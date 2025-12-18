@@ -1,0 +1,73 @@
+package indicator4cj.strategy.trend
+
+import std.core.*
+import std.collection.*
+import indicator4cj.helper.*
+import indicator4cj.helper as h
+import indicator4cj.asset.*
+import indicator4cj.strategy.*
+import indicator4cj.trend.*
+
+public const DefaultVwmaStrategyPeriod: Int64 = 20
+
+// VWMA 高于 SMA 买入，低于卖出。
+public class VwmaStrategy <: Strategy {
+    public let VwmaIndicator: Vwma
+    public let SmaIndicator: Sma
+
+    public init() {
+        this.VwmaIndicator = Vwma()
+        this.SmaIndicator = Sma()
+        this.VwmaIndicator.Period = DefaultVwmaStrategyPeriod
+        this.SmaIndicator.Period = DefaultVwmaStrategyPeriod
+    }
+
+    public func Name(): String { return "VWMA Strategy" }
+
+    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+        let (smas, vwmas) = calculateSmaAndVwma(c)
+        let actions = Operate(smas, vwmas, { sma: Float64, vwma: Float64 =>
+            if (vwma > sma) { return Action.Buy }
+            if (sma > vwma) { return Action.Sell }
+            return Action.Hold
+        })
+        return Shift(actions, VwmaIndicator.Period - 1, Action.Hold)
+    }
+
+    public func Report(c: Iterator<Snapshot>): Report {
+        let snaps = Duplicate(c, 4)
+        let dates = SnapshotsAsDates(snaps[0])
+        let closings = SnapshotsAsClosings(snaps[1])
+
+        var (smas, vwmas) = calculateSmaAndVwma(snaps[2])
+        smas = Shift(smas, VwmaIndicator.Period - 1, 0.0)
+        vwmas = Shift(vwmas, VwmaIndicator.Period - 1, 0.0)
+
+        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
+        let annotations = ActionsToAnnotations(actions)
+        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+
+        let report = NewReport(Name(), dates)
+        report.AddChart()
+        report.AddChart()
+        report.AddColumn(NewNumericReportColumn("Close", closings))
+        report.AddColumn(NewNumericReportColumn("SMA", smas), ArrayList<Int64>([1]))
+        report.AddColumn(NewNumericReportColumn("VWMA", vwmas), ArrayList<Int64>([1]))
+        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        return report
+    }
+
+    private func calculateSmaAndVwma(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>) {
+        let snaps = Duplicate(c, 2)
+        let closings = Duplicate(SnapshotsAsClosings(snaps[0]), 2)
+        let volumes = SnapshotsAsVolumes(snaps[1])
+        let smas = SmaIndicator.Compute(closings[0])
+        let vwmas = VwmaIndicator.Compute(closings[1], volumes)
+        return (smas, vwmas)
+    }
+}
+
+public func NewVwmaStrategy(): VwmaStrategy { return VwmaStrategy() }
+
+

@@ -1,0 +1,53 @@
+package indicator4cj.trend
+
+import std.core.*
+import indicator4cj.helper.*
+
+public const DefaultCciPeriod: Int64 = 20
+
+// Commodity Channel Index (CCI)
+public class Cci {
+    public var Period: Int64
+
+    public init() { this.Period = DefaultCciPeriod }
+    public init(period: Int64) { this.Period = period }
+
+    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
+        let tp = TypicalPrice()
+        let sma1 = Sma(Period)
+        let sma2 = Sma(Period)
+
+        let tps = Duplicate(tp.Compute(highs, lows, closings), 3)
+
+        let mas = Duplicate(sma1.Compute(tps[0]), 2)
+
+        tps[1] = Skip(tps[1], sma1.Period - 1)
+        tps[2] = Skip(tps[2], sma1.Period - 1)
+
+        let md = sma2.Compute(
+            Abs(
+                Subtract(tps[1], mas[0])
+            )
+        )
+
+        mas[1] = Skip(mas[1], sma2.Period - 1)
+        tps[2] = Skip(tps[2], sma2.Period - 1)
+
+        let cci = Divide(
+            Subtract(tps[2], mas[1]),
+            MultiplyBy(md, 0.015)
+        )
+
+        return cci
+    }
+
+    public func IdlePeriod(): Int64 {
+        return (Period * 2) - 2
+    }
+}
+
+public func NewCci(): Cci {
+    return Cci()
+}
+
+

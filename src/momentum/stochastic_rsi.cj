@@ -1,0 +1,51 @@
+package indicator4cj.momentum
+
+import std.core.*
+import indicator4cj.helper.*
+import indicator4cj.trend.*
+
+// Stochastic RSI：对 RSI 序列再应用随机振荡计算，与 Go 版保持一致。
+public class StochasticRsi {
+    public var Period: Int64
+    public let RsiIndicator: Rsi
+    public let MinIndicator: MovingMin
+    public let MaxIndicator: MovingMax
+
+    public init() {
+        this.Period = 14
+        this.RsiIndicator = Rsi(Period)
+        this.MinIndicator = MovingMin(Period)
+        this.MaxIndicator = MovingMax(Period)
+    }
+
+    public init(period: Int64) {
+        this.Period = period
+        this.RsiIndicator = Rsi(period)
+        this.MinIndicator = MovingMin(period)
+        this.MaxIndicator = MovingMax(period)
+    }
+
+    // 计算公式同 Go：
+    // (RSI - Min(RSI)) / (Max(RSI) - Min(RSI))
+    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
+        let rsisSplice = Duplicate(RsiIndicator.Compute(values), 3)
+
+        // Max/Min 需要满窗，先跳过对应 IdlePeriod。
+        rsisSplice[0] = Skip(rsisSplice[0], MaxIndicator.IdlePeriod())
+
+        let minRsisSplice = Duplicate(MinIndicator.Compute(rsisSplice[1]), 2)
+        let maxRsis = MaxIndicator.Compute(rsisSplice[2])
+
+        let result = Divide(
+            Subtract(rsisSplice[0], minRsisSplice[0]),
+            Subtract(maxRsis, minRsisSplice[1])
+        )
+
+        return result
+    }
+
+    // IdlePeriod = RSI.IdlePeriod + Min/Max.IdlePeriod
+    public func IdlePeriod(): Int64 {
+        return RsiIndicator.IdlePeriod() + MinIndicator.IdlePeriod()
+    }
+}

@@ -1,0 +1,51 @@
+package indicator4cj.trend
+
+import std.core.*
+import indicator4cj.helper.*
+
+public const DefaultApoFastPeriod: Int64 = 14
+public const DefaultApoFastSmoothing: Float64 = 2.0
+public const DefaultApoSlowPeriod: Int64 = 30
+public const DefaultApoSlowSmoothing: Float64 = 2.0
+
+// Absolute Price Oscillator (APO) = EMA(fast) - EMA(slow)
+public class Apo {
+    public var FastPeriod: Int64
+    public var FastSmoothing: Float64
+    public var SlowPeriod: Int64
+    public var SlowSmoothing: Float64
+
+    public init() {
+        this.FastPeriod = DefaultApoFastPeriod
+        this.FastSmoothing = DefaultApoFastSmoothing
+        this.SlowPeriod = DefaultApoSlowPeriod
+        this.SlowSmoothing = DefaultApoSlowSmoothing
+    }
+
+    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+        // Buffered 为保持与 Go 签名一致（当前直通）
+        let buffered = Buffered(c, SlowPeriod)
+        let cs = Duplicate(buffered, 2)
+
+        let fastEma = Ema(FastPeriod)
+        fastEma.Smoothing = FastSmoothing
+        let slowEma = Ema(SlowPeriod)
+        slowEma.Smoothing = SlowSmoothing
+
+        cs[0] = fastEma.Compute(cs[0])
+        cs[1] = slowEma.Compute(cs[1])
+
+        return Subtract(cs[0], cs[1])
+    }
+
+    // IdlePeriod 取慢周期，策略侧按 Go 版 Shift 使用。
+    public func IdlePeriod(): Int64 {
+        return SlowPeriod
+    }
+}
+
+public func NewApo(): Apo {
+    return Apo()
+}
+
+

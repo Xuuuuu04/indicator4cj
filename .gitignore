@@ -1,0 +1,37 @@
+# Cangjie build output
+target/
+*.o
+*.a
+*.so
+*.dylib
+
+# IDE
+.idea/
+.arts
+.cache
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Generated test macro stubs
+*.macrocall
+
+# Test coverage
+coverage/
+coverage_report/
+cov_output/
+*.cov
+
+# Temporary files
+tmp/
+temp/
+Gemini.md
+

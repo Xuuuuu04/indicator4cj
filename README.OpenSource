@@ -1,0 +1,12 @@
+[
+    {
+        "Name": " indicator4cj",
+        "License": " MIT License ",
+        "License File": " LICENSE ",
+        "Version Number": " v0.1.0 ",
+        "Owner": "徐少洋",
+        "Upstream URL": "https://github.com/cinar/indicator",
+        "Description": " indicator4cj 是将 Go 版 cinar/indicator v2 迁移到仓颉的技术指标与交易策略库，覆盖趋势/动量/波动率/成交量/估值/资产仓库/策略/回测等模块，保留与 Go 一致的 API 与测试数据。"
+    }
+]
+

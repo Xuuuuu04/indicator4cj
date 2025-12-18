@@ -1,0 +1,33 @@
+package indicator4cj.trend
+
+import std.core.*
+import indicator4cj.helper.*
+
+// Double Exponential Moving Average (DEMA) = 2*EMA1 - EMA2(EMA1)
+public class Dema {
+    public let Ema1: Ema
+    public let Ema2: Ema
+
+    public init() {
+        this.Ema1 = Ema()
+        this.Ema2 = Ema()
+    }
+
+    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+        let ema1 = Duplicate(Ema1.Compute(c), 2)
+        let ema2 = Ema2.Compute(ema1[1])
+
+        var doubleEma1 = MultiplyBy(ema1[0], 2.0)
+        doubleEma1 = Buffered(doubleEma1, Ema2.Period)
+
+        return Subtract(doubleEma1, ema2)
+    }
+
+    public func IdlePeriod(): Int64 {
+        return Ema1.Period + Ema2.Period - 2
+    }
+}
+
+public func NewDema(): Dema { return Dema() }
+
+

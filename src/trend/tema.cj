@@ -1,0 +1,46 @@
+package indicator4cj.trend
+
+import std.core.*
+import indicator4cj.helper.*
+
+// Triple Exponential Moving Average (TEMA) = 3*EMA1 - 3*EMA2 + EMA3
+public class Tema {
+    public let Ema1: Ema
+    public let Ema2: Ema
+    public let Ema3: Ema
+
+    public init() {
+        this.Ema1 = Ema()
+        this.Ema2 = Ema()
+        this.Ema3 = Ema()
+    }
+
+    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+        let ema1 = Duplicate(Ema1.Compute(c), 2)
+        let ema2 = Duplicate(Ema2.Compute(ema1[0]), 2)
+
+        ema1[1] = Skip(ema1[1], Ema2.Period - 1)
+
+        let ema3 = Ema3.Compute(ema2[0])
+        ema1[1] = Skip(ema1[1], Ema3.Period - 1)
+        ema2[1] = Skip(ema2[1], Ema3.Period - 1)
+
+        let tema = Add(
+            Subtract(
+                MultiplyBy(ema1[1], 3.0),
+                MultiplyBy(ema2[1], 3.0)
+            ),
+            ema3
+        )
+
+        return tema
+    }
+
+    public func IdlePeriod(): Int64 {
+        return Ema1.Period + Ema2.Period + Ema3.Period - 3
+    }
+}
+
+public func NewTema(): Tema { return Tema() }
+
+
