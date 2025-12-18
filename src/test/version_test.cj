@@ -9,7 +9,7 @@ class Indicator4cjMetaTest {
     // 验证版本号保持与清单一致。
     @TestCase
     public func version_matches_manifest() {
-        @Expect(version(), "0.1.0")
+        @Expect(version(), "1.0.0")
     }
 
     // 描述字段非空，用于基础元信息检查。
