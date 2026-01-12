@@ -24,53 +24,53 @@ public func NewWmaWith(period: Int64): Wma {
 }
 
 private class WmaIterator <: Iterator<Float64> {
-    private let source: Iterator<Float64>
-    private let period: Int64
-    private let buffer = ArrayList<Float64>()
-    private let divisor: Float64
+    private let _source: Iterator<Float64>
+    private let _period: Int64
+    private let _buffer = ArrayList<Float64>()
+    private let _divisor: Float64
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this.source = source
-        this.period = period
-        this.divisor = Float64(period) * (Float64(period) + 1.0) / 2.0
+        this._source = source
+        this._period = period
+        this._divisor = Float64(period) * (Float64(period) + 1.0) / 2.0
     }
 
     public func next(): Option<Float64> {
         while (true) {
-            match (source.next()) {
+            match (_source.next()) {
                 case Some(v) =>
-                    buffer.add(v)
-                    if (buffer.size < period) {
+                    _buffer.add(v)
+                    if (_buffer.size < _period) {
                         continue
                     }
-                    if (buffer.size > period) {
-                        buffer.remove(at: 0)
+                    if (_buffer.size > _period) {
+                        _buffer.remove(at: 0)
                     }
                     var sum = 0.0
                     var i: Int64 = 0
-                    while (i < period) {
+                    while (i < _period) {
                         // The weights should be: newest (index period-1) has weight 'period'
                         // oldest (index 0) has weight '1'
                         // Formula: (P*D_t + (P-1)*D_{t-1} + ... + 1*D_{t-P+1}) / Divisor
                         // buffer[period-1] is current (D_t)
                         // buffer[0] is oldest (D_{t-P+1})
-                        
+
                         // My loop: i goes 0 to period-1.
-                        // buffer[i] 
+                        // buffer[i]
                         // If i=0 (oldest), weight should be 1?
                         // If i=period-1 (newest), weight should be period?
-                        
+
                         // Current code:
                         // let weight = Float64(period - i)
                         // i=0 -> weight=period. (Oldest gets max weight? Wrong!)
                         // i=period-1 -> weight=1. (Newest gets min weight? Wrong!)
-                        
+
                         // Match Go implementation: Oldest gets highest weight (Period).
-                        let weight = Float64(period - i)
-                        sum += buffer[i] * weight
+                        let weight = Float64(_period - i)
+                        sum += _buffer[i] * weight
                         i += 1
                     }
-                    return Some(sum / divisor)
+                    return Some(sum / _divisor)
                 case None => return None
             }
         }

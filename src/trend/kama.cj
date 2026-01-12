@@ -62,33 +62,33 @@ public class Kama {
 }
 
 private class KamaIterator <: Iterator<Float64> {
-    private let prices: Iterator<Float64>
-    private let scs: Iterator<Float64>
-    private var prev: Float64 = 0.0
-    private var seeded: Bool = false
+    private let _prices: Iterator<Float64>
+    private let _scs: Iterator<Float64>
+    private var _prev: Float64 = 0.0
+    private var _seeded: Bool = false
 
     public init(prices: Iterator<Float64>, scs: Iterator<Float64>) {
-        this.prices = prices
-        this.scs = scs
+        this._prices = prices
+        this._scs = scs
     }
 
     public func next(): Option<Float64> {
-        if (!seeded) {
-            match (prices.next()) {
+        if (!_seeded) {
+            match (_prices.next()) {
                 case Some(p) =>
-                    prev = p
-                    seeded = true
-                    return Some(prev)
+                    _prev = p
+                    _seeded = true
+                    return Some(_prev)
                 case None => return None
             }
         }
 
-        match (prices.next()) {
+        match (_prices.next()) {
             case Some(price) =>
-                match (scs.next()) {
+                match (_scs.next()) {
                     case Some(sc) =>
-                        prev = prev + sc * (price - prev)
-                        return Some(prev)
+                        _prev = _prev + sc * (price - _prev)
+                        return Some(_prev)
                     case None => return None
                 }
             case None => return None
