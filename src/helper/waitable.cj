@@ -4,19 +4,19 @@ import std.collection.*
 
 // 简化版 WaitGroup：当前用作 Waitable 流结束同步。
 public class WaitGroup {
-    private var counter: Int64 = 0
+    private var _counter: Int64 = 0
 
     public func add(delta: Int64): Unit {
-        counter += delta
+        _counter += delta
     }
 
     public func done(): Unit {
-        counter -= 1
+        _counter -= 1
     }
 
     public func wait(): Unit {
         // 当前实现同步消耗输入，done 会在 Waitable 构造时完成，因此 wait 为 O(1)。
-        while (counter > 0) {}
+        while (_counter > 0) {}
     }
 }
 

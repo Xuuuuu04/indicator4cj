@@ -8,28 +8,28 @@ public func Window<T>(iter: Iterator<T>, w: Int64, f: (ArrayList<T>, Int64) -> T
 }
 
 public class WindowIterator<T> <: Iterator<T> {
-    private let source: Iterator<T>
-    private let w: Int64
-    private let aggregator: (ArrayList<T>, Int64) -> T
-    private let buffer = ArrayList<T>()
-    private var idx: Int64 = 0
+    private let _source: Iterator<T>
+    private let _w: Int64
+    private let _aggregator: (ArrayList<T>, Int64) -> T
+    private let _buffer = ArrayList<T>()
+    private var _idx: Int64 = 0
 
     public init(source: Iterator<T>, w: Int64, aggregator: (ArrayList<T>, Int64) -> T) {
-        this.source = source
-        this.w = w
-        this.aggregator = aggregator
+        this._source = source
+        this._w = w
+        this._aggregator = aggregator
     }
 
     public func next(): Option<T> {
-        match (source.next()) {
+        match (_source.next()) {
             case Some(v) =>
-                if (buffer.size == w) {
-                    buffer.remove(at: 0)
+                if (_buffer.size == _w) {
+                    _buffer.remove(at: 0)
                 }
-                buffer.add(v)
-                let start = idx % w
-                idx += 1
-                return Some(aggregator(buffer, start))
+                _buffer.add(v)
+                let start = _idx % _w
+                _idx += 1
+                return Some(_aggregator(_buffer, start))
             case None => return None
         }
     }
