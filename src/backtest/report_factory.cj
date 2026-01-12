@@ -8,22 +8,25 @@ public const DataReportBuilderName: String = "data"
 
 public type ReportBuilderFunc = (String) -> Report
 
-private let reportBuilders = HashMap<String, ReportBuilderFunc>()
+private let _reportBuilders = HashMap<String, ReportBuilderFunc>()
 
+// initReportFactory 初始化报告工厂，注册内置报告类型
 public func initReportFactory(): Unit {
-    reportBuilders.add(HTMLReportBuilderName, { cfg => NewHtmlReport(cfg) })
-    reportBuilders.add(DataReportBuilderName, { _ => NewDataReport() })
+    _reportBuilders.add(HTMLReportBuilderName, { cfg => HtmlReport(cfg) })
+    _reportBuilders.add(DataReportBuilderName, { _ => DataReport() })
 }
 
-public func RegisterReportBuilder(name: String, builder: ReportBuilderFunc): Unit {
-    reportBuilders.add(name, builder)
+// registerReportBuilder 注册自定义报告构建器
+public func registerReportBuilder(name: String, builder: ReportBuilderFunc): Unit {
+    _reportBuilders.add(name, builder)
 }
 
-public func NewReportByName(name: String, config: String): (Option<Report>, Option<Exception>) {
-    if (!reportBuilders.contains(name)) {
-        return (None, Some(Exception("unknown report: " + name)))
+// newReportByName 根据名称创建报告实例
+public func newReportByName(name: String, config: String): Report {
+    if (!_reportBuilders.contains(name)) {
+        throw Exception("report factory: unknown report type '${name}'")
     }
-    return (Some(reportBuilders[name](config)), None)
+    return _reportBuilders[name](config)
 }
 
 

@@ -15,10 +15,13 @@ public class MockDialect <: SQLRepositoryDialect {
 
 @Test
 public func test_sql_repository_basic() {
-    // 验证工厂函数是否能正常创建实例
-    let repo = NewSQLRepository("driver", "dsn", MockDialect())
-    
-    // 验证基本操作是否不报错
-    let err = repo.Drop()
-    if (err.isSome()) { fail("Drop failed") }
+    try {
+        // 验证构造函数是否能正常创建实例
+        let repo = SQLRepository(MockDialect())
+
+        // 验证基本操作是否不报错
+        repo.drop()
+    } catch (e: Exception) {
+        fail(e.toString())
+    }
 }

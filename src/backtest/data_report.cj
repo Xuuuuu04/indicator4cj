@@ -22,25 +22,27 @@ public class DataStrategyResult {
     }
 }
 
-// 数据报告，供程序访问。
+// DataReport 数据报告实现，将回测结果存储在内存中供程序访问
 public class DataReport <: Report {
-    public let Results = HashMap<String, ArrayList<DataStrategyResult>>()
+    public var _results = HashMap<String, ArrayList<DataStrategyResult>>()
 
-    public func Begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Option<Exception> {
+    public func DataReport() {}
+
+    public func begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Option<Exception> {
         _ = strategies.size // 标记已使用以消除告警
-        for (n in assetNames) { Results.add(n, ArrayList<DataStrategyResult>()) }
+        for (n in assetNames) { _results.add(n, ArrayList<DataStrategyResult>()) }
         return None
     }
 
-    public func AssetBegin(name: String, strategies: ArrayList<Strategy>): Option<Exception> {
+    public func assetBegin(name: String, strategies: ArrayList<Strategy>): Option<Exception> {
         _ = strategies.size // 标记已使用以消除告警
-        if (!Results.contains(name)) {
-            Results.add(name, ArrayList<DataStrategyResult>())
+        if (!_results.contains(name)) {
+            _results.add(name, ArrayList<DataStrategyResult>())
         }
         return None
     }
 
-    public func Write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Option<Exception> {
+    public func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Option<Exception> {
         // 耗尽 snapshots，避免资源泄漏。
         Drain(snapshots)
 
@@ -54,7 +56,7 @@ public class DataReport <: Report {
                 match (lastActionIter.next()) {
                     case Some(action) =>
                         let res = DataStrategyResult(assetName, currentStrategy, outcome, action, transactionsList)
-                        Results[assetName].add(res)
+                        _results[assetName].add(res)
                     case None => ()
                 }
             case None => ()
@@ -62,10 +64,8 @@ public class DataReport <: Report {
         return None
     }
 
-    public func AssetEnd(name: String): Option<Exception> { _ = name.isEmpty(); return None }
+    public func assetEnd(name: String): Option<Exception> { _ = name.isEmpty(); return None }
 
-    public func End(): Option<Exception> { return None }
+    public func end(): Option<Exception> { return None }
 }
-
-public func NewDataReport(): DataReport { return DataReport() }
 

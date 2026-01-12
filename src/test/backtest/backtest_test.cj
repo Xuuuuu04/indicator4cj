@@ -15,14 +15,15 @@ public func test_backtest_basic() {
     removeIfExists(outputDir, recursive: true)
     Directory.create(outputDir, recursive: true)
 
-    let htmlReport = NewHtmlReport(outputDir)
-    let bt = NewBacktest(repo, htmlReport)
-    bt.Names.add("brk-b")
-    bt.Strategies.add(NewApoStrategy())
+    try {
+        let htmlReport = HtmlReport(outputDir)
+        let bt = Backtest(repo, htmlReport)
+        bt.names.add("brk-b")
+        bt.strategies.add(ApoStrategy())
 
-    match (bt.Run()) {
-        case Some(e) => fail(e.toString())
-        case None => ()
+        bt.run()
+    } catch (e: Exception) {
+        fail(e.toString())
     }
 }
 
@@ -33,12 +34,13 @@ public func test_backtest_all_assets_and_strategies() {
     removeIfExists(outputDir, recursive: true)
     Directory.create(outputDir, recursive: true)
 
-    let htmlReport = NewHtmlReport(outputDir)
-    let bt = NewBacktest(repo, htmlReport)
+    try {
+        let htmlReport = HtmlReport(outputDir)
+        let bt = Backtest(repo, htmlReport)
 
-    match (bt.Run()) {
-        case Some(e) => fail(e.toString())
-        case None => ()
+        bt.run()
+    } catch (e: Exception) {
+        fail(e.toString())
     }
 }
 
@@ -49,16 +51,14 @@ public func test_backtest_non_existing_asset() {
     removeIfExists(outputDir, recursive: true)
     Directory.create(outputDir, recursive: true)
 
-    let htmlReport = NewHtmlReport(outputDir)
-    let bt = NewBacktest(repo, htmlReport)
-    bt.Names.add("non_existing")
+    try {
+        let htmlReport = HtmlReport(outputDir)
+        let bt = Backtest(repo, htmlReport)
+        bt.names.add("non_existing")
 
-    match (bt.Run()) {
-        case Some(e) => 
-            // In Go it might return error, but let's see how our repo behaves.
-            // If repository.Get returns error, bt.Run returns error.
-            () 
-        case None => 
-            fail("Expected error for non-existing asset")
+        bt.run()
+        fail("Expected error for non-existing asset")
+    } catch (_: Exception) {
+        // Expected error
     }
 }

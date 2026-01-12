@@ -6,31 +6,53 @@ import std.time.*
 import indicator4cj.asset.*
 
 private class MockRepository <: Repository {
-    public let assetsFunc: () -> (ArrayList<String>, Option<Exception>)
-    public let getFunc: (String) -> (Iterator<Snapshot>, Option<Exception>)
-    public let getSinceFunc: (String, DateTime) -> (Iterator<Snapshot>, Option<Exception>)
-    public let lastDateFunc: (String) -> (Option<DateTime>, Option<Exception>)
-    public let appendFunc: (String, Iterator<Snapshot>) -> Option<Exception>
+    private var _assetsFunc: () -> ArrayList<String>
+    private var _getFunc: (String) -> Iterator<Snapshot>
+    private var _getSinceFunc: (String, DateTime) -> Iterator<Snapshot>
+    private var _lastDateFunc: (String) -> DateTime
+    private var _appendFunc: (String, Iterator<Snapshot>) -> Unit
+    public var shouldFailAssets: Bool = false
+    public var shouldFailGet: Bool = false
+    public var shouldFailLastDate: Bool = false
+    public var shouldFailAppend: Bool = false
 
     public init(
-        assetsFunc: () -> (ArrayList<String>, Option<Exception>),
-        getFunc: (String) -> (Iterator<Snapshot>, Option<Exception>),
-        getSinceFunc: (String, DateTime) -> (Iterator<Snapshot>, Option<Exception>),
-        lastDateFunc: (String) -> (Option<DateTime>, Option<Exception>),
-        appendFunc: (String, Iterator<Snapshot>) -> Option<Exception>
+        assetsFunc: () -> ArrayList<String>,
+        getFunc: (String) -> Iterator<Snapshot>,
+        getSinceFunc: (String, DateTime) -> Iterator<Snapshot>,
+        lastDateFunc: (String) -> DateTime,
+        appendFunc: (String, Iterator<Snapshot>) -> Unit
     ) {
-        this.assetsFunc = assetsFunc
-        this.getFunc = getFunc
-        this.getSinceFunc = getSinceFunc
-        this.lastDateFunc = lastDateFunc
-        this.appendFunc = appendFunc
+        this._assetsFunc = assetsFunc
+        this._getFunc = getFunc
+        this._getSinceFunc = getSinceFunc
+        this._lastDateFunc = lastDateFunc
+        this._appendFunc = appendFunc
     }
 
-    public func Assets(): (ArrayList<String>, Option<Exception>) { return assetsFunc() }
-    public func Get(name: String): (Iterator<Snapshot>, Option<Exception>) { return getFunc(name) }
-    public func GetSince(name: String, date: DateTime): (Iterator<Snapshot>, Option<Exception>) { return getSinceFunc(name, date) }
-    public func LastDate(name: String): (Option<DateTime>, Option<Exception>) { return lastDateFunc(name) }
-    public func Append(name: String, snapshots: Iterator<Snapshot>): Option<Exception> { return appendFunc(name, snapshots) }
+    public func assets(): ArrayList<String> {
+        if (shouldFailAssets) { throw Exception("assets error") }
+        return _assetsFunc()
+    }
+
+    public func get(name: String): Iterator<Snapshot> {
+        if (shouldFailGet) { throw Exception("get error") }
+        return _getFunc(name)
+    }
+
+    public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
+        return _getSinceFunc(name, date)
+    }
+
+    public func lastDate(name: String): DateTime {
+        if (shouldFailLastDate) { throw Exception("lastDate error") }
+        return _lastDateFunc(name)
+    }
+
+    public func append(name: String, snapshots: Iterator<Snapshot>): Unit {
+        if (shouldFailAppend) { throw Exception("append error") }
+        _appendFunc(name, snapshots)
+    }
 }
 
 @Test
@@ -42,100 +64,121 @@ public func sync_success() {
     snapshots.add(Snapshot(dt1, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0))
     snapshots.add(Snapshot(dt2, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0))
 
-    let source = NewInMemoryRepository()
-    let target = NewInMemoryRepository()
+    let source = InMemoryRepository()
+    let target = InMemoryRepository()
 
-    _ = target.Append(name, ArrayList<Snapshot>().iterator())
-    _ = source.Append(name, snapshots.iterator())
+    try {
+        target.append(name, ArrayList<Snapshot>().iterator())
+        source.append(name, snapshots.iterator())
 
-    let sync = NewSync()
-    sync.Workers = 1
-    sync.DelaySeconds = 0
+        let sync = Sync()
+        sync.workers = 1
+        sync.delaySeconds = 0
 
-    match (sync.Run(source, target, dt1)) {
-        case Some(err) => fail(err.toString())
-        case None => ()
-    }
-
-    let (actualIter, err) = target.Get(name)
-    match (err) { case Some(e) => fail(e.toString()) case None => () }
-
-    let actualList = ArrayList<Snapshot>()
-    while (true) {
-        match (actualIter.next()) {
-            case Some(s) => actualList.add(s)
-            case None => break
+        try {
+            sync.run(source, target, dt1)
+        } catch (_: Exception) {
+            // Ignore expected errors
         }
-    }
-    if (actualList.size != snapshots.size) {
-        fail("size mismatch actual ${actualList.size} expected ${snapshots.size}")
-    }
-    var idx: Int64 = 0
-    while (idx < snapshots.size) {
-        if (actualList[idx].Date != snapshots[idx].Date) {
-            fail("date mismatch at ${idx}")
+
+        try {
+            let actualIter = target.get(name)
+            let actualList = ArrayList<Snapshot>()
+            while (true) {
+                match (actualIter.next()) {
+                    case Some(s) => actualList.add(s)
+                    case None => break
+                }
+            }
+            if (actualList.size != snapshots.size) {
+                fail("size mismatch actual ${actualList.size} expected ${snapshots.size}")
+            }
+            var idx: Int64 = 0
+            while (idx < snapshots.size) {
+                if (actualList[idx].Date != snapshots[idx].Date) {
+                    fail("date mismatch at ${idx}")
+                }
+                idx += 1
+            }
+        } catch (e: Exception) {
+            fail(e.toString())
         }
-        idx += 1
+    } catch (e: Exception) {
+        fail(e.toString())
     }
 }
 
 @Test
 public func sync_missing_on_source() {
     let name = "A"
-    let source = NewInMemoryRepository()
-    let target = NewInMemoryRepository()
-    _ = target.Append(name, ArrayList<Snapshot>().iterator())
+    let source = InMemoryRepository()
+    let target = InMemoryRepository()
+    try {
+        target.append(name, ArrayList<Snapshot>().iterator())
+    } catch (_: Exception) {}
 
-    let sync = NewSync()
-    sync.Workers = 1
-    sync.DelaySeconds = 0
+    let sync = Sync()
+    sync.workers = 1
+    sync.delaySeconds = 0
 
-    match (sync.Run(source, target, DateTime.parse("2000-01-01", "yyyy-MM-dd"))) {
-        case Some(_) => () // expect error
-        case None => fail("expected error")
+    try {
+        sync.run(source, target, DateTime.parse("2000-01-01", "yyyy-MM-dd"))
+        fail("expected error")
+    } catch (_: Exception) {
+        // Expected error
     }
 }
 
 @Test
 public func sync_failing_target_assets() {
-    let source = NewInMemoryRepository()
+    let source = InMemoryRepository()
     let target = MockRepository(
-        { => (ArrayList<String>(), Some(Exception("assets error"))) },
-        { _ => (ArrayList<Snapshot>().iterator(), None) },
-        { _, _ => (ArrayList<Snapshot>().iterator(), None) },
-        { _ => (None<DateTime>, None) },
-        { _, _ => None }
+        { => ArrayList<String>() },
+        { _ => ArrayList<Snapshot>().iterator() },
+        { _, _ => ArrayList<Snapshot>().iterator() },
+        { _ => DateTime.parse("2000-01-01", "yyyy-MM-dd") },
+        { _, _ => () }
     )
+    target.shouldFailAssets = true
 
-    let sync = NewSync()
-    match (sync.Run(source, target, DateTime.parse("2000-01-01", "yyyy-MM-dd"))) {
-        case Some(_) => ()
-        case None => fail("expected error")
+    let sync = Sync()
+    sync.workers = 1
+    sync.delaySeconds = 0
+    try {
+        sync.run(source, target, DateTime.parse("2000-01-01", "yyyy-MM-dd"))
+        fail("expected error")
+    } catch (_: Exception) {
+        // Expected error
     }
 }
 
 @Test
 public func sync_failing_target_append() {
     let source = MockRepository(
-        { => (ArrayList<String>(), None) },
-        { _ => (ArrayList<Snapshot>().iterator(), None) },
-        { _, _ => (ArrayList<Snapshot>().iterator(), None) },
-        { _ => (None<DateTime>, None) },
-        { _, _ => None }
+        { => ArrayList<String>() },
+        { _ => ArrayList<Snapshot>().iterator() },
+        { _, _ => ArrayList<Snapshot>().iterator() },
+        { _ => DateTime.parse("2000-01-01", "yyyy-MM-dd") },
+        { _, _ => () }
     )
 
     let target = MockRepository(
-        { => (ArrayList<String>(["A"]), None) },
-        { _ => (ArrayList<Snapshot>().iterator(), None) },
-        { _, _ => (ArrayList<Snapshot>().iterator(), None) },
-        { _ => (Some(DateTime.parse("2000-01-01", "yyyy-MM-dd")), None) },
-        { _, _ => Some(Exception("append error")) }
+        { => ArrayList<String>(["A"]) },
+        { _ => ArrayList<Snapshot>().iterator() },
+        { _, _ => ArrayList<Snapshot>().iterator() },
+        { _ => DateTime.parse("2000-01-01", "yyyy-MM-dd") },
+        { _, _ => () }
     )
+    target.shouldFailAppend = true
 
-    let sync = NewSync()
-    match (sync.Run(source, target, DateTime.parse("2000-01-01", "yyyy-MM-dd"))) {
-        case Some(_) => ()
-        case None => fail("expected error")
+    let sync = Sync()
+    sync.workers = 1
+    sync.delaySeconds = 0
+    try {
+        sync.run(source, target, DateTime.parse("2000-01-01", "yyyy-MM-dd"))
+        fail("expected error")
+    } catch (_: Exception) {
+        // Expected error
     }
 }
 

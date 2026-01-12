@@ -7,18 +7,28 @@ import indicator4cj.asset.*
 @Test
 public func test_repository_factory_basic() {
     initRepositoryFactory()
-    
+
     // Unknown
-    let (_, err) = NewRepository("unknown", "")
-    if (err.isNone()) { fail("expected error") }
-    
+    try {
+        let _ = newRepository("unknown", "")
+        fail("expected error")
+    } catch (_: Exception) {
+        // Expected error
+    }
+
     // Memory
-    let (repoMem, err2) = NewRepository(InMemoryRepositoryBuilderName, "")
-    if (err2.isSome()) { fail(err2.getOrThrow().toString()) }
-    if (!(repoMem.getOrThrow() is InMemoryRepository)) { fail("not memory") }
-    
+    try {
+        let repoMem = newRepository(InMemoryRepositoryBuilderName, "")
+        if (!(repoMem is InMemoryRepository)) { fail("not memory") }
+    } catch (e: Exception) {
+        fail(e.toString())
+    }
+
     // FileSystem
-    let (repoFs, err3) = NewRepository(FileSystemRepositoryBuilderName, ".")
-    if (err3.isSome()) { fail(err3.getOrThrow().toString()) }
-    if (!(repoFs.getOrThrow() is FileSystemRepository)) { fail("not fs") }
+    try {
+        let repoFs = newRepository(FileSystemRepositoryBuilderName, ".")
+        if (!(repoFs is FileSystemRepository)) { fail("not fs") }
+    } catch (e: Exception) {
+        fail(e.toString())
+    }
 }

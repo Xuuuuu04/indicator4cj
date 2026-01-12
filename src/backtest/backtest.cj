@@ -13,8 +13,8 @@ public const DefaultLastDays: Int64 = 365
 public class Backtest {
     private var _repository: Repository
     private var _report: Report
-    private var _names: ArrayList<String> = ArrayList<String>()
-    private var _strategies: ArrayList<Strategy> = ArrayList<Strategy>()
+    public var names: ArrayList<String> = ArrayList<String>()
+    public var strategies: ArrayList<Strategy> = ArrayList<Strategy>()
     private var _workers: Int64 = DefaultBacktestWorkers
     private var _lastDays: Int64 = DefaultLastDays
 
@@ -27,29 +27,29 @@ public class Backtest {
     // run 执行回测
     public func run(): Unit {
         // 资产列表
-        if (_names.isEmpty()) {
-            _names = _repository.assets()
+        if (names.isEmpty()) {
+            names = _repository.assets()
         }
         // 策略列表
-        if (_strategies.isEmpty()) {
-            _strategies.add(BuyAndHoldStrategy())
+        if (strategies.isEmpty()) {
+            strategies.add(BuyAndHoldStrategy())
         }
 
-        match (_report.begin(_names, _strategies)) {
+        match (_report.begin(names, strategies)) {
             case Some(e) => throw e
             case None => ()
         }
 
-        for (name in _names) {
+        for (name in names) {
             let snapsIter = _repository.get(name)
             let snapsList = ChanToSlice(snapsIter)
 
-            match (_report.assetBegin(name, _strategies)) {
+            match (_report.assetBegin(name, strategies)) {
                 case Some(e) => throw e
                 case None => ()
             }
 
-            for (st in _strategies) {
+            for (st in strategies) {
                 let dup = Duplicate(snapsList.iterator(), 2)
                 let (actions, outcomes) = ComputeWithOutcome(st, dup[0])
                 match (_report.write(name, st, dup[1], actions, outcomes)) {
