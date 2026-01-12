@@ -14,27 +14,27 @@ public class Obv {
 }
 
 private class ObvIterator <: Iterator<Float64> {
-    private let closings: Iterator<Float64>
-    private let volumes: Iterator<Float64>
-    private var previous: Float64 = 0.0
+    private let _closings: Iterator<Float64>
+    private let _volumes: Iterator<Float64>
+    private var _previous: Float64 = 0.0
 
     public init(closings: Iterator<Float64>, volumes: Iterator<Float64>) {
-        this.closings = closings
-        this.volumes = volumes
+        this._closings = closings
+        this._volumes = volumes
     }
 
     public func next(): Option<Float64> {
-        match (closings.next()) {
+        match (_closings.next()) {
             case Some(c) =>
-                match (volumes.next()) {
+                match (_volumes.next()) {
                     case Some(v) =>
-                        var current = previous
-                        if (c > previous) {
+                        var current = _previous
+                        if (c > _previous) {
                             current = current + v
-                        } else if (c < previous) {
+                        } else if (c < _previous) {
                             current = current - v
                         }
-                        previous = current
+                        _previous = current
                         return Some(current)
                     case None => return None
                 }

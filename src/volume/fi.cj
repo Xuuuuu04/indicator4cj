@@ -6,13 +6,13 @@ import indicator4cj.trend.*
 
 // Force Index.
 public class Fi {
-    private let ema = Ema()
+    private let _ema = Ema()
 
-    public init() { ema.Period = 13 }
-    public init(period: Int64) { ema.Period = period }
+    public init() { _ema.Period = 13 }
+    public init(period: Int64) { _ema.Period = period }
 
     public func Compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        return ema.Compute(
+        return _ema.Compute(
             Multiply(
                 Change(closings, 1),
                 volumes
@@ -20,6 +20,6 @@ public class Fi {
         )
     }
 
-    public func IdlePeriod(): Int64 { return ema.IdlePeriod() + 1 }
+    public func IdlePeriod(): Int64 { return _ema.IdlePeriod() + 1 }
 }
 

@@ -5,21 +5,21 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class Mfi {
-    private let TypicalPrice = TypicalPrice()
-    private let Sum = MovingSum()
+    private let _typicalPrice = TypicalPrice()
+    private let _sum = MovingSum()
 
     public init() {
-        Sum.Period = 14
+        _sum.Period = 14
     }
 
     public init(period: Int64) {
-        Sum.Period = period
+        _sum.Period = period
     }
 
     public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let rawFlowSplice = Duplicate(
             Multiply(
-                TypicalPrice.Compute(highs, lows, closings),
+                _typicalPrice.Compute(highs, lows, closings),
                 volumes
             ),
             2
@@ -34,8 +34,8 @@ public class Mfi {
         )
 
         let moneyRatio = Divide(
-            Sum.Compute(KeepPositives(moneyFlowSplice[0])),
-            Sum.Compute(MultiplyBy(KeepNegatives(moneyFlowSplice[1]), -1.0))
+            _sum.Compute(KeepPositives(moneyFlowSplice[0])),
+            _sum.Compute(MultiplyBy(KeepNegatives(moneyFlowSplice[1]), -1.0))
         )
 
         return IncrementBy(
@@ -50,6 +50,6 @@ public class Mfi {
         )
     }
 
-    public func IdlePeriod(): Int64 { return Sum.IdlePeriod() + 1 }
+    public func IdlePeriod(): Int64 { return _sum.IdlePeriod() + 1 }
 }
 
