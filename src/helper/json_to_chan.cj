@@ -14,45 +14,45 @@ public func JSONToChanWithLogger(reader: InputStream, _: Option<String>): Iterat
 }
 
 public class JSONIterator <: Iterator<Int64> {
-    private let bytes: ArrayList<Byte>
-    private var idx: Int64 = 0
+    private let _bytes: ArrayList<Byte>
+    private var _idx: Int64 = 0
 
     public init(reader: InputStream) {
-        this.bytes = ArrayList<Byte>()
+        this._bytes = ArrayList<Byte>()
         let buf = Array<Byte>(1, { _ => UInt8(0) })
         while (true) {
             let readCount = reader.read(buf)
             if (readCount <= 0) {
                 break
             }
-            bytes.add(buf[0])
+            _bytes.add(buf[0])
         }
     }
 
     public func next(): Option<Int64> {
         skipWs()
-        if (idx >= bytes.size) {
+        if (_idx >= _bytes.size) {
             return None
         }
         // 首次应为 '['
-        if (idx == 0) {
+        if (_idx == 0) {
             if (charAt() != UInt8(91)) { // '['
                 return None
             }
-            idx += 1
+            _idx += 1
             skipWs()
         }
         // 可能是结束
         if (charAt() == UInt8(93)) { // ']'
-            idx += 1
+            _idx += 1
             return None
         }
         // 解析值
         match (parseValue()) {
             case Some(v) =>
                 skipWs()
-                if (idx < bytes.size && charAt() == UInt8(44)) { // ','
-                    idx += 1
+                if (_idx < _bytes.size && charAt() == UInt8(44)) { // ','
+                    _idx += 1
                 }
                 return Some(v)
             case None => return None
@@ -61,7 +61,7 @@ public class JSONIterator <: Iterator<Int64> {
 
     private func parseValue(): Option<Int64> {
         skipWs()
-        if (idx >= bytes.size) {
+        if (_idx >= _bytes.size) {
             return None
         }
         let c = charAt()
@@ -72,24 +72,24 @@ public class JSONIterator <: Iterator<Int64> {
     }
 
     private func parseNumber(): Option<Int64> {
-        let start = idx
-        while (idx < bytes.size) {
+        let start = _idx
+        while (_idx < _bytes.size) {
             let c = charAt()
             if ((c >= UInt8(48) && c <= UInt8(57)) || c == UInt8(45) || c == UInt8(43)) { // digits '-' '+'
-                idx += 1
+                _idx += 1
             } else {
                 break
             }
         }
-        let s = bytesToString(bytes.slice(start..idx).toArray())
+        let s = bytesToString(_bytes.slice(start.._idx).toArray())
         return Int64.parse(s)
     }
 
     private func skipWs(): Unit {
-        while (idx < bytes.size) {
+        while (_idx < _bytes.size) {
             let c = charAt()
             if (c == UInt8(32) || c == UInt8(10) || c == UInt8(9) || c == UInt8(13)) {
-                idx += 1
+                _idx += 1
             } else {
                 break
             }
@@ -97,7 +97,7 @@ public class JSONIterator <: Iterator<Int64> {
     }
 
     private func charAt(): UInt8 {
-        return bytes[idx]
+        return _bytes[_idx]
     }
 
     private func bytesToString(arr: Array<Byte>): String {
