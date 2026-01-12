@@ -11,19 +11,19 @@ public func Filter<T>(iter: Iterator<T>, predicate: (T) -> Bool): Iterator<T> {
 }
 
 public class FilterIterator<T> <: Iterator<T> {
-    private let source: Iterator<T>
-    private let predicate: (T) -> Bool
+    private let _source: Iterator<T>
+    private let _predicate: (T) -> Bool
 
     public init(source: Iterator<T>, predicate: (T) -> Bool) {
-        this.source = source
-        this.predicate = predicate
+        this._source = source
+        this._predicate = predicate
     }
 
     public func next(): Option<T> {
         while (true) {
-            match (source.next()) {
+            match (_source.next()) {
                 case Some(v) =>
-                    if (predicate(v)) {
+                    if (_predicate(v)) {
                         return Some(v)
                     }
                 case None => return None

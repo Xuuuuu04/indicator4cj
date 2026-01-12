@@ -2,11 +2,12 @@ package indicator4cj.helper
 
 import std.core.*
 
+// AnnotationReportColumn 注释报告列，将字符串迭代器包装为报告列
 public class AnnotationReportColumn <: ReportColumn {
-    private let values: Iterator<String>
+    private let _values: Iterator<String>
 
     public init(values: Iterator<String>) {
-        this.values = values
+        this._values = values
     }
 
     public func Name(): String { return "" }
@@ -14,7 +15,7 @@ public class AnnotationReportColumn <: ReportColumn {
     public func Role(): String { return "annotation" }
 
     public func Value(): String {
-        match (values.next()) {
+        match (_values.next()) {
             case Some(v) =>
                 if (v.isEmpty()) { return "null" }
                 return "\"" + v + "\""
@@ -23,6 +24,7 @@ public class AnnotationReportColumn <: ReportColumn {
     }
 }
 
+// NewAnnotationReportColumn 创建注释报告列（公共 API，保持向后兼容）
 public func NewAnnotationReportColumn(values: Iterator<String>): ReportColumn {
     return AnnotationReportColumn(values)
 }

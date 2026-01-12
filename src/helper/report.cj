@@ -6,6 +6,7 @@ import std.io.*
 import std.fs.*
 import std.time.*
 
+// ReportColumn 报告列接口
 public interface ReportColumn {
     func Name(): String
     func Type(): String
@@ -13,24 +14,25 @@ public interface ReportColumn {
     func Value(): String
 }
 
+// Report 报告类，用于生成和输出数据报告
 public class Report {
-    public var Title: String
-    public let Date: Iterator<DateTime>
-    public let Columns = ArrayList<ReportColumn>()
-    public let Views = ArrayList<ArrayList<Int64>>()
-    public var DateFormat: String = "yyyy-MM-dd"
-    public var GeneratedOn: String
+    private var _title: String
+    private let _date: Iterator<DateTime>
+    private let _columns = ArrayList<ReportColumn>()
+    private let _views = ArrayList<ArrayList<Int64>>()
+    private var _dateFormat: String = "yyyy-MM-dd"
+    private var _generatedOn: String
 
     public init(title: String, date: Iterator<DateTime>) {
-        this.Title = title
-        this.Date = date
-        this.GeneratedOn = DateTime.now().format("yyyy-MM-dd HH:mm:ss")
-        this.Views.add(ArrayList<Int64>()) // 主图
+        this._title = title
+        this._date = date
+        this._generatedOn = DateTime.now().format("yyyy-MM-dd HH:mm:ss")
+        this._views.add(ArrayList<Int64>()) // 主图
     }
 
     public func AddChart(): Int64 {
-        this.Views.add(ArrayList<Int64>())
-        return Int64(this.Views.size - 1)
+        _views.add(ArrayList<Int64>())
+        return Int64(_views.size - 1)
     }
 
     public func AddColumn(column: ReportColumn): Unit {
@@ -38,29 +40,29 @@ public class Report {
     }
 
     public func AddColumn(column: ReportColumn, charts: ArrayList<Int64>): Unit {
-        this.Columns.add(column)
-        let cid = Int64(this.Columns.size) // 1-based 索引
+        _columns.add(column)
+        let cid = Int64(_columns.size) // 1-based 索引
         if (charts.isEmpty()) {
-            this.Views[0].add(cid)
+            _views[0].add(cid)
         } else {
             for (c in charts) {
-                this.Views[Int64(c)].add(cid)
+                _views[Int64(c)].add(cid)
             }
         }
     }
 
     public func WriteToWriter(writer: OutputStream): Option<Exception> {
         // 简化：输出为可读文本而非模板。
-        let header = "Report: ${Title}\nGeneratedOn: ${GeneratedOn}\n"
-            writer.write(ascii(header))
+        let header = "Report: ${_title}\nGeneratedOn: ${_generatedOn}\n"
+        writer.write(ascii(header))
 
         // 输出数据行：Date + 每列 Value()
         while (true) {
-            match (Date.next()) {
+            match (_date.next()) {
                 case Some(dt) =>
                     let sb = StringBuilder()
-                    sb.append(dt.format(DateFormat))
-                    for (col in Columns) {
+                    sb.append(dt.format(_dateFormat))
+                    for (col in _columns) {
                         sb.append(",")
                         sb.append(col.Value())
                     }
@@ -91,6 +93,7 @@ private func ascii(s: String): Array<Byte> {
     return arr.toArray()
 }
 
+// NewReport 创建报告实例（公共 API，保持向后兼容）
 public func NewReport(title: String, date: Iterator<DateTime>): Report {
     return Report(title, date)
 }
