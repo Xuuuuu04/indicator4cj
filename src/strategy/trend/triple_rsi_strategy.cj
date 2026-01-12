@@ -8,18 +8,18 @@ import indicator4cj.strategy.momentum as m
 
 // 为兼容旧路径，代理到动量包的真实实现。
 public class TripleRsiStrategy <: Strategy {
-    private let impl: m.TripleRsiStrategy
+    private let _impl: m.TripleRsiStrategy
 
-    public init() { this.impl = m.TripleRsiStrategy() }
+    public init() { this._impl = m.TripleRsiStrategy() }
 
-    public func Name(): String { return impl.Name() }
+    public func Name(): String { return _impl.Name() }
 
     public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        return impl.Compute(snapshots)
+        return _impl.Compute(snapshots)
     }
 
     public func Report(snapshots: Iterator<Snapshot>): Report {
-        return impl.Report(snapshots)
+        return _impl.Report(snapshots)
     }
 }
 
