@@ -7,68 +7,42 @@ import std.time.*
 public const DefaultSyncWorkers: Int64 = 1
 public const DefaultSyncDelaySeconds: Int64 = 5
 
-// Sync：在仓库间同步资产快照。
+// Sync 仓储同步器，在源仓储和目标仓储之间同步资产快照数据
 public class Sync {
-    public var Workers: Int64
-    public var DelaySeconds: Int64
-    public var Assets: ArrayList<String>
+    private var _workers: Int64 = DefaultSyncWorkers
+    private var _delaySeconds: Int64 = DefaultSyncDelaySeconds
+    private var _assets: ArrayList<String> = ArrayList<String>()
 
-    public init() {
-        this.Workers = DefaultSyncWorkers
-        this.DelaySeconds = DefaultSyncDelaySeconds
-        this.Assets = ArrayList<String>()
-    }
+    // 构造函数
+    public func Sync() {}
 
-    // 同步 source -> target；若 Assets 为空则同步 target.Assets() 返回的全部名称。
-    public func Run(source: Repository, target: Repository, defaultStartDate: DateTime): Option<Exception> {
-        var assetNames = Assets
+    // run 执行同步操作，从 source 同步到 target
+    // 如果 _assets 为空，则同步 target 中所有资产
+    public func run(source: Repository, target: Repository, defaultStartDate: DateTime): Unit {
+        var assetNames = _assets
         if (assetNames.isEmpty()) {
-            let (names, err) = target.Assets()
-            match (err) {
-                case Some(e) => return Some(e)
-                case None => ()
-            }
-            assetNames = names
+            assetNames = target.assets()
         }
-
-        var hasErrors = false
 
         for (name in assetNames) {
-            let (lastOpt, lastErr) = target.LastDate(name)
-            var startDate = defaultStartDate
-            match (lastErr) {
-                case None =>
-                    match (lastOpt) {
-                        case Some(dt) => startDate = dt // 可以按需 +1 天；当前保持同日含等于。
-                        case None => startDate = defaultStartDate
-                    }
-                case Some(_) =>
+            try {
+                var startDate = defaultStartDate
+                // 尝试获取目标仓储的最新日期
+                try {
+                    let lastDate = target.lastDate(name)
+                    startDate = lastDate // 可以按需 +1 天；当前保持同日含等于
+                } catch (_: Exception) {
                     startDate = defaultStartDate
-            }
+                }
 
-            let (snaps, getErr) = source.GetSince(name, startDate)
-            match (getErr) {
-                case Some(e) =>
-                    hasErrors = true
-                    continue
-                case None => ()
-            }
-
-            match (target.Append(name, snaps)) {
-                case Some(_) => hasErrors = true
-                case None => ()
+                let snaps = source.getSince(name, startDate)
+                target.append(name, snaps)
+            } catch (_: Exception) {
+                // 忽略单个资产的错误，继续处理下一个
+                continue
             }
         }
-
-        if (hasErrors) {
-            return Some(Exception("has errors"))
-        }
-        return None
     }
-}
-
-public func NewSync(): Sync {
-    return Sync()
 }
 
 

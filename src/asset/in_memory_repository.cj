@@ -5,59 +5,60 @@ import std.collection.*
 import std.time.*
 import indicator4cj.helper.*
 
+// InMemoryRepository 内存仓储实现，将资产数据存储在内存中
 public class InMemoryRepository <: Repository {
-    private let storage = HashMap<String, ArrayList<Snapshot>>()
+    private let _storage = HashMap<String, ArrayList<Snapshot>>()
 
-    public func Assets(): (ArrayList<String>, Option<Exception>) {
+    // 构造函数
+    public func InMemoryRepository() {}
+
+    // assets 返回所有资产名称列表
+    public func assets(): ArrayList<String> {
         let assets = ArrayList<String>()
-        for (k in storage.keys()) { assets.add(k) }
-        return (assets, None)
+        for (k in _storage.keys()) { assets.add(k) }
+        return assets
     }
 
-    public func Get(name: String): (Iterator<Snapshot>, Option<Exception>) {
-        if (!storage.contains(name)) {
-            return (ArrayList<Snapshot>().iterator(), Some(ErrRepositoryAssetNotFound))
+    // get 获取指定资产的全部快照数据
+    // 如果资产不存在，抛出 Exception
+    public func get(name: String): Iterator<Snapshot> {
+        if (!_storage.contains(name)) {
+            throw Exception("repository: asset '${name}' not found")
         }
-        return (storage[name].iterator(), None)
+        return _storage[name].iterator()
     }
 
-    public func GetSince(name: String, date: DateTime): (Iterator<Snapshot>, Option<Exception>) {
-        let (snapshots, err) = Get(name)
-        match (err) { case Some(e) => return (ArrayList<Snapshot>().iterator(), Some(e)) case None => () }
-        return (Filter(snapshots, { s: Snapshot => (s.Date == date) || (s.Date > date) }), None)
+    // getSince 获取指定资产从指定日期开始的快照数据
+    // 如果资产不存在，抛出 Exception
+    public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
+        let snapshots = get(name)
+        return Filter(snapshots, { s: Snapshot => (s.Date == date) || (s.Date > date) })
     }
 
-    public func LastDate(name: String): (Option<DateTime>, Option<Exception>) {
-        let (iter, err) = Get(name)
-        match (err) { case Some(e) => return (None, Some(e)) case None => () }
+    // lastDate 返回指定资产的最新日期
+    // 如果资产不存在或为空，抛出 Exception
+    public func lastDate(name: String): DateTime {
+        let iter = get(name)
         var last: Option<DateTime> = None
-        while (true) {
-            match (iter.next()) {
-                case Some(s) => last = Some(s.Date)
-                case None =>
-                    match (last) {
-                        case Some(dt) => return (Some(dt), None)
-                        case None => return (None, Some(ErrRepositoryAssetEmpty))
-                    }
-            }
+        for (snapshot in iter) {
+            last = Some(snapshot.Date)
         }
-        return (None, Some(ErrRepositoryAssetEmpty))
+        return match (last) {
+            case Some(dt) => dt
+            case None => throw Exception("repository: asset '${name}' is empty")
+        }
     }
 
-    public func Append(name: String, snapshots: Iterator<Snapshot>): Option<Exception> {
-        let combined = if (storage.contains(name)) { storage[name] } else { ArrayList<Snapshot>() }
+    // append 向指定资产追加快照数据
+    public func append(name: String, snapshots: Iterator<Snapshot>): Unit {
+        let combined = if (_storage.contains(name)) { _storage[name] } else { ArrayList<Snapshot>() }
         while (true) {
             match (snapshots.next()) {
                 case Some(s) => combined.add(s)
                 case None => break
             }
         }
-        storage.add(name, combined)
-        return None
+        _storage.add(name, combined)
     }
-}
-
-public func NewInMemoryRepository(): InMemoryRepository {
-    return InMemoryRepository()
 }
 

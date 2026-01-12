@@ -64,35 +64,38 @@ public struct TiingoEndOfDay {
     }
 }
 
-// TiingoRepository：占位实现，接口保持与 Go 对齐。
+// TiingoRepository Tiingo API 仓储实现，从 Tiingo 金融数据 API 获取资产数据
 public class TiingoRepository <: Repository {
-    public let ApiKey: String
-    public let BaseUrl: String
+    private var _apiKey: String = ""
+    private var _baseUrl: String = "https://api.tiingo.com"
 
-    public init(apiKey: String) {
-        this.ApiKey = apiKey
-        this.BaseUrl = "https://api.tiingo.com"
+    // 构造函数
+    public TiingoRepository() {}
+
+    public init(_apiKey: String) {
+        this._apiKey = _apiKey
     }
 
-    public func Assets(): (ArrayList<String>, Option<Exception>) {
-        // Tiingo 不提供资产列表接口，保持与 Go 版一致返回 unsupported。
-        let empty = ArrayList<String>()
-        return (empty, Some(Exception("unsupported")))
+    // assets 返回所有资产名称列表（Tiingo 不支持，抛出异常）
+    public func assets(): ArrayList<String> {
+        throw Exception("tiingo: assets list not supported")
     }
 
-    public func Get(name: String): (Iterator<Snapshot>, Option<Exception>) {
-        // 默认从 2000-01-01 起拉取。
-        return GetSince(name, DateTime.parse("2000-01-01", "yyyy-MM-dd"))
+    // get 获取指定资产的全部快照数据
+    public func get(name: String): Iterator<Snapshot> {
+        // 默认从 2000-01-01 起拉取
+        return getSince(name, DateTime.parse("2000-01-01", "yyyy-MM-dd"))
     }
 
-    public func GetSince(name: String, date: DateTime): (Iterator<Snapshot>, Option<Exception>) {
-        let url = BaseUrl + "/tiingo/daily/" + name + "/prices?startDate=" + formatDate(date) + "&token=" + ApiKey
+    // getSince 获取指定资产从指定日期开始的快照数据
+    public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
+        let url = _baseUrl + "/tiingo/daily/" + name + "/prices?startDate=" + formatDate(date) + "&token=" + _apiKey
         let client = ClientBuilder().build()
         try {
             let resp = client.get(url)
             if (resp.status >= 400u16) {
                 client.close()
-                return (ArrayList<Snapshot>().iterator(), Some(Exception("http status " + resp.status.toString())))
+                throw Exception("tiingo: http error ${resp.status.toString()}")
             }
             let bodyStr = readBody(resp.body)
             client.close()
@@ -106,23 +109,24 @@ public class TiingoRepository <: Repository {
                             case None => ()
                         }
                     }
-                    return (snaps.iterator(), None)
-                case None => return (ArrayList<Snapshot>().iterator(), Some(Exception("invalid json array")))
+                    return snaps.iterator()
+                case None => throw Exception("tiingo: invalid json array response")
             }
         } catch (e: Exception) {
             client.close()
-            return (ArrayList<Snapshot>().iterator(), Some(e))
+            throw e
         }
     }
 
-    public func LastDate(name: String): (Option<DateTime>, Option<Exception>) {
-        let url = BaseUrl + "/tiingo/daily/" + name + "?token=" + ApiKey
+    // lastDate 返回指定资产的最新日期
+    public func lastDate(name: String): DateTime {
+        let url = _baseUrl + "/tiingo/daily/" + name + "?token=" + _apiKey
         let client = ClientBuilder().build()
         try {
             let resp = client.get(url)
             if (resp.status >= 400u16) {
                 client.close()
-                return (None<DateTime>, Some(Exception("http status " + resp.status.toString())))
+                throw Exception("tiingo: http error ${resp.status.toString()}")
             }
             let bodyStr = readBody(resp.body)
             client.close()
@@ -132,22 +136,22 @@ public class TiingoRepository <: Repository {
                     match (obj.get("endDate")) {
                         case Some(v) =>
                             match (v as JsonString) {
-                                case Some(js) =>
-                                    return (Some(parseDate(js.getValue())), None)
-                                case None => return (None<DateTime>, Some(Exception("endDate not string")))
+                                case Some(js) => return parseDate(js.getValue())
+                                case None => throw Exception("tiingo: endDate is not a string")
                             }
-                        case None => return (None<DateTime>, Some(Exception("endDate missing")))
+                        case None => throw Exception("tiingo: endDate missing in response")
                     }
-                case None => return (None<DateTime>, Some(Exception("invalid json object")))
+                case None => throw Exception("tiingo: invalid json object response")
             }
         } catch (e: Exception) {
             client.close()
-            return (None<DateTime>, Some(e))
+            throw e
         }
     }
 
-    public func Append(_: String, _: Iterator<Snapshot>): Option<Exception> {
-        return Some(Exception("unsupported"))
+    // append 追加快照数据（Tiingo 不支持写入，抛出异常）
+    public func append(_: String, _: Iterator<Snapshot>): Unit {
+        throw Exception("tiingo: append operation not supported")
     }
 
     // ---- helpers ----
@@ -233,9 +237,5 @@ public class TiingoRepository <: Repository {
         }
         return DateTime.parse("1970-01-01", "yyyy-MM-dd")
     }
-}
-
-public func NewTiingoRepository(apiKey: String): TiingoRepository {
-    return TiingoRepository(apiKey)
 }
 

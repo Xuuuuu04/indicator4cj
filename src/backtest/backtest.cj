@@ -9,74 +9,66 @@ import indicator4cj.helper.*
 public const DefaultBacktestWorkers: Int64 = 1
 public const DefaultLastDays: Int64 = 365
 
+// Backtest 回测引擎，执行策略回测并生成报告
 public class Backtest {
-    private let repository: Repository
-    private let report: Report
-    public var Names: ArrayList<String>
-    public var Strategies: ArrayList<Strategy>
-    public var Workers: Int64
-    public var LastDays: Int64
+    private var _repository: Repository
+    private var _report: Report
+    private var _names: ArrayList<String> = ArrayList<String>()
+    private var _strategies: ArrayList<Strategy> = ArrayList<Strategy>()
+    private var _workers: Int64 = DefaultBacktestWorkers
+    private var _lastDays: Int64 = DefaultLastDays
 
+    // 构造函数
     public init(repository: Repository, report: Report) {
-        this.repository = repository
-        this.report = report
-        this.Names = ArrayList<String>()
-        this.Strategies = ArrayList<Strategy>()
-        this.Workers = DefaultBacktestWorkers
-        this.LastDays = DefaultLastDays
+        this._repository = repository
+        this._report = report
     }
 
-    public func Run(): Option<Exception> {
+    // run 执行回测
+    public func run(): Unit {
         // 资产列表
-        if (Names.isEmpty()) {
-            let (assets, err) = repository.Assets()
-            match (err) { case Some(e) => return Some(e) case None => () }
-            Names = assets
+        if (_names.isEmpty()) {
+            _names = _repository.assets()
         }
         // 策略列表
-        if (Strategies.isEmpty()) {
-            let arr = ArrayList<Strategy>()
-            arr.add(NewBuyAndHoldStrategy())
-            Strategies = arr
+        if (_strategies.isEmpty()) {
+            _strategies.add(BuyAndHoldStrategy())
         }
 
-        match (report.Begin(Names, Strategies)) {
-            case Some(e) => return Some(e)
+        match (_report.begin(_names, _strategies)) {
+            case Some(e) => throw e
             case None => ()
         }
 
-        for (name in Names) {
-            let (snapsIter, err) = repository.Get(name)
-            match (err) { case Some(e) => return Some(e) case None => () }
-
+        for (name in _names) {
+            let snapsIter = _repository.get(name)
             let snapsList = ChanToSlice(snapsIter)
 
-            match (report.AssetBegin(name, Strategies)) {
-                case Some(e) => return Some(e)
+            match (_report.assetBegin(name, _strategies)) {
+                case Some(e) => throw e
                 case None => ()
             }
 
-            for (st in Strategies) {
+            for (st in _strategies) {
                 let dup = Duplicate(snapsList.iterator(), 2)
                 let (actions, outcomes) = ComputeWithOutcome(st, dup[0])
-                match (report.Write(name, st, dup[1], actions, outcomes)) {
-                    case Some(e) => return Some(e)
+                match (_report.write(name, st, dup[1], actions, outcomes)) {
+                    case Some(e) => throw e
                     case None => ()
                 }
             }
 
-            match (report.AssetEnd(name)) {
-                case Some(e) => return Some(e)
+            match (_report.assetEnd(name)) {
+                case Some(e) => throw e
                 case None => ()
             }
         }
 
-        return report.End()
+        match (_report.end()) {
+            case Some(e) => throw e
+            case None => ()
+        }
     }
-}
-
-public func NewBacktest(repository: Repository, report: Report): Backtest {
-    return Backtest(repository, report)
 }
 
 

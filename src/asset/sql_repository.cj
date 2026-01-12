@@ -4,84 +4,69 @@ import std.core.*
 import std.collection.*
 import std.time.*
 
-// SQLRepository：在仓颉侧以内存实现 API，保持与 Go 版接口一致。
-// 由于当前环境缺少统一的 SQL 驱动，这里以内存 Map 模拟持久层，后续可替换为真实数据库实现。
+// SQLRepository SQL 仓储实现（当前以内存 Map 模拟，后续可替换为真实数据库）
 public class SQLRepository <: Repository {
-    private let storage = HashMap<String, ArrayList<Snapshot>>()
-    private let dialect: SQLRepositoryDialect
+    private let _storage = HashMap<String, ArrayList<Snapshot>>()
+    private var _dialect: SQLRepositoryDialect
 
-    public init(dialect: SQLRepositoryDialect) {
-        this.dialect = dialect
+    // 构造函数（必须提供 dialect）
+    public init(_dialect: SQLRepositoryDialect) {
+        this._dialect = _dialect
     }
 
-    public func Assets(): (ArrayList<String>, Option<Exception>) {
+    // assets 返回所有资产名称列表
+    public func assets(): ArrayList<String> {
         let assets = ArrayList<String>()
-        for (k in storage.keys()) { assets.add(k) }
-        return (assets, None)
+        for (k in _storage.keys()) { assets.add(k) }
+        return assets
     }
 
-    public func Get(name: String): (Iterator<Snapshot>, Option<Exception>) {
-        if (!storage.contains(name)) {
-            return (ArrayList<Snapshot>().iterator(), Some(ErrRepositoryAssetNotFound))
+    // get 获取指定资产的全部快照数据
+    public func get(name: String): Iterator<Snapshot> {
+        if (!_storage.contains(name)) {
+            throw Exception("sql repository: asset '${name}' not found")
         }
-        return (storage[name].iterator(), None)
+        return _storage[name].iterator()
     }
 
-    public func GetSince(name: String, date: DateTime): (Iterator<Snapshot>, Option<Exception>) {
-        let (iter, err) = Get(name)
-        match (err) { case Some(e) => return (ArrayList<Snapshot>().iterator(), Some(e)) case None => () }
-
+    // getSince 获取指定资产从指定日期开始的快照数据
+    public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
+        let iter = get(name)
         let filtered = ArrayList<Snapshot>()
-        while (true) {
-            match (iter.next()) {
-                case Some(s) =>
-                    if ((s.Date == date) || (s.Date > date)) {
-                        filtered.add(s)
-                    }
-                case None => break
+        for (s in iter) {
+            if ((s.Date == date) || (s.Date > date)) {
+                filtered.add(s)
             }
         }
-        return (filtered.iterator(), None)
+        return filtered.iterator()
     }
 
-    public func LastDate(name: String): (Option<DateTime>, Option<Exception>) {
-        let (iter, err) = Get(name)
-        match (err) { case Some(e) => return (None, Some(e)) case None => () }
+    // lastDate 返回指定资产的最新日期
+    public func lastDate(name: String): DateTime {
+        let iter = get(name)
         var last: Option<DateTime> = None
-        while (true) {
-            match (iter.next()) {
-                case Some(s) => last = Some(s.Date)
-                case None =>
-                    match (last) {
-                        case Some(dt) => return (Some(dt), None)
-                        case None => return (None, Some(ErrRepositoryAssetEmpty))
-                    }
-            }
+        for (s in iter) {
+            last = Some(s.Date)
         }
-        return (None, Some(ErrRepositoryAssetEmpty))
-    }
-
-    public func Append(name: String, snapshots: Iterator<Snapshot>): Option<Exception> {
-        let combined = if (storage.contains(name)) { storage[name] } else { ArrayList<Snapshot>() }
-        while (true) {
-            match (snapshots.next()) {
-                case Some(s) => combined.add(s)
-                case None => break
-            }
+        return match (last) {
+            case Some(dt) => dt
+            case None => throw Exception("sql repository: asset '${name}' is empty")
         }
-        storage.add(name, combined)
-        return None
     }
 
-    public func Drop(): Option<Exception> {
-        storage.clear()
-        return None
+    // append 向指定资产追加快照数据
+    public func append(name: String, snapshots: Iterator<Snapshot>): Unit {
+        let combined = if (_storage.contains(name)) { _storage[name] } else { ArrayList<Snapshot>() }
+        for (s in snapshots) {
+            combined.add(s)
+        }
+        _storage.add(name, combined)
     }
-}
 
-// 仿 Go NewSQLRepository 签名：driver/url 被忽略，仅保留 dialect 以兼容接口。
-public func NewSQLRepository(_: String, _: String, dialect: SQLRepositoryDialect): SQLRepository {
-    return SQLRepository(dialect)
+    // drop 清空所有资产数据
+    public func drop(): Unit {
+        _storage.clear()
+    }
 }
 
 
