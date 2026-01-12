@@ -20,36 +20,36 @@ public class MovingStd {
 
 // Iterator maintaining ring buffer and running mean.
 private class MovingStdIterator <: Iterator<Float64> {
-    private let source: Iterator<Float64>
-    private let period: Int64
-    private let ring: Ring<Float64>
-    private var sum: Float64 = 0.0
+    private let _source: Iterator<Float64>
+    private let _period: Int64
+    private let _ring: Ring<Float64>
+    private var _sum: Float64 = 0.0
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this.source = source
-        this.period = period
-        this.ring = Ring<Float64>(period)
+        this._source = source
+        this._period = period
+        this._ring = Ring<Float64>(period)
     }
 
     public func next(): Option<Float64> {
-        match (source.next()) {
+        match (_source.next()) {
             case Some(v) =>
-                let dropped = ring.Put(v)
+                let dropped = _ring.Put(v)
                 match (dropped) {
-                    case Some(old) => sum = sum - old + v
-                    case None => sum = sum + v
+                    case Some(old) => _sum = _sum - old + v
+                    case None => _sum = _sum + v
                 }
 
-                if (ring.IsFull()) {
-                    let sma = sum / Float64(period)
+                if (_ring.IsFull()) {
+                    let sma = _sum / Float64(_period)
                     var sum2 = 0.0
                     var i: Int64 = 0
-                    while (i < period) {
-                        let diff = ring.At(i) - sma
+                    while (i < _period) {
+                        let diff = _ring.At(i) - sma
                         sum2 += pow(diff, 2.0)
                         i = i + 1
                     }
-                    let std = sqrt(sum2 / Float64(period))
+                    let std = sqrt(sum2 / Float64(_period))
                     return Some(std)
                 }
                 return next()

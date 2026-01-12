@@ -6,20 +6,20 @@ import indicator4cj.trend.*
 
 // Projection Oscillator (PO) for Float64.
 public class Po {
-    private let mls: Mls
-    private let min: MovingMin
-    private let max: MovingMax
+    private let _mls: Mls
+    private let _min: MovingMin
+    private let _max: MovingMax
 
     public init() {
-        this.mls = Mls(14)
-        this.min = MovingMin(14)
-        this.max = MovingMax(14)
+        this._mls = Mls(14)
+        this._min = MovingMin(14)
+        this._max = MovingMax(14)
     }
 
     public init(period: Int64) {
-        this.mls = Mls(period)
-        this.min = MovingMin(period)
-        this.max = MovingMax(period)
+        this._mls = Mls(period)
+        this._min = MovingMin(period)
+        this._max = MovingMax(period)
     }
 
     public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
@@ -31,24 +31,24 @@ public class Po {
         let xSplice = Duplicate(x, 2)
 
         // PL = Min(period, (high + MLS(period, x, high)))
-        let (plM, plB) = mls.Compute(xSplice[0], hs[0])
+        let (plM, plB) = _mls.Compute(xSplice[0], hs[0])
         Drain(plB)
-        hs[1] = Skip(hs[1], mls.IdlePeriod())
+        hs[1] = Skip(hs[1], _mls.IdlePeriod())
         let plSplice = Duplicate(
-            min.Compute(
+            _min.Compute(
                 Add(hs[1], plM)
             ),
             2
         )
 
         // PH = Max(period, (low + MLS(period, x, low)))
-        let (phM, phB) = mls.Compute(xSplice[1], ls[0])
+        let (phM, phB) = _mls.Compute(xSplice[1], ls[0])
         Drain(phB)
-        ls[1] = Skip(ls[1], mls.IdlePeriod())
-        let ph = max.Compute(Add(ls[1], phM))
+        ls[1] = Skip(ls[1], _mls.IdlePeriod())
+        let ph = _max.Compute(Add(ls[1], phM))
 
         // PO = 100 * (Closing - PL) / (PH - PL)
-        cs[1] = Skip(cs[1], mls.IdlePeriod() + min.IdlePeriod())
+        cs[1] = Skip(cs[1], _mls.IdlePeriod() + _min.IdlePeriod())
         let po = MultiplyBy(
             Divide(
                 Subtract(cs[1], plSplice[0]),
@@ -61,7 +61,7 @@ public class Po {
     }
 
     public func IdlePeriod(): Int64 {
-        return mls.IdlePeriod() + min.IdlePeriod()
+        return _mls.IdlePeriod() + _min.IdlePeriod()
     }
 }
 
