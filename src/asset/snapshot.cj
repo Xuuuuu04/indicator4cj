@@ -20,7 +20,7 @@ public class Snapshot <: ToString {
     }
 
     // 无参构造用于 CSV 反射填充。
-    public init() {
+    public Snapshot() {
         this.Date = DateTime.now()
         this.Open = 0.0
         this.High = 0.0

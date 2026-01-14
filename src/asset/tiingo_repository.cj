@@ -17,12 +17,12 @@ public struct TiingoMeta {
     public let EndDate: DateTime
 
     public init() {
-        this.Ticker = ""
-        this.Name = ""
-        this.ExchangeCode = ""
-        this.Description = ""
-        this.StartDate = DateTime.now()
-        this.EndDate = DateTime.now()
+        Ticker = ""
+        Name = ""
+        ExchangeCode = ""
+        Description = ""
+        StartDate = DateTime.now()
+        EndDate = DateTime.now()
     }
 }
 
@@ -43,24 +43,32 @@ public struct TiingoEndOfDay {
     public let Split: Float64
 
     public init() {
-        this.Date = DateTime.now()
-        this.Open = 0.0
-        this.High = 0.0
-        this.Low = 0.0
-        this.Close = 0.0
-        this.Volume = 0
-        this.AdjOpen = 0.0
-        this.AdjHigh = 0.0
-        this.AdjLow = 0.0
-        this.AdjClose = 0.0
-        this.AdjVolume = 0
-        this.Dividend = 0.0
-        this.Split = 0.0
+        Date = DateTime.now()
+        Open = 0.0
+        High = 0.0
+        Low = 0.0
+        Close = 0.0
+        Volume = 0
+        AdjOpen = 0.0
+        AdjHigh = 0.0
+        AdjLow = 0.0
+        AdjClose = 0.0
+        AdjVolume = 0
+        Dividend = 0.0
+        Split = 0.0
     }
 
     public func ToSnapshot(): Snapshot {
         // 与 Go 版一致：使用调整后的价格与成交量。
-        return Snapshot(Date, AdjOpen, AdjHigh, AdjLow, AdjClose, AdjClose, Float64(AdjVolume))
+        let s = Snapshot()
+        s.Date = Date
+        s.Open = AdjOpen
+        s.High = AdjHigh
+        s.Low = AdjLow
+        s.Close = AdjClose
+        s.AdjClose = AdjClose
+        s.Volume = Float64(AdjVolume)
+        return s
     }
 }
 
@@ -178,7 +186,16 @@ public class TiingoRepository <: Repository {
         let adjLow = getFloat(obj, "adjLow", getFloat(obj, "low", 0.0))
         let adjClose = getFloat(obj, "adjClose", getFloat(obj, "close", 0.0))
         let adjVolume = getInt(obj, "adjVolume", getInt(obj, "volume", 0))
-        return Snapshot(date, adjOpen, adjHigh, adjLow, adjClose, adjClose, Float64(adjVolume))
+
+        let s = Snapshot()
+        s.Date = date
+        s.Open = adjOpen
+        s.High = adjHigh
+        s.Low = adjLow
+        s.Close = adjClose
+        s.AdjClose = adjClose
+        s.Volume = Float64(adjVolume)
+        return s
     }
 
     private func getString(obj: JsonObject, key: String, def: String): String {
