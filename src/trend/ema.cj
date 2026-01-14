@@ -8,7 +8,7 @@ public class Ema {
     public var Period: Int64
     public var Smoothing: Float64
 
-    public init() {
+    public func Ema() {
         this.Period = 20
         this.Smoothing = 2.0
     }
@@ -18,11 +18,11 @@ public class Ema {
         this.Smoothing = 2.0
     }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         return EmaIterator(c, Period, Smoothing)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 
     public func toString(): String { return "EMA(${Period})" }
 }

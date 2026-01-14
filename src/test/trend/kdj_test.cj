@@ -28,7 +28,7 @@ public func test_kdj_basic() {
     let expectedJ = h.Map(inputs[5], { row: KdjData => row.J })
 
     let kdj = Kdj()
-    let (actualKRaw, actualDRaw, actualJRaw) = kdj.Compute(high, low, closing)
+    let (actualKRaw, actualDRaw, actualJRaw) = kdj.compute(high, low, closing)
 
     let actualK = h.RoundDigits(actualKRaw, 2)
     let actualD = h.RoundDigits(actualDRaw, 2)

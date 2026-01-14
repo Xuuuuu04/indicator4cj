@@ -14,7 +14,7 @@ public func test_moving_sum_basic() {
     
     let movingSum = MovingSum()
     movingSum.Period = 4
-    let actual = movingSum.Compute(input)
+    let actual = movingSum.compute(input)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err)

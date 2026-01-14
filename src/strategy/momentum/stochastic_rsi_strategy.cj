@@ -28,13 +28,13 @@ public class StochasticRsiStrategy <: Strategy {
         this.SellAt = sellAt
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "Stochastic RSI Strategy (${BuyAt},${SellAt})"
     }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closings = SnapshotsAsClosings(c)
-        let stochasticRsi = Indicator.Compute(closings)
+        let stochasticRsi = Indicator.compute(closings)
 
         let actions = h.Map(stochasticRsi, { v: Float64 =>
             if (v <= BuyAt) { return Action.Buy }
@@ -42,33 +42,33 @@ public class StochasticRsiStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.IdlePeriod(), Action.Hold)
+        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         var dates = SnapshotsAsDates(snaps[0])
 
         let closings = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
-        closings[0] = Skip(closings[0], Indicator.IdlePeriod())
+        closings[0] = Skip(closings[0], Indicator.idlePeriod())
 
-        let stochasticRsi = Indicator.Compute(closings[1])
+        let stochasticRsi = Indicator.compute(closings[1])
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[1])
         var annotations = ActionsToAnnotations(actions)
         var outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        dates = Skip(dates, Indicator.IdlePeriod())
-        annotations = Skip(annotations, Indicator.IdlePeriod())
-        outcomes = Skip(outcomes, Indicator.IdlePeriod())
+        dates = Skip(dates, Indicator.idlePeriod())
+        annotations = Skip(annotations, Indicator.idlePeriod())
+        outcomes = Skip(outcomes, Indicator.idlePeriod())
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[0]))
-        report.AddColumn(NewNumericReportColumn("Stochastic RSI", stochasticRsi), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[0]))
+        report.addColumn(NumericReportColumn("Stochastic RSI", stochasticRsi), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 }

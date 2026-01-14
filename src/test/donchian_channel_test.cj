@@ -27,7 +27,7 @@ public func donchian_channel_basic() {
     let expLower = Map(inputs[3], { d: DonchianRow => d.Lower })
 
     let dc = DonchianChannel()
-    var (actUpper, actMiddle, actLower) = dc.Compute(closings)
+    var (actUpper, actMiddle, actLower) = dc.compute(closings)
     actUpper = RoundDigits(actUpper, 2)
     actMiddle = RoundDigits(actMiddle, 2)
     actLower = RoundDigits(actLower, 2)

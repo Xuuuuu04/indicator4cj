@@ -20,7 +20,7 @@ public func test_trix_basic() {
     let expected = h.Map(inputs[1], { d: TrixData => d.Trix })
 
     let trix = Trix()
-    let actual = h.RoundDigits(trix.Compute(closing), 4)
+    let actual = h.RoundDigits(trix.compute(closing), 4)
     let expectedSkipped = h.Skip(expected, trix.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

@@ -19,13 +19,13 @@ public class Ppo {
         this.SlowPeriod = slow
     }
 
-    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
-        let fastEma = Ema(FastPeriod).Compute(values)
-        let slowEma = Ema(SlowPeriod).Compute(values)
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        let fastEma = Ema(FastPeriod).compute(values)
+        let slowEma = Ema(SlowPeriod).compute(values)
         let diff = Subtract(fastEma, slowEma)
         return MultiplyBy(Divide(diff, slowEma), 100.0)
     }
 
-    public func IdlePeriod(): Int64 { return SlowPeriod - 1 }
+    public func idlePeriod(): Int64 { return SlowPeriod - 1 }
 }
 

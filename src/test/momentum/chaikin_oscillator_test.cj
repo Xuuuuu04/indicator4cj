@@ -30,7 +30,7 @@ public func chaikin_basic() {
     var expected = Map(inputs[4], { d: ChaikinRow => d.Chaikin })
 
     let co = ChaikinOscillator()
-    var actual = co.Compute(highs, lows, closes, volumes)
+    var actual = co.compute(highs, lows, closes, volumes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, co.IdlePeriod())
 

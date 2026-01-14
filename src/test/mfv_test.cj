@@ -18,7 +18,7 @@ class MfvTest {
         var expected = Map(inputs[4], { m => m.Mfv })
 
         let mfv = Mfv()
-        let actual = RoundDigits(mfv.Compute(highs, lows, closes, volumes), 2)
+        let actual = RoundDigits(mfv.compute(highs, lows, closes, volumes), 2)
         expected = Skip(expected, mfv.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

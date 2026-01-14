@@ -21,7 +21,7 @@ public func ppo_basic() {
     var expected = Map(inputs[1], { d: PpoRow => d.Ppo })
 
     let ppo = Ppo()
-    var actual = ppo.Compute(closes)
+    var actual = ppo.compute(closes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, ppo.IdlePeriod())
 

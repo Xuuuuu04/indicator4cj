@@ -9,13 +9,13 @@ public class Mfv {
 
     public init() {}
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         return Multiply(
-            _mfm.Compute(highs, lows, closings),
+            _mfm.compute(highs, lows, closings),
             volumes
         )
     }
 
-    public func IdlePeriod(): Int64 { return 0 }
+    public func idlePeriod(): Int64 { return 0 }
 }
 

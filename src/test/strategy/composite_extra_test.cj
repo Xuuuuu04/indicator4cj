@@ -34,25 +34,25 @@ public func test_composite_strategies_branches() {
     let or1 = NewOrStrategy("Or1")
     or1.Strategies.add(buyS)
     or1.Strategies.add(holdS)
-    let res1 = or1.Compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
+    let res1 = or1.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     if (res1 != Action.Buy) { fail("OrStrategy Buy|Hold failed") }
     
     let or2 = NewOrStrategy("Or2")
     or2.Strategies.add(sellS)
     or2.Strategies.add(holdS)
-    let res2 = or2.Compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
+    let res2 = or2.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     if (res2 != Action.Sell) { fail("OrStrategy Sell|Hold failed") }
     
     let or3 = NewOrStrategy("Or3")
     or3.Strategies.add(buyS)
     or3.Strategies.add(sellS)
-    let res3 = or3.Compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
+    let res3 = or3.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     // 根据 CountActions 逻辑，(buy > 0 && sell > 0) 会返回 Hold
     if (res3 != Action.Hold) { fail("OrStrategy Buy|Sell failed") }
 
     // 2. SplitStrategy 逻辑
     let split = NewSplitStrategy(buyS, sellS)
-    let resSIter = split.Compute(ArrayList<Snapshot>().iterator())
+    let resSIter = split.compute(ArrayList<Snapshot>().iterator())
     match (resSIter.next()) {
         case Some(_) => () // 只要有输出即可，逻辑由组合策略定义保证
         case None => fail("SplitStrategy expected output")

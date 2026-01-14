@@ -18,7 +18,7 @@ class CmfTest {
         var expected = Map(inputs[4], { m => m.Cmf })
 
         let cmf = Cmf()
-        let actual = RoundDigits(cmf.Compute(highs, lows, closes, volumes), 2)
+        let actual = RoundDigits(cmf.compute(highs, lows, closes, volumes), 2)
         expected = Skip(expected, cmf.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

@@ -27,7 +27,7 @@ public func super_trend_basic() {
     var expected = Map(inputs[3], { d: SuperTrendRow => d.SuperTrend })
 
     let st = SuperTrend()
-    var actual = RoundDigits(st.Compute(highs, lows, closings), 2)
+    var actual = RoundDigits(st.compute(highs, lows, closings), 2)
     expected = Skip(expected, st.IdlePeriod())
 
     match (CheckEquals(actual, expected)) {

@@ -25,7 +25,7 @@ public func ema_basic() {
 
     let ema = Ema(10)
     
-    var actual = RoundDigits(ema.Compute(input), 2)
+    var actual = RoundDigits(ema.compute(input), 2)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err.toString())

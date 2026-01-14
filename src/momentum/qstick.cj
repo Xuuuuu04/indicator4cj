@@ -11,17 +11,13 @@ public class Qstick {
     public init() { this.Period = 20 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(opens: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
+    public func compute(opens: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
         let diff = Subtract(closes, opens)
         let sma = Sma()
         sma.Period = Period
-        return sma.Compute(diff)
+        return sma.compute(diff)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
-}
-
-public func NewQstick(): Qstick {
-    return Qstick()
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
 

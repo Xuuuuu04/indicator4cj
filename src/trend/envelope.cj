@@ -21,8 +21,8 @@ public class Envelope {
         this.Percentage = percentage
     }
 
-    public func Compute(closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
-        let middleSplice = Duplicate(MaIndicator.Compute(closings), 3)
+    public func compute(closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
+        let middleSplice = Duplicate(MaIndicator.compute(closings), 3)
 
         let upper = MultiplyBy(middleSplice[0], 1.0 + (Percentage / 100.0))
         let lower = MultiplyBy(middleSplice[2], 1.0 - (Percentage / 100.0))
@@ -30,21 +30,8 @@ public class Envelope {
         return (upper, middleSplice[1], lower)
     }
 
-    public func IdlePeriod(): Int64 { return MaIndicator.IdlePeriod() }
+    public func idlePeriod(): Int64 { return MaIndicator.idlePeriod() }
 
     public func toString(): String { return "Envelope(${Percentage})" }
 }
-
-public func NewEnvelope(): Envelope {
-    return Envelope()
-}
-
-public func NewEnvelopeWithSma(): Envelope {
-    return Envelope(Sma(DefaultEnvelopePeriod), DefaultEnvelopePercentage)
-}
-
-public func NewEnvelopeWithEma(): Envelope {
-    return Envelope(Ema(DefaultEnvelopePeriod), DefaultEnvelopePercentage)
-}
-
 

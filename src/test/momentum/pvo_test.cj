@@ -21,7 +21,7 @@ public func pvo_basic() {
     var expected = Map(inputs[1], { d: PvoRow => d.Pvo })
 
     let pvo = Pvo()
-    var actual = pvo.Compute(volumes)
+    var actual = pvo.compute(volumes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, pvo.IdlePeriod())
 

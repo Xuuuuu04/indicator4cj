@@ -19,17 +19,17 @@ public class Rsi {
         this._rma = Rma(period)
     }
 
-    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let changes = Change(values, 1)
         let dup = Duplicate(changes, 2)
-        let avgGain = _rma.Compute(KeepPositives(dup[0]))
-        let avgLoss = MultiplyBy(_rma.Compute(KeepNegatives(dup[1])), -1.0)
+        let avgGain = _rma.compute(KeepPositives(dup[0]))
+        let avgLoss = MultiplyBy(_rma.compute(KeepNegatives(dup[1])), -1.0)
         let rs = Divide(avgGain, avgLoss)
         // RSI = 100 - 100 / (1 + RS)
         let rsi = IncrementBy(MultiplyBy(MultiplyBy(Pow(IncrementBy(rs, 1.0), -1.0), 100.0), -1.0), 100.0)
         return rsi
     }
 
-    public func IdlePeriod(): Int64 { return _rma.IdlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return _rma.idlePeriod() + 1 }
 }
 

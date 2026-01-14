@@ -62,7 +62,7 @@ public func awesome_oscillator_strategy_basic() {
 
     let strat = NewAwesomeOscillatorStrategy()
     let actualList = ArrayList<Action>()
-    let actualIter = strat.Compute(snaps.iterator())
+    let actualIter = strat.compute(snaps.iterator())
     while (true) {
         match (actualIter.next()) {
             case Some(a) => actualList.add(a)
@@ -94,7 +94,7 @@ public func awesome_oscillator_strategy_report() {
     }
 
     let strat = NewAwesomeOscillatorStrategy()
-    strat.Report(snaps.iterator())
+    strat.report(snaps.iterator())
     @Expect(true, true)
 }
 

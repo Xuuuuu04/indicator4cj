@@ -22,7 +22,7 @@ public func test_mass_index_basic() {
     let expected = h.Map(inputs[2], { row: MassIndexData => row.MassIndex })
 
     let mi = MassIndex()
-    let actual = h.RoundDigits(mi.Compute(highs, lows), 2)
+    let actual = h.RoundDigits(mi.compute(highs, lows), 2)
     let actualShifted = h.Shift(actual, mi.IdlePeriod(), 0.0)
 
     match (h.CheckFloatEquals(actualShifted, expected)) {

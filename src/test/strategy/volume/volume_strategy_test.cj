@@ -69,7 +69,7 @@ public func chaikin_money_flow_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/chaikin_money_flow_strategy.csv")
     let s = NewChaikinMoneyFlowStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
@@ -81,7 +81,7 @@ public func ease_of_movement_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/ease_of_movement_strategy.csv")
     let s = NewEaseOfMovementStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
@@ -93,7 +93,7 @@ public func force_index_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/force_index_strategy.csv")
     let s = NewForceIndexStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
@@ -105,7 +105,7 @@ public func money_flow_index_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/money_flow_index_strategy.csv")
     let s = NewMoneyFlowIndexStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
@@ -117,7 +117,7 @@ public func negative_volume_index_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/negative_volume_index_strategy.csv")
     let s = NewNegativeVolumeIndexStrategyWith(12)
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
@@ -129,7 +129,7 @@ public func weighted_average_price_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/volume_weighted_average_price_strategy.csv")
     let s = NewWeightedAveragePriceStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
@@ -142,7 +142,7 @@ public func percent_b_and_mfi_strategy_basic() {
     let expected = loadExpected("${basePath}/volume/percent_b_and_mfi_strategy.csv")
     // 按 Go 测试用例，与 percent_b_and_mfi_strategy_test.go 一致，使用 NVI 策略（周期 12）。
     let s = NewNegativeVolumeIndexStrategyWith(12)
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()

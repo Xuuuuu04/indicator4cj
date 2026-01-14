@@ -16,14 +16,14 @@ public class Trima {
         this.Period = period
     }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let (p1, p2) = calculatePeriods()
         let sma1 = Sma(p1)
         let sma2 = Sma(p2)
-        return sma1.Compute(sma2.Compute(c))
+        return sma1.compute(sma2.compute(c))
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         let (p1, p2) = calculatePeriods()
         return p1 + p2 - 2
     }
@@ -43,9 +43,4 @@ public class Trima {
 
     public func toString(): String { return "TRIMA(${Period})" }
 }
-
-public func NewTrima(): Trima {
-    return Trima()
-}
-
 

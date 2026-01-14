@@ -21,7 +21,7 @@ public func rsi_basic() {
     var expected = Map(inputs[1], { d: RsiRow => d.Rsi })
 
     let rsi = Rsi(14)
-    var actual = rsi.Compute(closes)
+    var actual = rsi.compute(closes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, rsi.IdlePeriod())
 

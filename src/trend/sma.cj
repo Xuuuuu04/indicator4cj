@@ -10,13 +10,13 @@ public class Sma {
     public init() { this.Period = 50 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let sum = MovingSum()
         sum.Period = Period
-        return DivideBy(sum.Compute(c), Float64(Period))
+        return DivideBy(sum.compute(c), Float64(Period))
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 
     public func toString(): String { return "SMA(${Period})" }
 }

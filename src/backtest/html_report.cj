@@ -80,12 +80,12 @@ public class HtmlReport <: Report {
         let outcomesList = ChanToSlice(outcomes)
         let lastOutcome = if (outcomesList.isEmpty()) { 0.0 } else { outcomesList[outcomesList.size - 1] * 100.0 }
 
-        let result = HtmlReportResult(assetName, currentStrategy.Name(), lastAction, since, lastOutcome, tx)
+        let result = HtmlReportResult(assetName, currentStrategy.name(), lastAction, since, lastOutcome, tx)
         _assetResults[assetName].add(result)
 
         if (_writeStrategyReports) {
-            let report = currentStrategy.Report(snapsList.iterator())
-            let path = _outputDir + "/" + assetName + " - " + currentStrategy.Name() + ".txt"
+            let report = currentStrategy.report(snapsList.iterator())
+            let path = _outputDir + "/" + assetName + " - " + currentStrategy.name() + ".txt"
             try {
                 report.writeToFile(path)
             } catch (e: Exception) {

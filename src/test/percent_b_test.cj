@@ -21,7 +21,7 @@ public func percent_b_basic() {
     let expected = Map(inputs[1], { d: PercentBRow => d.PercentB })
 
     let pb = PercentB()
-    var actual = pb.Compute(closing)
+    var actual = pb.compute(closing)
     actual = RoundDigits(actual, 2)
 
     let exp = Skip(expected, pb.IdlePeriod())

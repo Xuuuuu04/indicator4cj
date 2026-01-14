@@ -10,7 +10,7 @@ public class AccelerationBands {
     public init() { this.Period = 20 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
+    public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highs = Duplicate(high, 3)
         let lows = Duplicate(low, 3)
 
@@ -25,7 +25,7 @@ public class AccelerationBands {
         let sma = Sma()
         sma.Period = Period
 
-        let upper = sma.Compute(
+        let upper = sma.compute(
             Multiply(
                 highs[2],
                 IncrementBy(
@@ -35,9 +35,9 @@ public class AccelerationBands {
             )
         )
 
-        let middle = sma.Compute(closing)
+        let middle = sma.compute(closing)
 
-        let lower = sma.Compute(
+        let lower = sma.compute(
             Multiply(
                 lows[2],
                 IncrementBy(
@@ -50,6 +50,6 @@ public class AccelerationBands {
         return (upper, middle, lower)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
 

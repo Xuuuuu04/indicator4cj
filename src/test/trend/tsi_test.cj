@@ -20,7 +20,7 @@ public func test_tsi_basic() {
     let expected = h.Map(inputs[1], { d: TsiData => d.Tsi })
 
     let tsi = Tsi()
-    let actual = h.RoundDigits(tsi.Compute(closing), 2)
+    let actual = h.RoundDigits(tsi.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, tsi.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

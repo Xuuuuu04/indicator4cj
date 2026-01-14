@@ -21,7 +21,7 @@ public func ulcer_index_basic() {
     var expected = Map(inputs[1], { d: UlcerRow => d.UlcerIndex })
 
     let ui = UlcerIndex()
-    var actual = ui.Compute(closings)
+    var actual = ui.compute(closings)
     actual = RoundDigits(actual, 2)
 
     expected = Skip(expected, ui.IdlePeriod())

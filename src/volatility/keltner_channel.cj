@@ -18,20 +18,20 @@ public class KeltnerChannel {
         this._ema = Ema(period)
     }
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let closes = Duplicate(closings, 2)
 
         let atrs = Duplicate(
             MultiplyBy(
-                _atr.Compute(highs, lows, closes[0]),
+                _atr.compute(highs, lows, closes[0]),
                 2.0
             ),
             2
         )
 
-        let skipCnt = _atr.IdlePeriod() - _ema.IdlePeriod()
+        let skipCnt = _atr.idlePeriod() - _ema.idlePeriod()
         let middles = Duplicate(
-            Skip(_ema.Compute(closes[1]), skipCnt),
+            Skip(_ema.compute(closes[1]), skipCnt),
             3
         )
 
@@ -41,6 +41,6 @@ public class KeltnerChannel {
         return (upper, middles[2], lower)
     }
 
-    public func IdlePeriod(): Int64 { return _atr.IdlePeriod() }
+    public func idlePeriod(): Int64 { return _atr.idlePeriod() }
 }
 

@@ -66,7 +66,7 @@ public func qstick_strategy_basic() {
     }
 
     let s = NewQstickStrategy()
-    let actualIter = s.Compute(snapsList.iterator())
+    let actualIter = s.compute(snapsList.iterator())
     let actualList = ArrayList<Action>()
     while (true) {
         match (actualIter.next()) {

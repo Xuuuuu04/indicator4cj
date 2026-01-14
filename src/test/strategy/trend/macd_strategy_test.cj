@@ -13,7 +13,7 @@ public func macd_strategy_basic() {
     let expected = Map(results, { r: Result => ActionFromInt(r.Action) })
 
     let macd = MacdStrategy()
-    let actual = macd.Compute(snapshots)
+    let actual = macd.compute(snapshots)
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err.toString())

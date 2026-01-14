@@ -25,13 +25,13 @@ public class RsiStrategy <: Strategy {
         this.SellAt = sellAt
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "RSI Strategy ${Int64(BuyAt)}-${Int64(SellAt)}"
     }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closings = SnapshotsAsClosings(c)
-        let rsiVals = Indicator.Compute(closings)
+        let rsiVals = Indicator.compute(closings)
 
         let actions = h.Map(rsiVals, { v: Float64 =>
             if (v <= BuyAt) { return Action.Buy }
@@ -40,26 +40,26 @@ public class RsiStrategy <: Strategy {
         })
 
         // 与 Go 对齐：移位 IdlePeriod 个位置填充 Hold。
-        return Shift(actions, Indicator.IdlePeriod(), Action.Hold)
+        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         let dates = SnapshotsAsDates(snaps[0])
         let closingsDup = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
-        let rsiShifted = Shift(Indicator.Compute(closingsDup[1]), Indicator.IdlePeriod(), 0.0)
+        let rsiShifted = Shift(Indicator.compute(closingsDup[1]), Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[1])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closingsDup[0]))
-        report.AddColumn(NewNumericReportColumn("RSI", rsiShifted), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closingsDup[0]))
+        report.addColumn(NumericReportColumn("RSI", rsiShifted), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 }

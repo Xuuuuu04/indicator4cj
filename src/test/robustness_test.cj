@@ -15,21 +15,21 @@ public func test_empty_input_robustness() {
     let empty_floats3 = ArrayList<Float64>().iterator()
 
     // Trend
-    let ema = Ema(14).Compute(empty_floats1)
+    let ema = Ema(14).compute(empty_floats1)
     if (ema.next().isSome()) { fail("EMA should be empty for empty input") }
 
-    let sma = Sma(14).Compute(empty_floats2)
+    let sma = Sma(14).compute(empty_floats2)
     if (sma.next().isSome()) { fail("SMA should be empty for empty input") }
 
     // Momentum
-    let rsi = Rsi(14).Compute(empty_floats3)
+    let rsi = Rsi(14).compute(empty_floats3)
     if (rsi.next().isSome()) { fail("RSI should be empty for empty input") }
 
     // Volatility (ATR requires 3 inputs)
     let h = ArrayList<Float64>().iterator()
     let l = ArrayList<Float64>().iterator()
     let c = ArrayList<Float64>().iterator()
-    let atr = Atr(14).Compute(h, l, c)
+    let atr = Atr(14).compute(h, l, c)
     if (atr.next().isSome()) { fail("ATR should be empty for empty input") }
 }
 
@@ -38,7 +38,7 @@ public func test_single_element_input_robustness() {
     let single_float = ArrayList<Float64>([100.0]).iterator()
     
     // EMA(14) 对单元素输入不应崩溃
-    let ema = Ema(14).Compute(single_float)
+    let ema = Ema(14).compute(single_float)
     while (ema.next().isSome()) { } // consume
 }
 
@@ -46,7 +46,7 @@ public func test_single_element_input_robustness() {
 public func test_period_one_robustness() {
     let data = ArrayList<Float64>([10.0, 20.0, 30.0]).iterator()
     // SMA(1) 应该等于原始数据
-    let sma1 = Sma(1).Compute(data)
+    let sma1 = Sma(1).compute(data)
     if (sma1.next().getOrThrow() != 10.0) { fail("SMA(1) fail at index 0") }
     if (sma1.next().getOrThrow() != 20.0) { fail("SMA(1) fail at index 1") }
     if (sma1.next().getOrThrow() != 30.0) { fail("SMA(1) fail at index 2") }
@@ -61,7 +61,7 @@ public func test_large_data_performance() {
     }
     
     let source = large_data.iterator()
-    let ema = Ema(14).Compute(source)
+    let ema = Ema(14).compute(source)
     
     var processed = 0
     while (ema.next().isSome()) {

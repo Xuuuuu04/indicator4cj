@@ -54,7 +54,7 @@ public func inverse_strategy_basic() {
     let inner = NewMacdStrategy()
     let s = NewInverseStrategy(inner)
 
-    let actual = s.Compute(snapshots)
+    let actual = s.compute(snapshots)
     match (h.CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()

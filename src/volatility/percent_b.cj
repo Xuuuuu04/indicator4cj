@@ -9,10 +9,10 @@ public class PercentB {
     public init() {}
     public init(period: Int64) { _bands.Period = period }
 
-    public func Compute(closings: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let closes = Duplicate(closings, 2)
-        let (upper, middle, lower) = _bands.Compute(closes[0])
-        closes[1] = Skip(closes[1], _bands.IdlePeriod())
+        let (upper, middle, lower) = _bands.compute(closes[0])
+        closes[1] = Skip(closes[1], _bands.idlePeriod())
         // middle is drained
         Drain(middle)
         return Operate3(upper, lower, closes[1], { ub: Float64, lb: Float64, c: Float64 =>
@@ -20,7 +20,7 @@ public class PercentB {
         })
     }
 
-    public func IdlePeriod(): Int64 { return _bands.IdlePeriod() }
+    public func idlePeriod(): Int64 { return _bands.idlePeriod() }
 
     public func toString(): String { return "%B(${_bands.Period})" }
 }

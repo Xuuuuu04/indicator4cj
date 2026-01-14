@@ -24,7 +24,7 @@ public func test_weighted_close_basic() {
     let expected = h.Map(inputs[3], { d: WeightedCloseData => d.WeightedClose })
 
     let weightedClose = WeightedClose()
-    let actual = h.RoundDigits(weightedClose.Compute(high, low, closing), 2)
+    let actual = h.RoundDigits(weightedClose.compute(high, low, closing), 2)
     let expectedSkipped = h.Skip(expected, weightedClose.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

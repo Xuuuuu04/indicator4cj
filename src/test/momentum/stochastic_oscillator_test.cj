@@ -30,7 +30,7 @@ public func stochastic_oscillator_basic() {
     var expD = Map(inputs[4], { d: StochRow => d.D })
 
     let so = StochasticOscillator()
-    var (actK, actD) = so.Compute(highs, lows, closes)
+    var (actK, actD) = so.compute(highs, lows, closes)
     actK = RoundDigits(actK, 2)
     actD = RoundDigits(actD, 2)
 

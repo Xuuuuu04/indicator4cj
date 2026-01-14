@@ -11,17 +11,17 @@ public class Mls {
         this.Sum = MovingSum(period)
     }
 
-    public func Compute(x: Iterator<Float64>, y: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
+    public func compute(x: Iterator<Float64>, y: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let xSplice = Duplicate(x, 3)
         let ySplice = Duplicate(y, 2)
 
-        let sumXY = Sum.Compute(
+        let sumXY = Sum.compute(
             Operate(xSplice[0], ySplice[0], { a: Float64, b: Float64 => a * b })
         )
 
-        let sumXSplice = Duplicate(Sum.Compute(xSplice[1]), 4)
-        let sumYSplice = Duplicate(Sum.Compute(ySplice[1]), 2)
-        let sumX2 = Sum.Compute(Pow(xSplice[2], 2.0))
+        let sumXSplice = Duplicate(Sum.compute(xSplice[1]), 4)
+        let sumYSplice = Duplicate(Sum.compute(ySplice[1]), 2)
+        let sumX2 = Sum.compute(Pow(xSplice[2], 2.0))
 
         // m = (period * sumXY - sumX * sumY) / (period * sumX2 - sumX * sumX)
         let mSplice = Duplicate(
@@ -50,5 +50,5 @@ public class Mls {
         return (mSplice[0], b)
     }
 
-    public func IdlePeriod(): Int64 { return Sum.IdlePeriod() }
+    public func idlePeriod(): Int64 { return Sum.idlePeriod() }
 }

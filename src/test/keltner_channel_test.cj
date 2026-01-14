@@ -33,7 +33,7 @@ public func keltner_channel_basic() {
     let expLower = Map(inputs[5], { d: KeltnerRow => d.Lower })
 
     let kc = KeltnerChannel()
-    var (actUpper, actMiddle, actLower) = kc.Compute(highs, lows, closings)
+    var (actUpper, actMiddle, actLower) = kc.compute(highs, lows, closings)
     actUpper = RoundDigits(actUpper, 2)
     actMiddle = RoundDigits(actMiddle, 2)
     actLower = RoundDigits(actLower, 2)

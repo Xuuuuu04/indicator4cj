@@ -29,9 +29,9 @@ public class TripleMovingAverageCrossoverStrategy <: Strategy {
         this.SlowEma = Ema(slowPeriod)
     }
 
-    public func Name(): String { return "Triple Moving Average Crossover Strategy" }
+    public func name(): String { return "Triple Moving Average Crossover Strategy" }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let (fastEmas, mediumEmas, slowEmas) = calculateEmas(c)
 
         let actions = Operate3(fastEmas, mediumEmas, slowEmas, { f: Float64, m: Float64, s: Float64 =>
@@ -40,44 +40,44 @@ public class TripleMovingAverageCrossoverStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, SlowEma.IdlePeriod(), Action.Hold)
+        return Shift(actions, SlowEma.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
 
-        let dates = Skip(SnapshotsAsDates(snaps[0]), SlowEma.IdlePeriod())
+        let dates = Skip(SnapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
 
         let closings = Duplicate(
-            Skip(SnapshotsAsClosings(snaps[1]), SlowEma.IdlePeriod()),
+            Skip(SnapshotsAsClosings(snaps[1]), SlowEma.idlePeriod()),
             2
         )
 
         let (fastEmas, mediumEmas, slowEmas) = calculateEmas(snaps[2])
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
-        let annotations = Skip(ActionsToAnnotations(actions), SlowEma.IdlePeriod())
-        let outcomes = MultiplyBy(Skip(outcomesRaw, SlowEma.IdlePeriod()), 100.0)
+        let annotations = Skip(ActionsToAnnotations(actions), SlowEma.idlePeriod())
+        let outcomes = MultiplyBy(Skip(outcomesRaw, SlowEma.idlePeriod()), 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[0]))
-        report.AddColumn(NewNumericReportColumn("Close", closings[1]), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Fast", fastEmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Medium", mediumEmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Slow", slowEmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[0]))
+        report.addColumn(NumericReportColumn("Close", closings[1]), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Fast", fastEmas), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Medium", mediumEmas), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Slow", slowEmas), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 
     private func calculateEmas(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let closings = Duplicate(SnapshotsAsClosings(c), 3)
 
-        let fastEmas = Skip(FastEma.Compute(closings[0]), SlowEma.IdlePeriod() - FastEma.IdlePeriod())
-        let mediumEmas = Skip(MediumEma.Compute(closings[1]), SlowEma.IdlePeriod() - MediumEma.IdlePeriod())
-        let slowEmas = SlowEma.Compute(closings[2])
+        let fastEmas = Skip(FastEma.compute(closings[0]), SlowEma.idlePeriod() - FastEma.idlePeriod())
+        let mediumEmas = Skip(MediumEma.compute(closings[1]), SlowEma.idlePeriod() - MediumEma.idlePeriod())
+        let slowEmas = SlowEma.compute(closings[2])
 
         return (fastEmas, mediumEmas, slowEmas)
     }

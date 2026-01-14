@@ -23,7 +23,7 @@ public func stochastic_rsi_basic() {
     var expK = Map(inputs[1], { d: StochRsiRow => d.K })
 
     let sr = StochasticRsi()
-    var act = sr.Compute(closes)
+    var act = sr.compute(closes)
     act = RoundDigits(act, 2)
 
     let skip = sr.IdlePeriod()

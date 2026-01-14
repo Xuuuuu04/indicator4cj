@@ -14,7 +14,7 @@ public func macd_rsi_strategy_basic() {
     let expected = h.Map(results, { r: Result => ActionFromInt(r.Action) })
 
     let s = NewMacdRsiStrategy()
-    let actual = s.Compute(snapshots)
+    let actual = s.compute(snapshots)
 
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)

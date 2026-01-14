@@ -27,7 +27,7 @@ public func atr_basic() {
     var expected = Map(inputs[3], { d: AtrRow => d.Atr })
 
     let atr = Atr(50)
-    var actual = RoundDigits(atr.Compute(highs, lows, closings), 2)
+    var actual = RoundDigits(atr.compute(highs, lows, closings), 2)
     expected = Skip(expected, atr.IdlePeriod())
 
     match (CheckEquals(actual, expected)) {

@@ -10,11 +10,11 @@ public class Rma {
     public init() { this.Period = 20 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         return RmaIterator(c, Period)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
 
 private class RmaIterator <: Iterator<Float64> {

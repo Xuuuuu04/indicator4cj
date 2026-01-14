@@ -24,7 +24,7 @@ public func awesome_basic() {
     var expected = Map(inputs[2], { d: AwesomeRow => d.Awesome })
 
     let ao = AwesomeOscillator()
-    var actual = ao.Compute(highs, lows)
+    var actual = ao.compute(highs, lows)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, ao.IdlePeriod())
 

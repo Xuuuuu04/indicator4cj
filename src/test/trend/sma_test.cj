@@ -25,7 +25,7 @@ public func sma_basic() {
     let expected = SliceToChan(expectedArr)
 
     let sma = Sma(10)
-    var actual = h.RoundDigits(sma.Compute(input), 2)
+    var actual = h.RoundDigits(sma.compute(input), 2)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err.toString())

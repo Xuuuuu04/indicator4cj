@@ -42,26 +42,26 @@ public class TripleRsiStrategy <: Strategy {
         this.SellAt = sellAt
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "Triple RSI Strategy (${RsiIndicator.Period},${SmaIndicator.Period},${DownDays},${BuySignalAt},${BuyAt},${SellAt})"
     }
 
     public func IdlePeriod(): Int64 {
-        return SmaIndicator.IdlePeriod()
+        return SmaIndicator.idlePeriod()
     }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closingsSplice = Duplicate(SnapshotsAsClosings(c), 3)
 
-        var rsis = RsiIndicator.Compute(closingsSplice[0])
-        let smas = SmaIndicator.Compute(closingsSplice[1])
+        var rsis = RsiIndicator.compute(closingsSplice[0])
+        let smas = SmaIndicator.compute(closingsSplice[1])
         let memory = Ring<Float64>(DownDays)
 
         // Skip RSI 输出直至 SMA 就绪
-        rsis = Skip(rsis, SmaIndicator.IdlePeriod() - RsiIndicator.IdlePeriod())
+        rsis = Skip(rsis, SmaIndicator.idlePeriod() - RsiIndicator.idlePeriod())
 
         // Skip 收盘价直至 SMA 就绪
-        closingsSplice[2] = Skip(closingsSplice[2], SmaIndicator.IdlePeriod())
+        closingsSplice[2] = Skip(closingsSplice[2], SmaIndicator.idlePeriod())
 
         let actions = Operate3(rsis, smas, closingsSplice[2], { rsi: Float64, sma: Float64, closing: Float64 =>
             memory.Put(rsi)
@@ -97,16 +97,16 @@ public class TripleRsiStrategy <: Strategy {
             return Action.Buy
         })
 
-        return Shift(actions, SmaIndicator.IdlePeriod(), Action.Hold)
+        return Shift(actions, SmaIndicator.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         var dates = SnapshotsAsDates(snaps[0])
         let closings = Duplicate(SnapshotsAsClosings(snaps[2]), 3)
 
-        var rsis = RsiIndicator.Compute(closings[1])
-        let smas = SmaIndicator.Compute(closings[2])
+        var rsis = RsiIndicator.compute(closings[1])
+        let smas = SmaIndicator.compute(closings[2])
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[1])
         var annotations = ActionsToAnnotations(actions)
@@ -114,19 +114,19 @@ public class TripleRsiStrategy <: Strategy {
 
         dates = Skip(dates, IdlePeriod())
         closings[0] = Skip(closings[0], IdlePeriod())
-        rsis = Skip(rsis, IdlePeriod() - RsiIndicator.IdlePeriod())
+        rsis = Skip(rsis, IdlePeriod() - RsiIndicator.idlePeriod())
         annotations = Skip(annotations, IdlePeriod())
         outcomes = Skip(outcomes, IdlePeriod())
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
 
-        report.AddColumn(NewNumericReportColumn("Close", closings[0]))
-        report.AddColumn(NewNumericReportColumn("RSI(${RsiIndicator.Period})", rsis), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("SMA(${SmaIndicator.Period})", smas))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        report.addColumn(NumericReportColumn("Close", closings[0]))
+        report.addColumn(NumericReportColumn("RSI(${RsiIndicator.Period})", rsis), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("SMA(${SmaIndicator.Period})", smas))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
 
         return report
     }

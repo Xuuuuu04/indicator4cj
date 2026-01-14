@@ -27,15 +27,15 @@ public class MacdRsiStrategy <: Strategy {
         this.RsiStrategyInst = RsiStrategy(buyAt, sellAt)
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "MACD-RSI Strategy (${RsiStrategyInst.BuyAt}, ${RsiStrategyInst.SellAt})"
     }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(snapshots, 2)
 
-        let macdActions = DenormalizeActions(MacdStrategyInst.Compute(snaps[0]))
-        let rsiActions = DenormalizeActions(RsiStrategyInst.Compute(snaps[1]))
+        let macdActions = DenormalizeActions(MacdStrategyInst.compute(snaps[0]))
+        let rsiActions = DenormalizeActions(RsiStrategyInst.compute(snaps[1]))
 
         let actions = Operate(macdActions, rsiActions, { ma: Action, ra: Action =>
             if (ma == ra) { return ma }
@@ -45,32 +45,32 @@ public class MacdRsiStrategy <: Strategy {
         return actions
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         let dates = SnapshotsAsDates(snaps[0])
         let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 3)
 
-        var (macds, signals) = MacdStrategyInst.Macd.Compute(closings[0])
-        macds = Shift(macds, MacdStrategyInst.Macd.IdlePeriod(), 0.0)
-        signals = Shift(signals, MacdStrategyInst.Macd.IdlePeriod(), 0.0)
+        var (macds, signals) = MacdStrategyInst.Macd.compute(closings[0])
+        macds = Shift(macds, MacdStrategyInst.Macd.idlePeriod(), 0.0)
+        signals = Shift(signals, MacdStrategyInst.Macd.idlePeriod(), 0.0)
 
-        var rsiVals = RsiStrategyInst.Indicator.Compute(closings[2])
-        rsiVals = Shift(rsiVals, RsiStrategyInst.Indicator.IdlePeriod(), 0.0)
+        var rsiVals = RsiStrategyInst.Indicator.compute(closings[2])
+        rsiVals = Shift(rsiVals, RsiStrategyInst.Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[1]))
-        report.AddColumn(NewNumericReportColumn("MACD", macds), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Signal", signals), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("RSI", rsiVals), ArrayList<Int64>([2]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1, 2]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([3]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[1]))
+        report.addColumn(NumericReportColumn("MACD", macds), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Signal", signals), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("RSI", rsiVals), ArrayList<Int64>([2]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1, 2]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([3]))
         return report
     }
 }

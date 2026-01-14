@@ -26,7 +26,7 @@ public func test_dema_basic() {
     let expected = SliceToChan(expectedArr)
 
     let dema = Dema()
-    let actual = h.RoundDigits(dema.Compute(input), 2)
+    let actual = h.RoundDigits(dema.compute(input), 2)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err.toString())

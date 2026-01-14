@@ -25,28 +25,20 @@ public class Macd {
         this.Ema3 = Ema(period3)
     }
 
-    public func Compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
+    public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let snaps = Duplicate(c, 2)
-        var ema1 = Ema1.Compute(snaps[0])
+        var ema1 = Ema1.compute(snaps[0])
         ema1 = Skip(ema1, Ema2.Period - Ema1.Period)
-        let ema2 = Ema2.Compute(snaps[1])
+        let ema2 = Ema2.compute(snaps[1])
 
         let macds = Duplicate(Subtract(ema1, ema2), 2)
         macds[0] = Skip(macds[0], Ema3.Period - 1)
-        let signal = Ema3.Compute(macds[1])
+        let signal = Ema3.compute(macds[1])
         return (macds[0], signal)
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return Ema2.Period + Ema3.Period - 2
     }
-}
-
-public func NewMacd(): Macd {
-    return Macd()
-}
-
-public func NewMacdWithPeriod(period1: Int64, period2: Int64, period3: Int64): Macd {
-    return Macd(period1, period2, period3)
 }
 

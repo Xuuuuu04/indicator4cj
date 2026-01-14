@@ -17,7 +17,7 @@ class EmvTest {
         var expected = Map(inputs[3], { m => m.Emv })
 
         let emv = Emv()
-        let actual = RoundDigits(emv.Compute(highs, lows, volumes), 2)
+        let actual = RoundDigits(emv.compute(highs, lows, volumes), 2)
         expected = Skip(expected, emv.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

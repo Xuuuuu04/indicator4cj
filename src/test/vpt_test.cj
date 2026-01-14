@@ -16,7 +16,7 @@ class VptTest {
         var expected = Map(inputs[2], { m => m.Vpt })
 
         let vpt = Vpt()
-        let actual = RoundDigits(vpt.Compute(closings, volumes), 2)
+        let actual = RoundDigits(vpt.compute(closings, volumes), 2)
         expected = Skip(expected, vpt.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

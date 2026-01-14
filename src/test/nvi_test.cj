@@ -16,7 +16,7 @@ class NviTest {
         var expected = Map(inputs[2], { m => m.Nvi })
 
         let nvi = Nvi()
-        let actual = RoundDigits(nvi.Compute(closings, volumes), 2)
+        let actual = RoundDigits(nvi.compute(closings, volumes), 2)
         expected = Skip(expected, nvi.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

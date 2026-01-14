@@ -13,9 +13,9 @@ public class Dema {
         this.Ema2 = Ema()
     }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
-        let ema1 = Duplicate(Ema1.Compute(c), 2)
-        let ema2 = Ema2.Compute(ema1[1])
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
+        let ema1 = Duplicate(Ema1.compute(c), 2)
+        let ema2 = Ema2.compute(ema1[1])
 
         var doubleEma1 = MultiplyBy(ema1[0], 2.0)
         doubleEma1 = Buffered(doubleEma1, Ema2.Period)
@@ -23,11 +23,8 @@ public class Dema {
         return Subtract(doubleEma1, ema2)
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return Ema1.Period + Ema2.Period - 2
     }
 }
-
-public func NewDema(): Dema { return Dema() }
-
 

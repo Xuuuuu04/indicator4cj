@@ -15,18 +15,18 @@ public class NoLossStrategy <: Strategy {
         this.InnerStrategy = innerStrategy
     }
 
-    public func Name(): String {
-        return "No Loss Strategy (${InnerStrategy.Name()})"
+    public func name(): String {
+        return "No Loss Strategy (${InnerStrategy.name()})"
     }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(snapshots, 2)
-        let innerActions = InnerStrategy.Compute(snaps[0])
+        let innerActions = InnerStrategy.compute(snaps[0])
         let closings = SnapshotsAsClosings(snaps[1])
         return NoLossIterator(innerActions, closings)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         let dates = SnapshotsAsDates(snaps[0])
         let closings = SnapshotsAsClosings(snaps[1])
@@ -35,11 +35,11 @@ public class NoLossStrategy <: Strategy {
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings))
-        report.AddColumn(NewAnnotationReportColumn(annotations))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings))
+        report.addColumn(AnnotationReportColumn(annotations))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
         return report
     }
 }

@@ -24,7 +24,7 @@ public func qstick_basic() {
     var expected = Map(inputs[2], { d: QstickRow => d.Qstick })
 
     let qs = Qstick(10)
-    var actual = qs.Compute(opens, closes)
+    var actual = qs.compute(opens, closes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, qs.IdlePeriod())
 

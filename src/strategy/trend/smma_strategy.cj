@@ -26,14 +26,14 @@ public class SmmaStrategy <: Strategy {
         this.LongSmma = Smma(longPeriod)
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "SMMA Strategy (${ShortSmma.Period},${LongSmma.Period})"
     }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closingsDup = Duplicate(SnapshotsAsClosings(snapshots), 2)
-        var shortSmmas = ShortSmma.Compute(closingsDup[0])
-        var longSmmas = LongSmma.Compute(closingsDup[1])
+        var shortSmmas = ShortSmma.compute(closingsDup[0])
+        var longSmmas = LongSmma.compute(closingsDup[1])
 
         let common = CommonPeriod(ArrayList<Int64>([ShortSmma.Period, LongSmma.Period]))
         shortSmmas = SyncPeriod(common, ShortSmma.Period, shortSmmas)
@@ -48,13 +48,13 @@ public class SmmaStrategy <: Strategy {
         return Shift(actions, common, Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         var dates = SnapshotsAsDates(snaps[0])
         let closingsDup = Duplicate(SnapshotsAsClosings(snaps[1]), 3)
 
-        var shortSmmas = ShortSmma.Compute(closingsDup[1])
-        var longSmmas = LongSmma.Compute(closingsDup[2])
+        var shortSmmas = ShortSmma.compute(closingsDup[1])
+        var longSmmas = LongSmma.compute(closingsDup[2])
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
         var annotations = ActionsToAnnotations(actions)
@@ -68,15 +68,15 @@ public class SmmaStrategy <: Strategy {
         annotations = Skip(annotations, common)
         outcomes = Skip(outcomes, common)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
 
-        report.AddColumn(NewNumericReportColumn("Close", closingsDup[0]))
-        report.AddColumn(NewNumericReportColumn("Short SMMA", shortSmmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Long SMMA", longSmmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        report.addColumn(NumericReportColumn("Close", closingsDup[0]))
+        report.addColumn(NumericReportColumn("Short SMMA", shortSmmas), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Long SMMA", longSmmas), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 }

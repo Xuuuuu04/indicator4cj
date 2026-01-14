@@ -22,22 +22,22 @@ public class Hma {
         this._wma3 = Wma(p3)
     }
 
-    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let vals = Duplicate(values, 2)
 
-        let w1 = _wma1.Compute(vals[0])
-        let w2 = _wma2.Compute(vals[1])
+        let w1 = _wma1.compute(vals[0])
+        let w2 = _wma2.compute(vals[1])
 
         let combined = Subtract(
             MultiplyBy(w1, 2.0),
             w2
         )
 
-        return _wma3.Compute(combined)
+        return _wma3.compute(combined)
     }
 
-    public func IdlePeriod(): Int64 {
-        return _wma1.IdlePeriod() + _wma3.IdlePeriod()
+    public func idlePeriod(): Int64 {
+        return _wma1.idlePeriod() + _wma3.idlePeriod()
     }
 
     public func toString(): String { return "HMA(${_wma2.Period})" }

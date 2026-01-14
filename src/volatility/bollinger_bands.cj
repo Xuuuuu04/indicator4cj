@@ -10,7 +10,7 @@ public class BollingerBands {
     public init() { this.Period = 20 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
+    public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let cs = Duplicate(c, 2)
         let sma = Sma()
         sma.Period = Period
@@ -18,12 +18,12 @@ public class BollingerBands {
         std.Period = Period
 
         let middleBands = Duplicate(
-            sma.Compute(cs[0]),
+            sma.compute(cs[0]),
             3
         )
 
         let std2s = Duplicate(
-            MultiplyBy(std.Compute(cs[1]), 2.0),
+            MultiplyBy(std.compute(cs[1]), 2.0),
             2
         )
 
@@ -33,6 +33,6 @@ public class BollingerBands {
         return (upperBand, middleBands[2], lowerBand)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
 

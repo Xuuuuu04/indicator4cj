@@ -35,7 +35,7 @@ public func test_aroon_basic() {
     let expectedUpSkipped = h.Skip(expectedUp, aroon.Period - 1)
     let expectedDownSkipped = h.Skip(expectedDown, aroon.Period - 1)
 
-    let (actualUp, actualDown) = aroon.Compute(high, low)
+    let (actualUp, actualDown) = aroon.compute(high, low)
 
     match (h.CheckFloatEquals(actualUp, expectedUpSkipped)) {
         case Some(err) => fail("Up mismatch: " + err.toString())
@@ -76,7 +76,7 @@ public func test_aroon_compare_rust() {
     let expectedUpSkipped = h.Skip(expectedUp, aroon.Period - 1)
     let expectedDownSkipped = h.Skip(expectedDown, aroon.Period - 1)
 
-    let (actualUp, actualDown) = aroon.Compute(high, low)
+    let (actualUp, actualDown) = aroon.compute(high, low)
 
     match (h.CheckFloatEquals(actualUp, expectedUpSkipped)) {
         case Some(err) => fail("Up mismatch (Rust): " + err.toString())

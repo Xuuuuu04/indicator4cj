@@ -25,46 +25,46 @@ public class GoldenCrossStrategy <: Strategy {
         this.SlowEma = Ema(slowPeriod)
     }
 
-    public func Name(): String { return "Golden Cross Strategy" }
+    public func name(): String { return "Golden Cross Strategy" }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let (fastEmas, slowEmas) = calculateEmas(c)
         let actions = Operate(fastEmas, slowEmas, { f: Float64, s: Float64 =>
             if (f > s) { return Action.Buy }
             if (f < s) { return Action.Sell }
             return Action.Hold
         })
-        return Shift(actions, SlowEma.IdlePeriod(), Action.Hold)
+        return Shift(actions, SlowEma.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), SlowEma.IdlePeriod())
+        let dates = Skip(SnapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
         let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
-        closings[0] = Skip(closings[0], SlowEma.IdlePeriod())
+        closings[0] = Skip(closings[0], SlowEma.idlePeriod())
 
         let (fastEmas, slowEmas) = calculateEmas(snaps[2])
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
-        let annotations = Skip(ActionsToAnnotations(actions), SlowEma.IdlePeriod())
-        let outcomes = MultiplyBy(Skip(outcomesRaw, SlowEma.IdlePeriod()), 100.0)
+        let annotations = Skip(ActionsToAnnotations(actions), SlowEma.idlePeriod())
+        let outcomes = MultiplyBy(Skip(outcomesRaw, SlowEma.idlePeriod()), 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[0]))
-        report.AddColumn(NewNumericReportColumn("Close", closings[1]), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Fast", fastEmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Slow", slowEmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[0]))
+        report.addColumn(NumericReportColumn("Close", closings[1]), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Fast", fastEmas), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Slow", slowEmas), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 
     private func calculateEmas(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>) {
         let closings = Duplicate(SnapshotsAsClosings(c), 2)
-        let fastEmas = Skip(FastEma.Compute(closings[0]), SlowEma.IdlePeriod() - FastEma.IdlePeriod())
-        let slowEmas = SlowEma.Compute(closings[1])
+        let fastEmas = Skip(FastEma.compute(closings[0]), SlowEma.idlePeriod() - FastEma.idlePeriod())
+        let slowEmas = SlowEma.compute(closings[1])
         return (fastEmas, slowEmas)
     }
 }

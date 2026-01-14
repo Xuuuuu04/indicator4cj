@@ -12,15 +12,11 @@ public class Wma {
         this.Period = period
     }
 
-    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
         return WmaIterator(values, Period)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
-}
-
-public func NewWmaWith(period: Int64): Wma {
-    return Wma(period)
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
 
 private class WmaIterator <: Iterator<Float64> {

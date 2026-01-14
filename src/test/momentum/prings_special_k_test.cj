@@ -21,7 +21,7 @@ public func prings_special_k_basic() {
     var expected = Map(inputs[1], { d: SpecialKRow => d.SpecialK })
 
     let sk = PringsSpecialK()
-    var actual = sk.Compute(closes)
+    var actual = sk.compute(closes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, sk.IdlePeriod())
 

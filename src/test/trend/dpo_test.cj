@@ -20,7 +20,7 @@ public func test_dpo_basic() {
     let expected = h.Map(inputs[1], { row: DpoData => row.Dpo })
 
     let dpo = Dpo()
-    let actual = h.RoundDigits(dpo.Compute(closing), 2)
+    let actual = h.RoundDigits(dpo.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, dpo.IdlePeriod())
 
     let actIter = actual

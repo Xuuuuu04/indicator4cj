@@ -20,7 +20,7 @@ public func test_tema_basic() {
     let expected = h.Map(inputs[1], { d: TemaData => d.Tema })
 
     let tema = Tema()
-    let actual = h.RoundDigits(tema.Compute(closing), 2)
+    let actual = h.RoundDigits(tema.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, tema.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

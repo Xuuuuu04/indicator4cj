@@ -19,27 +19,24 @@ public class MassIndex {
         this.MovingSumInd = MovingSum(DefaultMassIndexPeriod3)
     }
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>): Iterator<Float64> {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>): Iterator<Float64> {
         let ema1 = Duplicate(
-            Ema1.Compute(
+            Ema1.compute(
                 Subtract(highs, lows)
             ),
             2
         )
 
-        let ema2 = Ema2.Compute(ema1[0])
+        let ema2 = Ema2.compute(ema1[0])
         ema1[1] = Skip(ema1[1], Ema2.Period - 1)
 
         let ratio = Divide(ema1[1], ema2)
-        let mi = MovingSumInd.Compute(ratio)
+        let mi = MovingSumInd.compute(ratio)
         return mi
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return Ema1.Period + Ema2.Period + MovingSumInd.Period - 3
     }
 }
-
-public func NewMassIndex(): MassIndex { return MassIndex() }
-
 

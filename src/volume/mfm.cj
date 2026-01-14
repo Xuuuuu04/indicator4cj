@@ -7,7 +7,7 @@ import indicator4cj.helper.*
 public class Mfm {
     public init() {}
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
         let cs = Duplicate(closings, 2)
@@ -20,6 +20,6 @@ public class Mfm {
         )
     }
 
-    public func IdlePeriod(): Int64 { return 0 }
+    public func idlePeriod(): Int64 { return 0 }
 }
 

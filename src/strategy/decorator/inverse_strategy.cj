@@ -15,12 +15,12 @@ public class InverseStrategy <: Strategy {
         this.InnerStrategy = innerStrategy
     }
 
-    public func Name(): String {
-        return "Inverse Strategy (${InnerStrategy.Name()})"
+    public func name(): String {
+        return "Inverse Strategy (${InnerStrategy.name()})"
     }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        return h.Map(InnerStrategy.Compute(snapshots), { a: Action =>
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+        return h.Map(InnerStrategy.compute(snapshots), { a: Action =>
             match (a) {
                 case Action.Buy => return Action.Sell
                 case Action.Sell => return Action.Buy
@@ -29,7 +29,7 @@ public class InverseStrategy <: Strategy {
         })
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         let dates = SnapshotsAsDates(snaps[0])
         let closings = SnapshotsAsClosings(snaps[1])
@@ -38,11 +38,11 @@ public class InverseStrategy <: Strategy {
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings))
-        report.AddColumn(NewAnnotationReportColumn(annotations))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings))
+        report.addColumn(AnnotationReportColumn(annotations))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
         return report
     }
 }

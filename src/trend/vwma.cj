@@ -12,21 +12,16 @@ public class Vwma {
     public init() { this.Period = DefaultVwmaPeriod }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(closing: Iterator<Float64>, volume: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closing: Iterator<Float64>, volume: Iterator<Float64>): Iterator<Float64> {
         let vols = Duplicate(volume, 2)
         let sum = MovingSum()
         sum.Period = Period
         return Divide(
-            sum.Compute(Multiply(closing, vols[0])),
-            sum.Compute(vols[1])
+            sum.compute(Multiply(closing, vols[0])),
+            sum.compute(vols[1])
         )
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
-
-public func NewVwma(): Vwma {
-    return Vwma()
-}
-
 

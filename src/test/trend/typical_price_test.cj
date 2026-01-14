@@ -24,7 +24,7 @@ public func test_typical_price_basic() {
     let expected = h.Map(inputs[3], { d: TypicalPriceData => d.TypicalPrice })
 
     let typicalPrice = TypicalPrice()
-    let actual = h.RoundDigits(typicalPrice.Compute(high, low, closing), 2)
+    let actual = h.RoundDigits(typicalPrice.compute(high, low, closing), 2)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err)

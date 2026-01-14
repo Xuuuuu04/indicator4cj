@@ -18,7 +18,7 @@ public class ChandelierExit {
         this.Multiplier = multiplier
     }
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
 
@@ -26,15 +26,15 @@ public class ChandelierExit {
         let movingMin = MovingMin(Period)
         let atr = Atr(Period)
 
-        let skipMax = atr.IdlePeriod() - movingMax.IdlePeriod()
-        let skipMin = atr.IdlePeriod() - movingMin.IdlePeriod()
+        let skipMax = atr.idlePeriod() - movingMax.idlePeriod()
+        let skipMin = atr.idlePeriod() - movingMin.idlePeriod()
 
-        let maxHighs = Skip(movingMax.Compute(hs[0]), skipMax)
-        let minLows = Skip(movingMin.Compute(ls[0]), skipMin)
+        let maxHighs = Skip(movingMax.compute(hs[0]), skipMax)
+        let minLows = Skip(movingMin.compute(ls[0]), skipMin)
 
         let atrScaled = Duplicate(
             MultiplyBy(
-                atr.Compute(hs[1], ls[1], closings),
+                atr.compute(hs[1], ls[1], closings),
                 Multiplier
             ),
             2
@@ -46,6 +46,6 @@ public class ChandelierExit {
         return (ceLong, ceShort)
     }
 
-    public func IdlePeriod(): Int64 { return Period }
+    public func idlePeriod(): Int64 { return Period }
 }
 

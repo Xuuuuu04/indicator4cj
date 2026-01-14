@@ -10,7 +10,7 @@ public class MovingMax {
     public init() { this.Period = 1 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let cs = Duplicate(c, 2)
         cs[1] = Shift(cs[1], Period, 0.0)
 
@@ -25,6 +25,6 @@ public class MovingMax {
         return Skip(maxs, Period - 1)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
 

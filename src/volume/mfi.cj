@@ -16,10 +16,10 @@ public class Mfi {
         _sum.Period = period
     }
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let rawFlowSplice = Duplicate(
             Multiply(
-                _typicalPrice.Compute(highs, lows, closings),
+                _typicalPrice.compute(highs, lows, closings),
                 volumes
             ),
             2
@@ -34,8 +34,8 @@ public class Mfi {
         )
 
         let moneyRatio = Divide(
-            _sum.Compute(KeepPositives(moneyFlowSplice[0])),
-            _sum.Compute(MultiplyBy(KeepNegatives(moneyFlowSplice[1]), -1.0))
+            _sum.compute(KeepPositives(moneyFlowSplice[0])),
+            _sum.compute(MultiplyBy(KeepNegatives(moneyFlowSplice[1]), -1.0))
         )
 
         return IncrementBy(
@@ -50,6 +50,6 @@ public class Mfi {
         )
     }
 
-    public func IdlePeriod(): Int64 { return _sum.IdlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return _sum.idlePeriod() + 1 }
 }
 

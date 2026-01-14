@@ -33,7 +33,7 @@ public func acceleration_bands_basic() {
     let expLower = Map(inputs[5], { d: AccelRow => d.Lower })
 
     let ab = AccelerationBands()
-    var (actUpper, actMiddle, actLower) = ab.Compute(highs, lows, closings)
+    var (actUpper, actMiddle, actLower) = ab.compute(highs, lows, closings)
     actUpper = RoundDigits(actUpper, 2)
     actMiddle = RoundDigits(actMiddle, 2)
     actLower = RoundDigits(actLower, 2)

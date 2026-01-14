@@ -27,7 +27,7 @@ public func bollinger_bands_basic() {
     let lower = Map(inputs[3], { d: BollingerBandsData => d.Lower })
 
     let bb = BollingerBands()
-    var (actualUpper, actualMiddle, actualLower) = bb.Compute(closings)
+    var (actualUpper, actualMiddle, actualLower) = bb.compute(closings)
     actualUpper = RoundDigits(actualUpper, 2)
     actualMiddle = RoundDigits(actualMiddle, 2)
     actualLower = RoundDigits(actualLower, 2)

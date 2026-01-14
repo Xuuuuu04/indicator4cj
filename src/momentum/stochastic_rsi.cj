@@ -27,14 +27,14 @@ public class StochasticRsi {
 
     // 计算公式同 Go：
     // (RSI - Min(RSI)) / (Max(RSI) - Min(RSI))
-    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
-        let rsisSplice = Duplicate(RsiIndicator.Compute(values), 3)
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        let rsisSplice = Duplicate(RsiIndicator.compute(values), 3)
 
         // Max/Min 需要满窗，先跳过对应 IdlePeriod。
-        rsisSplice[0] = Skip(rsisSplice[0], MaxIndicator.IdlePeriod())
+        rsisSplice[0] = Skip(rsisSplice[0], MaxIndicator.idlePeriod())
 
-        let minRsisSplice = Duplicate(MinIndicator.Compute(rsisSplice[1]), 2)
-        let maxRsis = MaxIndicator.Compute(rsisSplice[2])
+        let minRsisSplice = Duplicate(MinIndicator.compute(rsisSplice[1]), 2)
+        let maxRsis = MaxIndicator.compute(rsisSplice[2])
 
         let result = Divide(
             Subtract(rsisSplice[0], minRsisSplice[0]),
@@ -45,7 +45,7 @@ public class StochasticRsi {
     }
 
     // IdlePeriod = RSI.IdlePeriod + Min/Max.IdlePeriod
-    public func IdlePeriod(): Int64 {
-        return RsiIndicator.IdlePeriod() + MinIndicator.IdlePeriod()
+    public func idlePeriod(): Int64 {
+        return RsiIndicator.idlePeriod() + MinIndicator.idlePeriod()
     }
 }

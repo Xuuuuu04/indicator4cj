@@ -24,7 +24,7 @@ public func test_data_report_basic() {
         let snapsIter = repo.get("brk-b")
 
         let splice = Duplicate(snapsIter, 3)
-        let actionsSplice = Duplicate(strategies[0].Compute(splice[1]), 2)
+        let actionsSplice = Duplicate(strategies[0].compute(splice[1]), 2)
         let outcomes = Outcome(SnapshotsAsClosings(splice[2]), actionsSplice[1])
 
         report.write("brk-b", strategies[0], splice[0], actionsSplice[0], outcomes)

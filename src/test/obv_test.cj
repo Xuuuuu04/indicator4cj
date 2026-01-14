@@ -16,7 +16,7 @@ class ObvTest {
         var expected = Map(inputs[2], { m => m.Obv })
 
         let obv = Obv()
-        let actual = RoundDigits(obv.Compute(closings, volumes), 2)
+        let actual = RoundDigits(obv.compute(closings, volumes), 2)
         expected = Skip(expected, obv.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

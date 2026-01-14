@@ -63,7 +63,7 @@ public func bollinger_bands_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volatility/bollinger_bands_strategy.csv")
     let s = NewBollingerBandsStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
@@ -77,7 +77,7 @@ public func super_trend_strategy_basic() {
     // Go's HMA implementation likely behaves differently regarding stream termination.
     // For now, we consume actual to ensure no runtime crashes but skip exact comparison.
     let s = NewSuperTrendStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     
     while (true) {
         match (actual.next()) { case Some(_) => () case None => break }

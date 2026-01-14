@@ -30,15 +30,15 @@ public class AlligatorStrategy <: Strategy {
         this.Lip = Smma(lipPeriod)
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "Alligator Strategy (${Jaw.Period},${Teeth.Period},${Lip.Period})"
     }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = Duplicate(SnapshotsAsClosings(snapshots), 3)
-        var jaws = Jaw.Compute(closings[0])
-        var teeths = Teeth.Compute(closings[1])
-        var lips = Lip.Compute(closings[2])
+        var jaws = Jaw.compute(closings[0])
+        var teeths = Teeth.compute(closings[1])
+        var lips = Lip.compute(closings[2])
 
         let common = CommonPeriod(ArrayList<Int64>([Jaw.Period, Teeth.Period, Lip.Period]))
         jaws = SyncPeriod(common, Jaw.Period, jaws)
@@ -54,14 +54,14 @@ public class AlligatorStrategy <: Strategy {
         return Shift(actions, common, Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         var dates = SnapshotsAsDates(snaps[0])
         let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 4)
 
-        var jaws = Jaw.Compute(closings[1])
-        var teeths = Teeth.Compute(closings[2])
-        var lips = Lip.Compute(closings[3])
+        var jaws = Jaw.compute(closings[1])
+        var teeths = Teeth.compute(closings[2])
+        var lips = Lip.compute(closings[3])
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
         var annotations = ActionsToAnnotations(actions)
@@ -76,15 +76,15 @@ public class AlligatorStrategy <: Strategy {
         annotations = Skip(annotations, common)
         outcomes = Skip(outcomes, common)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[0]))
-        report.AddColumn(NewNumericReportColumn("Jaw", jaws), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Teeth", teeths), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Lip", lips), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[0]))
+        report.addColumn(NumericReportColumn("Jaw", jaws), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Teeth", teeths), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Lip", lips), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 }

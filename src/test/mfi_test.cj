@@ -18,7 +18,7 @@ class MfiTest {
         var expected = Map(inputs[4], { m => m.Mfi })
 
         let mfi = Mfi()
-        let actual = RoundDigits(mfi.Compute(highs, lows, closings, volumes), 2)
+        let actual = RoundDigits(mfi.compute(highs, lows, closings, volumes), 2)
         expected = Skip(expected, mfi.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

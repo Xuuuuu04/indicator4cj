@@ -20,7 +20,7 @@ public func test_moving_std_basic() {
     let expected = h.Map(inputs[1], { d: MovingStdData => d.Std })
 
     let std = MovingStd(20)
-    let actual = h.RoundDigits(std.Compute(closings), 2)
+    let actual = h.RoundDigits(std.compute(closings), 2)
     let expectedSkipped = h.Skip(expected, std.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

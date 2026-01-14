@@ -15,7 +15,7 @@ public func split_strategy_basic() {
 
     let s = NewSplitStrategy(NewMacdStrategy(), NewApoStrategy())
 
-    let actual = s.Compute(snapshots)
+    let actual = s.compute(snapshots)
     match (h.CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err.toString())
         case None => ()

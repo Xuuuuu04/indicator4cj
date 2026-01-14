@@ -27,7 +27,7 @@ public func po_basic() {
     var expected = Map(inputs[3], { d: PoRow => d.Po })
 
     let po = Po(50)
-    var actual = RoundDigits(po.Compute(highs, lows, closings), 2)
+    var actual = RoundDigits(po.compute(highs, lows, closings), 2)
     expected = Skip(expected, po.IdlePeriod())
 
     match (CheckEquals(actual, expected)) {

@@ -20,7 +20,7 @@ public func test_kama_basic() {
     let expected = h.Map(inputs[1], { row: KamaData => row.Kama })
 
     let kama = Kama()
-    let actual = h.RoundDigits(kama.Compute(closing), 2)
+    let actual = h.RoundDigits(kama.compute(closing), 2)
     
     // Actual stream: Seed (p9), K(p10), K(p11)...
     // Seed = 109.24. K(p10) = 109.24. K(p11) = 109.22.

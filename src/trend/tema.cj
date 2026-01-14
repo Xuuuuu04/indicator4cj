@@ -15,13 +15,13 @@ public class Tema {
         this.Ema3 = Ema()
     }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
-        let ema1 = Duplicate(Ema1.Compute(c), 2)
-        let ema2 = Duplicate(Ema2.Compute(ema1[0]), 2)
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
+        let ema1 = Duplicate(Ema1.compute(c), 2)
+        let ema2 = Duplicate(Ema2.compute(ema1[0]), 2)
 
         ema1[1] = Skip(ema1[1], Ema2.Period - 1)
 
-        let ema3 = Ema3.Compute(ema2[0])
+        let ema3 = Ema3.compute(ema2[0])
         ema1[1] = Skip(ema1[1], Ema3.Period - 1)
         ema2[1] = Skip(ema2[1], Ema3.Period - 1)
 
@@ -36,11 +36,8 @@ public class Tema {
         return tema
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return Ema1.Period + Ema2.Period + Ema3.Period - 3
     }
 }
-
-public func NewTema(): Tema { return Tema() }
-
 

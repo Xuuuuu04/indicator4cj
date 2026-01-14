@@ -18,7 +18,7 @@ class AdTest {
         var expected = Map(inputs[4], { m => m.Ad })
 
         let ad = Ad()
-        let actual = RoundDigits(ad.Compute(highs, lows, closes, volumes), 2)
+        let actual = RoundDigits(ad.compute(highs, lows, closes, volumes), 2)
         expected = Skip(expected, ad.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

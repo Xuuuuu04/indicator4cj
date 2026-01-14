@@ -22,9 +22,9 @@ public class VwmaStrategy <: Strategy {
         this.SmaIndicator.Period = DefaultVwmaStrategyPeriod
     }
 
-    public func Name(): String { return "VWMA Strategy" }
+    public func name(): String { return "VWMA Strategy" }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let (smas, vwmas) = calculateSmaAndVwma(c)
         let actions = Operate(smas, vwmas, { sma: Float64, vwma: Float64 =>
             if (vwma > sma) { return Action.Buy }
@@ -34,7 +34,7 @@ public class VwmaStrategy <: Strategy {
         return Shift(actions, VwmaIndicator.Period - 1, Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
         let dates = SnapshotsAsDates(snaps[0])
         let closings = SnapshotsAsClosings(snaps[1])
@@ -47,14 +47,14 @@ public class VwmaStrategy <: Strategy {
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings))
-        report.AddColumn(NewNumericReportColumn("SMA", smas), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("VWMA", vwmas), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings))
+        report.addColumn(NumericReportColumn("SMA", smas), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("VWMA", vwmas), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 
@@ -62,8 +62,8 @@ public class VwmaStrategy <: Strategy {
         let snaps = Duplicate(c, 2)
         let closings = Duplicate(SnapshotsAsClosings(snaps[0]), 2)
         let volumes = SnapshotsAsVolumes(snaps[1])
-        let smas = SmaIndicator.Compute(closings[0])
-        let vwmas = VwmaIndicator.Compute(closings[1], volumes)
+        let smas = SmaIndicator.compute(closings[0])
+        let vwmas = VwmaIndicator.compute(closings[1], volumes)
         return (smas, vwmas)
     }
 }

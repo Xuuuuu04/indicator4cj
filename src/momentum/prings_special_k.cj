@@ -6,7 +6,7 @@ import indicator4cj.trend.*
 
 // Pring's Special K: weighted ROC sums smoothed by EMA(10).
 public class PringsSpecialK {
-    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let roc10 = MultiplyBy(Roc(values, 10), 1.0)
         let roc15 = MultiplyBy(Roc(values, 15), 2.0)
         let roc20 = MultiplyBy(Roc(values, 20), 3.0)
@@ -29,10 +29,10 @@ public class PringsSpecialK {
         let sum = Add(Add(s1, s2), Add(Add(s3, s4), Add(s5, s6)))
 
         let ema = Ema(10)
-        return ema.Compute(sum)
+        return ema.compute(sum)
     }
 
-    public func IdlePeriod(): Int64 { return 530 - 1 }
+    public func idlePeriod(): Int64 { return 530 - 1 }
 }
 
 // Rate of Change helper: (curr - prev_n) / prev_n * 100

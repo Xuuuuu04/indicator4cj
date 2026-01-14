@@ -13,7 +13,7 @@ public func test_moving_max_basic() {
     let expected: Iterator<Float64> = SliceToChan(ArrayList<Float64>([20.0, 20.0, 5.0, 8.0, 10.0, 10.0, 10.0]))
     
     let movingMax = MovingMax(4)
-    let actual = movingMax.Compute(input)
+    let actual = movingMax.compute(input)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err)

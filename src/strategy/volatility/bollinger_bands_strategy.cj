@@ -14,12 +14,12 @@ public class BollingerBandsStrategy <: Strategy {
 
     public init() { this.Indicator = BollingerBands() }
 
-    public func Name(): String { return "Bollinger Bands Strategy" }
+    public func name(): String { return "Bollinger Bands Strategy" }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = Duplicate(SnapshotsAsClosings(snapshots), 2)
-        let (uppers, _, lowers) = Indicator.Compute(closings[0])
-        closings[1] = Skip(closings[1], Indicator.IdlePeriod())
+        let (uppers, _, lowers) = Indicator.compute(closings[0])
+        closings[1] = Skip(closings[1], Indicator.idlePeriod())
 
         let actions = Operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
             if (close > up) { return Action.Sell }
@@ -27,31 +27,31 @@ public class BollingerBandsStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.IdlePeriod(), Action.Hold)
+        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         let dates = SnapshotsAsDates(snaps[0])
         let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
 
-        var (uppers, middles, lowers) = Indicator.Compute(closings[0])
-        uppers = Shift(uppers, Indicator.IdlePeriod(), 0.0)
-        middles = Shift(middles, Indicator.IdlePeriod(), 0.0)
-        lowers = Shift(lowers, Indicator.IdlePeriod(), 0.0)
+        var (uppers, middles, lowers) = Indicator.compute(closings[0])
+        uppers = Shift(uppers, Indicator.idlePeriod(), 0.0)
+        middles = Shift(middles, Indicator.idlePeriod(), 0.0)
+        lowers = Shift(lowers, Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[1]))
-        report.AddColumn(NewNumericReportColumn("Upper", uppers))
-        report.AddColumn(NewNumericReportColumn("Middle", middles))
-        report.AddColumn(NewNumericReportColumn("Lower", lowers))
-        report.AddColumn(NewAnnotationReportColumn(annotations))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[1]))
+        report.addColumn(NumericReportColumn("Upper", uppers))
+        report.addColumn(NumericReportColumn("Middle", middles))
+        report.addColumn(NumericReportColumn("Lower", lowers))
+        report.addColumn(AnnotationReportColumn(annotations))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
         return report
     }
 }

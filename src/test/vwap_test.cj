@@ -16,7 +16,7 @@ class VwapTest {
         var expected = Map(inputs[2], { m => m.Vwap })
 
         let vwap = Vwap()
-        let actual = RoundDigits(vwap.Compute(closings, volumes), 2)
+        let actual = RoundDigits(vwap.compute(closings, volumes), 2)
         expected = Skip(expected, vwap.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

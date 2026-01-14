@@ -20,7 +20,7 @@ public func test_roc_simple() {
     let roc = NewRoc()
     roc.Period = 3
 
-    let actual = roc.Compute(closing.iterator())
+    let actual = roc.compute(closing.iterator())
     let expectedSkipped = h.Skip(expected.iterator(), roc.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
@@ -37,7 +37,7 @@ public func test_roc_basic() {
     let expected = h.Map(inputs[1], { row: RocData => row.Roc })
 
     let roc = NewRoc()
-    let actual = h.RoundDigits(roc.Compute(closing), 2)
+    let actual = h.RoundDigits(roc.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, roc.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

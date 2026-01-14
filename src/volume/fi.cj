@@ -11,8 +11,8 @@ public class Fi {
     public init() { _ema.Period = 13 }
     public init(period: Int64) { _ema.Period = period }
 
-    public func Compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        return _ema.Compute(
+    public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+        return _ema.compute(
             Multiply(
                 Change(closings, 1),
                 volumes
@@ -20,6 +20,6 @@ public class Fi {
         )
     }
 
-    public func IdlePeriod(): Int64 { return _ema.IdlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return _ema.idlePeriod() + 1 }
 }
 

@@ -20,7 +20,7 @@ public func test_rma_basic() {
     let expected = h.Map(inputs[1], { d: RmaData => d.Rma })
 
     let rma = Rma(15)
-    let actual = h.RoundDigits(rma.Compute(closing), 2)
+    let actual = h.RoundDigits(rma.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, rma.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

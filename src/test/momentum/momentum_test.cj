@@ -21,7 +21,7 @@ public func momentum_basic() {
     var expected = Map(inputs[1], { d: MomentumRow => d.Momentum })
 
     let m = Momentum(10)
-    var actual = m.Compute(closes)
+    var actual = m.compute(closes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, m.IdlePeriod())
 

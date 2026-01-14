@@ -21,7 +21,7 @@ public func test_hma_basic() {
 
     let hma = Hma(3)
 
-    let actual = h.RoundDigits(hma.Compute(closing), 2)
+    let actual = h.RoundDigits(hma.compute(closing), 2)
     
     // Actual starts at Index 2 (249 items).
     // Expected valid data starts at Index 3 (248 items).

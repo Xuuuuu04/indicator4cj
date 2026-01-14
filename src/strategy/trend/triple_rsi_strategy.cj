@@ -12,14 +12,14 @@ public class TripleRsiStrategy <: Strategy {
 
     public init() { this._impl = m.TripleRsiStrategy() }
 
-    public func Name(): String { return _impl.Name() }
+    public func name(): String { return _impl.name() }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        return _impl.Compute(snapshots)
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+        return _impl.compute(snapshots)
     }
 
-    public func Report(snapshots: Iterator<Snapshot>): Report {
-        return _impl.Report(snapshots)
+    public func report(snapshots: Iterator<Snapshot>): Report {
+        return _impl.report(snapshots)
     }
 }
 

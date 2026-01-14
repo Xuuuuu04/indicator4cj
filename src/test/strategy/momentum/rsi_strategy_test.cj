@@ -70,7 +70,7 @@ public func rsi_strategy_basic() {
 
     let strat = NewRsiStrategy()
     let actualList = ArrayList<Action>()
-    let actualIter = strat.Compute(snaps.iterator())
+    let actualIter = strat.compute(snaps.iterator())
     while (true) {
         match (actualIter.next()) {
             case Some(a) => actualList.add(a)
@@ -101,7 +101,7 @@ public func rsi_strategy_report() {
         }
     }
     let strat = NewRsiStrategy()
-    strat.Report(snaps.iterator())
+    strat.report(snaps.iterator())
     @Expect(true, true) // 占位断言，确认调用不抛异常
 }
 

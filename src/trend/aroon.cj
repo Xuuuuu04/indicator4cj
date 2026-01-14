@@ -12,12 +12,12 @@ public class Aroon {
     public init() { this.Period = DefaultAroonPeriod }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(high: Iterator<Float64>, low: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
+    public func compute(high: Iterator<Float64>, low: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let movingMax = MovingMax(Period)
         let movingMin = MovingMin(Period)
 
-        let sinceLastHigh = MaxSince(movingMax.Compute(high), Period)
-        let sinceLastLow = MinSince(movingMin.Compute(low), Period)
+        let sinceLastHigh = MaxSince(movingMax.compute(high), Period)
+        let sinceLastLow = MinSince(movingMin.compute(low), Period)
 
         var aroonUp = MultiplyBy(IncrementBy(MultiplyBy(sinceLastHigh, -1.0), Float64(Period)), 100.0 / Float64(Period))
         aroonUp = RoundDigits(aroonUp, 0)
@@ -28,7 +28,4 @@ public class Aroon {
         return (aroonUp, aroonDown)
     }
 }
-
-public func NewAroon(): Aroon { return Aroon() }
-
 

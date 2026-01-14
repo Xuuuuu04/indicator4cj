@@ -10,13 +10,13 @@ public class UlcerIndex {
     public init() { this.Period = 14 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(closings: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let cs = Duplicate(closings, 2)
 
         let movingMax = MovingMax(Period)
-        let highs = Duplicate(movingMax.Compute(cs[0]), 2)
+        let highs = Duplicate(movingMax.compute(cs[0]), 2)
 
-        cs[1] = Skip(cs[1], movingMax.IdlePeriod())
+        cs[1] = Skip(cs[1], movingMax.idlePeriod())
 
         let drawdown = MultiplyBy(
             Divide(
@@ -28,11 +28,11 @@ public class UlcerIndex {
 
         let sma = Sma()
         sma.Period = Period
-        let squaredAvg = Pow(sma.Compute(drawdown), 2.0)
+        let squaredAvg = Pow(sma.compute(drawdown), 2.0)
 
         return Sqrt(squaredAvg)
     }
 
-    public func IdlePeriod(): Int64 { return (Period - 1) * 2 }
+    public func idlePeriod(): Int64 { return (Period - 1) * 2 }
 }
 

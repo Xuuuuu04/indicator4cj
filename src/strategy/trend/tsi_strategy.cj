@@ -28,15 +28,15 @@ public class TsiStrategy <: Strategy {
         this._signalPeriod = signalPeriod
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "Tsi Strategy (${Indicator.toString()},EMA(${_signalPeriod}))"
     }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = SnapshotsAsClosings(snapshots)
-        let tsis = Duplicate(Indicator.Compute(closings), 2)
-        tsis[0] = Skip(tsis[0], Signal.IdlePeriod())
-        let signals = Signal.Compute(tsis[1])
+        let tsis = Duplicate(Indicator.compute(closings), 2)
+        tsis[0] = Skip(tsis[0], Signal.idlePeriod())
+        let signals = Signal.compute(tsis[1])
 
         let actions = Operate(tsis[0], signals, { tsi: Float64, sig: Float64 =>
             if ((tsi > 0.0) && (tsi > sig)) { return Action.Buy }
@@ -47,15 +47,15 @@ public class TsiStrategy <: Strategy {
         return Shift(actions, IdlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         let dates = Skip(SnapshotsAsDates(snaps[0]), IdlePeriod())
         let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
         closings[1] = Skip(closings[1], IdlePeriod())
 
-        let tsis = Duplicate(Indicator.Compute(closings[0]), 2)
-        tsis[0] = Skip(tsis[0], Signal.IdlePeriod())
-        let signals = Signal.Compute(tsis[1])
+        let tsis = Duplicate(Indicator.compute(closings[0]), 2)
+        tsis[0] = Skip(tsis[0], Signal.idlePeriod())
+        let signals = Signal.compute(tsis[1])
 
         var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
         actions = Skip(actions, IdlePeriod())
@@ -63,19 +63,19 @@ public class TsiStrategy <: Strategy {
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[1]))
-        report.AddColumn(NewNumericReportColumn("TSI", tsis[0]), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Signal", signals), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[1]))
+        report.addColumn(NumericReportColumn("TSI", tsis[0]), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Signal", signals), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 
     public func IdlePeriod(): Int64 {
-        return Indicator.IdlePeriod() + Signal.IdlePeriod()
+        return Indicator.idlePeriod() + Signal.idlePeriod()
     }
 }
 

@@ -11,11 +11,11 @@ public class MovingStd {
     public init() { this.Period = 1 }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         return MovingStdIterator(c, Period)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 }
 
 // Iterator maintaining ring buffer and running mean.

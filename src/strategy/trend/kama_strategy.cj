@@ -20,13 +20,13 @@ public class KamaStrategy <: Strategy {
         this.Indicator = Kama(erPeriod, fastScPeriod, slowScPeriod)
     }
 
-    public func Name(): String { return Indicator.toString() }
+    public func name(): String { return Indicator.toString() }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closings = Duplicate(SnapshotsAsClosings(c), 2)
-        closings[1] = Skip(closings[1], Indicator.IdlePeriod())
+        closings[1] = Skip(closings[1], Indicator.idlePeriod())
 
-        let kamas = Indicator.Compute(closings[0])
+        let kamas = Indicator.compute(closings[0])
 
         let actions = Operate(kamas, closings[1], { kama: Float64, closing: Float64 =>
             if (closing > kama) { return Action.Buy }
@@ -34,31 +34,31 @@ public class KamaStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.IdlePeriod(), Action.Hold)
+        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.IdlePeriod())
+        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.idlePeriod())
 
         let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
-        closings[1] = Skip(closings[1], Indicator.IdlePeriod())
+        closings[1] = Skip(closings[1], Indicator.idlePeriod())
 
-        let kamas = Indicator.Compute(closings[0])
+        let kamas = Indicator.compute(closings[0])
 
         var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
-        actions = Skip(actions, Indicator.IdlePeriod())
-        outcomesRaw = Skip(outcomesRaw, Indicator.IdlePeriod())
+        actions = Skip(actions, Indicator.idlePeriod())
+        outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings[1]))
-        report.AddColumn(NewNumericReportColumn("KAMA", kamas), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings[1]))
+        report.addColumn(NumericReportColumn("KAMA", kamas), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 }

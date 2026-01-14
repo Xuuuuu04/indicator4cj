@@ -24,7 +24,7 @@ public func test_envelope_sma_basic() {
     let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.Lower })
 
     let envelope = NewEnvelopeWithSma()
-    let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.Compute(closing)
+    let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.compute(closing)
 
     let actualUpper = h.RoundDigits(actualUpperRaw, 2)
     let actualMiddle = h.RoundDigits(actualMiddleRaw, 2)
@@ -58,7 +58,7 @@ public func test_envelope_ema_basic() {
     let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.Lower })
 
     let envelope = NewEnvelopeWithEma()
-    let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.Compute(closing)
+    let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.compute(closing)
 
     let actualUpper = h.RoundDigits(actualUpperRaw, 2)
     let actualMiddle = h.RoundDigits(actualMiddleRaw, 2)

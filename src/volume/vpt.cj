@@ -7,7 +7,7 @@ import indicator4cj.helper.*
 public class Vpt {
     public init() {}
 
-    public func Compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let ratios = Multiply(
             ChangeRatio(closings, 1),
             Skip(volumes, 1)
@@ -15,6 +15,6 @@ public class Vpt {
         return MapWithPrevious(ratios, { prev: Float64, curr: Float64 => prev + curr }, 0.0)
     }
 
-    public func IdlePeriod(): Int64 { return 1 }
+    public func idlePeriod(): Int64 { return 1 }
 }
 

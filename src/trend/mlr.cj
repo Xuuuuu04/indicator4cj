@@ -11,18 +11,18 @@ public class Mlr {
         this.MlsIndicator = Mls(period)
     }
 
-    public func Compute(x: Iterator<Float64>, y: Iterator<Float64>): Iterator<Float64> {
+    public func compute(x: Iterator<Float64>, y: Iterator<Float64>): Iterator<Float64> {
         // 需要两份 x：一份给 Mls 计算斜率截距，一份用于生成预测值
         let xCopies = Duplicate(x, 2)
-        let (mIter, bIter) = MlsIndicator.Compute(xCopies[0], y)
+        let (mIter, bIter) = MlsIndicator.compute(xCopies[0], y)
         
-        let xShifted = Skip(xCopies[1], MlsIndicator.IdlePeriod())
+        let xShifted = Skip(xCopies[1], MlsIndicator.idlePeriod())
         
         let mx = Operate(mIter, xShifted, { a: Float64, b: Float64 => a * b })
         return Add(mx, bIter)
     }
 
-    public func IdlePeriod(): Int64 { return MlsIndicator.IdlePeriod() }
+    public func idlePeriod(): Int64 { return MlsIndicator.idlePeriod() }
 
     public func toString(): String { return "MLR(${MlsIndicator.Sum.Period})" }
 }

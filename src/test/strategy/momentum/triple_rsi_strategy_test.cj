@@ -30,7 +30,7 @@ public func test_triple_rsi_strategy_basic() {
     let expected = h.Map(expectedRows, { r: TripleRsiStrategyRow => ActionFromInt(r.Action) })
     
     let s = NewTripleRsiStrategy()
-    let actual = s.Compute(snaps)
+    let actual = s.compute(snaps)
     
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)

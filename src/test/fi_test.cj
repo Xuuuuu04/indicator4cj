@@ -16,7 +16,7 @@ class FiTest {
         var expected = Map(inputs[2], { m => m.Fi })
 
         let fi = Fi()
-        let actual = RoundDigits(fi.Compute(closes, volumes), 2)
+        let actual = RoundDigits(fi.compute(closes, volumes), 2)
         expected = Skip(expected, fi.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

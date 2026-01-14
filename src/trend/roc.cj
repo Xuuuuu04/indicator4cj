@@ -18,7 +18,7 @@ public class Roc {
         }
     }
 
-    public func Compute(values: Iterator<Float64>): Iterator<Float64> {
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let window = Ring<Float64>(Period)
         var rocs = Map(values, { v: Float64 =>
             var res: Float64 = 0.0
@@ -34,16 +34,12 @@ public class Roc {
             window.Put(v)
             return res
         })
-        rocs = Skip(rocs, IdlePeriod())
+        rocs = Skip(rocs, idlePeriod())
         return rocs
     }
 
-    public func IdlePeriod(): Int64 { return Period }
+    public func idlePeriod(): Int64 { return Period }
 
     public func toString(): String { return "ROC(${Period})" }
 }
-
-public func NewRoc(): Roc { return Roc() }
-public func NewRocWithPeriod(period: Int64): Roc { return Roc(period) }
-
 

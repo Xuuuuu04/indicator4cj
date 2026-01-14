@@ -23,7 +23,7 @@ public func test_wma_simple() {
     let expected = ArrayList<Float64>([10.0/6.0, 16.0/6.0, 22.0/6.0])
     
     let wma = NewWmaWith(3)
-    let actual = wma.Compute(input.iterator())
+    let actual = wma.compute(input.iterator())
     
     match (h.CheckFloatEquals(actual, expected.iterator())) {
         case Some(err) => fail(err)
@@ -42,8 +42,8 @@ public func test_wma_basic() {
     let wma3 = NewWmaWith(3)
     let wma5 = NewWmaWith(5)
 
-    let actualWma3 = h.RoundDigits(wma3.Compute(closing[0]), 3)
-    let actualWma5 = h.RoundDigits(wma5.Compute(closing[1]), 3)
+    let actualWma3 = h.RoundDigits(wma3.compute(closing[0]), 3)
+    let actualWma5 = h.RoundDigits(wma5.compute(closing[1]), 3)
 
     let expWma3Skipped = h.Skip(expectedWma3, wma3.IdlePeriod())
     let expWma5Skipped = h.Skip(expectedWma5, wma5.IdlePeriod())

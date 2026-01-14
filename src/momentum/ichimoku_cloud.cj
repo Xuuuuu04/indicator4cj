@@ -11,7 +11,7 @@ public class IchimokuCloud {
     public var LeadingPeriod: Int64 = 52
     public var LaggingShift: Int64 = 26
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highsSp = Duplicate(highs, 3)
         let lowsSp = Duplicate(lows, 3)
 
@@ -25,7 +25,7 @@ public class IchimokuCloud {
         // Tenkan
         let conv = Duplicate(
             DivideBy(
-            Add(convMax.Compute(highsSp[0]), convMin.Compute(lowsSp[0])),
+            Add(convMax.compute(highsSp[0]), convMin.compute(lowsSp[0])),
             2.0
             ),
             2
@@ -34,14 +34,14 @@ public class IchimokuCloud {
         // Kijun
         let base = Duplicate(
             DivideBy(
-            Add(baseMax.Compute(highsSp[1]), baseMin.Compute(lowsSp[1])),
+            Add(baseMax.compute(highsSp[1]), baseMin.compute(lowsSp[1])),
             2.0
             ),
             2
         )
 
         // 对齐 Tenkan 与 Kijun 的 idle 差
-        let diffConvBase = baseMax.IdlePeriod() - convMax.IdlePeriod()
+        let diffConvBase = baseMax.idlePeriod() - convMax.idlePeriod()
         conv[0] = Skip(conv[0], diffConvBase)
         conv[1] = Skip(conv[1], diffConvBase)
 
@@ -50,12 +50,12 @@ public class IchimokuCloud {
 
         // Senkou B
         let senkouB_raw = DivideBy(
-            Add(leadMax.Compute(highsSp[2]), leadMin.Compute(lowsSp[2])),
+            Add(leadMax.compute(highsSp[2]), leadMin.compute(lowsSp[2])),
             2.0
         )
 
         // 领先线对齐到最长窗口
-        let diffLeadBase = leadMax.IdlePeriod() - baseMax.IdlePeriod()
+        let diffLeadBase = leadMax.idlePeriod() - baseMax.idlePeriod()
         senkouA = Skip(senkouA, diffLeadBase)
         conv[1] = Skip(conv[1], diffLeadBase)
         base[1] = Skip(base[1], diffLeadBase)
@@ -64,11 +64,11 @@ public class IchimokuCloud {
 
         // Chikou：向左移 LaggingShift，相当于向右平移 lagging 并裁掉领先 idle。
         let chikouShifted = Shift(closes, LaggingShift, 0.0)
-        let chikou = Skip(chikouShifted, leadMax.IdlePeriod())
+        let chikou = Skip(chikouShifted, leadMax.idlePeriod())
 
         return (conv[1], base[1], senkouA, senkouB, chikou)
     }
 
-    public func IdlePeriod(): Int64 { return LeadingPeriod - 1 }
+    public func idlePeriod(): Int64 { return LeadingPeriod - 1 }
 }
 

@@ -8,15 +8,15 @@ import indicator4cj.helper.*
 public class BuyAndHoldStrategy <: Strategy {
     private var _first: Bool = true
 
-    public func Name(): String { return "BuyAndHold" }
+    public func name(): String { return "BuyAndHold" }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         return BuyAndHoldIterator(snapshots)
     }
 
-    public func Report(snapshots: Iterator<Snapshot>): Report {
+    public func report(snapshots: Iterator<Snapshot>): Report {
         let dates = SnapshotsAsDates(snapshots)
-        return NewReport(Name(), dates)
+        return NewReport(this.name(), dates)
     }
 }
 

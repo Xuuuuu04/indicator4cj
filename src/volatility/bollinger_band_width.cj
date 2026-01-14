@@ -8,14 +8,14 @@ public class BollingerBandWidth {
 
     public init() {}
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
-        let (upper, middle, lower) = _bands.Compute(c)
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
+        let (upper, middle, lower) = _bands.compute(c)
         return Divide(
             Subtract(upper, lower),
             middle
         )
     }
 
-    public func IdlePeriod(): Int64 { return _bands.IdlePeriod() }
+    public func idlePeriod(): Int64 { return _bands.idlePeriod() }
 }
 

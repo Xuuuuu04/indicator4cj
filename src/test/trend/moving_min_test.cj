@@ -13,7 +13,7 @@ public func test_moving_min_basic() {
     let expected: Iterator<Float64> = SliceToChan(ArrayList<Float64>([-10.0, -5.0, -5.0, -5.0, 1.0, -20.0, -20.0]))
     
     let movingMin = MovingMin(4)
-    let actual = movingMin.Compute(input)
+    let actual = movingMin.compute(input)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err)

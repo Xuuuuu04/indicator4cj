@@ -17,7 +17,7 @@ public func stop_loss_strategy_basic() {
     let inner = NewAroonStrategy()
     let s = NewStopLossStrategy(inner, 0.02)
 
-    let actual = s.Compute(snapshots)
+    let actual = s.compute(snapshots)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()

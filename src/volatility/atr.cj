@@ -12,7 +12,7 @@ public class Atr {
     public init(period: Int64) { this.ma = Sma(period) }
     public init(ma: Ma) { this.ma = ma }
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         // align highs/lows to use previous closing
         let hs = Skip(highs, 1)
         let ls = Skip(lows, 1)
@@ -25,9 +25,9 @@ public class Atr {
             return m
         })
 
-        return ma.Compute(tr)
+        return ma.compute(tr)
     }
 
-    public func IdlePeriod(): Int64 { return ma.IdlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return ma.idlePeriod() + 1 }
 }
 

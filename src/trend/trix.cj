@@ -12,21 +12,18 @@ public class Trix {
     public init() { this.Period = DefaultTrixPeriod }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let ema1 = Ema(Period)
         let ema2 = Ema(Period)
         let ema3 = Ema(Period)
 
-        let emas = ema3.Compute(ema2.Compute(ema1.Compute(c)))
+        let emas = ema3.compute(ema2.compute(ema1.compute(c)))
         let trix = ChangeRatio(emas, 1)
         return trix
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return (Period * 3) - 3 + 1
     }
 }
-
-public func NewTrix(): Trix { return Trix() }
-
 

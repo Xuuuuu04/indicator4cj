@@ -26,7 +26,7 @@ public func test_bop_basic() {
     let expected = h.Map(inputs[4], { row: BopData => row.Bop })
 
     let bop = Bop()
-    let actual = h.RoundDigits(bop.Compute(opening, high, low, closing), 0)
+    let actual = h.RoundDigits(bop.compute(opening, high, low, closing), 0)
 
     match (h.CheckFloatEquals(actual, expected)) {
         case Some(err) => fail(err.toString())

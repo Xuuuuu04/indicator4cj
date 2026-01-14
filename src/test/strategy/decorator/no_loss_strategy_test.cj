@@ -17,7 +17,7 @@ public func no_loss_strategy_basic() {
     let inner = NewAroonStrategy()
     let s = NewNoLossStrategy(inner)
 
-    let actual = s.Compute(snapshots)
+    let actual = s.compute(snapshots)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()

@@ -18,7 +18,7 @@ public class SuperTrend {
         this._multiplier = multiplier
     }
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
         let cs = Duplicate(closings, 2)
@@ -28,20 +28,20 @@ public class SuperTrend {
                 Add(hs[0], ls[0]),
                 2.0
             ),
-            _atr.IdlePeriod()
+            _atr.idlePeriod()
         )
 
         let atrMult = MultiplyBy(
-            _atr.Compute(hs[1], ls[1], cs[0]),
+            _atr.compute(hs[1], ls[1], cs[0]),
             _multiplier
         )
 
-        cs[1] = Skip(cs[1], _atr.IdlePeriod())
+        cs[1] = Skip(cs[1], _atr.idlePeriod())
 
         return SuperTrendIterator(medians, atrMult, cs[1])
     }
 
-    public func IdlePeriod(): Int64 { return _atr.IdlePeriod() }
+    public func idlePeriod(): Int64 { return _atr.idlePeriod() }
 }
 
 private class SuperTrendIterator <: Iterator<Float64> {

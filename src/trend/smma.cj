@@ -17,11 +17,11 @@ public class Smma {
         this.Period = period
     }
 
-    public func Compute(c: Iterator<Float64>): Iterator<Float64> {
+    public func compute(c: Iterator<Float64>): Iterator<Float64> {
         return SmmaIterator(c, Period)
     }
 
-    public func IdlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return Period - 1 }
 
     public func toString(): String { return "SMMA(${Period})" }
 }
@@ -66,13 +66,4 @@ private class SmmaIterator <: Iterator<Float64> {
         }
     }
 }
-
-public func NewSmma(): Smma {
-    return Smma()
-}
-
-public func NewSmmaWithPeriod(period: Int64): Smma {
-    return Smma(period)
-}
-
 

@@ -17,7 +17,7 @@ public func and_strategy_basic() {
     s.Strategies.add(NewBuyAndHoldStrategy())
     s.Strategies.add(NewBuyAndHoldStrategy())
 
-    let actual = s.Compute(snapshots)
+    let actual = s.compute(snapshots)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()

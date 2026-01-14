@@ -18,7 +18,7 @@ public func majority_strategy_basic() {
     s.Strategies.add(NewBuyAndHoldStrategy())
     s.Strategies.add(NewMacdStrategy())
 
-    let actual = s.Compute(snapshots)
+    let actual = s.compute(snapshots)
     match (h.CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err.toString())
         case None => ()

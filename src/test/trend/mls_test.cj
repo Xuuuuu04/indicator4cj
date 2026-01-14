@@ -24,7 +24,7 @@ public func test_mls_basic() {
     let expectedB = h.Map(inputs[3], { d: MlsData => d.B })
 
     let mls = Mls(5)
-    let (actualMraw, actualBRaw) = mls.Compute(x, y)
+    let (actualMraw, actualBRaw) = mls.compute(x, y)
     
     let actualM = h.RoundDigits(actualMraw, 2)
     let actualB = h.RoundDigits(actualBRaw, 2)

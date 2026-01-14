@@ -20,7 +20,7 @@ public func test_smma_basic() {
     let expected = h.Map(inputs[1], { d: SmmaData => d.Smma })
 
     let smma = Smma()
-    let actual = h.RoundDigits(smma.Compute(closing), 2)
+    let actual = h.RoundDigits(smma.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, smma.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

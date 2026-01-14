@@ -25,7 +25,7 @@ public func macd_basic() {
     let closes = Map(inputs[0], { d: MacdRow => d.Close })
     
     let macd = Macd() 
-    let (actualMacdsRaw, actualSignalsRaw) = macd.Compute(closes)
+    let (actualMacdsRaw, actualSignalsRaw) = macd.compute(closes)
 
     let actualMacds = RoundDigits(actualMacdsRaw, 2)
     let actualSignals = RoundDigits(actualSignalsRaw, 2)

@@ -29,50 +29,50 @@ public class MoneyFlowIndexStrategy <: Strategy {
         this.BuyAt = buyAt
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "Money Flow Index Strategy (${SellAt},${BuyAt})"
     }
 
-    public func Compute(c: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 4)
         let highs = SnapshotsAsHighs(snaps[0])
         let lows = SnapshotsAsLows(snaps[1])
         let closings = SnapshotsAsClosings(snaps[2])
         let volumes = SnapshotsAsVolumes(snaps[3])
 
-        let mfis = Indicator.Compute(highs, lows, closings, volumes)
+        let mfis = Indicator.compute(highs, lows, closings, volumes)
         let actions = h.Map(mfis, { v: Float64 =>
             if (v >= SellAt) { return Action.Sell }
             if (v <= BuyAt) { return Action.Buy }
             return Action.Hold
         })
-        return Shift(actions, Indicator.IdlePeriod(), Action.Hold)
+        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 6)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.IdlePeriod())
+        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.idlePeriod())
         let highs = SnapshotsAsHighs(snaps[1])
         let lows = SnapshotsAsLows(snaps[2])
         let closingsDup = Duplicate(SnapshotsAsClosings(snaps[3]), 2)
         let volumes = SnapshotsAsVolumes(snaps[4])
 
-        let mfis = Indicator.Compute(highs, lows, closingsDup[0], volumes)
-        closingsDup[1] = Skip(closingsDup[1], Indicator.IdlePeriod())
+        let mfis = Indicator.compute(highs, lows, closingsDup[0], volumes)
+        closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())
 
         var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[5])
-        actions = Skip(actions, Indicator.IdlePeriod())
-        outcomesRaw = Skip(outcomesRaw, Indicator.IdlePeriod())
+        actions = Skip(actions, Indicator.idlePeriod())
+        outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closingsDup[1]))
-        report.AddColumn(NewNumericReportColumn("Money Flow Index", mfis), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closingsDup[1]))
+        report.addColumn(NumericReportColumn("Money Flow Index", mfis), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 }

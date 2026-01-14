@@ -17,7 +17,7 @@ class MfmTest {
         var expected = Map(inputs[3], { m => m.Mfm })
 
         let mfm = Mfm()
-        let actual = RoundDigits(mfm.Compute(highs, lows, closes), 2)
+        let actual = RoundDigits(mfm.compute(highs, lows, closes), 2)
         expected = Skip(expected, mfm.IdlePeriod())
 
         match (CheckEquals(actual, expected)) {

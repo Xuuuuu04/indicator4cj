@@ -27,28 +27,22 @@ public class Tsi {
         this.SecondSmoothing = Ema(_secondPeriod)
     }
 
-    public func Compute(closings: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let pcs = Duplicate(Change(closings, 1), 2)
 
-        let pcds = FirstSmoothing.Compute(SecondSmoothing.Compute(pcs[0]))
-        let apcds = FirstSmoothing.Compute(SecondSmoothing.Compute(Abs(pcs[1])))
+        let pcds = FirstSmoothing.compute(SecondSmoothing.compute(pcs[0]))
+        let apcds = FirstSmoothing.compute(SecondSmoothing.compute(Abs(pcs[1])))
 
         let tsi = MultiplyBy(Divide(pcds, apcds), 100.0)
         return tsi
     }
 
-    public func IdlePeriod(): Int64 {
-        return FirstSmoothing.IdlePeriod() + SecondSmoothing.IdlePeriod() + 1
+    public func idlePeriod(): Int64 {
+        return FirstSmoothing.idlePeriod() + SecondSmoothing.idlePeriod() + 1
     }
 
     public func toString(): String {
         return "TSI(${_firstPeriod},${_secondPeriod})"
     }
 }
-
-public func NewTsi(): Tsi { return Tsi() }
-public func NewTsiWith(firstSmoothingPeriod: Int64, secondSmoothingPeriod: Int64): Tsi {
-    return Tsi(firstSmoothingPeriod, secondSmoothingPeriod)
-}
-
 

@@ -21,9 +21,9 @@ public class Kdj {
         this.Sma2 = Sma(DefaultKdjSma2Period)
     }
 
-    public func Compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
-        let highest = MovingMaxInd.Compute(high)
-        let lowests = Duplicate(MovingMinInd.Compute(low), 2)
+    public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
+        let highest = MovingMaxInd.compute(high)
+        let lowests = Duplicate(MovingMinInd.compute(low), 2)
 
         let closingShift = Skip(closing, MovingMaxInd.Period - 1)
 
@@ -35,8 +35,8 @@ public class Kdj {
             100.0
         )
 
-        let ks = Duplicate(Sma1.Compute(rsv), 3)
-        let ds = Duplicate(Sma2.Compute(ks[0]), 2)
+        let ks = Duplicate(Sma1.compute(rsv), 3)
+        let ds = Duplicate(Sma2.compute(ks[0]), 2)
 
         ks[1] = Skip(ks[1], Sma2.Period - 1)
         ks[2] = Skip(ks[2], Sma2.Period - 1)
@@ -46,11 +46,8 @@ public class Kdj {
         return (ks[2], ds[1], j)
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return MovingMaxInd.Period + Sma1.Period + Sma2.Period - 3
     }
 }
-
-public func NewKdj(): Kdj { return Kdj() }
-
 

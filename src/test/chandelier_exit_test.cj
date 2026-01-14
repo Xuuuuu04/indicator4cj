@@ -30,7 +30,7 @@ public func chandelier_exit_basic() {
     let expShort = Map(inputs[4], { d: ChandelierRow => d.Short })
 
     let ce = ChandelierExit()
-    var (actLong, actShort) = ce.Compute(highs, lows, closings)
+    var (actLong, actShort) = ce.compute(highs, lows, closings)
     actLong = RoundDigits(actLong, 2)
     actShort = RoundDigits(actShort, 2)
 

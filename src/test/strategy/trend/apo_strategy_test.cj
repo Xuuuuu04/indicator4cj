@@ -14,7 +14,7 @@ public func apo_strategy_basic() {
     let expected = Map(results, { r: Result => ActionFromInt(r.Action) })
 
     let apo = ApoStrategy()
-    let actual = apo.Compute(snapshots)
+    let actual = apo.compute(snapshots)
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err.toString())

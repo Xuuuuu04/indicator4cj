@@ -21,7 +21,7 @@ public func bollinger_band_width_basic() {
     let expected = Map(inputs[1], { d: BollingerBandWidthRow => d.Width })
 
     let bbw = BollingerBandWidth()
-    var actual = bbw.Compute(closings)
+    var actual = bbw.compute(closings)
     actual = RoundDigits(actual, 2)
 
     let exp = Skip(expected, bbw.IdlePeriod())

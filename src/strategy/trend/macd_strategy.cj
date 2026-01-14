@@ -11,20 +11,20 @@ public class MacdStrategy <: Strategy {
     public let Macd: Macd
 
     public init() {
-        this.Macd = NewMacd()
+        this.Macd = Macd()
     }
 
     public init(period1: Int64, period2: Int64, period3: Int64) {
-        this.Macd = NewMacdWithPeriod(period1, period2, period3)
+        this.Macd = Macd(period1, period2, period3)
     }
 
-    public func Name(): String {
+    public func name(): String {
         return "MACD Strategy (${Macd.Ema1.Period},${Macd.Ema2.Period},${Macd.Ema3.Period})"
     }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = SnapshotsAsClosings(snapshots)
-        let (macdsRaw, signalsRaw) = Macd.Compute(closings)
+        let (macdsRaw, signalsRaw) = Macd.compute(closings)
         let macds = Duplicate(macdsRaw, 2)
         let signals = Duplicate(signalsRaw, 2)
 
@@ -38,30 +38,30 @@ public class MacdStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, Macd.IdlePeriod(), Action.Hold)
+        return Shift(actions, Macd.idlePeriod(), Action.Hold)
     }
 
-    public func Report(c: Iterator<Snapshot>): Report {
+    public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
         let dates = SnapshotsAsDates(snaps[0])
         let closingsDup = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
 
-        var (macds, signals) = Macd.Compute(closingsDup[0])
-        macds = Shift(macds, Macd.IdlePeriod(), 0.0)
-        signals = Shift(signals, Macd.IdlePeriod(), 0.0)
+        var (macds, signals) = Macd.compute(closingsDup[0])
+        macds = Shift(macds, Macd.idlePeriod(), 0.0)
+        signals = Shift(signals, Macd.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closingsDup[1]))
-        report.AddColumn(NewNumericReportColumn("MACD", macds), ArrayList<Int64>([1]))
-        report.AddColumn(NewNumericReportColumn("Signal", signals), ArrayList<Int64>([1]))
-        report.AddColumn(NewAnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closingsDup[1]))
+        report.addColumn(NumericReportColumn("MACD", macds), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Signal", signals), ArrayList<Int64>([1]))
+        report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report
     }
 }

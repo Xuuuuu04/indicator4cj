@@ -8,11 +8,11 @@ public class Nvi {
 
     public init() { this.Initial = 1000.0 }
 
-    public func Compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         return NviIterator(closings, volumes, Initial)
     }
 
-    public func IdlePeriod(): Int64 { return 1 }
+    public func idlePeriod(): Int64 { return 1 }
 }
 
 private class NviIterator <: Iterator<Float64> {

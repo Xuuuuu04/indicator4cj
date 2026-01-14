@@ -24,7 +24,7 @@ public func test_cci_basic() {
     let expected = h.Map(inputs[3], { row: CciData => row.Cci })
 
     let cci = NewCci()
-    let actual = h.RoundDigits(cci.Compute(high, low, closing), 2)
+    let actual = h.RoundDigits(cci.compute(high, low, closing), 2)
     let expectedSkipped = h.Skip(expected, cci.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

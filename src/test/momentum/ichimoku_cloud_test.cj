@@ -39,7 +39,7 @@ public func ichimoku_cloud_basic() {
     var expChikou = Map(inputs[7], { d: IchimokuRow => d.Chikou })
 
     let ichimoku = IchimokuCloud()
-    var (actTenkan, actKijun, actA, actB, actChikou) = ichimoku.Compute(highs, lows, closes)
+    var (actTenkan, actKijun, actA, actB, actChikou) = ichimoku.compute(highs, lows, closes)
     actTenkan = RoundDigits(actTenkan, 2)
     actKijun = RoundDigits(actKijun, 2)
     actA = RoundDigits(actA, 2)

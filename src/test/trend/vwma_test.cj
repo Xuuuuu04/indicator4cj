@@ -22,7 +22,7 @@ public func test_vwma_basic() {
     let expected = h.Map(inputs[2], { d: VwmaData => d.Vwma })
 
     let vwma = Vwma()
-    let actual = h.RoundDigits(vwma.Compute(closing, volume), 2)
+    let actual = h.RoundDigits(vwma.compute(closing, volume), 2)
     let expectedSkipped = h.Skip(expected, vwma.IdlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

@@ -18,11 +18,11 @@ public class DonchianChannel {
         this._min = MovingMin(period)
     }
 
-    public func Compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
+    public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let closings = Duplicate(c, 2)
 
-        let uppers = Duplicate(_max.Compute(closings[0]), 2)
-        let lowers = Duplicate(_min.Compute(closings[1]), 2)
+        let uppers = Duplicate(_max.compute(closings[0]), 2)
+        let lowers = Duplicate(_min.compute(closings[1]), 2)
 
         let middle = DivideBy(
             Add(uppers[0], lowers[0]),
@@ -32,6 +32,6 @@ public class DonchianChannel {
         return (uppers[1], middle, lowers[1])
     }
 
-    public func IdlePeriod(): Int64 { return _max.IdlePeriod() }
+    public func idlePeriod(): Int64 { return _max.idlePeriod() }
 }
 

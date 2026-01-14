@@ -6,11 +6,11 @@ import std.core.*
 public class Obv {
     public init() {}
 
-    public func Compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         return ObvIterator(closings, volumes)
     }
 
-    public func IdlePeriod(): Int64 { return 0 }
+    public func idlePeriod(): Int64 { return 0 }
 }
 
 private class ObvIterator <: Iterator<Float64> {

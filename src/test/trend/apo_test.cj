@@ -20,7 +20,7 @@ public func test_apo_basic() {
     let expected = h.Map(inputs[1], { row: ApoData => row.Apo })
 
     let apo = NewApo()
-    let actual = h.RoundDigits(apo.Compute(closing), 2)
+    let actual = h.RoundDigits(apo.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, apo.SlowPeriod - 1)
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {

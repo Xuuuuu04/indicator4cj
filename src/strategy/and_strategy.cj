@@ -19,9 +19,9 @@ public class AndStrategy <: Strategy {
         this.Strategies = ArrayList<Strategy>()
     }
 
-    public func Name(): String { return _name }
+    public func name(): String { return _name }
 
-    public func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
+    public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let result = ArrayList<Action>()
         let sources = ActionSources(Strategies, snapshots)
         let andCount = Strategies.size
@@ -39,7 +39,7 @@ public class AndStrategy <: Strategy {
         return result.iterator()
     }
 
-    public func Report(snapshots: Iterator<Snapshot>): Report {
+    public func report(snapshots: Iterator<Snapshot>): Report {
         let snaps = Duplicate(snapshots, 3)
         let dates = SnapshotsAsDates(snaps[0])
         let closings = SnapshotsAsClosings(snaps[1])
@@ -47,11 +47,11 @@ public class AndStrategy <: Strategy {
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(Name(), dates)
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("Close", closings))
-        report.AddColumn(NewAnnotationReportColumn(annotations))
-        report.AddColumn(NewNumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
+        let report = NewReport(this.name(), dates)
+        report.addChart()
+        report.addColumn(NumericReportColumn("Close", closings))
+        report.addColumn(AnnotationReportColumn(annotations))
+        report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([1]))
         return report
     }
 }
@@ -67,7 +67,7 @@ public func AllAndStrategies(strategies: ArrayList<Strategy>): ArrayList<Strateg
         var j: Int64 = 0
         while (j < strategies.size) {
             if (i != j) {
-                let s = AndStrategy("${strategies[i].Name()} and ${strategies[j].Name()}", ArrayList<Strategy>([strategies[i], strategies[j]]))
+                let s = AndStrategy("${strategies[i].name()} and ${strategies[j].name()}", ArrayList<Strategy>([strategies[i], strategies[j]]))
                 res.add(s)
             }
             j += 1

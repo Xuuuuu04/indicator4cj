@@ -12,19 +12,19 @@ public class Cci {
     public init() { this.Period = DefaultCciPeriod }
     public init(period: Int64) { this.Period = period }
 
-    public func Compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
+    public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         let tp = TypicalPrice()
         let sma1 = Sma(Period)
         let sma2 = Sma(Period)
 
-        let tps = Duplicate(tp.Compute(highs, lows, closings), 3)
+        let tps = Duplicate(tp.compute(highs, lows, closings), 3)
 
-        let mas = Duplicate(sma1.Compute(tps[0]), 2)
+        let mas = Duplicate(sma1.compute(tps[0]), 2)
 
         tps[1] = Skip(tps[1], sma1.Period - 1)
         tps[2] = Skip(tps[2], sma1.Period - 1)
 
-        let md = sma2.Compute(
+        let md = sma2.compute(
             Abs(
                 Subtract(tps[1], mas[0])
             )
@@ -41,13 +41,8 @@ public class Cci {
         return cci
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return (Period * 2) - 2
     }
 }
-
-public func NewCci(): Cci {
-    return Cci()
-}
-
 

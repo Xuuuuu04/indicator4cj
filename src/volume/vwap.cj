@@ -15,14 +15,14 @@ public class Vwap {
         this._sum = MovingSum(period)
     }
 
-    public func Compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+    public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let vols = Duplicate(volumes, 2)
         return Divide(
-            _sum.Compute(Multiply(closings, vols[0])),
-            _sum.Compute(vols[1])
+            _sum.compute(Multiply(closings, vols[0])),
+            _sum.compute(vols[1])
         )
     }
 
-    public func IdlePeriod(): Int64 { return _sum.IdlePeriod() }
+    public func idlePeriod(): Int64 { return _sum.idlePeriod() }
 }
 

@@ -27,7 +27,7 @@ public func williams_r_basic() {
     var expected = Map(inputs[3], { d: WilliamsRRow => d.WilliamsR })
 
     let wr = WilliamsR(14)
-    var actual = wr.Compute(highs, lows, closes)
+    var actual = wr.compute(highs, lows, closes)
     actual = RoundDigits(actual, 2)
     expected = Skip(expected, wr.IdlePeriod())
 
