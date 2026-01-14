@@ -8,7 +8,7 @@ public class Ema {
     public var Period: Int64
     public var Smoothing: Float64
 
-    public func Ema() {
+    public init() {
         this.Period = 20
         this.Smoothing = 2.0
     }

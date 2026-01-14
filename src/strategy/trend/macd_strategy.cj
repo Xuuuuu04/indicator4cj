@@ -11,11 +11,11 @@ public class MacdStrategy <: Strategy {
     public let Macd: Macd
 
     public init() {
-        this.Macd = Macd()
+        this.Macd = NewMacd()
     }
 
     public init(period1: Int64, period2: Int64, period3: Int64) {
-        this.Macd = Macd(period1, period2, period3)
+        this.Macd = NewMacdWithPeriod(period1, period2, period3)
     }
 
     public func name(): String {

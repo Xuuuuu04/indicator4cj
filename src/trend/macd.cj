@@ -42,3 +42,11 @@ public class Macd {
     }
 }
 
+public func NewMacd(): Macd {
+    return Macd()
+}
+
+public func NewMacdWithPeriod(period1: Int64, period2: Int64, period3: Int64): Macd {
+    return Macd(period1, period2, period3)
+}
+
