@@ -24,7 +24,7 @@ public class Csv<T> {
     public var hasHeader: Bool = true
     public var defaultDateTimeFormat: String = "yyyy-MM-dd"
 
-    public init() {}
+    public Csv() {}
 
     public init(options: ArrayList<CsvOption<T>>) {
         for (opt in options) { opt.apply(this) }
@@ -90,29 +90,19 @@ public class Csv<T> {
         }
     }
 
-    public func WriteToFile(path: String, rows: Iterator<T>): Option<Exception> {
-        try {
-            let f = File(path, OpenMode.Write)
-            let res = writeCommon(f, rows, true)
-            f.close()
-            return res
-        } catch (e: Exception) {
-            return Some(e)
-        }
+    public func WriteToFile(path: String, rows: Iterator<T>) {
+        let f = File(path, OpenMode.Write)
+        writeCommon(f, rows, true)
+        f.close()
     }
 
-    public func AppendToFile(path: String, rows: Iterator<T>): Option<Exception> {
-        try {
-            let f = File(path, OpenMode.Append)
-            let res = writeCommon(f, rows, false)
-            f.close()
-            return res
-        } catch (e: Exception) {
-            return Some(e)
-        }
+    public func AppendToFile(path: String, rows: Iterator<T>) {
+        let f = File(path, OpenMode.Append)
+        writeCommon(f, rows, false)
+        f.close()
     }
 
-    private func writeCommon(output: OutputStream, rows: Iterator<T>, writeHeader: Bool): Option<Exception> {
+    private func writeCommon(output: OutputStream, rows: Iterator<T>, writeHeader: Bool) {
         let typeInfo = ClassTypeInfo.of<T>()
         let vars = ArrayList<InstanceVariableInfo>()
         for (v in typeInfo.instanceVariables) { vars.add(v) }
@@ -129,8 +119,7 @@ public class Csv<T> {
                 case Some(obj) =>
                     let record = ArrayList<String>()
                     for (v in vars) {
-                        let (err, s) = getReflectValue(v, obj, defaultDateTimeFormat)
-                        match (err) { case Some(e) => return Some(e) case None => () }
+                        let s = getReflectValue(v, obj, defaultDateTimeFormat)
                         record.add(s)
                     }
                     let line = joinRow(record)
@@ -139,7 +128,6 @@ public class Csv<T> {
             }
         }
         output.flush()
-        return None
     }
 }
 
@@ -157,6 +145,15 @@ public func WithCsvDefaultDateTimeFormat<T>(format: String): CsvOption<T> {
     return CsvOption<T>({ c => c.defaultDateTimeFormat = format })
 }
 
+public func ReadFromCsvFile<T>(path: String, options: ArrayList<CsvOption<T>>): Iterator<T> {
+    return Csv<T>(options).ReadFromFile(path)
+}
+
+public func ReadFromCsvFile<T>(path: String): Iterator<T> {
+    return Csv<T>().ReadFromFile(path)
+}
+
+// NewCsv 创建 CSV 实例（公共 API，保持向后兼容）
 public func NewCsv<T>(options: ArrayList<CsvOption<T>>): Csv<T> {
     return Csv<T>(options)
 }
@@ -165,31 +162,24 @@ public func NewCsv<T>(): Csv<T> {
     return Csv<T>()
 }
 
-public func ReadFromCsvFile<T>(path: String, options: ArrayList<CsvOption<T>>): Iterator<T> {
-    return NewCsv<T>(options).ReadFromFile(path)
-}
-
-public func ReadFromCsvFile<T>(path: String): Iterator<T> {
-    return NewCsv<T>().ReadFromFile(path)
-}
-
-public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>, options: ArrayList<CsvOption<T>>): Option<Exception> {
+public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>, options: ArrayList<CsvOption<T>>) {
     // 如果文件存在且非空则 append，否则写入新文件。
     try {
         let f = File(path, OpenMode.Read)
         let size = f.length
         f.close()
         if (size > 0) {
-            return NewCsv<T>(options).AppendToFile(path, rows)
+            Csv<T>(options).AppendToFile(path, rows)
+            return
         }
     } catch (_: Exception) {
         // ignore, treat as new file
     }
-    return NewCsv<T>(options).WriteToFile(path, rows)
+    Csv<T>(options).WriteToFile(path, rows)
 }
 
-public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>): Option<Exception> {
-    return AppendOrWriteToCsvFile(path, rows, ArrayList<CsvOption<T>>())
+public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>) {
+    AppendOrWriteToCsvFile(path, rows, ArrayList<CsvOption<T>>())
 }
 
 // ------------- 工具函数 -------------

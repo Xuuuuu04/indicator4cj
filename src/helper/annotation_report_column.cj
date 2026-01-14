@@ -10,11 +10,11 @@ public class AnnotationReportColumn <: ReportColumn {
         this._values = values
     }
 
-    public func Name(): String { return "" }
-    public func Type(): String { return "string" }
-    public func Role(): String { return "annotation" }
+    public func name(): String { return "" }
+    public func getType(): String { return "string" }
+    public func role(): String { return "annotation" }
 
-    public func Value(): String {
+    public func value(): String {
         match (_values.next()) {
             case Some(v) =>
                 if (v.isEmpty()) { return "null" }

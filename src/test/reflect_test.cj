@@ -13,12 +13,8 @@ class ReflectTest {
         let obj = Sample()
         let ty = ClassTypeInfo.of<Sample>()
         let field = ty.getInstanceVariable("Value")
-        match (setReflectValue(field, obj, "10", "")) {
-            case Some(err) => @Fail(err.message)
-            case None => ()
-        }
-        let (err, s) = getReflectValue(field, obj, "")
-        match (err) { case Some(e) => @Fail(e.message) case None => () }
+        setReflectValue(field, obj, "10", "")
+        let s = getReflectValue(field, obj, "")
         @Expect(s, "10")
     }
 
@@ -27,12 +23,8 @@ class ReflectTest {
         let obj = Sample()
         let ty = ClassTypeInfo.of<Sample>()
         let field = ty.getInstanceVariable("Date")
-        match (setReflectValue(field, obj, "2023-11-28 19:14:00", "yyyy-MM-dd HH:mm:ss")) {
-            case Some(err) => @Fail(err.message)
-            case None => ()
-        }
-        let (err, s) = getReflectValue(field, obj, "yyyy-MM-dd HH:mm:ss")
-        match (err) { case Some(e) => @Fail(e.message) case None => () }
+        setReflectValue(field, obj, "2023-11-28 19:14:00", "yyyy-MM-dd HH:mm:ss")
+        let s = getReflectValue(field, obj, "yyyy-MM-dd HH:mm:ss")
         @Expect(s, "2023-11-28 19:14:00")
     }
 
@@ -41,9 +33,11 @@ class ReflectTest {
         let obj = Sample()
         let ty = ClassTypeInfo.of<Sample>()
         let field = ty.getInstanceVariable("Value")
-        match (setReflectValue(field, obj, "abc", "")) {
-            case Some(_) => () // expected error
-            case None => @Fail("should fail")
+        try {
+            setReflectValue(field, obj, "abc", "")
+            @Fail("should fail")
+        } catch (_: Exception) {
+            // expected error
         }
     }
 }

@@ -81,10 +81,10 @@ public class FileSystemRepository <: Repository {
             merged.add(s)
         }
         let path = _root + "/" + name + ".csv"
-        let err = AppendOrWriteToCsvFile(path, merged.iterator())
-        match (err) {
-            case Some(e) => throw Exception("filesystem: failed to append to '${path}': ${e.toString()}")
-            case None => ()
+        try {
+            AppendOrWriteToCsvFile(path, merged.iterator())
+        } catch (e: Exception) {
+            throw Exception("filesystem: failed to append to '${path}': ${e.toString()}")
         }
     }
 }

@@ -12,10 +12,7 @@ class ChanToJsonTest {
     public func write_json_array() {
         let input = SliceToChan(ArrayList<Int64>([2, 4, 6, 8]))
         let buf = MemoryOutputStream()
-        match (ChanToJSON(input, buf)) {
-            case Some(err) => @Fail(err.message)
-            case None => ()
-        }
+        ChanToJSON(input, buf)
         @Expect(buf.toStringValue(), "[2,4,6,8]")
     }
 }

@@ -12,11 +12,11 @@ public class NumericReportColumn <: ReportColumn {
         this._values = values
     }
 
-    public func Name(): String { return _name }
-    public func Type(): String { return "number" }
-    public func Role(): String { return "data" }
+    public func name(): String { return _name }
+    public func getType(): String { return "number" }
+    public func role(): String { return "data" }
 
-    public func Value(): String {
+    public func value(): String {
         match (_values.next()) {
             case Some(v) => return "${v}"
             case None => return "null"

@@ -5,7 +5,7 @@ import std.io.*
 import std.core.*
 
 // ChanToJSON：将迭代器写为 JSON 数组到 writer。仅支持 Int64/Float64/Bool/String。
-public func ChanToJSON<T>(iter: Iterator<T>, writer: OutputStream): Option<Exception> {
+public func ChanToJSON<T>(iter: Iterator<T>, writer: OutputStream) {
     let open = ascii("[")
     let comma = ascii(",")
     let close = ascii("]")
@@ -23,14 +23,13 @@ public func ChanToJSON<T>(iter: Iterator<T>, writer: OutputStream): Option<Excep
                 }
                 match (encodeJson(v)) {
                     case Some(bytes) => writer.write(bytes)
-                    case None => return Some(Exception("json encode failed"))
+                    case None => throw Exception("json encode failed")
                 }
             case None => break
         }
     }
 
     writer.write(close)
-    return None
 }
 
 // encodeJson：仅支持基础类型 Float64/Int64/Bool/String，足够覆盖本库测试用例。

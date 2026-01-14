@@ -86,9 +86,10 @@ public class HtmlReport <: Report {
         if (_writeStrategyReports) {
             let report = currentStrategy.Report(snapsList.iterator())
             let path = _outputDir + "/" + assetName + " - " + currentStrategy.Name() + ".txt"
-            match (report.WriteToFile(path)) {
-                case Some(e) => return Some(e)
-                case None => ()
+            try {
+                report.writeToFile(path)
+            } catch (e: Exception) {
+                return Some(e)
             }
         }
         return None
