@@ -27,7 +27,7 @@ private class TrendTestResultRow {
 public func test_aroon_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/aroon_strategy.csv")
-    let s = NewAroonStrategy()
+    let s = AroonStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -39,7 +39,7 @@ public func test_aroon_strategy_basic() {
 public func test_bop_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/bop_strategy.csv")
-    let s = NewBopStrategy()
+    let s = BopStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -51,7 +51,7 @@ public func test_bop_strategy_basic() {
 public func test_cci_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/cci_strategy.csv")
-    let s = NewCciStrategy()
+    let s = CciStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -63,7 +63,7 @@ public func test_cci_strategy_basic() {
 public func test_dema_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/dema_strategy.csv")
-    let s = NewDemaStrategy()
+    let s = DemaStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -75,7 +75,7 @@ public func test_dema_strategy_basic() {
 public func test_envelope_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/envelope_strategy.csv")
-    let s = NewEnvelopeStrategy()
+    let s = EnvelopeStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -99,7 +99,7 @@ public func test_golden_cross_strategy_basic() {
 public func test_alligator_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/alligator_strategy.csv")
-    let s = NewAlligatorStrategy()
+    let s = AlligatorStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -111,7 +111,7 @@ public func test_alligator_strategy_basic() {
 public func test_kama_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/kama_strategy.csv")
-    let s = NewKamaStrategy()
+    let s = KamaStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -123,7 +123,7 @@ public func test_kama_strategy_basic() {
 public func test_kdj_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/kdj_strategy.csv")
-    let s = NewKdjStrategy()
+    let s = KdjStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -135,7 +135,7 @@ public func test_kdj_strategy_basic() {
 public func test_smma_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/smma_strategy.csv")
-    let s = NewSmmaStrategy()
+    let s = SmmaStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -147,7 +147,7 @@ public func test_smma_strategy_basic() {
 public func test_trima_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/trima_strategy.csv")
-    let s = NewTrimaStrategy()
+    let s = TrimaStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -171,7 +171,7 @@ public func test_triple_moving_average_crossover_strategy_basic() {
 public func test_trix_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/trix_strategy.csv")
-    let s = NewTrixStrategy()
+    let s = TrixStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -183,7 +183,7 @@ public func test_trix_strategy_basic() {
 public func test_tsi_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/tsi_strategy.csv")
-    let s = NewTsiStrategy()
+    let s = TsiStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -195,7 +195,7 @@ public func test_tsi_strategy_basic() {
 public func test_vwma_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/vwma_strategy.csv")
-    let s = NewVwmaStrategy()
+    let s = VwmaStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -207,7 +207,7 @@ public func test_vwma_strategy_basic() {
 public func test_weighted_close_strategy_basic() {
     let snaps = loadBrkSnapsTrend()
     let expected = loadExpectedTrend("src/test/testdata/strategy/trend/weighted_close_strategy.csv")
-    let s = NewWeightedCloseStrategy()
+    let s = WeightedCloseStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)

@@ -56,6 +56,5 @@ public class BollingerBandsStrategy <: Strategy {
     }
 }
 
-public func NewBollingerBandsStrategy(): BollingerBandsStrategy { return BollingerBandsStrategy() }
 
 

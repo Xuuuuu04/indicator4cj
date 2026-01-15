@@ -96,7 +96,6 @@ public class PercentBandMFIStrategy <: Strategy {
     }
 }
 
-public func NewPercentBandMFIStrategy(): PercentBandMFIStrategy { return PercentBandMFIStrategy() }
 public func NewPercentBandMFIStrategyWith(sellPercentBAt: Float64, buyPercentBAt: Float64, sellMfiAt: Float64, buyMfiAt: Float64): PercentBandMFIStrategy {
     return PercentBandMFIStrategy(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt)
 }

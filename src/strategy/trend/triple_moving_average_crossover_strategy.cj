@@ -83,10 +83,6 @@ public class TripleMovingAverageCrossoverStrategy <: Strategy {
     }
 }
 
-public func NewTripleMovingAverageCrossoverStrategy(): TripleMovingAverageCrossoverStrategy {
-    return TripleMovingAverageCrossoverStrategy()
-}
-
 public func NewTripleMovingAverageCrossoverStrategyWith(fastPeriod: Int64, mediumPeriod: Int64, slowPeriod: Int64): TripleMovingAverageCrossoverStrategy {
     return TripleMovingAverageCrossoverStrategy(fastPeriod, mediumPeriod, slowPeriod)
 }

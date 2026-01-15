@@ -65,7 +65,6 @@ public class EnvelopeStrategy <: Strategy {
     }
 }
 
-public func NewEnvelopeStrategy(): EnvelopeStrategy { return EnvelopeStrategy() }
 public func NewEnvelopeStrategyWith(envelope: Envelope): EnvelopeStrategy {
     return EnvelopeStrategy(envelope)
 }

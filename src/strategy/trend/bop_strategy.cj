@@ -56,6 +56,5 @@ public class BopStrategy <: Strategy {
     }
 }
 
-public func NewBopStrategy(): BopStrategy { return BopStrategy() }
 
 

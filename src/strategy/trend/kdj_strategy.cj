@@ -66,6 +66,5 @@ public class KdjStrategy <: Strategy {
     }
 }
 
-public func NewKdjStrategy(): KdjStrategy { return KdjStrategy() }
 
 

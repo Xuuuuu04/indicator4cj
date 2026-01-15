@@ -68,6 +68,5 @@ public class VwmaStrategy <: Strategy {
     }
 }
 
-public func NewVwmaStrategy(): VwmaStrategy { return VwmaStrategy() }
 
 

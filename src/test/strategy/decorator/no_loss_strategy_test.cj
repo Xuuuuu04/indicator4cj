@@ -14,7 +14,7 @@ public func no_loss_strategy_basic() {
     let results = Csv<Result>().readFromFile("src/test/testdata/strategy/decorator/no_loss_strategy.csv")
     let expected = h.Map(results, { r: Result => ActionFromInt(r.Action) })
 
-    let inner = NewAroonStrategy()
+    let inner = AroonStrategy()
     let s = NewNoLossStrategy(inner)
 
     let actual = s.compute(snapshots)

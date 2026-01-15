@@ -79,7 +79,6 @@ public class TsiStrategy <: Strategy {
     }
 }
 
-public func NewTsiStrategy(): TsiStrategy { return TsiStrategy() }
 public func NewTsiStrategyWith(firstSmoothing: Int64, secondSmoothing: Int64, signalPeriod: Int64): TsiStrategy {
     return TsiStrategy(firstSmoothing, secondSmoothing, signalPeriod)
 }

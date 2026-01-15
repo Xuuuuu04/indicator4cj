@@ -5,10 +5,10 @@ import indicator4cj.strategy.*
 
 public func allStrategies(): ArrayList<Strategy> {
     let arr = ArrayList<Strategy>()
-    arr.add(NewAwesomeOscillatorStrategy())
-    arr.add(NewRsiStrategy())
-    arr.add(NewStochasticRsiStrategy())
-    arr.add(NewTripleRsiStrategy())
+    arr.add(AwesomeOscillatorStrategy())
+    arr.add(RsiStrategy())
+    arr.add(StochasticRsiStrategy())
+    arr.add(TripleRsiStrategy())
     return arr
 }
 

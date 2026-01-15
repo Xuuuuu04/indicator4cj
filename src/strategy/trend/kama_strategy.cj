@@ -63,7 +63,6 @@ public class KamaStrategy <: Strategy {
     }
 }
 
-public func NewKamaStrategy(): KamaStrategy { return KamaStrategy() }
 public func NewKamaStrategyWith(erPeriod: Int64, fastScPeriod: Int64, slowScPeriod: Int64): KamaStrategy {
     return KamaStrategy(erPeriod, fastScPeriod, slowScPeriod)
 }

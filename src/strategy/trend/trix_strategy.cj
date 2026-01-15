@@ -50,6 +50,5 @@ public class TrixStrategy <: Strategy {
     }
 }
 
-public func NewTrixStrategy(): TrixStrategy { return TrixStrategy() }
 
 

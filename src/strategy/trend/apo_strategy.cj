@@ -55,6 +55,3 @@ public class ApoStrategy <: Strategy {
     }
 }
 
-public func NewApoStrategy(): ApoStrategy { return ApoStrategy() }
-
-

@@ -14,7 +14,7 @@ public func stop_loss_strategy_basic() {
     let results = Csv<Result>().readFromFile("src/test/testdata/strategy/decorator/stop_loss_strategy.csv")
     let expected = h.Map(results, { r: Result => ActionFromInt(r.Action) })
 
-    let inner = NewAroonStrategy()
+    let inner = AroonStrategy()
     let s = NewStopLossStrategy(inner, 0.02)
 
     let actual = s.compute(snapshots)

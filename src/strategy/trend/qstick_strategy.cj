@@ -63,7 +63,3 @@ public class QstickStrategy <: Strategy {
     }
 }
 
-public func NewQstickStrategy(): QstickStrategy {
-    return QstickStrategy()
-}
-

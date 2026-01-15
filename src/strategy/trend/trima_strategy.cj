@@ -72,7 +72,6 @@ public class TrimaStrategy <: Strategy {
     }
 }
 
-public func NewTrimaStrategy(): TrimaStrategy { return TrimaStrategy() }
 public func NewTrimaStrategyWith(shortPeriod: Int64, longPeriod: Int64): TrimaStrategy {
     return TrimaStrategy(shortPeriod, longPeriod)
 }

@@ -5,8 +5,8 @@ import indicator4cj.strategy.*
 
 public func allStrategies(): ArrayList<Strategy> {
     let arr = ArrayList<Strategy>()
-    arr.add(NewBollingerBandsStrategy())
-    arr.add(NewSuperTrendStrategy())
+    arr.add(BollingerBandsStrategy())
+    arr.add(SuperTrendStrategy())
     // 额外 SuperTrend 参数化版本可按需补充
     return arr
 }

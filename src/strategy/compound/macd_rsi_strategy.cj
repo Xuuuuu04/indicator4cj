@@ -75,7 +75,6 @@ public class MacdRsiStrategy <: Strategy {
     }
 }
 
-public func NewMacdRsiStrategy(): MacdRsiStrategy { return MacdRsiStrategy() }
 public func NewMacdRsiStrategyWith(buyAt: Float64, sellAt: Float64): MacdRsiStrategy {
     return MacdRsiStrategy(buyAt, sellAt)
 }

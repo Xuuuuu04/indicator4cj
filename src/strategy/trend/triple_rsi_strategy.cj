@@ -23,6 +23,4 @@ public class TripleRsiStrategy <: Strategy {
     }
 }
 
-public func NewTripleRsiStrategy(): TripleRsiStrategy { return TripleRsiStrategy() }
-
 

@@ -29,7 +29,7 @@ public func test_triple_rsi_strategy_basic() {
     let expectedRows = Csv<TripleRsiStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/triple_rsi_strategy.csv")
     let expected = h.Map(expectedRows, { r: TripleRsiStrategyRow => ActionFromInt(r.action) })
     
-    let s = NewTripleRsiStrategy()
+    let s = TripleRsiStrategy()
     let actual = s.compute(snaps)
     
     match (CheckEquals<Action>(actual, expected)) {

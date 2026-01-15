@@ -19,12 +19,12 @@ public class Ema {
     }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return EmaIterator(c, this.period, this.smoothing)
+        return EmaIterator(c, period, smoothing)
     }
 
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 
-    public func toString(): String { return "EMA(${this.period})" }
+    public func toString(): String { return "EMA(${period})" }
 }
 
 private class EmaIterator <: Iterator<Float64> {

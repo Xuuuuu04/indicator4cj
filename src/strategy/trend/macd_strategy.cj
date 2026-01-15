@@ -66,10 +66,6 @@ public class MacdStrategy <: Strategy {
     }
 }
 
-public func NewMacdStrategy(): MacdStrategy {
-    return MacdStrategy()
-}
-
 public func NewMacdStrategyWith(period1: Int64, period2: Int64, period3: Int64): MacdStrategy {
     return MacdStrategy(period1, period2, period3)
 }

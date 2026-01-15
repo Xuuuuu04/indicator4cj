@@ -20,10 +20,6 @@ public class BuyAndHoldStrategy <: Strategy {
     }
 }
 
-public func NewBuyAndHoldStrategy(): BuyAndHoldStrategy {
-    return BuyAndHoldStrategy()
-}
-
 class BuyAndHoldIterator <: Iterator<Action> {
     private let source: Iterator<Snapshot>
     private var isFirst: Bool = true

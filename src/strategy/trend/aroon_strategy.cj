@@ -57,6 +57,5 @@ public class AroonStrategy <: Strategy {
     }
 }
 
-public func NewAroonStrategy(): AroonStrategy { return AroonStrategy() }
 
 

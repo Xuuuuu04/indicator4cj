@@ -81,7 +81,6 @@ public class SmmaStrategy <: Strategy {
     }
 }
 
-public func NewSmmaStrategy(): SmmaStrategy { return SmmaStrategy() }
 public func NewSmmaStrategyWith(shortPeriod: Int64, longPeriod: Int64): SmmaStrategy {
     return SmmaStrategy(shortPeriod, longPeriod)
 }

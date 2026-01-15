@@ -60,7 +60,7 @@ public func awesome_oscillator_strategy_basic() {
         }
     }
 
-    let strat = NewAwesomeOscillatorStrategy()
+    let strat = AwesomeOscillatorStrategy()
     let actualList = ArrayList<Action>()
     let actualIter = strat.compute(snaps.iterator())
     while (true) {
@@ -93,7 +93,7 @@ public func awesome_oscillator_strategy_report() {
         }
     }
 
-    let strat = NewAwesomeOscillatorStrategy()
+    let strat = AwesomeOscillatorStrategy()
     strat.report(snaps.iterator())
     @Expect(true, true)
 }

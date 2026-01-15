@@ -77,7 +77,6 @@ public class MoneyFlowIndexStrategy <: Strategy {
     }
 }
 
-public func NewMoneyFlowIndexStrategy(): MoneyFlowIndexStrategy { return MoneyFlowIndexStrategy() }
 public func NewMoneyFlowIndexStrategyWith(sellAt: Float64, buyAt: Float64): MoneyFlowIndexStrategy {
     return MoneyFlowIndexStrategy(sellAt, buyAt)
 }

@@ -64,10 +64,6 @@ public class RsiStrategy <: Strategy {
     }
 }
 
-public func NewRsiStrategy(): RsiStrategy {
-    return RsiStrategy()
-}
-
 public func NewRsiStrategyWith(buyAt: Float64, sellAt: Float64): RsiStrategy {
     return RsiStrategy(buyAt, sellAt)
 }

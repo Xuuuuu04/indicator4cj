@@ -59,6 +59,5 @@ public class CciStrategy <: Strategy {
     }
 }
 
-public func NewCciStrategy(): CciStrategy { return CciStrategy() }
 
 

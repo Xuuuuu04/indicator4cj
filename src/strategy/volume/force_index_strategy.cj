@@ -59,7 +59,6 @@ public class ForceIndexStrategy <: Strategy {
     }
 }
 
-public func NewForceIndexStrategy(): ForceIndexStrategy { return ForceIndexStrategy() }
 public func NewForceIndexStrategyWith(period: Int64): ForceIndexStrategy {
     return ForceIndexStrategy(period)
 }

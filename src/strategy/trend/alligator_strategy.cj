@@ -89,7 +89,6 @@ public class AlligatorStrategy <: Strategy {
     }
 }
 
-public func NewAlligatorStrategy(): AlligatorStrategy { return AlligatorStrategy() }
 public func NewAlligatorStrategyWith(jawPeriod: Int64, teethPeriod: Int64, lipPeriod: Int64): AlligatorStrategy {
     return AlligatorStrategy(jawPeriod, teethPeriod, lipPeriod)
 }

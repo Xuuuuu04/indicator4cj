@@ -61,7 +61,6 @@ public class EaseOfMovementStrategy <: Strategy {
     }
 }
 
-public func NewEaseOfMovementStrategy(): EaseOfMovementStrategy { return EaseOfMovementStrategy() }
 public func NewEaseOfMovementStrategyWith(period: Int64): EaseOfMovementStrategy {
     return EaseOfMovementStrategy(period)
 }

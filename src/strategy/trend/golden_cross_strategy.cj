@@ -69,7 +69,6 @@ public class GoldenCrossStrategy <: Strategy {
     }
 }
 
-public func NewGoldenCrossStrategy(): GoldenCrossStrategy { return GoldenCrossStrategy() }
 public func NewGoldenCrossStrategyWith(fastPeriod: Int64, slowPeriod: Int64): GoldenCrossStrategy {
     return GoldenCrossStrategy(fastPeriod, slowPeriod)
 }

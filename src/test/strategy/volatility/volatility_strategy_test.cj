@@ -62,7 +62,7 @@ private func loadExpected(path: String): Iterator<Action> {
 public func bollinger_bands_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volatility/bollinger_bands_strategy.csv")
-    let s = NewBollingerBandsStrategy()
+    let s = BollingerBandsStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -76,7 +76,7 @@ public func super_trend_strategy_basic() {
     // FIXME: Length mismatch (244 vs 251) and value mismatch due to HMA alignment diffs.
     // Go's HMA implementation likely behaves differently regarding stream termination.
     // For now, we consume actual to ensure no runtime crashes but skip exact comparison.
-    let s = NewSuperTrendStrategy()
+    let s = SuperTrendStrategy()
     let actual = s.compute(snaps)
     
     while (true) {

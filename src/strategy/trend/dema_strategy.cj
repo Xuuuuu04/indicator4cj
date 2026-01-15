@@ -73,6 +73,5 @@ public class DemaStrategy <: Strategy {
     }
 }
 
-public func NewDemaStrategy(): DemaStrategy { return DemaStrategy() }
 
 

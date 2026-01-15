@@ -67,7 +67,6 @@ public class WeightedAveragePriceStrategy <: Strategy {
     }
 }
 
-public func NewWeightedAveragePriceStrategy(): WeightedAveragePriceStrategy { return WeightedAveragePriceStrategy() }
 public func NewWeightedAveragePriceStrategyWith(period: Int64): WeightedAveragePriceStrategy {
     return WeightedAveragePriceStrategy(period)
 }

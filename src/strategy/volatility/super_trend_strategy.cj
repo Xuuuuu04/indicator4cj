@@ -63,7 +63,6 @@ public class SuperTrendStrategy <: Strategy {
     }
 }
 
-public func NewSuperTrendStrategy(): SuperTrendStrategy { return SuperTrendStrategy() }
 public func NewSuperTrendStrategyWith(period: Int64, multiplier: Float64): SuperTrendStrategy {
     return SuperTrendStrategy(period, multiplier)
 }

@@ -132,10 +132,6 @@ public class TripleRsiStrategy <: Strategy {
     }
 }
 
-public func NewTripleRsiStrategy(): TripleRsiStrategy {
-    return TripleRsiStrategy()
-}
-
 public func NewTripleRsiStrategyWith(period: Int64, smaPeriod: Int64, downDays: Int64, buySignalAt: Float64, buyAt: Float64, sellAt: Float64): TripleRsiStrategy {
     return TripleRsiStrategy(period, smaPeriod, downDays, buySignalAt, buyAt, sellAt)
 }

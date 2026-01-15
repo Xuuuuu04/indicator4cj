@@ -78,10 +78,6 @@ public class WeightedCloseStrategy <: Strategy {
     }
 }
 
-public func NewWeightedCloseStrategy(): WeightedCloseStrategy {
-    return WeightedCloseStrategy()
-}
-
 public func NewWeightedCloseStrategyWith(maPeriod: Int64): WeightedCloseStrategy {
     return WeightedCloseStrategy(maPeriod)
 }

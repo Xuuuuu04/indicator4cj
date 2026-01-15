@@ -68,7 +68,7 @@ private func loadExpected(path: String): Iterator<Action> {
 public func chaikin_money_flow_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/chaikin_money_flow_strategy.csv")
-    let s = NewChaikinMoneyFlowStrategy()
+    let s = ChaikinMoneyFlowStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -80,7 +80,7 @@ public func chaikin_money_flow_strategy_basic() {
 public func ease_of_movement_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/ease_of_movement_strategy.csv")
-    let s = NewEaseOfMovementStrategy()
+    let s = EaseOfMovementStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -92,7 +92,7 @@ public func ease_of_movement_strategy_basic() {
 public func force_index_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/force_index_strategy.csv")
-    let s = NewForceIndexStrategy()
+    let s = ForceIndexStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -104,7 +104,7 @@ public func force_index_strategy_basic() {
 public func money_flow_index_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/money_flow_index_strategy.csv")
-    let s = NewMoneyFlowIndexStrategy()
+    let s = MoneyFlowIndexStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
@@ -128,7 +128,7 @@ public func negative_volume_index_strategy_basic() {
 public func weighted_average_price_strategy_basic() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${basePath}/volume/volume_weighted_average_price_strategy.csv")
-    let s = NewWeightedAveragePriceStrategy()
+    let s = WeightedAveragePriceStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)

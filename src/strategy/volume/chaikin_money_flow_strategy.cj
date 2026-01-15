@@ -68,7 +68,6 @@ public class ChaikinMoneyFlowStrategy <: Strategy {
     }
 }
 
-public func NewChaikinMoneyFlowStrategy(): ChaikinMoneyFlowStrategy { return ChaikinMoneyFlowStrategy() }
 public func NewChaikinMoneyFlowStrategyWith(period: Int64): ChaikinMoneyFlowStrategy {
     return ChaikinMoneyFlowStrategy(period)
 }

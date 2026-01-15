@@ -80,7 +80,6 @@ public class NegativeVolumeIndexStrategy <: Strategy {
     }
 }
 
-public func NewNegativeVolumeIndexStrategy(): NegativeVolumeIndexStrategy { return NegativeVolumeIndexStrategy() }
 public func NewNegativeVolumeIndexStrategyWith(emaPeriod: Int64): NegativeVolumeIndexStrategy {
     return NegativeVolumeIndexStrategy(emaPeriod)
 }

@@ -29,7 +29,7 @@ public func test_stochastic_rsi_strategy_basic() {
     let expectedRows = Csv<StochRsiStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/stochastic_rsi_strategy.csv")
     let expected = h.Map(expectedRows, { r: StochRsiStrategyRow => ActionFromInt(r.action) })
     
-    let s = NewStochasticRsiStrategy()
+    let s = StochasticRsiStrategy()
     let actual = s.compute(snaps)
     
     match (CheckEquals<Action>(actual, expected)) {

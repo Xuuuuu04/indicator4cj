@@ -13,7 +13,7 @@ public func macd_rsi_strategy_basic() {
     let results = Csv<Result>().readFromFile("src/test/testdata/strategy/compound/macd_rsi_strategy.csv")
     let expected = h.Map(results, { r: Result => ActionFromInt(r.Action) })
 
-    let s = NewMacdRsiStrategy()
+    let s = MacdRsiStrategy()
     let actual = s.compute(snapshots)
 
     match (CheckEquals<Action>(actual, expected)) {
