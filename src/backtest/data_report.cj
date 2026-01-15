@@ -28,21 +28,19 @@ public class DataReport <: Report {
 
     public func DataReport() {}
 
-    public func begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Option<Exception> {
+    public func begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Unit {
         _ = strategies.size // 标记已使用以消除告警
         for (n in assetNames) { _results.add(n, ArrayList<DataStrategyResult>()) }
-        return None
     }
 
-    public func assetBegin(name: String, strategies: ArrayList<Strategy>): Option<Exception> {
+    public func assetBegin(name: String, strategies: ArrayList<Strategy>): Unit {
         _ = strategies.size // 标记已使用以消除告警
         if (!_results.contains(name)) {
             _results.add(name, ArrayList<DataStrategyResult>())
         }
-        return None
     }
 
-    public func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Option<Exception> {
+    public func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Unit {
         // 耗尽 snapshots，避免资源泄漏。
         Drain(snapshots)
 
@@ -61,11 +59,10 @@ public class DataReport <: Report {
                 }
             case None => ()
         }
-        return None
     }
 
-    public func assetEnd(name: String): Option<Exception> { _ = name.isEmpty(); return None }
+    public func assetEnd(name: String): Unit { _ = name.isEmpty() }
 
-    public func end(): Option<Exception> { return None }
+    public func end(): Unit {}
 }
 

@@ -39,24 +39,22 @@ public class HtmlReport <: Report {
         this._outputDir = outputDir
     }
 
-    public func begin(assetNames: ArrayList<String>, _: ArrayList<Strategy>): Option<Exception> {
+    public func begin(assetNames: ArrayList<String>, _: ArrayList<Strategy>): Unit {
         _bestResults.clear()
         _assetResults.clear()
         for (n in assetNames) {
             _assetResults.add(n, ArrayList<HtmlReportResult>())
         }
-        return None
     }
 
-    public func assetBegin(name: String, strategies: ArrayList<Strategy>): Option<Exception> {
+    public func assetBegin(name: String, strategies: ArrayList<Strategy>): Unit {
         _ = strategies.size // 标记已使用以消除告警
         if (!_assetResults.contains(name)) {
             _assetResults.add(name, ArrayList<HtmlReportResult>())
         }
-        return None
     }
 
-    public func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Option<Exception> {
+    public func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Unit {
         // 物化 snapshots 供报告使用
         let snapsList = ChanToSlice(snapshots)
 
@@ -89,19 +87,18 @@ public class HtmlReport <: Report {
             try {
                 report.writeToFile(path)
             } catch (e: Exception) {
-                return Some(e)
+                throw e
             }
         }
-        return None
     }
 
-    public func assetEnd(name: String): Option<Exception> {
+    public func assetEnd(name: String): Unit {
         if (!_assetResults.contains(name)) {
-            return Some(Exception("asset not begun: " + name))
+            throw Exception("asset not begun: " + name)
         }
         let results = _assetResults[name]
         if (results.isEmpty()) {
-            return None
+            return
         }
         // 选择最佳
         var best = results[0]
@@ -109,21 +106,16 @@ public class HtmlReport <: Report {
             if (r.Outcome > best.Outcome) { best = r }
         }
         _bestResults.add(best)
-        match (writeAssetReport(name, results)) {
-            case Some(e) => return Some(e)
-            case None => ()
-        }
-        return None
+        writeAssetReport(name, results)
     }
 
-    public func end(): Option<Exception> {
-        if (_bestResults.isEmpty()) {
-            return None
+    public func end(): Unit {
+        if (!_bestResults.isEmpty()) {
+            writeIndex(_bestResults)
         }
-        return writeIndex(_bestResults)
     }
 
-    private func writeAssetReport(name: String, results: ArrayList<HtmlReportResult>): Option<Exception> {
+    private func writeAssetReport(name: String, results: ArrayList<HtmlReportResult>) {
         var sb = "<html><body>\n"
         sb += "<h2>Asset: ${name}</h2>\n"
         sb += "<table border='1'><tr><th>Strategy</th><th>Action</th><th>Since</th><th>Outcome</th><th>Transactions</th></tr>\n"
@@ -137,10 +129,10 @@ public class HtmlReport <: Report {
             sb += "</tr>\n"
         }
         sb += "</table>\n</body></html>"
-        return writeStringToFile(_outputDir + "/" + name + ".html", sb)
+        writeStringToFile(_outputDir + "/" + name + ".html", sb)
     }
 
-    private func writeIndex(results: ArrayList<HtmlReportResult>): Option<Exception> {
+    private func writeIndex(results: ArrayList<HtmlReportResult>) {
         var sb = "<html><body>\n"
         sb += "<h2>Best Results</h2>\n"
         sb += "<table border='1'><tr><th>Asset</th><th>Strategy</th><th>Action</th><th>Outcome</th></tr>\n"
@@ -153,18 +145,17 @@ public class HtmlReport <: Report {
             sb += "</tr>\n"
         }
         sb += "</table>\n</body></html>"
-        return writeStringToFile(_outputDir + "/index.html", sb)
+        writeStringToFile(_outputDir + "/index.html", sb)
     }
 
-    private func writeStringToFile(path: String, content: String): Option<Exception> {
+    private func writeStringToFile(path: String, content: String) {
         try {
             let f = File(path, OpenMode.Write)
             f.write(localAscii(content))
             f.flush()
             f.close()
-            return None
         } catch (e: Exception) {
-            return Some(e)
+            throw e
         }
     }
 }

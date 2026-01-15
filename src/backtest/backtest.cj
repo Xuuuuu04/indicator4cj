@@ -35,38 +35,43 @@ public class Backtest {
             strategies.add(BuyAndHoldStrategy())
         }
 
-        match (_report.begin(names, strategies)) {
-            case Some(e) => throw e
-            case None => ()
+        try {
+            _report.begin(names, strategies)
+        } catch (e: Exception) {
+            throw e
         }
 
         for (name in names) {
             let snapsIter = _repository.get(name)
             let snapsList = ChanToSlice(snapsIter)
 
-            match (_report.assetBegin(name, strategies)) {
-                case Some(e) => throw e
-                case None => ()
+            try {
+                _report.assetBegin(name, strategies)
+            } catch (e: Exception) {
+                throw e
             }
 
             for (st in strategies) {
                 let dup = Duplicate(snapsList.iterator(), 2)
                 let (actions, outcomes) = ComputeWithOutcome(st, dup[0])
-                match (_report.write(name, st, dup[1], actions, outcomes)) {
-                    case Some(e) => throw e
-                    case None => ()
+                try {
+                    _report.write(name, st, dup[1], actions, outcomes)
+                } catch (e: Exception) {
+                    throw e
                 }
             }
 
-            match (_report.assetEnd(name)) {
-                case Some(e) => throw e
-                case None => ()
+            try {
+                _report.assetEnd(name)
+            } catch (e: Exception) {
+                throw e
             }
         }
 
-        match (_report.end()) {
-            case Some(e) => throw e
-            case None => ()
+        try {
+            _report.end()
+        } catch (e: Exception) {
+            throw e
         }
     }
 }

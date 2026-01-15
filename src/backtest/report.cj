@@ -7,19 +7,19 @@ import std.collection.*
 // Report 回测报告接口，定义回测报告生成的方法
 public interface Report {
     // begin 开始生成报告
-    func begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Option<Exception>
+    func begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Unit
 
     // assetBegin 开始单个资产的报告
-    func assetBegin(name: String, strategies: ArrayList<Strategy>): Option<Exception>
+    func assetBegin(name: String, strategies: ArrayList<Strategy>): Unit
 
     // write 写入策略执行结果
-    func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Option<Exception>
+    func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Unit
 
     // assetEnd 结束单个资产的报告
-    func assetEnd(name: String): Option<Exception>
+    func assetEnd(name: String): Unit
 
     // end 结束报告生成
-    func end(): Option<Exception>
+    func end(): Unit
 }
 
 
