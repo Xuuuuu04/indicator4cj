@@ -9,7 +9,7 @@ public class Pvo {
     public var FastPeriod: Int64
     public var SlowPeriod: Int64
 
-    public init() {
+    public Pvo() {
         this.FastPeriod = 12
         this.SlowPeriod = 26
     }

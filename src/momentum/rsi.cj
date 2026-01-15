@@ -9,7 +9,7 @@ public class Rsi {
     public var period: Int64
     private let _rma: Rma
 
-    public init() {
+    public Rsi() {
         this.period = 14
         this._rma = Rma(this.period)
     }

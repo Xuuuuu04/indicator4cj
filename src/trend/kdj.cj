@@ -14,7 +14,7 @@ public class Kdj {
     public let Sma1: Sma
     public let Sma2: Sma
 
-    public init() {
+    public Kdj() {
         this.MovingMaxInd = MovingMax(DefaultKdjMinMaxPeriod)
         this.MovingMinInd = MovingMin(DefaultKdjMinMaxPeriod)
         this.Sma1 = Sma(DefaultKdjSma1Period)

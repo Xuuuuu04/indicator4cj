@@ -8,7 +8,7 @@ public class Ema {
     public var period: Int64
     public var smoothing: Float64
 
-    public init() {
+    public Ema() {
         this.period = 20
         this.smoothing = 2.0
     }

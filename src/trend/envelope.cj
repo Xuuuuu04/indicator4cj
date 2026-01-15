@@ -11,7 +11,7 @@ public class Envelope {
     public let MaIndicator: Ma
     public var Percentage: Float64
 
-    public init() {
+    public Envelope() {
         this.MaIndicator = Sma(DefaultEnvelopePeriod)
         this.Percentage = DefaultEnvelopePercentage
     }

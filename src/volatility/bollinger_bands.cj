@@ -7,7 +7,7 @@ import indicator4cj.trend.*
 public class BollingerBands {
     public var period: Int64
 
-    public init() { this.period = 20 }
+    public BollingerBands() { this.period = 20 }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {

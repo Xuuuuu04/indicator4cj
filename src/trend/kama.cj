@@ -13,7 +13,7 @@ public class Kama {
     public var FastScPeriod: Int64
     public var SlowScPeriod: Int64
 
-    public init() {
+    public Kama() {
         this.ErPeriod = DefaultKamaErPeriod
         this.FastScPeriod = DefaultKamaFastScPeriod
         this.SlowScPeriod = DefaultKamaSlowScPeriod

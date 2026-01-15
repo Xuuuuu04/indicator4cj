@@ -13,7 +13,7 @@ public class MassIndex {
     public let Ema2: Ema
     public let MovingSumInd: MovingSum
 
-    public init() {
+    public MassIndex() {
         this.Ema1 = Ema(DefaultMassIndexPeriod1)
         this.Ema2 = Ema(DefaultMassIndexPeriod2)
         this.MovingSumInd = MovingSum(DefaultMassIndexPeriod3)

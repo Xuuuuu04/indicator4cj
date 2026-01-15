@@ -7,7 +7,7 @@ import indicator4cj.helper.*
 public class MovingMax {
     public var period: Int64
 
-    public init() { this.period = 1 }
+    public MovingMax() { this.period = 1 }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

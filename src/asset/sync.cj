@@ -14,7 +14,7 @@ public class Sync {
     private var _assets: ArrayList<String> = ArrayList<String>()
 
     // 构造函数
-    public func Sync() {}
+    public Sync() {}
 
     // run 执行同步操作，从 source 同步到 target
     // 如果 _assets 为空，则同步 target 中所有资产

@@ -8,7 +8,7 @@ import indicator4cj.trend.*
 public class Atr {
     public var ma: Ma
 
-    public init() { this.ma = Sma(14) }
+    public Atr() { this.ma = Sma(14) }
     public init(period: Int64) { this.ma = Sma(period) }
     public init(ma: Ma) { this.ma = ma }
 

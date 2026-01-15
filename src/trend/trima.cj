@@ -8,7 +8,7 @@ public const DefaultTrimaPeriod: Int64 = 15
 public class Trima {
     public var period: Int64
 
-    public init() {
+    public Trima() {
         this.period = DefaultTrimaPeriod
     }
 

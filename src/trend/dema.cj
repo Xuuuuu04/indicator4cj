@@ -8,7 +8,7 @@ public class Dema {
     public let Ema1: Ema
     public let Ema2: Ema
 
-    public init() {
+    public Dema() {
         this.Ema1 = Ema()
         this.Ema2 = Ema()
     }

@@ -11,7 +11,7 @@ public class StochasticRsi {
     public let MinIndicator: MovingMin
     public let MaxIndicator: MovingMax
 
-    public init() {
+    public StochasticRsi() {
         this.period = 14
         this.RsiIndicator = Rsi(this.period)
         this.MinIndicator = MovingMin(this.period)

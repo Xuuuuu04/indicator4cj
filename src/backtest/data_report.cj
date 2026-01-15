@@ -26,7 +26,7 @@ public class DataStrategyResult {
 public class DataReport <: Report {
     public var _results = HashMap<String, ArrayList<DataStrategyResult>>()
 
-    public func DataReport() {}
+    public DataReport() {}
 
     public func begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Unit {
         _ = strategies.size // 标记已使用以消除告警

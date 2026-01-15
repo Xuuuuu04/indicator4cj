@@ -7,7 +7,7 @@ import indicator4cj.helper.*
 public class Sma {
     public var period: Int64
 
-    public init() { this.period = 50 }
+    public Sma() { this.period = 50 }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

@@ -9,7 +9,7 @@ public const DefaultDpoPeriod: Int64 = 20
 public class Dpo {
     public var period: Int64
 
-    public init() { this.period = DefaultDpoPeriod }
+    public Dpo() { this.period = DefaultDpoPeriod }
     public init(period: Int64) {
         if (period <= 1) {
             this.period = DefaultDpoPeriod

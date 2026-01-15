@@ -6,7 +6,7 @@ import indicator4cj.helper.*
 public class BollingerBandWidth {
     private let _bands = BollingerBands()
 
-    public init() {}
+    public BollingerBandWidth() {}
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let (upper, middle, lower) = _bands.compute(c)

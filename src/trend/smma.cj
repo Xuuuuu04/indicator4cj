@@ -9,7 +9,7 @@ public const DefaultSmmaPeriod: Int64 = 7
 public class Smma {
     public var period: Int64
 
-    public init() {
+    public Smma() {
         this.period = DefaultSmmaPeriod
     }
 

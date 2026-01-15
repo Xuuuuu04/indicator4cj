@@ -8,7 +8,7 @@ public class KeltnerChannel {
     private let _atr: Atr
     private let _ema: Ema
 
-    public init() {
+    public KeltnerChannel() {
         this._atr = Atr(20)
         this._ema = Ema(20)
     }

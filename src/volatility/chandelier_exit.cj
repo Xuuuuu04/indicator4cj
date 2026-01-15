@@ -8,7 +8,7 @@ public class ChandelierExit {
     public var period: Int64
     public var multiplier: Float64
 
-    public init() {
+    public ChandelierExit() {
         this.period = 22
         this.multiplier = 3.0
     }

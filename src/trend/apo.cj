@@ -15,7 +15,7 @@ public class Apo {
     public var SlowPeriod: Int64
     public var SlowSmoothing: Float64
 
-    public init() {
+    public Apo() {
         this.FastPeriod = DefaultApoFastPeriod
         this.FastSmoothing = DefaultApoFastSmoothing
         this.SlowPeriod = DefaultApoSlowPeriod

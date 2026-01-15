@@ -7,7 +7,7 @@ import indicator4cj.helper.*
 public class Mlr {
     public let MlsIndicator: Mls
 
-    public init(period: Int64) {
+    public Mlr(period: Int64) {
         this.MlsIndicator = Mls(period)
     }
 

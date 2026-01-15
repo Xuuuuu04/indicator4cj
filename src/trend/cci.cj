@@ -9,7 +9,7 @@ public const DefaultCciPeriod: Int64 = 20
 public class Cci {
     public var period: Int64
 
-    public init() { this.period = DefaultCciPeriod }
+    public Cci() { this.period = DefaultCciPeriod }
     public init(period: Int64) { this.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {

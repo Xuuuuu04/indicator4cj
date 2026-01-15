@@ -9,7 +9,7 @@ public const DefaultTrixPeriod: Int64 = 15
 public class Trix {
     public var period: Int64
 
-    public init() { this.period = DefaultTrixPeriod }
+    public Trix() { this.period = DefaultTrixPeriod }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

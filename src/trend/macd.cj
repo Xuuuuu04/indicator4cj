@@ -13,7 +13,7 @@ public class Macd {
     public let Ema2: Ema
     public let Ema3: Ema
 
-    public init() {
+    public Macd() {
         this.Ema1 = Ema(DefaultMacdPeriod1)
         this.Ema2 = Ema(DefaultMacdPeriod2)
         this.Ema3 = Ema(DefaultMacdPeriod3)

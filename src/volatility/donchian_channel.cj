@@ -8,7 +8,7 @@ public class DonchianChannel {
     private let _max: MovingMax
     private let _min: MovingMin
 
-    public init() {
+    public DonchianChannel() {
         this._max = MovingMax(20)
         this._min = MovingMin(20)
     }

@@ -7,7 +7,7 @@ import indicator4cj.helper.*
 public class Momentum {
     public var period: Int64
 
-    public init() { this.period = 10 }
+    public Momentum() { this.period = 10 }
     public init(period: Int64) { this.period = period }
 
     public func compute(values: Iterator<Float64>): Iterator<Float64> {

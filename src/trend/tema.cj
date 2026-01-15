@@ -9,7 +9,7 @@ public class Tema {
     public let Ema2: Ema
     public let Ema3: Ema
 
-    public init() {
+    public Tema() {
         this.Ema1 = Ema()
         this.Ema2 = Ema()
         this.Ema3 = Ema()

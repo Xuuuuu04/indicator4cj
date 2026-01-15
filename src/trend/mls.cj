@@ -7,7 +7,7 @@ import indicator4cj.helper.*
 public class Mls {
     public let Sum: MovingSum
 
-    public init(period: Int64) {
+    public Mls(period: Int64) {
         this.Sum = MovingSum(period)
     }
 

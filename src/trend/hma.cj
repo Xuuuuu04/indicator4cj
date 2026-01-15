@@ -10,7 +10,7 @@ public class Hma {
     private let _wma2: Wma
     private let _wma3: Wma
 
-    public init(period: Int64) {
+    public Hma(period: Int64) {
         // Empirically, to match Go's test data (hma.csv), we must use ROUNDING,
         // even though Go source code suggests truncation.
         // This implies the CSV might be generated with a different version or logic.

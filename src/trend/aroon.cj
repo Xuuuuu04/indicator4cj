@@ -9,7 +9,7 @@ public const DefaultAroonPeriod: Int64 = 25
 public class Aroon {
     public var period: Int64
 
-    public init() { this.period = DefaultAroonPeriod }
+    public Aroon() { this.period = DefaultAroonPeriod }
     public init(period: Int64) { this.period = period }
 
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {

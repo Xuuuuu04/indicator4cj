@@ -8,7 +8,7 @@ import indicator4cj.trend.*
 public class Qstick {
     public var period: Int64
 
-    public init() { this.period = 20 }
+    public Qstick() { this.period = 20 }
     public init(period: Int64) { this.period = period }
 
     public func compute(opens: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {

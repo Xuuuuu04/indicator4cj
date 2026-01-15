@@ -13,7 +13,7 @@ public class Tsi {
     private let _firstPeriod: Int64
     private let _secondPeriod: Int64
 
-    public init() {
+    public Tsi() {
         this._firstPeriod = DefaultTsiFirstSmoothingPeriod
         this._secondPeriod = DefaultTsiSecondSmoothingPeriod
         this.FirstSmoothing = Ema(_firstPeriod)
