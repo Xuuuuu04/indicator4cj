@@ -35,3 +35,8 @@ tmp/
 temp/
 Gemini.md
 
+# Build and test output files
+build_*.txt
+test_*.txt
+*.txt.bak
+
