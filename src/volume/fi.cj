@@ -8,7 +8,7 @@ import indicator4cj.trend.*
 public class Fi {
     private let ema = Ema()
 
-    public init() { ema.period = 13 }
+    public Fi() { ema.period = 13 }
     public init(period: Int64) { ema.period = period }
 
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {

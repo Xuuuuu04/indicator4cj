@@ -4,9 +4,9 @@ import std.core.*
 import indicator4cj.helper.*
 
 public class Nvi {
-    public var Initial: Float64
+    public var Initial: Float64 = 1000.0
 
-    public init() { this.Initial = 1000.0 }
+    public Nvi() { this.Initial = Initial }
 
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         return NviIterator(closings, volumes, Initial)

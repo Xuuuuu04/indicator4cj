@@ -6,9 +6,9 @@ import indicator4cj.trend.*
 
 // Average True Range (ATR) with pluggable moving average (Ma).
 public class Atr {
-    public var ma: Ma
+    public var ma: Ma = Sma(14)
 
-    public Atr() { this.ma = Sma(14) }
+    public Atr() { this.ma = ma }
     public init(period: Int64) { this.ma = Sma(period) }
     public init(ma: Ma) { this.ma = ma }
 

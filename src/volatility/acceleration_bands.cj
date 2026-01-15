@@ -5,9 +5,9 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class AccelerationBands {
-    public var period: Int64
+    public var period: Int64 = 20
 
-    public AccelerationBands() { this.period = 20 }
+    public AccelerationBands() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {

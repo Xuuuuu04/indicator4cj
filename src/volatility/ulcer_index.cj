@@ -5,9 +5,9 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class UlcerIndex {
-    public var period: Int64
+    public var period: Int64 = 14
 
-    public init() { this.period = 14 }
+    public init() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {

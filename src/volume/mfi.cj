@@ -8,7 +8,7 @@ public class Mfi {
     private let typicalPrice = TypicalPrice()
     private let sum = MovingSum()
 
-    public init() {
+    public Mfi() {
         sum.period = 14
     }
 

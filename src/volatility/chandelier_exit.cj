@@ -5,12 +5,12 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class ChandelierExit {
-    public var period: Int64
-    public var multiplier: Float64
+    public var period: Int64 = 22
+    public var multiplier: Float64 = 3.0
 
     public ChandelierExit() {
-        this.period = 22
-        this.multiplier = 3.0
+        this.period = period
+        this.multiplier = multiplier
     }
 
     public init(period: Int64, multiplier: Float64) {

@@ -6,9 +6,9 @@ import indicator4cj.helper.*
 
 // Moving Standard Deviation over fixed period (Float64).
 public class MovingStd {
-    public var period: Int64
+    public var period: Int64 = 1
 
-    public init() { this.period = 1 }
+    public init() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

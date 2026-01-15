@@ -9,7 +9,7 @@ public class Cmf {
     private let mfv = Mfv()
     private let sum = MovingSum()
 
-    public init() { sum.period = 20 }
+    public Cmf() { sum.period = 20 }
     public init(period: Int64) { sum.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
