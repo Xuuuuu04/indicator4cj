@@ -46,13 +46,13 @@ public class KamaStrategy <: Strategy {
 
         let kamas = Indicator.compute(closings[0])
 
-        var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
+        var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         actions = Skip(actions, Indicator.idlePeriod())
         outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[1]))

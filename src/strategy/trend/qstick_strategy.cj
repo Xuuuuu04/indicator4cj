@@ -35,7 +35,7 @@ public class QstickStrategy <: Strategy {
         })
 
         // 移位 period 个位置填充 Hold（与 Go 版一致）。
-        return Shift(actions, Indicator.Period, Action.Hold)
+        return Shift(actions, Indicator.period, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -45,13 +45,13 @@ public class QstickStrategy <: Strategy {
         let closingsDup = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
 
         var qstick = Indicator.compute(openingsDup[0], closingsDup[0])
-        qstick = Shift(qstick, Indicator.Period - 1, 0.0)
+        qstick = Shift(qstick, Indicator.period - 1, 0.0)
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Open", openingsDup[1]))

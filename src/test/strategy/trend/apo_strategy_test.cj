@@ -9,8 +9,8 @@ import indicator4cj.strategy.trend.*
 
 @Test
 public func apo_strategy_basic() {
-    let snapshots = ReadFromCsvFile<Snapshot>("src/test/testdata/strategy/trend/brk-b.csv")
-    let results = ReadFromCsvFile<Result>("src/test/testdata/strategy/trend/apo_strategy.csv")
+    let snapshots = Csv<Snapshot>().readFromFile("src/test/testdata/strategy/trend/brk-b.csv")
+    let results = Csv<Result>().readFromFile("src/test/testdata/strategy/trend/apo_strategy.csv")
     let expected = Map(results, { r: Result => ActionFromInt(r.Action) })
 
     let apo = ApoStrategy()

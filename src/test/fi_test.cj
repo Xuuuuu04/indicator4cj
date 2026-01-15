@@ -9,10 +9,10 @@ import indicator4cj.volume.*
 class FiTest {
     @TestCase
     public func fi_basic() {
-        let input = ReadFromCsvFile<FiRow>("src/test/testdata/volume/fi.csv")
+        let input = Csv<FiRow>().readFromFile("src/test/testdata/volume/fi.csv")
         let inputs = Duplicate(input, 3)
-        let closes = Map(inputs[0], { m => m.Close })
-        let volumes = Map(inputs[1], { m => Float64(m.Volume) })
+        let closes = Map(inputs[0], { m => m.close })
+        let volumes = Map(inputs[1], { m => Float64(m.volume) })
         var expected = Map(inputs[2], { m => m.Fi })
 
         let fi = Fi()
@@ -27,8 +27,8 @@ class FiTest {
 }
 
 public class FiRow {
-    public var Close: Float64 = 0.0
-    public var Volume: Int64 = 0
+    public var close: Float64 = 0.0
+    public var volume: Int64 = 0
     public var Fi: Float64 = 0.0
     public init() {}
 }

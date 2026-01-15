@@ -38,7 +38,7 @@ public class FileSystemRepository <: Repository {
     // get 获取指定资产的全部快照数据
     public func get(name: String): Iterator<Snapshot> {
         let path = _root + "/" + name + ".csv"
-        let it = ReadFromCsvFile<Snapshot>(path)
+        let it = Csv<Snapshot>().readFromFile(path)
         match (it.next()) {
             case Some(first) =>
                 let res = ArrayList<Snapshot>()
@@ -54,7 +54,7 @@ public class FileSystemRepository <: Repository {
     // getSince 获取指定资产从指定日期开始的快照数据
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
         let iter = get(name)
-        return Filter<Snapshot>(iter, { s: Snapshot => (s.Date == date) || (s.Date > date) })
+        return Filter<Snapshot>(iter, { s: Snapshot => (s.date == date) || (s.date > date) })
     }
 
     // lastDate 返回指定资产的最新日期
@@ -62,7 +62,7 @@ public class FileSystemRepository <: Repository {
         let iter = get(name)
         var last: Option<DateTime> = None
         for (s in iter) {
-            last = Some(s.Date)
+            last = Some(s.date)
         }
         return match (last) {
             case Some(dt) => dt
@@ -82,7 +82,7 @@ public class FileSystemRepository <: Repository {
         }
         let path = _root + "/" + name + ".csv"
         try {
-            AppendOrWriteToCsvFile(path, merged.iterator())
+            Csv<Snapshot>().appendOrWriteToFile(path, merged.iterator())
         } catch (e: Exception) {
             throw Exception("filesystem: failed to append to '${path}': ${e.toString()}")
         }

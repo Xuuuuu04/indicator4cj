@@ -54,7 +54,7 @@ public class StochasticRsiStrategy <: Strategy {
 
         let stochasticRsi = Indicator.compute(closings[1])
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[1])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
         var annotations = ActionsToAnnotations(actions)
         var outcomes = MultiplyBy(outcomesRaw, 100.0)
 
@@ -62,7 +62,7 @@ public class StochasticRsiStrategy <: Strategy {
         annotations = Skip(annotations, Indicator.idlePeriod())
         outcomes = Skip(outcomes, Indicator.idlePeriod())
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[0]))

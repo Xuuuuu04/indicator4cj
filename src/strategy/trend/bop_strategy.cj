@@ -41,11 +41,11 @@ public class BopStrategy <: Strategy {
 
         let bop = Indicator.compute(openings, highs, lows, closingsDup[1])
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[5])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[5])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closingsDup[0]))

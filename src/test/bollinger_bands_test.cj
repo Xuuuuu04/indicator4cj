@@ -5,26 +5,26 @@ import indicator4cj.helper.*
 import indicator4cj.volatility.*
 
 public class BollingerBandsData {
-    public let Close: Float64
-    public let Upper: Float64
-    public let Middle: Float64
-    public let Lower: Float64
+    public let close: Float64
+    public let upper: Float64
+    public let middle: Float64
+    public let lower: Float64
     public init(c: Float64, u: Float64, m: Float64, l: Float64) {
-        this.Close = c
-        this.Upper = u
-        this.Middle = m
-        this.Lower = l
+        this.close = c
+        this.upper = u
+        this.middle = m
+        this.lower = l
     }
 }
 
 @Test
 public func bollinger_bands_basic() {
-    let input = ReadFromCsvFile<BollingerBandsData>("src/test/testdata/volatility/bollinger_bands.csv")
+    let input = Csv<BollingerBandsData>().readFromFile("src/test/testdata/volatility/bollinger_bands.csv")
     let inputs = Duplicate(input, 4)
-    let closings = Map(inputs[0], { d: BollingerBandsData => d.Close })
-    let upper = Map(inputs[1], { d: BollingerBandsData => d.Upper })
-    let middle = Map(inputs[2], { d: BollingerBandsData => d.Middle })
-    let lower = Map(inputs[3], { d: BollingerBandsData => d.Lower })
+    let closings = Map(inputs[0], { d: BollingerBandsData => d.close })
+    let upper = Map(inputs[1], { d: BollingerBandsData => d.upper })
+    let middle = Map(inputs[2], { d: BollingerBandsData => d.middle })
+    let lower = Map(inputs[3], { d: BollingerBandsData => d.lower })
 
     let bb = BollingerBands()
     var (actualUpper, actualMiddle, actualLower) = bb.compute(closings)

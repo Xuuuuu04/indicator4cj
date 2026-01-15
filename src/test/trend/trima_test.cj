@@ -8,19 +8,19 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class TrimaData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Trima: Float64 = 0.0
 }
 
 @Test
 public func test_trima_odd_basic() {
-    let input = ReadFromCsvFile<TrimaData>("src/test/testdata/trend/trima_odd.csv")
+    let input = Csv<TrimaData>().readFromFile("src/test/testdata/trend/trima_odd.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TrimaData => d.Close })
+    let closing = h.Map(inputs[0], { d: TrimaData => d.close })
     let expected = h.Map(inputs[1], { d: TrimaData => d.Trima })
 
     let trima = Trima()
-    trima.Period = 15
+    trima.period = 15
     let actual = h.RoundDigits(trima.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, trima.idlePeriod())
 
@@ -32,13 +32,13 @@ public func test_trima_odd_basic() {
 
 @Test
 public func test_trima_even_basic() {
-    let input = ReadFromCsvFile<TrimaData>("src/test/testdata/trend/trima_even.csv")
+    let input = Csv<TrimaData>().readFromFile("src/test/testdata/trend/trima_even.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TrimaData => d.Close })
+    let closing = h.Map(inputs[0], { d: TrimaData => d.close })
     let expected = h.Map(inputs[1], { d: TrimaData => d.Trima })
 
     let trima = Trima()
-    trima.Period = 20
+    trima.period = 20
     let actual = h.RoundDigits(trima.compute(closing), 2)
     let expectedSkipped = h.Skip(expected, trima.idlePeriod())
 

@@ -40,11 +40,11 @@ public class ApoStrategy <: Strategy {
         let closingsDup = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
         let apo = Shift(Indicator.compute(closingsDup[1]), Indicator.SlowPeriod, 0.0)
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[1])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closingsDup[0]))

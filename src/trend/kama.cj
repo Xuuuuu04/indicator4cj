@@ -28,16 +28,16 @@ public class Kama {
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let closingsSplice = Duplicate(closings, 3)
 
-        let directions = Abs(Change(closingsSplice[0], ErPeriod))
+        let directions = Abs(Change(closingsSplice[0], this.ErPeriod))
 
         let movingSum = MovingSum()
-        movingSum.Period = ErPeriod
+        movingSum.period = this.ErPeriod
         let volatilitys = movingSum.compute(Abs(Change(closingsSplice[1], 1)))
 
         let ers = Divide(directions, volatilitys)
 
-        let fastSc = 2.0 / Float64(FastScPeriod + 1)
-        let slowSc = 2.0 / Float64(SlowScPeriod + 1)
+        let fastSc = 2.0 / Float64(this.FastScPeriod + 1)
+        let slowSc = 2.0 / Float64(this.SlowScPeriod + 1)
 
         let scs = Pow(
             IncrementBy(
@@ -50,14 +50,14 @@ public class Kama {
             2.0
         )
 
-        let closingsShifted = Skip(closingsSplice[2], ErPeriod - 1)
+        let closingsShifted = Skip(closingsSplice[2], this.ErPeriod - 1)
         return KamaIterator(closingsShifted, scs)
     }
 
-    public func idlePeriod(): Int64 { return ErPeriod - 1 }
+    public func idlePeriod(): Int64 { return this.ErPeriod - 1 }
 
     public func toString(): String {
-        return "KAMA(${ErPeriod},${FastScPeriod},${SlowScPeriod})"
+        return "KAMA(${this.ErPeriod},${this.FastScPeriod},${this.SlowScPeriod})"
     }
 }
 

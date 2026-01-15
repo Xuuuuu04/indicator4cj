@@ -8,19 +8,19 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class WeightedCloseData {
-    public var High: Float64 = 0.0
-    public var Low: Float64 = 0.0
-    public var Close: Float64 = 0.0
+    public var high: Float64 = 0.0
+    public var low: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var WeightedClose: Float64 = 0.0
 }
 
 @Test
 public func test_weighted_close_basic() {
-    let input = ReadFromCsvFile<WeightedCloseData>("src/test/testdata/trend/weighted_close.csv")
+    let input = Csv<WeightedCloseData>().readFromFile("src/test/testdata/trend/weighted_close.csv")
     let inputs = Duplicate(input, 4)
-    let high = h.Map(inputs[0], { d: WeightedCloseData => d.Close })
-    let low = h.Map(inputs[1], { d: WeightedCloseData => d.Close })
-    let closing = h.Map(inputs[2], { d: WeightedCloseData => d.Close })
+    let high = h.Map(inputs[0], { d: WeightedCloseData => d.close })
+    let low = h.Map(inputs[1], { d: WeightedCloseData => d.close })
+    let closing = h.Map(inputs[2], { d: WeightedCloseData => d.close })
     let expected = h.Map(inputs[3], { d: WeightedCloseData => d.WeightedClose })
 
     let weightedClose = WeightedClose()

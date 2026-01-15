@@ -5,17 +5,17 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class BollingerBands {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = 20 }
-    public init(period: Int64) { this.Period = period }
+    public init() { this.period = 20 }
+    public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let cs = Duplicate(c, 2)
         let sma = Sma()
-        sma.Period = Period
+        sma.period = this.period
         let std = MovingStd()
-        std.Period = Period
+        std.period = this.period
 
         let middleBands = Duplicate(
             sma.compute(cs[0]),
@@ -33,6 +33,6 @@ public class BollingerBands {
         return (upperBand, middleBands[2], lowerBand)
     }
 
-    public func idlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return this.period - 1 }
 }
 

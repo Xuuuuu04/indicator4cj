@@ -15,6 +15,7 @@ class ReportTest {
         let lows = ArrayList<Float64>([5.0]).iterator()
         let annos = ArrayList<String>([""]).iterator()
 
+        // 使用工厂函数避免与 std.unittest.Report 冲突
         let report = NewReport("Test Report", dates)
         report.addChart()
         report.addColumn(NewNumericReportColumn("High", highs))

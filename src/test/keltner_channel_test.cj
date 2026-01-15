@@ -5,32 +5,32 @@ import indicator4cj.helper.*
 import indicator4cj.volatility.*
 
 public class KeltnerRow {
-    public let High: Float64
-    public let Low: Float64
-    public let Close: Float64
-    public let Upper: Float64
-    public let Middle: Float64
-    public let Lower: Float64
+    public let high: Float64
+    public let low: Float64
+    public let close: Float64
+    public let upper: Float64
+    public let middle: Float64
+    public let lower: Float64
     public init(High: Float64, Low: Float64, Close: Float64, Upper: Float64, Middle: Float64, Lower: Float64) {
-        this.High = High
-        this.Low = Low
-        this.Close = Close
-        this.Upper = Upper
-        this.Middle = Middle
-        this.Lower = Lower
+        this.high = High
+        this.low = Low
+        this.close = Close
+        this.upper = Upper
+        this.middle = Middle
+        this.lower = Lower
     }
 }
 
 @Test
 public func keltner_channel_basic() {
-    let input = ReadFromCsvFile<KeltnerRow>("src/test/testdata/volatility/keltner_channel.csv")
+    let input = Csv<KeltnerRow>().readFromFile("src/test/testdata/volatility/keltner_channel.csv")
     let inputs = Duplicate(input, 6)
-    let highs = Map(inputs[0], { d: KeltnerRow => d.High })
-    let lows = Map(inputs[1], { d: KeltnerRow => d.Low })
-    let closings = Map(inputs[2], { d: KeltnerRow => d.Close })
-    let expUpper = Map(inputs[3], { d: KeltnerRow => d.Upper })
-    let expMiddle = Map(inputs[4], { d: KeltnerRow => d.Middle })
-    let expLower = Map(inputs[5], { d: KeltnerRow => d.Lower })
+    let highs = Map(inputs[0], { d: KeltnerRow => d.high })
+    let lows = Map(inputs[1], { d: KeltnerRow => d.low })
+    let closings = Map(inputs[2], { d: KeltnerRow => d.close })
+    let expUpper = Map(inputs[3], { d: KeltnerRow => d.upper })
+    let expMiddle = Map(inputs[4], { d: KeltnerRow => d.middle })
+    let expLower = Map(inputs[5], { d: KeltnerRow => d.lower })
 
     let kc = KeltnerChannel()
     var (actUpper, actMiddle, actLower) = kc.compute(highs, lows, closings)

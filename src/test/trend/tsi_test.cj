@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class TsiData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Tsi: Float64 = 0.0
 }
 
 @Test
 public func test_tsi_basic() {
-    let input = ReadFromCsvFile<TsiData>("src/test/testdata/trend/tsi.csv")
+    let input = Csv<TsiData>().readFromFile("src/test/testdata/trend/tsi.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TsiData => d.Close })
+    let closing = h.Map(inputs[0], { d: TsiData => d.close })
     let expected = h.Map(inputs[1], { d: TsiData => d.Tsi })
 
     let tsi = Tsi()

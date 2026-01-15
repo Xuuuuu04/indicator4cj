@@ -31,7 +31,7 @@ public class AlligatorStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "Alligator Strategy (${Jaw.Period},${Teeth.Period},${Lip.Period})"
+        return "Alligator Strategy (${Jaw.period},${Teeth.period},${Lip.period})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
@@ -40,10 +40,10 @@ public class AlligatorStrategy <: Strategy {
         var teeths = Teeth.compute(closings[1])
         var lips = Lip.compute(closings[2])
 
-        let common = CommonPeriod(ArrayList<Int64>([Jaw.Period, Teeth.Period, Lip.Period]))
-        jaws = SyncPeriod(common, Jaw.Period, jaws)
-        teeths = SyncPeriod(common, Teeth.Period, teeths)
-        lips = SyncPeriod(common, Lip.Period, lips)
+        let common = CommonPeriod(ArrayList<Int64>([Jaw.period, Teeth.period, Lip.period]))
+        jaws = SyncPeriod(common, Jaw.period, jaws)
+        teeths = SyncPeriod(common, Teeth.period, teeths)
+        lips = SyncPeriod(common, Lip.period, lips)
 
         let actions = Operate3(jaws, teeths, lips, { jaw: Float64, teeth: Float64, lip: Float64 =>
             if ((lip > teeth) && (lip > jaw)) { return Action.Buy }
@@ -63,20 +63,20 @@ public class AlligatorStrategy <: Strategy {
         var teeths = Teeth.compute(closings[2])
         var lips = Lip.compute(closings[3])
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         var annotations = ActionsToAnnotations(actions)
         var outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let common = CommonPeriod(ArrayList<Int64>([Jaw.Period, Teeth.Period, Lip.Period]))
+        let common = CommonPeriod(ArrayList<Int64>([Jaw.period, Teeth.period, Lip.period]))
         dates = SyncPeriod(common, 0, dates)
         closings[0] = Skip(closings[0], common)
-        jaws = SyncPeriod(common, Jaw.Period, jaws)
-        teeths = SyncPeriod(common, Teeth.Period, teeths)
-        lips = SyncPeriod(common, Lip.Period, lips)
+        jaws = SyncPeriod(common, Jaw.period, jaws)
+        teeths = SyncPeriod(common, Teeth.period, teeths)
+        lips = SyncPeriod(common, Lip.period, lips)
         annotations = Skip(annotations, common)
         outcomes = Skip(outcomes, common)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[0]))

@@ -9,11 +9,11 @@ public class Mfi {
     private let _sum = MovingSum()
 
     public init() {
-        _sum.Period = 14
+        _sum.period = 14
     }
 
     public init(period: Int64) {
-        _sum.Period = period
+        _sum.period = period
     }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {

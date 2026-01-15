@@ -5,16 +5,16 @@ import std.collection.*
 
 // Moving Sum over a fixed period (Float64 version).
 public class MovingSum {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = 1 }
-    public init(period: Int64) { this.Period = period }
+    public init() { this.period = 1 }
+    public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return MovingSumIterator(c, Period)
+        return MovingSumIterator(c, this.period)
     }
 
-    public func idlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return this.period - 1 }
 }
 
 private class MovingSumIterator <: Iterator<Float64> {

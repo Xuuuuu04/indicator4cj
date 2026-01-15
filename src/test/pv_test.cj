@@ -9,9 +9,9 @@ import indicator4cj.valuation.*
 class PvTest {
     @TestCase
     public func pv_basic() {
-        let input = ReadFromCsvFile<PvRow>("src/test/testdata/valuation/pv.csv")
+        let input = Csv<PvRow>().readFromFile("src/test/testdata/valuation/pv.csv")
         for (row in input) {
-            let actual = RoundDigit(Pv(row.FV, row.Rate, row.Years), 2)
+            let actual = RoundDigit(pv(row.FV, row.Rate, row.Years), 2)
             @Expect(actual, row.PV)
         }
     }

@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class DpoData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Dpo: Float64 = 0.0
 }
 
 @Test
 public func test_dpo_basic() {
-    let input = ReadFromCsvFile<DpoData>("src/test/testdata/trend/dpo.csv")
+    let input = Csv<DpoData>().readFromFile("src/test/testdata/trend/dpo.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { row: DpoData => row.Close })
+    let closing = h.Map(inputs[0], { row: DpoData => row.close })
     let expected = h.Map(inputs[1], { row: DpoData => row.Dpo })
 
     let dpo = Dpo()

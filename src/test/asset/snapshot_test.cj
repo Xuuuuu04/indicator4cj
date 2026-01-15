@@ -25,27 +25,27 @@ public func test_snapshots_as() {
     match (copies[0].next()) {
         case Some(s0) =>
             match (dates.next()) {
-                case Some(d) => if (d.toString() != s0.Date.toString()) { fail("date") }
+                case Some(d) => if (d.toString() != s0.date.toString()) { fail("date") }
                 case None => fail("dates empty")
             }
             match (openings.next()) {
-                case Some(v) => if (v != s0.Open) { fail("open") }
+                case Some(v) => if (v != s0.open) { fail("open") }
                 case None => fail("openings empty")
             }
             match (highs.next()) {
-                case Some(v) => if (v != s0.High) { fail("high") }
+                case Some(v) => if (v != s0.high) { fail("high") }
                 case None => fail("highs empty")
             }
             match (lows.next()) {
-                case Some(v) => if (v != s0.Low) { fail("low") }
+                case Some(v) => if (v != s0.low) { fail("low") }
                 case None => fail("lows empty")
             }
             match (closings.next()) {
-                case Some(v) => if (v != s0.Close) { fail("close") }
+                case Some(v) => if (v != s0.close) { fail("close") }
                 case None => fail("closings empty")
             }
             match (volumes.next()) {
-                case Some(v) => if (v != s0.Volume) { fail("volume") }
+                case Some(v) => if (v != s0.volume) { fail("volume") }
                 case None => fail("volumes empty")
             }
         case None => fail("copies[0] empty")

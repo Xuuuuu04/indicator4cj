@@ -43,7 +43,7 @@ public class TripleRsiStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "Triple RSI Strategy (${RsiIndicator.Period},${SmaIndicator.Period},${DownDays},${BuySignalAt},${BuyAt},${SellAt})"
+        return "Triple RSI Strategy (${RsiIndicator.period},${SmaIndicator.period},${DownDays},${BuySignalAt},${BuyAt},${SellAt})"
     }
 
     public func IdlePeriod(): Int64 {
@@ -108,7 +108,7 @@ public class TripleRsiStrategy <: Strategy {
         var rsis = RsiIndicator.compute(closings[1])
         let smas = SmaIndicator.compute(closings[2])
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[1])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
         var annotations = ActionsToAnnotations(actions)
         var outcomes = MultiplyBy(outcomesRaw, 100.0)
 
@@ -118,13 +118,13 @@ public class TripleRsiStrategy <: Strategy {
         annotations = Skip(annotations, IdlePeriod())
         outcomes = Skip(outcomes, IdlePeriod())
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
 
         report.addColumn(NumericReportColumn("Close", closings[0]))
-        report.addColumn(NumericReportColumn("RSI(${RsiIndicator.Period})", rsis), ArrayList<Int64>([1]))
-        report.addColumn(NumericReportColumn("SMA(${SmaIndicator.Period})", smas))
+        report.addColumn(NumericReportColumn("RSI(${RsiIndicator.period})", rsis), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("SMA(${SmaIndicator.period})", smas))
         report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
         report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
 

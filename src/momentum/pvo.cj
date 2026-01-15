@@ -20,12 +20,12 @@ public class Pvo {
     }
 
     public func compute(volumes: Iterator<Float64>): Iterator<Float64> {
-        let fastEma = Ema(FastPeriod).compute(volumes)
-        let slowEma = Ema(SlowPeriod).compute(volumes)
+        let fastEma = Ema(this.FastPeriod).compute(volumes)
+        let slowEma = Ema(this.SlowPeriod).compute(volumes)
         let diff = Subtract(fastEma, slowEma)
         return MultiplyBy(Divide(diff, slowEma), 100.0)
     }
 
-    public func idlePeriod(): Int64 { return SlowPeriod - 1 }
+    public func idlePeriod(): Int64 { return this.SlowPeriod - 1 }
 }
 

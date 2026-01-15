@@ -4,7 +4,7 @@ import std.math.*
 import std.collection.*
 
 // Net Present Value: sum(cashflow_i / (1+rate) ** (i+1))
-public func Npv(rate: Float64, cashFlows: ArrayList<Float64>): Float64 {
+public func npv(rate: Float64, cashFlows: ArrayList<Float64>): Float64 {
     var acc = 0.0
     var idx: Int64 = 0
     while (idx < cashFlows.size) {

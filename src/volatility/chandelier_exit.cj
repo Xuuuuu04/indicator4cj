@@ -5,26 +5,26 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class ChandelierExit {
-    public var Period: Int64
-    public var Multiplier: Float64
+    public var period: Int64
+    public var multiplier: Float64
 
     public init() {
-        this.Period = 22
-        this.Multiplier = 3.0
+        this.period = 22
+        this.multiplier = 3.0
     }
 
     public init(period: Int64, multiplier: Float64) {
-        this.Period = period
-        this.Multiplier = multiplier
+        this.period = period
+        this.multiplier = multiplier
     }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
 
-        let movingMax = MovingMax(Period)
-        let movingMin = MovingMin(Period)
-        let atr = Atr(Period)
+        let movingMax = MovingMax(this.period)
+        let movingMin = MovingMin(this.period)
+        let atr = Atr(this.period)
 
         let skipMax = atr.idlePeriod() - movingMax.idlePeriod()
         let skipMin = atr.idlePeriod() - movingMin.idlePeriod()
@@ -35,7 +35,7 @@ public class ChandelierExit {
         let atrScaled = Duplicate(
             MultiplyBy(
                 atr.compute(hs[1], ls[1], closings),
-                Multiplier
+                this.multiplier
             ),
             2
         )
@@ -46,6 +46,6 @@ public class ChandelierExit {
         return (ceLong, ceShort)
     }
 
-    public func idlePeriod(): Int64 { return Period }
+    public func idlePeriod(): Int64 { return this.period }
 }
 

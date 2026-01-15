@@ -27,11 +27,11 @@ public class Mls {
         let mSplice = Duplicate(
             Divide(
                 Subtract(
-                    MultiplyBy(sumXY, Float64(Sum.Period)),
+                    MultiplyBy(sumXY, Float64(Sum.period)),
                     Multiply(sumXSplice[0], sumYSplice[0])
                 ),
                 Subtract(
-                    MultiplyBy(sumX2, Float64(Sum.Period)),
+                    MultiplyBy(sumX2, Float64(Sum.period)),
                     Multiply(sumXSplice[1], sumXSplice[2])
                 )
             ),
@@ -44,7 +44,7 @@ public class Mls {
                 sumYSplice[1],
                 Multiply(mSplice[1], sumXSplice[3])
             ),
-            Float64(Sum.Period)
+            Float64(Sum.period)
         )
 
         return (mSplice[0], b)

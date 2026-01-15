@@ -53,7 +53,7 @@ public class Backtest {
 
             for (st in strategies) {
                 let dup = Duplicate(snapsList.iterator(), 2)
-                let (actions, outcomes) = ComputeWithOutcome(st, dup[0])
+                let (actions, outcomes) = computeWithOutcome(st, dup[0])
                 try {
                     _report.write(name, st, dup[1], actions, outcomes)
                 } catch (e: Exception) {

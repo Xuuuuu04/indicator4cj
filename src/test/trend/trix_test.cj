@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class TrixData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Trix: Float64 = 0.0
 }
 
 @Test
 public func test_trix_basic() {
-    let input = ReadFromCsvFile<TrixData>("src/test/testdata/trend/trix.csv")
+    let input = Csv<TrixData>().readFromFile("src/test/testdata/trend/trix.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TrixData => d.Close })
+    let closing = h.Map(inputs[0], { d: TrixData => d.close })
     let expected = h.Map(inputs[1], { d: TrixData => d.Trix })
 
     let trix = Trix()

@@ -15,7 +15,7 @@ class MlrData {
 
 @Test
 public func test_mlr_basic() {
-    let input = ReadFromCsvFile<MlrData>("src/test/testdata/trend/mlr.csv")
+    let input = Csv<MlrData>().readFromFile("src/test/testdata/trend/mlr.csv")
     let inputs = Duplicate(input, 3)
     let x = h.Map(inputs[0], { d: MlrData => d.X })
     let y = h.Map(inputs[1], { d: MlrData => d.Y })

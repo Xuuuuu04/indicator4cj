@@ -5,10 +5,10 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class AccelerationBands {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = 20 }
-    public init(period: Int64) { this.Period = period }
+    public init() { this.period = 20 }
+    public init(period: Int64) { this.period = period }
 
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highs = Duplicate(high, 3)
@@ -23,7 +23,7 @@ public class AccelerationBands {
         )
 
         let sma = Sma()
-        sma.Period = Period
+        sma.period = this.period
 
         let upper = sma.compute(
             Multiply(
@@ -50,6 +50,6 @@ public class AccelerationBands {
         return (upper, middle, lower)
     }
 
-    public func idlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return this.period - 1 }
 }
 

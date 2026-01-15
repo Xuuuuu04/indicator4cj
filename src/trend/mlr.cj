@@ -24,6 +24,6 @@ public class Mlr {
 
     public func idlePeriod(): Int64 { return MlsIndicator.idlePeriod() }
 
-    public func toString(): String { return "MLR(${MlsIndicator.Sum.Period})" }
+    public func toString(): String { return "MLR(${MlsIndicator.Sum.period})" }
 }
 

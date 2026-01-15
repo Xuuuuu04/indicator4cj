@@ -9,12 +9,12 @@ import indicator4cj.volume.*
 class MfiTest {
     @TestCase
     public func mfi_basic() {
-        let input = ReadFromCsvFile<MfiData>("src/test/testdata/volume/mfi.csv")
+        let input = Csv<MfiData>().readFromFile("src/test/testdata/volume/mfi.csv")
         let inputs = Duplicate(input, 5)
-        let highs = Map(inputs[0], { m => m.High })
-        let lows = Map(inputs[1], { m => m.Low })
-        let closings = Map(inputs[2], { m => m.Close })
-        let volumes = Map(inputs[3], { m => Float64(m.Volume) })
+        let highs = Map(inputs[0], { m => m.high })
+        let lows = Map(inputs[1], { m => m.low })
+        let closings = Map(inputs[2], { m => m.close })
+        let volumes = Map(inputs[3], { m => Float64(m.volume) })
         var expected = Map(inputs[4], { m => m.Mfi })
 
         let mfi = Mfi()
@@ -29,10 +29,10 @@ class MfiTest {
 }
 
 public class MfiData {
-    public var High: Float64 = 0.0
-    public var Low: Float64 = 0.0
-    public var Close: Float64 = 0.0
-    public var Volume: Int64 = 0
+    public var high: Float64 = 0.0
+    public var low: Float64 = 0.0
+    public var close: Float64 = 0.0
+    public var volume: Int64 = 0
     public var Mfi: Float64 = 0.0
     public init() {}
 }

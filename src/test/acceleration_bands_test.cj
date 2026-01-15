@@ -5,32 +5,32 @@ import indicator4cj.helper.*
 import indicator4cj.volatility.*
 
 public class AccelRow {
-    public let High: Float64
-    public let Low: Float64
-    public let Close: Float64
-    public let Upper: Float64
-    public let Middle: Float64
-    public let Lower: Float64
+    public let high: Float64
+    public let low: Float64
+    public let close: Float64
+    public let upper: Float64
+    public let middle: Float64
+    public let lower: Float64
     public init(High: Float64, Low: Float64, Close: Float64, Upper: Float64, Middle: Float64, Lower: Float64) {
-        this.High = High
-        this.Low = Low
-        this.Close = Close
-        this.Upper = Upper
-        this.Middle = Middle
-        this.Lower = Lower
+        this.high = High
+        this.low = Low
+        this.close = Close
+        this.upper = Upper
+        this.middle = Middle
+        this.lower = Lower
     }
 }
 
 @Test
 public func acceleration_bands_basic() {
-    let input = ReadFromCsvFile<AccelRow>("src/test/testdata/volatility/acceleration_bands.csv")
+    let input = Csv<AccelRow>().readFromFile("src/test/testdata/volatility/acceleration_bands.csv")
     let inputs = Duplicate(input, 6)
-    let highs = Map(inputs[0], { d: AccelRow => d.High })
-    let lows = Map(inputs[1], { d: AccelRow => d.Low })
-    let closings = Map(inputs[2], { d: AccelRow => d.Close })
-    let expUpper = Map(inputs[3], { d: AccelRow => d.Upper })
-    let expMiddle = Map(inputs[4], { d: AccelRow => d.Middle })
-    let expLower = Map(inputs[5], { d: AccelRow => d.Lower })
+    let highs = Map(inputs[0], { d: AccelRow => d.high })
+    let lows = Map(inputs[1], { d: AccelRow => d.low })
+    let closings = Map(inputs[2], { d: AccelRow => d.close })
+    let expUpper = Map(inputs[3], { d: AccelRow => d.upper })
+    let expMiddle = Map(inputs[4], { d: AccelRow => d.middle })
+    let expLower = Map(inputs[5], { d: AccelRow => d.lower })
 
     let ab = AccelerationBands()
     var (actUpper, actMiddle, actLower) = ab.compute(highs, lows, closings)

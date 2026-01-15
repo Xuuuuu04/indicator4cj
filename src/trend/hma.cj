@@ -40,7 +40,7 @@ public class Hma {
         return _wma1.idlePeriod() + _wma3.idlePeriod()
     }
 
-    public func toString(): String { return "HMA(${_wma2.Period})" }
+    public func toString(): String { return "HMA(${_wma2.period})" }
 }
 
 // Hma conforms to Ma.

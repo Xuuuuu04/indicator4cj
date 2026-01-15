@@ -18,8 +18,8 @@ public class VwmaStrategy <: Strategy {
     public init() {
         this.VwmaIndicator = Vwma()
         this.SmaIndicator = Sma()
-        this.VwmaIndicator.Period = DefaultVwmaStrategyPeriod
-        this.SmaIndicator.Period = DefaultVwmaStrategyPeriod
+        this.VwmaIndicator.period = DefaultVwmaStrategyPeriod
+        this.SmaIndicator.period = DefaultVwmaStrategyPeriod
     }
 
     public func name(): String { return "VWMA Strategy" }
@@ -31,7 +31,7 @@ public class VwmaStrategy <: Strategy {
             if (sma > vwma) { return Action.Sell }
             return Action.Hold
         })
-        return Shift(actions, VwmaIndicator.Period - 1, Action.Hold)
+        return Shift(actions, VwmaIndicator.period - 1, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -40,14 +40,14 @@ public class VwmaStrategy <: Strategy {
         let closings = SnapshotsAsClosings(snaps[1])
 
         var (smas, vwmas) = calculateSmaAndVwma(snaps[2])
-        smas = Shift(smas, VwmaIndicator.Period - 1, 0.0)
-        vwmas = Shift(vwmas, VwmaIndicator.Period - 1, 0.0)
+        smas = Shift(smas, VwmaIndicator.period - 1, 0.0)
+        vwmas = Shift(vwmas, VwmaIndicator.period - 1, 0.0)
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings))

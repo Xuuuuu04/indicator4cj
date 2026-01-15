@@ -1,6 +1,6 @@
 package indicator4cj.helper
 
-// 简易可关闭接口，兼容 Go io.Closer 语义。
+// 简易可关闭接口，兼容 Go io.closer 语义。
 public interface Closeable {
     func close(): Unit
 }

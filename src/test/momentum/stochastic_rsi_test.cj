@@ -5,11 +5,11 @@ import indicator4cj.helper.*
 import indicator4cj.momentum.*
 
 public class StochRsiRow {
-    public let Close: Float64
+    public let close: Float64
     public let K: Float64
     public let D: Float64
     public init(Close: Float64, K: Float64, D: Float64) {
-        this.Close = Close
+        this.close = Close
         this.K = K
         this.D = D
     }
@@ -17,9 +17,9 @@ public class StochRsiRow {
 
 @Test
 public func stochastic_rsi_basic() {
-    let input = ReadFromCsvFile<StochRsiRow>("src/test/testdata/momentum/stochastic_rsi.csv")
+    let input = Csv<StochRsiRow>().readFromFile("src/test/testdata/momentum/stochastic_rsi.csv")
     let inputs = Duplicate(input, 2)
-    let closes = Map(inputs[0], { d: StochRsiRow => d.Close })
+    let closes = Map(inputs[0], { d: StochRsiRow => d.close })
     var expK = Map(inputs[1], { d: StochRsiRow => d.K })
 
     let sr = StochasticRsi()

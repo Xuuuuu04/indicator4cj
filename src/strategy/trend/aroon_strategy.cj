@@ -27,7 +27,7 @@ public class AroonStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.Period - 1, Action.Hold)
+        return Shift(actions, Indicator.period - 1, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -38,14 +38,14 @@ public class AroonStrategy <: Strategy {
         let closings = SnapshotsAsClosings(snaps[3])
 
         var (ups, downs) = Indicator.compute(highs, lows)
-        ups = Shift(ups, Indicator.Period - 1, 0.0)
-        downs = Shift(downs, Indicator.Period - 1, 0.0)
+        ups = Shift(ups, Indicator.period - 1, 0.0)
+        downs = Shift(downs, Indicator.period - 1, 0.0)
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[4])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings))

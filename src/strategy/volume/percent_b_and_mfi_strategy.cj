@@ -79,11 +79,11 @@ public class PercentBandMFIStrategy <: Strategy {
         mfis = Shift(mfis, PercentBInd.idlePeriod() - MoneyFlowIndex.idlePeriod(), 0.0)
         let pb = PercentBInd.compute(closings[2])
 
-        var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[5])
+        var (actions, outcomesRaw) = computeWithOutcome(this, snaps[5])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addChart()

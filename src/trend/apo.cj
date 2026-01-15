@@ -24,13 +24,13 @@ public class Apo {
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         // Buffered 为保持与 Go 签名一致（当前直通）
-        let buffered = Buffered(c, SlowPeriod)
+        let buffered = Buffered(c, this.SlowPeriod)
         let cs = Duplicate(buffered, 2)
 
-        let fastEma = Ema(FastPeriod)
-        fastEma.Smoothing = FastSmoothing
-        let slowEma = Ema(SlowPeriod)
-        slowEma.Smoothing = SlowSmoothing
+        let fastEma = Ema(this.FastPeriod)
+        fastEma.smoothing = this.FastSmoothing
+        let slowEma = Ema(this.SlowPeriod)
+        slowEma.smoothing = this.SlowSmoothing
 
         cs[0] = fastEma.compute(cs[0])
         cs[1] = slowEma.compute(cs[1])
@@ -40,7 +40,7 @@ public class Apo {
 
     // IdlePeriod 取慢周期，策略侧按 Go 版 Shift 使用。
     public func idlePeriod(): Int64 {
-        return SlowPeriod
+        return this.SlowPeriod
     }
 }
 

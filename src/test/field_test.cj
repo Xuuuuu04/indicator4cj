@@ -10,7 +10,7 @@ class FieldTest {
     @TestCase
     public func extract_field() {
         let rows = ArrayList<FieldRow>([FieldRow(1.0, 2.0)]).iterator()
-        let closes = Field<Float64, FieldRow>(rows, "Close")
+        let closes = Field<Float64, FieldRow>(rows, "close")
         match (closes.next()) {
             case Some(v) => @Expect(v, 2.0)
             case None => @Fail("no value")
@@ -29,11 +29,11 @@ class FieldTest {
 }
 
 public class FieldRow {
-    public var Open: Float64 = 0.0
-    public var Close: Float64 = 0.0
+    public var open: Float64 = 0.0
+    public var close: Float64 = 0.0
     public init(open: Float64, close: Float64) {
-        this.Open = open
-        this.Close = close
+        this.open = open
+        this.close = close
     }
 }
 

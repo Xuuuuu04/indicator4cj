@@ -28,17 +28,17 @@ public class Macd {
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let snaps = Duplicate(c, 2)
         var ema1 = Ema1.compute(snaps[0])
-        ema1 = Skip(ema1, Ema2.Period - Ema1.Period)
+        ema1 = Skip(ema1, Ema2.period - Ema1.period)
         let ema2 = Ema2.compute(snaps[1])
 
         let macds = Duplicate(Subtract(ema1, ema2), 2)
-        macds[0] = Skip(macds[0], Ema3.Period - 1)
+        macds[0] = Skip(macds[0], Ema3.period - 1)
         let signal = Ema3.compute(macds[1])
         return (macds[0], signal)
     }
 
     public func idlePeriod(): Int64 {
-        return Ema2.Period + Ema3.Period - 2
+        return Ema2.period + Ema3.period - 2
     }
 }
 

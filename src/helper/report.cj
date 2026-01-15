@@ -87,7 +87,7 @@ private func ascii(s: String): Array<Byte> {
     return arr.toArray()
 }
 
-// NewReport 创建报告实例
+// NewReport 创建报告实例（保留以避免与 std.unittest.Report 的命名冲突）
 public func NewReport(title: String, date: Iterator<DateTime>): Report {
     return Report(title, date)
 }

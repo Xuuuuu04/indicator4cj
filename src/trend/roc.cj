@@ -7,19 +7,19 @@ public const DefaultRocPeriod: Int64 = 9
 
 // Rate Of Change (ROC) = (price - price_n) / price_n
 public class Roc {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = DefaultRocPeriod }
+    public init() { this.period = DefaultRocPeriod }
     public init(period: Int64) {
         if (period <= 0) {
-            this.Period = DefaultRocPeriod
+            this.period = DefaultRocPeriod
         } else {
-            this.Period = period
+            this.period = period
         }
     }
 
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        let window = Ring<Float64>(Period)
+        let window = Ring<Float64>(this.period)
         var rocs = Map(values, { v: Float64 =>
             var res: Float64 = 0.0
             if (window.IsFull()) {
@@ -38,8 +38,8 @@ public class Roc {
         return rocs
     }
 
-    public func idlePeriod(): Int64 { return Period }
+    public func idlePeriod(): Int64 { return this.period }
 
-    public func toString(): String { return "ROC(${Period})" }
+    public func toString(): String { return "ROC(${this.period})" }
 }
 

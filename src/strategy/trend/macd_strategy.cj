@@ -19,7 +19,7 @@ public class MacdStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "MACD Strategy (${Macd.Ema1.Period},${Macd.Ema2.Period},${Macd.Ema3.Period})"
+        return "MACD Strategy (${Macd.Ema1.period},${Macd.Ema2.period},${Macd.Ema3.period})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
@@ -50,11 +50,11 @@ public class MacdStrategy <: Strategy {
         macds = Shift(macds, Macd.idlePeriod(), 0.0)
         signals = Shift(signals, Macd.idlePeriod(), 0.0)
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closingsDup[1]))

@@ -19,11 +19,11 @@ public class Tema {
         let ema1 = Duplicate(Ema1.compute(c), 2)
         let ema2 = Duplicate(Ema2.compute(ema1[0]), 2)
 
-        ema1[1] = Skip(ema1[1], Ema2.Period - 1)
+        ema1[1] = Skip(ema1[1], Ema2.period - 1)
 
         let ema3 = Ema3.compute(ema2[0])
-        ema1[1] = Skip(ema1[1], Ema3.Period - 1)
-        ema2[1] = Skip(ema2[1], Ema3.Period - 1)
+        ema1[1] = Skip(ema1[1], Ema3.period - 1)
+        ema2[1] = Skip(ema2[1], Ema3.period - 1)
 
         let tema = Add(
             Subtract(
@@ -37,7 +37,7 @@ public class Tema {
     }
 
     public func idlePeriod(): Int64 {
-        return Ema1.Period + Ema2.Period + Ema3.Period - 3
+        return Ema1.period + Ema2.period + Ema3.period - 3
     }
 }
 

@@ -9,10 +9,10 @@ import indicator4cj.volume.*
 class ObvTest {
     @TestCase
     public func obv_basic() {
-        let input = ReadFromCsvFile<ObvData>("src/test/testdata/volume/obv.csv")
+        let input = Csv<ObvData>().readFromFile("src/test/testdata/volume/obv.csv")
         let inputs = Duplicate(input, 3)
-        let closings = Map(inputs[0], { m => m.Close })
-        let volumes = Map(inputs[1], { m => Float64(m.Volume) })
+        let closings = Map(inputs[0], { m => m.close })
+        let volumes = Map(inputs[1], { m => Float64(m.volume) })
         var expected = Map(inputs[2], { m => m.Obv })
 
         let obv = Obv()
@@ -27,8 +27,8 @@ class ObvTest {
 }
 
 public class ObvData {
-    public var Close: Float64 = 0.0
-    public var Volume: Int64 = 0
+    public var close: Float64 = 0.0
+    public var volume: Int64 = 0
     public var Obv: Float64 = 0.0
     public init() {}
 }

@@ -15,9 +15,9 @@ public class AwesomeOscillator {
             2
         )
         let s5 = Sma()
-        s5.Period = 5
+        s5.period = 5
         let s34 = Sma()
-        s34.Period = 34
+        s34.period = 34
         var fast = s5.compute(medianDup[0])
         var slow = s34.compute(medianDup[1])
         // 对齐：跳过 fast 前 (34-5)=29 个值，使两条均从 index 33 开始。

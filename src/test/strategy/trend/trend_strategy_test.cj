@@ -10,17 +10,17 @@ import indicator4cj.strategy.*
 import indicator4cj.strategy.trend.*
 
 private class TrendTestSnapshotRow {
-    public var Date: String = ""
-    public var Open: Float64 = 0.0
-    public var High: Float64 = 0.0
-    public var Low: Float64 = 0.0
-    public var Close: Float64 = 0.0
-    public var AdjClose: Float64 = 0.0
-    public var Volume: Float64 = 0.0
+    public var date: String = ""
+    public var open: Float64 = 0.0
+    public var high: Float64 = 0.0
+    public var low: Float64 = 0.0
+    public var close: Float64 = 0.0
+    public var adjClose: Float64 = 0.0
+    public var volume: Float64 = 0.0
 }
 
 private class TrendTestResultRow {
-    public var Action: Int64 = 0
+    public var action: Int64 = 0
 }
 
 @Test
@@ -216,13 +216,13 @@ public func test_weighted_close_strategy_basic() {
 }
 
 private func loadBrkSnapsTrend(): Iterator<Snapshot> {
-    let rows = ReadFromCsvFile<TrendTestSnapshotRow>("src/test/testdata/strategy/repository/brk-b.csv")
+    let rows = Csv<TrendTestSnapshotRow>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let snaps = ArrayList<Snapshot>()
     while (true) {
         match (rows.next()) {
             case Some(r) =>
-                let dt = DateTime.parse(r.Date, "yyyy-MM-dd")
-                snaps.add(Snapshot(dt, r.Open, r.High, r.Low, r.Close, r.AdjClose, r.Volume))
+                let dt = DateTime.parse(r.date, "yyyy-MM-dd")
+                snaps.add(Snapshot(dt, r.open, r.high, r.low, r.close, r.adjClose, r.volume))
             case None => break
         }
     }
@@ -230,6 +230,6 @@ private func loadBrkSnapsTrend(): Iterator<Snapshot> {
 }
 
 private func loadExpectedTrend(path: String): Iterator<Action> {
-    let rows = ReadFromCsvFile<TrendTestResultRow>(path)
-    return h.Map(rows, { r: TrendTestResultRow => ActionFromInt(r.Action) })
+    let rows = Csv<TrendTestResultRow>().readFromFile(path)
+    return h.Map(rows, { r: TrendTestResultRow => ActionFromInt(r.action) })
 }

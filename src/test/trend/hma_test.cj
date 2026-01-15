@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class HmaData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Hma: Float64 = 0.0
 }
 
 @Test
 public func test_hma_basic() {
-    let input = ReadFromCsvFile<HmaData>("src/test/testdata/trend/hma.csv")
+    let input = Csv<HmaData>().readFromFile("src/test/testdata/trend/hma.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { row: HmaData => row.Close })
+    let closing = h.Map(inputs[0], { row: HmaData => row.close })
     let expected = h.Map(inputs[1], { row: HmaData => row.Hma })
 
     let hma = Hma(3)

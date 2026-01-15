@@ -18,13 +18,13 @@ public class Dema {
         let ema2 = Ema2.compute(ema1[1])
 
         var doubleEma1 = MultiplyBy(ema1[0], 2.0)
-        doubleEma1 = Buffered(doubleEma1, Ema2.Period)
+        doubleEma1 = Buffered(doubleEma1, Ema2.period)
 
         return Subtract(doubleEma1, ema2)
     }
 
     public func idlePeriod(): Int64 {
-        return Ema1.Period + Ema2.Period - 2
+        return Ema1.period + Ema2.period - 2
     }
 }
 

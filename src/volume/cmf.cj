@@ -9,8 +9,8 @@ public class Cmf {
     private let _mfv = Mfv()
     private let _sum = MovingSum()
 
-    public init() { _sum.Period = 20 }
-    public init(period: Int64) { _sum.Period = period }
+    public init() { _sum.period = 20 }
+    public init(period: Int64) { _sum.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let vols = Duplicate(volumes, 2)

@@ -57,13 +57,13 @@ public class TsiStrategy <: Strategy {
         tsis[0] = Skip(tsis[0], Signal.idlePeriod())
         let signals = Signal.compute(tsis[1])
 
-        var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
+        var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         actions = Skip(actions, IdlePeriod())
         outcomesRaw = Skip(outcomesRaw, IdlePeriod())
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[1]))

@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class AroonData {
-    public var High: Float64 = 0.0
-    public var Low: Float64 = 0.0
+    public var high: Float64 = 0.0
+    public var low: Float64 = 0.0
     public var Up: Float64 = 0.0
     public var Down: Float64 = 0.0
 
     public init() {}
     public init(High!: Float64, Low!: Float64, Up!: Float64, Down!: Float64) {
-        this.High = High
-        this.Low = Low
+        this.high = High
+        this.low = Low
         this.Up = Up
         this.Down = Down
     }
@@ -24,16 +24,16 @@ class AroonData {
 
 @Test
 public func test_aroon_basic() {
-    let input = ReadFromCsvFile<AroonData>("src/test/testdata/trend/aroon.csv")
+    let input = Csv<AroonData>().readFromFile("src/test/testdata/trend/aroon.csv")
     let inputs = Duplicate(input, 4)
-    let high = h.Map(inputs[0], { row: AroonData => row.High })
-    let low = h.Map(inputs[1], { row: AroonData => row.Low })
+    let high = h.Map(inputs[0], { row: AroonData => row.high })
+    let low = h.Map(inputs[1], { row: AroonData => row.low })
     let expectedUp = h.Map(inputs[2], { row: AroonData => row.Up })
     let expectedDown = h.Map(inputs[3], { row: AroonData => row.Down })
 
     let aroon = Aroon()
-    let expectedUpSkipped = h.Skip(expectedUp, aroon.Period - 1)
-    let expectedDownSkipped = h.Skip(expectedDown, aroon.Period - 1)
+    let expectedUpSkipped = h.Skip(expectedUp, aroon.period - 1)
+    let expectedDownSkipped = h.Skip(expectedDown, aroon.period - 1)
 
     let (actualUp, actualDown) = aroon.compute(high, low)
 
@@ -67,14 +67,14 @@ public func test_aroon_compare_rust() {
     testData.add(AroonData(High: 87.87, Low: 87.01, Up: 20.00, Down: 80.00))
 
     let inputs = Duplicate(testData.iterator(), 4)
-    let high = h.Map(inputs[0], { row: AroonData => row.High })
-    let low = h.Map(inputs[1], { row: AroonData => row.Low })
+    let high = h.Map(inputs[0], { row: AroonData => row.high })
+    let low = h.Map(inputs[1], { row: AroonData => row.low })
     let expectedUp = h.Map(inputs[2], { row: AroonData => row.Up })
     let expectedDown = h.Map(inputs[3], { row: AroonData => row.Down })
 
     let aroon = Aroon()
-    let expectedUpSkipped = h.Skip(expectedUp, aroon.Period - 1)
-    let expectedDownSkipped = h.Skip(expectedDown, aroon.Period - 1)
+    let expectedUpSkipped = h.Skip(expectedUp, aroon.period - 1)
+    let expectedDownSkipped = h.Skip(expectedDown, aroon.period - 1)
 
     let (actualUp, actualDown) = aroon.compute(high, low)
 

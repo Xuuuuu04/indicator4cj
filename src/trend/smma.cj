@@ -7,23 +7,23 @@ public const DefaultSmmaPeriod: Int64 = 7
 
 // Smoothed Moving Average (SMMA)
 public class Smma {
-    public var Period: Int64
+    public var period: Int64
 
     public init() {
-        this.Period = DefaultSmmaPeriod
+        this.period = DefaultSmmaPeriod
     }
 
     public init(period: Int64) {
-        this.Period = period
+        this.period = period
     }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return SmmaIterator(c, Period)
+        return SmmaIterator(c, this.period)
     }
 
-    public func idlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return this.period - 1 }
 
-    public func toString(): String { return "SMMA(${Period})" }
+    public func toString(): String { return "SMMA(${this.period})" }
 }
 
 private class SmmaIterator <: Iterator<Float64> {

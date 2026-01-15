@@ -27,7 +27,7 @@ public class SmmaStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "SMMA Strategy (${ShortSmma.Period},${LongSmma.Period})"
+        return "SMMA Strategy (${ShortSmma.period},${LongSmma.period})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
@@ -35,9 +35,9 @@ public class SmmaStrategy <: Strategy {
         var shortSmmas = ShortSmma.compute(closingsDup[0])
         var longSmmas = LongSmma.compute(closingsDup[1])
 
-        let common = CommonPeriod(ArrayList<Int64>([ShortSmma.Period, LongSmma.Period]))
-        shortSmmas = SyncPeriod(common, ShortSmma.Period, shortSmmas)
-        longSmmas = SyncPeriod(common, LongSmma.Period, longSmmas)
+        let common = CommonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
+        shortSmmas = SyncPeriod(common, ShortSmma.period, shortSmmas)
+        longSmmas = SyncPeriod(common, LongSmma.period, longSmmas)
 
         let actions = Operate(shortSmmas, longSmmas, { s: Float64, l: Float64 =>
             if (s > l) { return Action.Buy }
@@ -56,19 +56,19 @@ public class SmmaStrategy <: Strategy {
         var shortSmmas = ShortSmma.compute(closingsDup[1])
         var longSmmas = LongSmma.compute(closingsDup[2])
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         var annotations = ActionsToAnnotations(actions)
         var outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let common = CommonPeriod(ArrayList<Int64>([ShortSmma.Period, LongSmma.Period]))
+        let common = CommonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
         dates = SyncPeriod(common, 0, dates)
         closingsDup[0] = Skip(closingsDup[0], common)
-        shortSmmas = SyncPeriod(common, ShortSmma.Period, shortSmmas)
-        longSmmas = SyncPeriod(common, LongSmma.Period, longSmmas)
+        shortSmmas = SyncPeriod(common, ShortSmma.period, shortSmmas)
+        longSmmas = SyncPeriod(common, LongSmma.period, longSmmas)
         annotations = Skip(annotations, common)
         outcomes = Skip(outcomes, common)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
 

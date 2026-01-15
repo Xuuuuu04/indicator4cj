@@ -51,13 +51,13 @@ public class WeightedAveragePriceStrategy <: Strategy {
         let vwaps = Indicator.compute(closingsDup[0], volumes)
         closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())
 
-        var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
+        var (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
         actions = Skip(actions, Indicator.idlePeriod())
         outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closingsDup[1]))
         report.addColumn(NumericReportColumn("VWAP", vwaps))

@@ -40,11 +40,11 @@ public class BollingerBandsStrategy <: Strategy {
         middles = Shift(middles, Indicator.idlePeriod(), 0.0)
         lowers = Shift(lowers, Indicator.idlePeriod(), 0.0)
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[2])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[1]))
         report.addColumn(NumericReportColumn("Upper", uppers))

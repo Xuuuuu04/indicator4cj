@@ -5,19 +5,19 @@ import indicator4cj.helper.*
 import indicator4cj.volatility.*
 
 public class PercentBRow {
-    public let Close: Float64
+    public let close: Float64
     public let PercentB: Float64
     public init(c: Float64, p: Float64) {
-        this.Close = c
+        this.close = c
         this.PercentB = p
     }
 }
 
 @Test
 public func percent_b_basic() {
-    let input = ReadFromCsvFile<PercentBRow>("src/test/testdata/volatility/percent_b.csv")
+    let input = Csv<PercentBRow>().readFromFile("src/test/testdata/volatility/percent_b.csv")
     let inputs = Duplicate(input, 2)
-    let closing = Map(inputs[0], { d: PercentBRow => d.Close })
+    let closing = Map(inputs[0], { d: PercentBRow => d.close })
     let expected = Map(inputs[1], { d: PercentBRow => d.PercentB })
 
     let pb = PercentB()

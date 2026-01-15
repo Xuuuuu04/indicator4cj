@@ -8,19 +8,19 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class TypicalPriceData {
-    public var High: Float64 = 0.0
-    public var Low: Float64 = 0.0
-    public var Close: Float64 = 0.0
+    public var high: Float64 = 0.0
+    public var low: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var TypicalPrice: Float64 = 0.0
 }
 
 @Test
 public func test_typical_price_basic() {
-    let input = ReadFromCsvFile<TypicalPriceData>("src/test/testdata/trend/typical_price.csv")
+    let input = Csv<TypicalPriceData>().readFromFile("src/test/testdata/trend/typical_price.csv")
     let inputs = Duplicate(input, 4)
-    let high = h.Map(inputs[0], { d: TypicalPriceData => d.High })
-    let low = h.Map(inputs[1], { d: TypicalPriceData => d.Low })
-    let closing = h.Map(inputs[2], { d: TypicalPriceData => d.Close })
+    let high = h.Map(inputs[0], { d: TypicalPriceData => d.high })
+    let low = h.Map(inputs[1], { d: TypicalPriceData => d.low })
+    let closing = h.Map(inputs[2], { d: TypicalPriceData => d.close })
     let expected = h.Map(inputs[3], { d: TypicalPriceData => d.TypicalPrice })
 
     let typicalPrice = TypicalPrice()

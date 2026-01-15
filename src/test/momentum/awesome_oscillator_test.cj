@@ -5,22 +5,22 @@ import indicator4cj.helper.*
 import indicator4cj.momentum.*
 
 public class AwesomeRow {
-    public let High: Float64
-    public let Low: Float64
+    public let high: Float64
+    public let low: Float64
     public let Awesome: Float64
     public init(High: Float64, Low: Float64, Awesome: Float64) {
-        this.High = High
-        this.Low = Low
+        this.high = High
+        this.low = Low
         this.Awesome = Awesome
     }
 }
 
 @Test
 public func awesome_basic() {
-    let input = ReadFromCsvFile<AwesomeRow>("src/test/testdata/momentum/awesome_oscillator.csv")
+    let input = Csv<AwesomeRow>().readFromFile("src/test/testdata/momentum/awesome_oscillator.csv")
     let inputs = Duplicate(input, 3)
-    let highs = Map(inputs[0], { d: AwesomeRow => d.High })
-    let lows = Map(inputs[1], { d: AwesomeRow => d.Low })
+    let highs = Map(inputs[0], { d: AwesomeRow => d.high })
+    let lows = Map(inputs[1], { d: AwesomeRow => d.low })
     var expected = Map(inputs[2], { d: AwesomeRow => d.Awesome })
 
     let ao = AwesomeOscillator()

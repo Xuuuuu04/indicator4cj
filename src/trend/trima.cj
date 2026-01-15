@@ -6,14 +6,14 @@ public const DefaultTrimaPeriod: Int64 = 15
 
 // Triangular Moving Average (TRIMA)
 public class Trima {
-    public var Period: Int64
+    public var period: Int64
 
     public init() {
-        this.Period = DefaultTrimaPeriod
+        this.period = DefaultTrimaPeriod
     }
 
     public init(period: Int64) {
-        this.Period = period
+        this.period = period
     }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
@@ -31,16 +31,16 @@ public class Trima {
     private func calculatePeriods(): (Int64, Int64) {
         var p1: Int64
         var p2: Int64
-        if (Period % 2 == 0) {
-            p1 = Period / 2
+        if (this.period % 2 == 0) {
+            p1 = this.period / 2
             p2 = p1 + 1
         } else {
-            p1 = (Period + 1) / 2
+            p1 = (this.period + 1) / 2
             p2 = p1
         }
         return (p1, p2)
     }
 
-    public func toString(): String { return "TRIMA(${Period})" }
+    public func toString(): String { return "TRIMA(${this.period})" }
 }
 

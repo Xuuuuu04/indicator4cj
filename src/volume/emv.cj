@@ -8,8 +8,8 @@ import indicator4cj.trend.*
 public class Emv {
     private let _sma = Sma()
 
-    public init() { _sma.Period = 14 }
-    public init(period: Int64) { _sma.Period = period }
+    public init() { _sma.period = 14 }
+    public init(period: Int64) { _sma.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let hs = Duplicate(highs, 2)

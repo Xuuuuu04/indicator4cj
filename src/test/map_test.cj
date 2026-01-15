@@ -7,11 +7,11 @@ import indicator4cj.helper.*
 import indicator4cj.helper as h
 
 class MapTestRow {
-    public var High: Int64
-    public var Low: Int64
+    public var high: Int64
+    public var low: Int64
     public init(High: Int64, Low: Int64) {
-        this.High = High
-        this.Low = Low
+        this.high = High
+        this.low = Low
     }
 }
 
@@ -22,7 +22,7 @@ public func test_map_basic() {
         MapTestRow(20, 15)
     ])
     let expected = ArrayList<Int64>([5, 15])
-    let actual = h.Map<MapTestRow, Int64>(input.iterator(), { r: MapTestRow => r.Low })
+    let actual = h.Map<MapTestRow, Int64>(input.iterator(), { r: MapTestRow => r.low })
     match (CheckEquals(actual, expected.iterator())) {
         case Some(err) => fail(err)
         case None => ()

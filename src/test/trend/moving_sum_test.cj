@@ -13,7 +13,7 @@ public func test_moving_sum_basic() {
     let expected: Iterator<Float64> = SliceToChan(ArrayList<Float64>([1.0, 12.0, -3.0, 9.0, 24.0, 3.0, 2.0]))
     
     let movingSum = MovingSum()
-    movingSum.Period = 4
+    movingSum.period = 4
     let actual = movingSum.compute(input)
 
     match (h.CheckFloatEquals(actual, expected)) {

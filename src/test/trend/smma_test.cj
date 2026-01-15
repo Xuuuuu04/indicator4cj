@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class SmmaData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Smma: Float64 = 0.0
 }
 
 @Test
 public func test_smma_basic() {
-    let input = ReadFromCsvFile<SmmaData>("src/test/testdata/trend/smma.csv")
+    let input = Csv<SmmaData>().readFromFile("src/test/testdata/trend/smma.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: SmmaData => d.Close })
+    let closing = h.Map(inputs[0], { d: SmmaData => d.close })
     let expected = h.Map(inputs[1], { d: SmmaData => d.Smma })
 
     let smma = Smma()

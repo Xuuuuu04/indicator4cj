@@ -5,16 +5,16 @@ import std.collection.*
 
 // Rolling Moving Average (RMA) with Wilder smoothing.
 public class Rma {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = 20 }
-    public init(period: Int64) { this.Period = period }
+    public init() { this.period = 20 }
+    public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return RmaIterator(c, Period)
+        return RmaIterator(c, this.period)
     }
 
-    public func idlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return this.period - 1 }
 }
 
 private class RmaIterator <: Iterator<Float64> {

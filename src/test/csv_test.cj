@@ -14,12 +14,12 @@ class CsvTest {
         let reader = MemoryInputStream(ascii("Date,Asset,Open,Close\n\"2023-11-26 00:00:00\",\"SP500\",10.2,30.4\n"))
         let opts = ArrayList<CsvOption<CsvRow>>()
         opts.add(WithCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
-        let csv = NewCsv<CsvRow>(opts)
+        let csv = Csv<CsvRow>(opts)
         let iter = csv.readFromReader(reader)
         match (iter.next()) {
             case Some(r) =>
-                @Expect(r.Close, 30.4)
-                @Expect(r.Open, 10.2)
+                @Expect(r.close, 30.4)
+                @Expect(r.open, 10.2)
             case None => @Fail("no row")
         }
     }
@@ -29,10 +29,10 @@ class CsvTest {
         let reader = MemoryInputStream(ascii("10.2,30.4\n"))
         let opts = ArrayList<CsvOption<CsvRow>>()
         opts.add(WithoutCsvHeader<CsvRow>())
-        let csv = NewCsv<CsvRow>(opts)
+        let csv = Csv<CsvRow>(opts)
         let iter = csv.readFromReader(reader)
         match (iter.next()) {
-            case Some(r) => @Expect(r.Close, 10.2)
+            case Some(r) => @Expect(r.close, 10.2)
             case None => @Fail("no row")
         }
     }
@@ -41,10 +41,10 @@ class CsvTest {
     public func read_from_file() {
         let opts = ArrayList<CsvOption<CsvRow>>()
         opts.add(WithCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
-        let csv = NewCsv<CsvRow>(opts)
+        let csv = Csv<CsvRow>(opts)
         let iter = csv.readFromFile("src/test/testdata/with_header.csv")
         match (iter.next()) {
-            case Some(r) => @Expect(r.Close, 30.4)
+            case Some(r) => @Expect(r.close, 30.4)
             case None => @Fail("no row")
         }
     }
@@ -54,7 +54,7 @@ class CsvTest {
         let rows = ArrayList<CsvRow>()
         rows.add(CsvRow(10.0, 20.0))
         rows.add(CsvRow(30.0, 40.0))
-        let csv = NewCsv<CsvRow>()
+        let csv = Csv<CsvRow>()
         let path = "test_csv_write.csv"
         try {
             csv.writeToFile(path, rows.iterator())
@@ -72,24 +72,24 @@ class CsvTest {
 }
 
 public class CsvRow <: ToString & Equatable<CsvRow> {
-    public var Close: Float64 = 0.0
-    public var High: Float64 = 0.0
-    public var Open: Float64 = 0.0
-    public var Date: DateTime = DateTime.now()
+    public var close: Float64 = 0.0
+    public var high: Float64 = 0.0
+    public var open: Float64 = 0.0
+    public var date: DateTime = DateTime.now()
 
     public init() {}
     public init(close: Float64, high: Float64) {
-        this.Close = close
-        this.High = high
-        this.Open = close
+        this.close = close
+        this.high = high
+        this.open = close
     }
 
     public func toString(): String {
-        return "CsvRow(${Open},${High},${Close})"
+        return "CsvRow(${open},${high},${close})"
     }
 
     public operator func ==(right: CsvRow): Bool {
-        return Close == right.Close && High == right.High && Open == right.Open
+        return close == right.close && high == right.high && open == right.open
     }
 
     public operator func !=(right: CsvRow): Bool {

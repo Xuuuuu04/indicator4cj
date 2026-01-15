@@ -19,7 +19,7 @@ public class MockActionStrategy <: Strategy {
         return list.iterator()
     }
     public func report(_: Iterator<Snapshot>): HelperReport {
-        return NewReport("Mock", ArrayList<DateTime>().iterator())
+        return HelperReport("Mock", ArrayList<DateTime>().iterator())
     }
     public func idlePeriod(): Int64 { 0 }
 }
@@ -51,7 +51,7 @@ public func test_composite_strategies_branches() {
     if (res3 != Action.Hold) { fail("OrStrategy Buy|Sell failed") }
 
     // 2. SplitStrategy 逻辑
-    let split = NewSplitStrategy(buyS, sellS)
+    let split = SplitStrategy(buyS, sellS)
     let resSIter = split.compute(ArrayList<Snapshot>().iterator())
     match (resSIter.next()) {
         case Some(_) => () // 只要有输出即可，逻辑由组合策略定义保证

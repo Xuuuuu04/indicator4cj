@@ -95,7 +95,7 @@ public func sync_success() {
             }
             var idx: Int64 = 0
             while (idx < snapshots.size) {
-                if (actualList[idx].Date != snapshots[idx].Date) {
+                if (actualList[idx].date != snapshots[idx].date) {
                     fail("date mismatch at ${idx}")
                 }
                 idx += 1

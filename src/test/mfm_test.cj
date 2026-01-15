@@ -9,11 +9,11 @@ import indicator4cj.volume.*
 class MfmTest {
     @TestCase
     public func mfm_basic() {
-        let input = ReadFromCsvFile<MfmRow>("src/test/testdata/volume/mfm.csv")
+        let input = Csv<MfmRow>().readFromFile("src/test/testdata/volume/mfm.csv")
         let inputs = Duplicate(input, 4)
-        let highs = Map(inputs[0], { m => m.High })
-        let lows = Map(inputs[1], { m => m.Low })
-        let closes = Map(inputs[2], { m => m.Close })
+        let highs = Map(inputs[0], { m => m.high })
+        let lows = Map(inputs[1], { m => m.low })
+        let closes = Map(inputs[2], { m => m.close })
         var expected = Map(inputs[3], { m => m.Mfm })
 
         let mfm = Mfm()
@@ -28,9 +28,9 @@ class MfmTest {
 }
 
 public class MfmRow {
-    public var High: Float64 = 0.0
-    public var Low: Float64 = 0.0
-    public var Close: Float64 = 0.0
+    public var high: Float64 = 0.0
+    public var low: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Mfm: Float64 = 0.0
     public init() {}
 }

@@ -6,16 +6,16 @@ import indicator4cj.trend.*
 
 // RSI: 100 - 100 / (1 + RS), RS = AvgGain/AvgLoss over period.
 public class Rsi {
-    public var Period: Int64
+    public var period: Int64
     private let _rma: Rma
 
     public init() {
-        this.Period = 14
-        this._rma = Rma(Period)
+        this.period = 14
+        this._rma = Rma(this.period)
     }
 
     public init(period: Int64) {
-        this.Period = period
+        this.period = period
         this._rma = Rma(period)
     }
 

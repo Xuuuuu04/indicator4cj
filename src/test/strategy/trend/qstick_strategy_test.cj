@@ -10,53 +10,53 @@ import indicator4cj.strategy.*
 import indicator4cj.strategy.trend.*
 
 public class QstickStrategyRow {
-    public var Action: Int64
-    public init() { this.Action = 0 }
-    public init(Action: Int64) { this.Action = Action }
+    public var action: Int64
+    public init() { this.action = 0 }
+    public init(Action: Int64) { this.action = Action }
 }
 
 private class SnapshotCsvRow {
-    public var Date: String
-    public var Open: Float64
-    public var High: Float64
-    public var Low: Float64
-    public var Close: Float64
-    public var AdjClose: Float64
-    public var Volume: Float64
+    public var date: String
+    public var open: Float64
+    public var high: Float64
+    public var low: Float64
+    public var close: Float64
+    public var adjClose: Float64
+    public var volume: Float64
     public init() {
-        this.Date = ""
-        this.Open = 0.0
-        this.High = 0.0
-        this.Low = 0.0
-        this.Close = 0.0
-        this.AdjClose = 0.0
-        this.Volume = 0.0
+        this.date = ""
+        this.open = 0.0
+        this.high = 0.0
+        this.low = 0.0
+        this.close = 0.0
+        this.adjClose = 0.0
+        this.volume = 0.0
     }
     public init(Date: String, Open: Float64, High: Float64, Low: Float64, Close: Float64, AdjClose: Float64, Volume: Float64) {
-        this.Date = Date
-        this.Open = Open
-        this.High = High
-        this.Low = Low
-        this.Close = Close
-        this.AdjClose = AdjClose
-        this.Volume = Volume
+        this.date = Date
+        this.open = Open
+        this.high = High
+        this.low = Low
+        this.close = Close
+        this.adjClose = AdjClose
+        this.volume = Volume
     }
 }
 
 @Test
 public func qstick_strategy_basic() {
-    let snapRows = ReadFromCsvFile<SnapshotCsvRow>("src/test/testdata/strategy/repository/brk-b.csv")
+    let snapRows = Csv<SnapshotCsvRow>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let snapsList = ArrayList<Snapshot>()
     while (true) {
         match (snapRows.next()) {
             case Some(r) =>
-                let dt = DateTime.parse(r.Date, "yyyy-MM-dd")
-                snapsList.add(Snapshot(dt, r.Open, r.High, r.Low, r.Close, r.AdjClose, r.Volume))
+                let dt = DateTime.parse(r.date, "yyyy-MM-dd")
+                snapsList.add(Snapshot(dt, r.open, r.high, r.low, r.close, r.adjClose, r.volume))
             case None => break
         }
     }
-    let expectedActs = ReadFromCsvFile<QstickStrategyRow>("src/test/testdata/strategy/trend/qstick_strategy.csv")
-    let expectedIter = h.Map(expectedActs, { r: QstickStrategyRow => ActionFromInt(r.Action) })
+    let expectedActs = Csv<QstickStrategyRow>().readFromFile("src/test/testdata/strategy/trend/qstick_strategy.csv")
+    let expectedIter = h.Map(expectedActs, { r: QstickStrategyRow => ActionFromInt(r.action) })
     let expectedList = ArrayList<Action>()
     while (true) {
         match (expectedIter.next()) {

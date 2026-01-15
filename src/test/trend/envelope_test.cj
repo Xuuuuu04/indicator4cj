@@ -8,20 +8,20 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class EnvelopeData {
-    public var Close: Float64 = 0.0
-    public var Upper: Float64 = 0.0
-    public var Middle: Float64 = 0.0
-    public var Lower: Float64 = 0.0
+    public var close: Float64 = 0.0
+    public var upper: Float64 = 0.0
+    public var middle: Float64 = 0.0
+    public var lower: Float64 = 0.0
 }
 
 @Test
 public func test_envelope_sma_basic() {
-    let input = ReadFromCsvFile<EnvelopeData>("src/test/testdata/trend/envelope_sma.csv")
+    let input = Csv<EnvelopeData>().readFromFile("src/test/testdata/trend/envelope_sma.csv")
     let inputs = Duplicate(input, 4)
-    let closing = h.Map(inputs[0], { d: EnvelopeData => d.Close })
-    let expectedUpper = h.Map(inputs[1], { d: EnvelopeData => d.Upper })
-    let expectedMiddle = h.Map(inputs[2], { d: EnvelopeData => d.Middle })
-    let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.Lower })
+    let closing = h.Map(inputs[0], { d: EnvelopeData => d.close })
+    let expectedUpper = h.Map(inputs[1], { d: EnvelopeData => d.upper })
+    let expectedMiddle = h.Map(inputs[2], { d: EnvelopeData => d.middle })
+    let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.lower })
 
     let envelope = Envelope()
     let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.compute(closing)
@@ -50,12 +50,12 @@ public func test_envelope_sma_basic() {
 
 @Test
 public func test_envelope_ema_basic() {
-    let input = ReadFromCsvFile<EnvelopeData>("src/test/testdata/trend/envelope_ema.csv")
+    let input = Csv<EnvelopeData>().readFromFile("src/test/testdata/trend/envelope_ema.csv")
     let inputs = Duplicate(input, 4)
-    let closing = h.Map(inputs[0], { d: EnvelopeData => d.Close })
-    let expectedUpper = h.Map(inputs[1], { d: EnvelopeData => d.Upper })
-    let expectedMiddle = h.Map(inputs[2], { d: EnvelopeData => d.Middle })
-    let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.Lower })
+    let closing = h.Map(inputs[0], { d: EnvelopeData => d.close })
+    let expectedUpper = h.Map(inputs[1], { d: EnvelopeData => d.upper })
+    let expectedMiddle = h.Map(inputs[2], { d: EnvelopeData => d.middle })
+    let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.lower })
 
     let envelope = Envelope(Ema(), 20.0)
     let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.compute(closing)

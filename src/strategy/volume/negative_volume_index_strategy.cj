@@ -27,7 +27,7 @@ public class NegativeVolumeIndexStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "Negative Volume Index Strategy (${EmaIndicator.Period})"
+        return "Negative Volume Index Strategy (${EmaIndicator.period})"
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
@@ -62,13 +62,13 @@ public class NegativeVolumeIndexStrategy <: Strategy {
 
         closingsDup[1] = Skip(closingsDup[1], period)
 
-        var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
+        var (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
         actions = Skip(actions, period)
         outcomesRaw = Skip(outcomesRaw, period)
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closingsDup[1]))

@@ -49,11 +49,11 @@ public class KdjStrategy <: Strategy {
         d = Shift(d, Indicator.idlePeriod(), 0.0)
         j = Shift(j, Indicator.idlePeriod(), 0.0)
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[4])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[0]))

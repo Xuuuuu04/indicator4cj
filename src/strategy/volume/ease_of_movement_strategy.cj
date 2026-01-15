@@ -44,13 +44,13 @@ public class EaseOfMovementStrategy <: Strategy {
 
         let emvs = Indicator.compute(highs, lows, volumes)
 
-        var (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[5])
+        var (actions, outcomesRaw) = computeWithOutcome(this, snaps[5])
         actions = Skip(actions, Indicator.idlePeriod())
         outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings))

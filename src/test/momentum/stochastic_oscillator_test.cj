@@ -5,15 +5,15 @@ import indicator4cj.helper.*
 import indicator4cj.momentum.*
 
 public class StochRow {
-    public let High: Float64
-    public let Low: Float64
-    public let Close: Float64
+    public let high: Float64
+    public let low: Float64
+    public let close: Float64
     public let K: Float64
     public let D: Float64
     public init(High: Float64, Low: Float64, Close: Float64, K: Float64, D: Float64) {
-        this.High = High
-        this.Low = Low
-        this.Close = Close
+        this.high = High
+        this.low = Low
+        this.close = Close
         this.K = K
         this.D = D
     }
@@ -21,11 +21,11 @@ public class StochRow {
 
 @Test
 public func stochastic_oscillator_basic() {
-    let input = ReadFromCsvFile<StochRow>("src/test/testdata/momentum/stochastic_oscillator.csv")
+    let input = Csv<StochRow>().readFromFile("src/test/testdata/momentum/stochastic_oscillator.csv")
     let inputs = Duplicate(input, 5)
-    let highs = Map(inputs[0], { d: StochRow => d.High })
-    let lows = Map(inputs[1], { d: StochRow => d.Low })
-    let closes = Map(inputs[2], { d: StochRow => d.Close })
+    let highs = Map(inputs[0], { d: StochRow => d.high })
+    let lows = Map(inputs[1], { d: StochRow => d.low })
+    let closes = Map(inputs[2], { d: StochRow => d.close })
     var expK = Map(inputs[3], { d: StochRow => d.K })
     var expD = Map(inputs[4], { d: StochRow => d.D })
 

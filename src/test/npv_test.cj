@@ -12,10 +12,10 @@ import indicator4cj.valuation.*
 class NpvTest {
     @TestCase
     public func npv_basic() {
-        let input = ReadFromCsvFile<NpvRow>("src/test/testdata/valuation/npv.csv")
+        let input = Csv<NpvRow>().readFromFile("src/test/testdata/valuation/npv.csv")
         for (row in input) {
             let cashFlows = parseFlows(row.CashFlows)
-            let actual = RoundDigit(Npv(row.Rate, cashFlows), 2)
+            let actual = RoundDigit(npv(row.Rate, cashFlows), 2)
             @Expect(actual, row.NPV)
         }
     }

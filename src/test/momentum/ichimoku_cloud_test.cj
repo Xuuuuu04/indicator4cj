@@ -5,18 +5,18 @@ import indicator4cj.helper.*
 import indicator4cj.momentum.*
 
 public class IchimokuRow {
-    public let High: Float64
-    public let Low: Float64
-    public let Close: Float64
+    public let high: Float64
+    public let low: Float64
+    public let close: Float64
     public let Tenkan: Float64
     public let Kijun: Float64
     public let SenkouA: Float64
     public let SenkouB: Float64
     public let Chikou: Float64
     public init(High: Float64, Low: Float64, Close: Float64, Tenkan: Float64, Kijun: Float64, SenkouA: Float64, SenkouB: Float64, Chikou: Float64) {
-        this.High = High
-        this.Low = Low
-        this.Close = Close
+        this.high = High
+        this.low = Low
+        this.close = Close
         this.Tenkan = Tenkan
         this.Kijun = Kijun
         this.SenkouA = SenkouA
@@ -27,11 +27,11 @@ public class IchimokuRow {
 
 @Test
 public func ichimoku_cloud_basic() {
-    let input = ReadFromCsvFile<IchimokuRow>("src/test/testdata/momentum/ichimoku_cloud.csv")
+    let input = Csv<IchimokuRow>().readFromFile("src/test/testdata/momentum/ichimoku_cloud.csv")
     let inputs = Duplicate(input, 8)
-    let highs = Map(inputs[0], { d: IchimokuRow => d.High })
-    let lows = Map(inputs[1], { d: IchimokuRow => d.Low })
-    let closes = Map(inputs[2], { d: IchimokuRow => d.Close })
+    let highs = Map(inputs[0], { d: IchimokuRow => d.high })
+    let lows = Map(inputs[1], { d: IchimokuRow => d.low })
+    let closes = Map(inputs[2], { d: IchimokuRow => d.close })
     var expTenkan = Map(inputs[3], { d: IchimokuRow => d.Tenkan })
     var expKijun = Map(inputs[4], { d: IchimokuRow => d.Kijun })
     var expA = Map(inputs[5], { d: IchimokuRow => d.SenkouA })

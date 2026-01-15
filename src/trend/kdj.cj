@@ -25,7 +25,7 @@ public class Kdj {
         let highest = MovingMaxInd.compute(high)
         let lowests = Duplicate(MovingMinInd.compute(low), 2)
 
-        let closingShift = Skip(closing, MovingMaxInd.Period - 1)
+        let closingShift = Skip(closing, MovingMaxInd.period - 1)
 
         let rsv = MultiplyBy(
             Divide(
@@ -38,8 +38,8 @@ public class Kdj {
         let ks = Duplicate(Sma1.compute(rsv), 3)
         let ds = Duplicate(Sma2.compute(ks[0]), 2)
 
-        ks[1] = Skip(ks[1], Sma2.Period - 1)
-        ks[2] = Skip(ks[2], Sma2.Period - 1)
+        ks[1] = Skip(ks[1], Sma2.period - 1)
+        ks[2] = Skip(ks[2], Sma2.period - 1)
 
         let j = Subtract(MultiplyBy(ks[1], 3.0), MultiplyBy(ds[0], 2.0))
 
@@ -47,7 +47,7 @@ public class Kdj {
     }
 
     public func idlePeriod(): Int64 {
-        return MovingMaxInd.Period + Sma1.Period + Sma2.Period - 3
+        return MovingMaxInd.period + Sma1.period + Sma2.period - 3
     }
 }
 

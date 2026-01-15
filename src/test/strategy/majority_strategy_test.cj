@@ -10,13 +10,13 @@ import indicator4cj.strategy.trend.*
 
 @Test
 public func majority_strategy_basic() {
-    let snapshots = ReadFromCsvFile<Snapshot>("src/test/testdata/strategy/repository/brk-b.csv")
-    let results = ReadFromCsvFile<Result>("src/test/testdata/strategy/majority.csv")
+    let snapshots = Csv<Snapshot>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
+    let results = Csv<Result>().readFromFile("src/test/testdata/strategy/majority.csv")
     let expected = h.Map(results, { r: Result => ActionFromInt(r.Action) })
 
     let s = NewMajorityStrategy("Majority Strategy")
-    s.Strategies.add(NewBuyAndHoldStrategy())
-    s.Strategies.add(NewMacdStrategy())
+    s.Strategies.add(BuyAndHoldStrategy())
+    s.Strategies.add(MacdStrategy())
 
     let actual = s.compute(snapshots)
     match (h.CheckEquals<Action>(actual, expected)) {

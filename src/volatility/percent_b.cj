@@ -7,7 +7,7 @@ public class PercentB {
     private let _bands = BollingerBands()
 
     public init() {}
-    public init(period: Int64) { _bands.Period = period }
+    public init(period: Int64) { _bands.period = period }
 
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let closes = Duplicate(closings, 2)
@@ -22,6 +22,6 @@ public class PercentB {
 
     public func idlePeriod(): Int64 { return _bands.idlePeriod() }
 
-    public func toString(): String { return "%B(${_bands.Period})" }
+    public func toString(): String { return "%B(${_bands.period})" }
 }
 

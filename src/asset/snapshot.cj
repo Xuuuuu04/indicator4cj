@@ -7,60 +7,60 @@ import indicator4cj.helper.*
 // 对齐 Go 版 Snapshot，全字段以便 CSV 读取与后续策略使用。
 // 修改为 class 以支持反射填充 (CSV)。
 public class Snapshot <: ToString {
-    public var Date: DateTime
-    public var Open: Float64
-    public var High: Float64
-    public var Low: Float64
-    public var Close: Float64
-    public var AdjClose: Float64
-    public var Volume: Float64
+    public var date: DateTime
+    public var open: Float64
+    public var high: Float64
+    public var low: Float64
+    public var close: Float64
+    public var adjClose: Float64
+    public var volume: Float64
 
     public func toString(): String {
-        return "Snapshot(${Date}, ${Close})"
+        return "Snapshot(${date}, ${close})"
     }
 
     // 无参构造用于 CSV 反射填充。
     public Snapshot() {
-        this.Date = DateTime.now()
-        this.Open = 0.0
-        this.High = 0.0
-        this.Low = 0.0
-        this.Close = 0.0
-        this.AdjClose = 0.0
-        this.Volume = 0.0
+        this.date = DateTime.now()
+        this.open = 0.0
+        this.high = 0.0
+        this.low = 0.0
+        this.close = 0.0
+        this.adjClose = 0.0
+        this.volume = 0.0
     }
 
     public init(Date: DateTime, Open: Float64, High: Float64, Low: Float64, Close: Float64, AdjClose: Float64, Volume: Float64) {
-        this.Date = Date
-        this.Open = Open
-        this.High = High
-        this.Low = Low
-        this.Close = Close
-        this.AdjClose = AdjClose
-        this.Volume = Volume
+        this.date = Date
+        this.open = Open
+        this.high = High
+        this.low = Low
+        this.close = Close
+        this.adjClose = AdjClose
+        this.volume = Volume
     }
 }
 
 public func SnapshotsAsDates(snaps: Iterator<Snapshot>): Iterator<DateTime> {
-    return Map(snaps, { s: Snapshot => s.Date })
+    return Map(snaps, { s: Snapshot => s.date })
 }
 
 public func SnapshotsAsOpenings(snaps: Iterator<Snapshot>): Iterator<Float64> {
-    return Map(snaps, { s: Snapshot => s.Open })
+    return Map(snaps, { s: Snapshot => s.open })
 }
 
 public func SnapshotsAsHighs(snaps: Iterator<Snapshot>): Iterator<Float64> {
-    return Map(snaps, { s: Snapshot => s.High })
+    return Map(snaps, { s: Snapshot => s.high })
 }
 
 public func SnapshotsAsLows(snaps: Iterator<Snapshot>): Iterator<Float64> {
-    return Map(snaps, { s: Snapshot => s.Low })
+    return Map(snaps, { s: Snapshot => s.low })
 }
 
 public func SnapshotsAsClosings(snaps: Iterator<Snapshot>): Iterator<Float64> {
-    return Map(snaps, { s: Snapshot => s.Close })
+    return Map(snaps, { s: Snapshot => s.close })
 }
 
 public func SnapshotsAsVolumes(snaps: Iterator<Snapshot>): Iterator<Float64> {
-    return Map(snaps, { s: Snapshot => s.Volume })
+    return Map(snaps, { s: Snapshot => s.volume })
 }

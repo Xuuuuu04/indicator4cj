@@ -34,7 +34,7 @@ public class SQLRepository <: Repository {
         let iter = get(name)
         let filtered = ArrayList<Snapshot>()
         for (s in iter) {
-            if ((s.Date == date) || (s.Date > date)) {
+            if ((s.date == date) || (s.date > date)) {
                 filtered.add(s)
             }
         }
@@ -46,7 +46,7 @@ public class SQLRepository <: Repository {
         let iter = get(name)
         var last: Option<DateTime> = None
         for (s in iter) {
-            last = Some(s.Date)
+            last = Some(s.date)
         }
         return match (last) {
             case Some(dt) => dt

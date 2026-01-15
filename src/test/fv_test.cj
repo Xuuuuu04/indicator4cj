@@ -9,9 +9,9 @@ import indicator4cj.valuation.*
 class FvTest {
     @TestCase
     public func fv_basic() {
-        let input = ReadFromCsvFile<FvRow>("src/test/testdata/valuation/fv.csv")
+        let input = Csv<FvRow>().readFromFile("src/test/testdata/valuation/fv.csv")
         for (row in input) {
-            let actual = RoundDigit(Fv(row.PV, row.Rate, row.Years), 2)
+            let actual = RoundDigit(fv(row.PV, row.Rate, row.Years), 2)
             @Expect(actual, row.FV)
         }
     }

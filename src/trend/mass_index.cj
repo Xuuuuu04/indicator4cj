@@ -28,7 +28,7 @@ public class MassIndex {
         )
 
         let ema2 = Ema2.compute(ema1[0])
-        ema1[1] = Skip(ema1[1], Ema2.Period - 1)
+        ema1[1] = Skip(ema1[1], Ema2.period - 1)
 
         let ratio = Divide(ema1[1], ema2)
         let mi = MovingSumInd.compute(ratio)
@@ -36,7 +36,7 @@ public class MassIndex {
     }
 
     public func idlePeriod(): Int64 {
-        return Ema1.Period + Ema2.Period + MovingSumInd.Period - 3
+        return Ema1.period + Ema2.period + MovingSumInd.period - 3
     }
 }
 

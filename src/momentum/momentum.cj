@@ -5,15 +5,15 @@ import indicator4cj.helper.*
 
 // Momentum = Current - value N steps before.
 public class Momentum {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = 10 }
-    public init(period: Int64) { this.Period = period }
+    public init() { this.period = 10 }
+    public init(period: Int64) { this.period = period }
 
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        return Change(values, Period)
+        return Change(values, this.period)
     }
 
-    public func idlePeriod(): Int64 { return Period }
+    public func idlePeriod(): Int64 { return this.period }
 }
 

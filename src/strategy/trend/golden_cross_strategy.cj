@@ -45,11 +45,11 @@ public class GoldenCrossStrategy <: Strategy {
 
         let (fastEmas, slowEmas) = calculateEmas(snaps[2])
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[3])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
         let annotations = Skip(ActionsToAnnotations(actions), SlowEma.idlePeriod())
         let outcomes = MultiplyBy(Skip(outcomesRaw, SlowEma.idlePeriod()), 100.0)
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[0]))

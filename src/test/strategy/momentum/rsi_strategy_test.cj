@@ -10,57 +10,57 @@ import indicator4cj.strategy.*
 import indicator4cj.strategy.momentum.*
 
 public class RsiStrategyRow {
-    public var Action: Int64
-    public init() { this.Action = 0 }
-    public init(Action: Int64) { this.Action = Action }
+    public var action: Int64
+    public init() { this.action = 0 }
+    public init(Action: Int64) { this.action = Action }
 }
 
 private class SnapshotCsvRow {
-    public var Date: String
-    public var Open: Float64
-    public var High: Float64
-    public var Low: Float64
-    public var Close: Float64
-    public var AdjClose: Float64
-    public var Volume: Float64
+    public var date: String
+    public var open: Float64
+    public var high: Float64
+    public var low: Float64
+    public var close: Float64
+    public var adjClose: Float64
+    public var volume: Float64
     public init() {
-        this.Date = ""
-        this.Open = 0.0
-        this.High = 0.0
-        this.Low = 0.0
-        this.Close = 0.0
-        this.AdjClose = 0.0
-        this.Volume = 0.0
+        this.date = ""
+        this.open = 0.0
+        this.high = 0.0
+        this.low = 0.0
+        this.close = 0.0
+        this.adjClose = 0.0
+        this.volume = 0.0
     }
     public init(Date: String, Open: Float64, High: Float64, Low: Float64, Close: Float64, AdjClose: Float64, Volume: Float64) {
-        this.Date = Date
-        this.Open = Open
-        this.High = High
-        this.Low = Low
-        this.Close = Close
-        this.AdjClose = AdjClose
-        this.Volume = Volume
+        this.date = Date
+        this.open = Open
+        this.high = High
+        this.low = Low
+        this.close = Close
+        this.adjClose = AdjClose
+        this.volume = Volume
     }
 }
 
 @Test
 public func rsi_strategy_basic() {
-    let snapIter = ReadFromCsvFile<SnapshotCsvRow>("src/test/testdata/strategy/repository/brk-b.csv")
+    let snapIter = Csv<SnapshotCsvRow>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let snaps = ArrayList<Snapshot>()
     while (true) {
         match (snapIter.next()) {
             case Some(s) =>
-                let dt = DateTime.parse(s.Date, "yyyy-MM-dd")
-                snaps.add(Snapshot(dt, s.Open, s.High, s.Low, s.Close, s.AdjClose, s.Volume))
+                let dt = DateTime.parse(s.date, "yyyy-MM-dd")
+                snaps.add(Snapshot(dt, s.open, s.high, s.low, s.close, s.adjClose, s.volume))
             case None => break
         }
     }
     if (snaps.size != 251) {
         fail("snapshot size ${snaps.size} expected 251")
     }
-    let expectedRows = ReadFromCsvFile<RsiStrategyRow>("src/test/testdata/strategy/momentum/rsi_strategy.csv")
+    let expectedRows = Csv<RsiStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/rsi_strategy.csv")
     let expectedList = ArrayList<Action>()
-    let expectedIter = h.Map(expectedRows, { r: RsiStrategyRow => ActionFromInt(r.Action) })
+    let expectedIter = h.Map(expectedRows, { r: RsiStrategyRow => ActionFromInt(r.action) })
     while (true) {
         match (expectedIter.next()) {
             case Some(a) => expectedList.add(a)
@@ -90,13 +90,13 @@ public func rsi_strategy_basic() {
 
 @Test
 public func rsi_strategy_report() {
-    let rows = ReadFromCsvFile<SnapshotCsvRow>("src/test/testdata/strategy/repository/brk-b.csv")
+    let rows = Csv<SnapshotCsvRow>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let snaps = ArrayList<Snapshot>()
     while (true) {
         match (rows.next()) {
             case Some(s) =>
-                let dt = DateTime.parse(s.Date, "yyyy-MM-dd")
-                snaps.add(Snapshot(dt, s.Open, s.High, s.Low, s.Close, s.AdjClose, s.Volume))
+                let dt = DateTime.parse(s.date, "yyyy-MM-dd")
+                snaps.add(Snapshot(dt, s.open, s.high, s.low, s.close, s.adjClose, s.volume))
             case None => break
         }
     }

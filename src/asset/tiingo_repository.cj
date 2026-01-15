@@ -61,13 +61,13 @@ public struct TiingoEndOfDay {
     public func ToSnapshot(): Snapshot {
         // 与 Go 版一致：使用调整后的价格与成交量。
         let s = Snapshot()
-        s.Date = Date
-        s.Open = AdjOpen
-        s.High = AdjHigh
-        s.Low = AdjLow
-        s.Close = AdjClose
-        s.AdjClose = AdjClose
-        s.Volume = Float64(AdjVolume)
+        s.date = Date
+        s.open = AdjOpen
+        s.high = AdjHigh
+        s.low = AdjLow
+        s.close = AdjClose
+        s.adjClose = AdjClose
+        s.volume = Float64(AdjVolume)
         return s
     }
 }
@@ -188,13 +188,13 @@ public class TiingoRepository <: Repository {
         let adjVolume = getInt(obj, "adjVolume", getInt(obj, "volume", 0))
 
         let s = Snapshot()
-        s.Date = date
-        s.Open = adjOpen
-        s.High = adjHigh
-        s.Low = adjLow
-        s.Close = adjClose
-        s.AdjClose = adjClose
-        s.Volume = Float64(adjVolume)
+        s.date = date
+        s.open = adjOpen
+        s.high = adjHigh
+        s.low = adjLow
+        s.close = adjClose
+        s.adjClose = adjClose
+        s.volume = Float64(adjVolume)
         return s
     }
 

@@ -32,7 +32,7 @@ public class InMemoryRepository <: Repository {
     // 如果资产不存在，抛出 Exception
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
         let snapshots = get(name)
-        return Filter(snapshots, { s: Snapshot => (s.Date == date) || (s.Date > date) })
+        return Filter(snapshots, { s: Snapshot => (s.date == date) || (s.date > date) })
     }
 
     // lastDate 返回指定资产的最新日期
@@ -41,7 +41,7 @@ public class InMemoryRepository <: Repository {
         let iter = get(name)
         var last: Option<DateTime> = None
         for (snapshot in iter) {
-            last = Some(snapshot.Date)
+            last = Some(snapshot.date)
         }
         return match (last) {
             case Some(dt) => dt

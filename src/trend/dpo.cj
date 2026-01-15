@@ -7,23 +7,23 @@ public const DefaultDpoPeriod: Int64 = 20
 
 // Detrended Price Oscillator (DPO)
 public class Dpo {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = DefaultDpoPeriod }
+    public init() { this.period = DefaultDpoPeriod }
     public init(period: Int64) {
         if (period <= 1) {
-            this.Period = DefaultDpoPeriod
+            this.period = DefaultDpoPeriod
         } else {
-            this.Period = period
+            this.period = period
         }
     }
 
     public func compute(closing: Iterator<Float64>): Iterator<Float64> {
-        let k = Period / 2 + 1
+        let k = this.period / 2 + 1
         let dup = Duplicate(closing, 2)
 
         let sma = Sma()
-        sma.Period = Period
+        sma.period = this.period
         let smaOut = sma.compute(dup[0])
 
         let skippedClosing = Skip(dup[1], idlePeriod())
@@ -35,9 +35,9 @@ public class Dpo {
     }
 
     public func idlePeriod(): Int64 {
-        return (Period - 1) + (Period / 2 + 1)
+        return (this.period - 1) + (this.period / 2 + 1)
     }
 
-    public func toString(): String { return "DPO(${Period})" }
+    public func toString(): String { return "DPO(${this.period})" }
 }
 

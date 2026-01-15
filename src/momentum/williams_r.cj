@@ -6,16 +6,16 @@ import indicator4cj.trend.*
 
 // Williams %R = -100 * (HighestHigh - Close) / (HighestHigh - LowestLow)
 public class WilliamsR {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = 14 }
-    public init(period: Int64) { this.Period = period }
+    public init() { this.period = 14 }
+    public init(period: Int64) { this.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
-        let hh = MovingMax(Period).compute(highs)
-        let ll = MovingMin(Period).compute(lows)
+        let hh = MovingMax(this.period).compute(highs)
+        let ll = MovingMin(this.period).compute(lows)
 
-        let closesAdj = Skip(closes, Period - 1)
+        let closesAdj = Skip(closes, this.period - 1)
 
         return Operate3(hh, ll, closesAdj, { h: Float64, l: Float64, c: Float64 =>
             let denom = h - l
@@ -24,6 +24,6 @@ public class WilliamsR {
         })
     }
 
-    public func idlePeriod(): Int64 { return Period - 1 }
+    public func idlePeriod(): Int64 { return this.period - 1 }
 }
 

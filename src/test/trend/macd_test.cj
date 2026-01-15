@@ -7,12 +7,12 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class MacdRow {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Macd: Float64 = 0.0
     public var Signal: Float64 = 0.0
     public init() {}
     public init(Close: Float64, Macd: Float64, Signal: Float64) {
-        this.Close = Close
+        this.close = Close
         this.Macd = Macd
         this.Signal = Signal
     }
@@ -20,9 +20,9 @@ public class MacdRow {
 
 @Test
 public func macd_basic() {
-    let input = ReadFromCsvFile<MacdRow>("src/test/testdata/trend/macd.csv")
+    let input = Csv<MacdRow>().readFromFile("src/test/testdata/trend/macd.csv")
     let inputs = Duplicate(input, 2)
-    let closes = Map(inputs[0], { d: MacdRow => d.Close })
+    let closes = Map(inputs[0], { d: MacdRow => d.close })
     
     let macd = Macd() 
     let (actualMacdsRaw, actualSignalsRaw) = macd.compute(closes)

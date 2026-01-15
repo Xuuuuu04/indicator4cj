@@ -48,7 +48,7 @@ private func parseValue(typeName: String, raw: String, format: String): Option<A
                 return None
             }
         case _ =>
-            // 兼容全限定名，例如 std.time.DateTime
+            // 兼容全限定名，例如 std.time.dateTime
             if (typeName.contains("DateTime")) {
                 try {
                     let dt = DateTime.parse(raw, format)

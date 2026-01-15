@@ -9,11 +9,11 @@ import indicator4cj.volume.*
 class EmvTest {
     @TestCase
     public func emv_basic() {
-        let input = ReadFromCsvFile<EmvRow>("src/test/testdata/volume/emv.csv")
+        let input = Csv<EmvRow>().readFromFile("src/test/testdata/volume/emv.csv")
         let inputs = Duplicate(input, 4)
-        let highs = Map(inputs[0], { m => m.High })
-        let lows = Map(inputs[1], { m => m.Low })
-        let volumes = Map(inputs[2], { m => Float64(m.Volume) })
+        let highs = Map(inputs[0], { m => m.high })
+        let lows = Map(inputs[1], { m => m.low })
+        let volumes = Map(inputs[2], { m => Float64(m.volume) })
         var expected = Map(inputs[3], { m => m.Emv })
 
         let emv = Emv()
@@ -28,9 +28,9 @@ class EmvTest {
 }
 
 public class EmvRow {
-    public var High: Float64 = 0.0
-    public var Low: Float64 = 0.0
-    public var Volume: Int64 = 0
+    public var high: Float64 = 0.0
+    public var low: Float64 = 0.0
+    public var volume: Int64 = 0
     public var Emv: Float64 = 0.0
     public init() {}
 }

@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.volatility.*
 
 class MovingStdData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Std: Float64 = 0.0
 }
 
 @Test
 public func test_moving_std_basic() {
-    let input = ReadFromCsvFile<MovingStdData>("src/test/testdata/volatility/moving_std.csv")
+    let input = Csv<MovingStdData>().readFromFile("src/test/testdata/volatility/moving_std.csv")
     let inputs = Duplicate(input, 2)
-    let closings = h.Map(inputs[0], { d: MovingStdData => d.Close })
+    let closings = h.Map(inputs[0], { d: MovingStdData => d.close })
     let expected = h.Map(inputs[1], { d: MovingStdData => d.Std })
 
     let std = MovingStd(20)

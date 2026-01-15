@@ -8,15 +8,15 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class KamaData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Kama: Float64 = 0.0
 }
 
 @Test
 public func test_kama_basic() {
-    let input = ReadFromCsvFile<KamaData>("src/test/testdata/trend/kama.csv")
+    let input = Csv<KamaData>().readFromFile("src/test/testdata/trend/kama.csv")
     let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { row: KamaData => row.Close })
+    let closing = h.Map(inputs[0], { row: KamaData => row.close })
     let expected = h.Map(inputs[1], { row: KamaData => row.Kama })
 
     let kama = Kama()

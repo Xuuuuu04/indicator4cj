@@ -5,19 +5,19 @@ import indicator4cj.helper.*
 import indicator4cj.momentum.*
 
 public class RsiRow {
-    public let Close: Float64
+    public let close: Float64
     public let Rsi: Float64
     public init(Close: Float64, Rsi: Float64) {
-        this.Close = Close
+        this.close = Close
         this.Rsi = Rsi
     }
 }
 
 @Test
 public func rsi_basic() {
-    let input = ReadFromCsvFile<RsiRow>("src/test/testdata/momentum/rsi.csv")
+    let input = Csv<RsiRow>().readFromFile("src/test/testdata/momentum/rsi.csv")
     let inputs = Duplicate(input, 2)
-    let closes = Map(inputs[0], { d: RsiRow => d.Close })
+    let closes = Map(inputs[0], { d: RsiRow => d.close })
     var expected = Map(inputs[1], { d: RsiRow => d.Rsi })
 
     let rsi = Rsi(14)

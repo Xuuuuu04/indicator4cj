@@ -102,6 +102,22 @@ public class Csv<T> {
         f.close()
     }
 
+    public func appendOrWriteToFile(path: String, rows: Iterator<T>) {
+        // 如果文件存在且非空则 append，否则写入新文件。
+        try {
+            let f = File(path, OpenMode.Read)
+            let size = f.length
+            f.close()
+            if (size > 0) {
+                appendToFile(path, rows)
+                return
+            }
+        } catch (_: Exception) {
+            // ignore, treat as new file
+        }
+        writeToFile(path, rows)
+    }
+
     private func writeCommon(output: OutputStream, rows: Iterator<T>, writeHeader: Bool) {
         let typeInfo = ClassTypeInfo.of<T>()
         let vars = ArrayList<InstanceVariableInfo>()
@@ -145,42 +161,7 @@ public func WithCsvDefaultDateTimeFormat<T>(format: String): CsvOption<T> {
     return CsvOption<T>({ c => c.defaultDateTimeFormat = format })
 }
 
-public func ReadFromCsvFile<T>(path: String, options: ArrayList<CsvOption<T>>): Iterator<T> {
-    return Csv<T>(options).readFromFile(path)
-}
 
-public func ReadFromCsvFile<T>(path: String): Iterator<T> {
-    return Csv<T>().readFromFile(path)
-}
-
-// NewCsv 创建 CSV 实例（公共 API，保持向后兼容）
-public func NewCsv<T>(options: ArrayList<CsvOption<T>>): Csv<T> {
-    return Csv<T>(options)
-}
-
-public func NewCsv<T>(): Csv<T> {
-    return Csv<T>()
-}
-
-public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>, options: ArrayList<CsvOption<T>>) {
-    // 如果文件存在且非空则 append，否则写入新文件。
-    try {
-        let f = File(path, OpenMode.Read)
-        let size = f.length
-        f.close()
-        if (size > 0) {
-            Csv<T>(options).appendToFile(path, rows)
-            return
-        }
-    } catch (_: Exception) {
-        // ignore, treat as new file
-    }
-    Csv<T>(options).writeToFile(path, rows)
-}
-
-public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>) {
-    AppendOrWriteToCsvFile(path, rows, ArrayList<CsvOption<T>>())
-}
 
 // ------------- 工具函数 -------------
 

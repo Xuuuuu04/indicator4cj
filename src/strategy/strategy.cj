@@ -11,7 +11,7 @@ public interface Strategy {
     func report(snapshots: Iterator<Snapshot>): Report
 }
 
-public func ActionSources(strategies: ArrayList<Strategy>, snapshots: Iterator<Snapshot>): ArrayList<Iterator<Action>> {
+public func actionSources(strategies: ArrayList<Strategy>, snapshots: Iterator<Snapshot>): ArrayList<Iterator<Action>> {
     let snaps = Duplicate(snapshots, strategies.size)
     let res = ArrayList<Iterator<Action>>()
     var i: Int64 = 0
@@ -22,7 +22,7 @@ public func ActionSources(strategies: ArrayList<Strategy>, snapshots: Iterator<S
     return res
 }
 
-public func ComputeWithOutcome(s: Strategy, snapshots: Iterator<Snapshot>): (Iterator<Action>, Iterator<Float64>) {
+public func computeWithOutcome(s: Strategy, snapshots: Iterator<Snapshot>): (Iterator<Action>, Iterator<Float64>) {
     let snaps = Duplicate(snapshots, 2)
     let actions = Duplicate(s.compute(snaps[0]), 2)
     let closings = SnapshotsAsClosings(snaps[1])
@@ -30,7 +30,7 @@ public func ComputeWithOutcome(s: Strategy, snapshots: Iterator<Snapshot>): (Ite
     return (actions[0], outcomes)
 }
 
-public func AllStrategies(): ArrayList<Strategy> {
+public func allStrategies(): ArrayList<Strategy> {
     let arr = ArrayList<Strategy>()
     arr.add(BuyAndHoldStrategy())
     return arr

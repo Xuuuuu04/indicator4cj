@@ -22,7 +22,7 @@ class ReflectTest {
     public func set_time() {
         let obj = Sample()
         let ty = ClassTypeInfo.of<Sample>()
-        let field = ty.getInstanceVariable("Date")
+        let field = ty.getInstanceVariable("date")
         setReflectValue(field, obj, "2023-11-28 19:14:00", "yyyy-MM-dd HH:mm:ss")
         let s = getReflectValue(field, obj, "yyyy-MM-dd HH:mm:ss")
         @Expect(s, "2023-11-28 19:14:00")
@@ -44,6 +44,6 @@ class ReflectTest {
 
 public class Sample {
     public var Value: Int64 = 0
-    public var Date: DateTime = DateTime.now()
+    public var date: DateTime = DateTime.now()
 }
 

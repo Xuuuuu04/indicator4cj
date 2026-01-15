@@ -8,7 +8,7 @@ import indicator4cj.helper as h
 import indicator4cj.trend.*
 
 class WmaData {
-    public var Close: Float64 = 0.0
+    public var close: Float64 = 0.0
     public var Wma3: Float64 = 0.0
     public var Wma5: Float64 = 0.0
 }
@@ -33,9 +33,9 @@ public func test_wma_simple() {
 
 @Test
 public func test_wma_basic() {
-    let input = ReadFromCsvFile<WmaData>("src/test/testdata/trend/wma.csv")
+    let input = Csv<WmaData>().readFromFile("src/test/testdata/trend/wma.csv")
     let inputs = Duplicate(input, 3)
-    let closing = Duplicate(h.Map(inputs[0], { row: WmaData => row.Close }), 2)
+    let closing = Duplicate(h.Map(inputs[0], { row: WmaData => row.close }), 2)
     let expectedWma3 = h.Map(inputs[1], { row: WmaData => row.Wma3 })
     let expectedWma5 = h.Map(inputs[2], { row: WmaData => row.Wma5 })
 

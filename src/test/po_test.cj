@@ -5,25 +5,25 @@ import indicator4cj.helper.*
 import indicator4cj.volatility.*
 
 public class PoRow {
-    public let High: Float64
-    public let Low: Float64
-    public let Close: Float64
+    public let high: Float64
+    public let low: Float64
+    public let close: Float64
     public let Po: Float64
     public init(High: Float64, Low: Float64, Close: Float64, Po: Float64) {
-        this.High = High
-        this.Low = Low
-        this.Close = Close
+        this.high = High
+        this.low = Low
+        this.close = Close
         this.Po = Po
     }
 }
 
 @Test
 public func po_basic() {
-    let input = ReadFromCsvFile<PoRow>("src/test/testdata/volatility/po.csv")
+    let input = Csv<PoRow>().readFromFile("src/test/testdata/volatility/po.csv")
     let inputs = Duplicate(input, 4)
-    let highs = Map(inputs[0], { d: PoRow => d.High })
-    let lows = Map(inputs[1], { d: PoRow => d.Low })
-    let closings = Map(inputs[2], { d: PoRow => d.Close })
+    let highs = Map(inputs[0], { d: PoRow => d.high })
+    let lows = Map(inputs[1], { d: PoRow => d.low })
+    let closings = Map(inputs[2], { d: PoRow => d.close })
     var expected = Map(inputs[3], { d: PoRow => d.Po })
 
     let po = Po(50)

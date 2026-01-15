@@ -5,26 +5,26 @@ import indicator4cj.helper.*
 import indicator4cj.volatility.*
 
 public class DonchianRow {
-    public let Close: Float64
-    public let Upper: Float64
-    public let Middle: Float64
-    public let Lower: Float64
+    public let close: Float64
+    public let upper: Float64
+    public let middle: Float64
+    public let lower: Float64
     public init(Close: Float64, Upper: Float64, Middle: Float64, Lower: Float64) {
-        this.Close = Close
-        this.Upper = Upper
-        this.Middle = Middle
-        this.Lower = Lower
+        this.close = Close
+        this.upper = Upper
+        this.middle = Middle
+        this.lower = Lower
     }
 }
 
 @Test
 public func donchian_channel_basic() {
-    let input = ReadFromCsvFile<DonchianRow>("src/test/testdata/volatility/donchian_channel.csv")
+    let input = Csv<DonchianRow>().readFromFile("src/test/testdata/volatility/donchian_channel.csv")
     let inputs = Duplicate(input, 4)
-    let closings = Map(inputs[0], { d: DonchianRow => d.Close })
-    let expUpper = Map(inputs[1], { d: DonchianRow => d.Upper })
-    let expMiddle = Map(inputs[2], { d: DonchianRow => d.Middle })
-    let expLower = Map(inputs[3], { d: DonchianRow => d.Lower })
+    let closings = Map(inputs[0], { d: DonchianRow => d.close })
+    let expUpper = Map(inputs[1], { d: DonchianRow => d.upper })
+    let expMiddle = Map(inputs[2], { d: DonchianRow => d.middle })
+    let expLower = Map(inputs[3], { d: DonchianRow => d.lower })
 
     let dc = DonchianChannel()
     var (actUpper, actMiddle, actLower) = dc.compute(closings)

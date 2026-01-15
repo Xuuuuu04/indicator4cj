@@ -5,15 +5,15 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class UlcerIndex {
-    public var Period: Int64
+    public var period: Int64
 
-    public init() { this.Period = 14 }
-    public init(period: Int64) { this.Period = period }
+    public init() { this.period = 14 }
+    public init(period: Int64) { this.period = period }
 
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let cs = Duplicate(closings, 2)
 
-        let movingMax = MovingMax(Period)
+        let movingMax = MovingMax(this.period)
         let highs = Duplicate(movingMax.compute(cs[0]), 2)
 
         cs[1] = Skip(cs[1], movingMax.idlePeriod())
@@ -27,12 +27,12 @@ public class UlcerIndex {
         )
 
         let sma = Sma()
-        sma.Period = Period
+        sma.period = this.period
         let squaredAvg = Pow(sma.compute(drawdown), 2.0)
 
         return Sqrt(squaredAvg)
     }
 
-    public func idlePeriod(): Int64 { return (Period - 1) * 2 }
+    public func idlePeriod(): Int64 { return (this.period - 1) * 2 }
 }
 

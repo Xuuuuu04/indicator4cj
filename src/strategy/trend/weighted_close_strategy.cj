@@ -57,7 +57,7 @@ public class WeightedCloseStrategy <: Strategy {
         let wcDup = Duplicate(Indicator.compute(highs, lows, closingsDup[1]), 2)
         let mas = Ma.compute(wcDup[1])
 
-        let (actions, outcomesRaw) = ComputeWithOutcome(this, snaps[4])
+        let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
         var annotations = ActionsToAnnotations(actions)
         var outcomes = MultiplyBy(outcomesRaw, 100.0)
 
@@ -67,7 +67,7 @@ public class WeightedCloseStrategy <: Strategy {
         annotations = Skip(annotations, Ma.idlePeriod())
         outcomes = Skip(outcomes, Ma.idlePeriod())
 
-        let report = NewReport(this.name(), dates)
+        let report = Report(this.name(), dates)
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closingsDup[0]))
         report.addColumn(NumericReportColumn("Weighted Close", wcDup[0]))

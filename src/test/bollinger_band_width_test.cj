@@ -5,19 +5,19 @@ import indicator4cj.helper.*
 import indicator4cj.volatility.*
 
 public class BollingerBandWidthRow {
-    public let Close: Float64
+    public let close: Float64
     public let Width: Float64
     public init(c: Float64, w: Float64) {
-        this.Close = c
+        this.close = c
         this.Width = w
     }
 }
 
 @Test
 public func bollinger_band_width_basic() {
-    let input = ReadFromCsvFile<BollingerBandWidthRow>("src/test/testdata/volatility/bollinger_band_width.csv")
+    let input = Csv<BollingerBandWidthRow>().readFromFile("src/test/testdata/volatility/bollinger_band_width.csv")
     let inputs = Duplicate(input, 2)
-    let closings = Map(inputs[0], { d: BollingerBandWidthRow => d.Close })
+    let closings = Map(inputs[0], { d: BollingerBandWidthRow => d.close })
     let expected = Map(inputs[1], { d: BollingerBandWidthRow => d.Width })
 
     let bbw = BollingerBandWidth()

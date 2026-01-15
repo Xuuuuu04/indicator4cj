@@ -10,39 +10,39 @@ import indicator4cj.strategy.*
 import indicator4cj.strategy.momentum.*
 
 public class AoSnapshotRow {
-    public var Date: String
-    public var Open: Float64
-    public var High: Float64
-    public var Low: Float64
-    public var Close: Float64
-    public var AdjClose: Float64
-    public var Volume: Float64
+    public var date: String
+    public var open: Float64
+    public var high: Float64
+    public var low: Float64
+    public var close: Float64
+    public var adjClose: Float64
+    public var volume: Float64
     public init() {
-        this.Date = ""
-        this.Open = 0.0
-        this.High = 0.0
-        this.Low = 0.0
-        this.Close = 0.0
-        this.AdjClose = 0.0
-        this.Volume = 0.0
+        this.date = ""
+        this.open = 0.0
+        this.high = 0.0
+        this.low = 0.0
+        this.close = 0.0
+        this.adjClose = 0.0
+        this.volume = 0.0
     }
 }
 
 public class AoStrategyRow {
-    public var Action: Int64
-    public init() { this.Action = 0 }
-    public init(Action: Int64) { this.Action = Action }
+    public var action: Int64
+    public init() { this.action = 0 }
+    public init(Action: Int64) { this.action = Action }
 }
 
 @Test
 public func awesome_oscillator_strategy_basic() {
-    let snapRows = ReadFromCsvFile<AoSnapshotRow>("src/test/testdata/strategy/repository/brk-b.csv")
+    let snapRows = Csv<AoSnapshotRow>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let snaps = ArrayList<Snapshot>()
     while (true) {
         match (snapRows.next()) {
             case Some(r) =>
-                let dt = DateTime.parse(r.Date, "yyyy-MM-dd")
-                snaps.add(Snapshot(dt, r.Open, r.High, r.Low, r.Close, r.AdjClose, r.Volume))
+                let dt = DateTime.parse(r.date, "yyyy-MM-dd")
+                snaps.add(Snapshot(dt, r.open, r.high, r.low, r.close, r.adjClose, r.volume))
             case None => break
         }
     }
@@ -50,9 +50,9 @@ public func awesome_oscillator_strategy_basic() {
         fail("snapshot size ${snaps.size} expected 251")
     }
 
-    let expectedRows = ReadFromCsvFile<AoStrategyRow>("src/test/testdata/strategy/momentum/awesome_oscillator.csv")
+    let expectedRows = Csv<AoStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/awesome_oscillator.csv")
     let expectedList = ArrayList<Action>()
-    let expectedIter = h.Map(expectedRows, { r: AoStrategyRow => ActionFromInt(r.Action) })
+    let expectedIter = h.Map(expectedRows, { r: AoStrategyRow => ActionFromInt(r.action) })
     while (true) {
         match (expectedIter.next()) {
             case Some(a) => expectedList.add(a)
@@ -82,13 +82,13 @@ public func awesome_oscillator_strategy_basic() {
 
 // @Test
 public func awesome_oscillator_strategy_report() {
-    let snapRows = ReadFromCsvFile<AoSnapshotRow>("src/test/testdata/strategy/repository/brk-b.csv")
+    let snapRows = Csv<AoSnapshotRow>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let snaps = ArrayList<Snapshot>()
     while (true) {
         match (snapRows.next()) {
             case Some(r) =>
-                let dt = DateTime.parse(r.Date, "yyyy-MM-dd")
-                snaps.add(Snapshot(dt, r.Open, r.High, r.Low, r.Close, r.AdjClose, r.Volume))
+                let dt = DateTime.parse(r.date, "yyyy-MM-dd")
+                snaps.add(Snapshot(dt, r.open, r.high, r.low, r.close, r.adjClose, r.volume))
             case None => break
         }
     }
