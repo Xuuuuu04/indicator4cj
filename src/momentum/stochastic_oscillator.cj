@@ -7,9 +7,9 @@ import indicator4cj.trend.*
 // Stochastic Oscillator: %K = 100 * (Close - LowN) / (HighN - LowN)
 // %D = SMA(%K, period)
 public class StochasticOscillator {
-    public var period: Int64
+    public var period: Int64 = 14
 
-    public StochasticOscillator() { this.period = 14 }
+    public StochasticOscillator() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {

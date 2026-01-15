@@ -6,13 +6,12 @@ import indicator4cj.trend.*
 
 // Stochastic RSI：对 RSI 序列再应用随机振荡计算，与 Go 版保持一致。
 public class StochasticRsi {
-    public var period: Int64
+    public var period: Int64 = 14
     public let RsiIndicator: Rsi
     public let MinIndicator: MovingMin
     public let MaxIndicator: MovingMax
 
     public StochasticRsi() {
-        this.period = 14
         this.RsiIndicator = Rsi(this.period)
         this.MinIndicator = MovingMin(this.period)
         this.MaxIndicator = MovingMax(this.period)

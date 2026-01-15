@@ -6,9 +6,9 @@ import indicator4cj.trend.*
 
 // QStick = SMA(period, Close - Open)
 public class Qstick {
-    public var period: Int64
+    public var period: Int64 = 20
 
-    public Qstick() { this.period = 20 }
+    public Qstick() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(opens: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
