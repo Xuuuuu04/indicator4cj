@@ -26,7 +26,7 @@ public func stochastic_rsi_basic() {
     var act = sr.compute(closes)
     act = RoundDigits(act, 2)
 
-    let skip = sr.IdlePeriod()
+    let skip = sr.idlePeriod()
     expK = Skip(expK, skip)
     act = Skip(act, skip)
 

@@ -32,7 +32,7 @@ public func chaikin_basic() {
     let co = ChaikinOscillator()
     var actual = co.compute(highs, lows, closes, volumes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, co.IdlePeriod())
+    expected = Skip(expected, co.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

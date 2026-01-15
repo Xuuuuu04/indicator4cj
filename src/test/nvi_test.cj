@@ -17,7 +17,7 @@ class NviTest {
 
         let nvi = Nvi()
         let actual = RoundDigits(nvi.compute(closings, volumes), 2)
-        expected = Skip(expected, nvi.IdlePeriod())
+        expected = Skip(expected, nvi.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

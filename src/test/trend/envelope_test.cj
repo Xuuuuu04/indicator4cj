@@ -23,16 +23,16 @@ public func test_envelope_sma_basic() {
     let expectedMiddle = h.Map(inputs[2], { d: EnvelopeData => d.Middle })
     let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.Lower })
 
-    let envelope = NewEnvelopeWithSma()
+    let envelope = Envelope()
     let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.compute(closing)
 
     let actualUpper = h.RoundDigits(actualUpperRaw, 2)
     let actualMiddle = h.RoundDigits(actualMiddleRaw, 2)
     let actualLower = h.RoundDigits(actualLowerRaw, 2)
 
-    let expUpperSkipped = h.Skip(expectedUpper, envelope.IdlePeriod())
-    let expMiddleSkipped = h.Skip(expectedMiddle, envelope.IdlePeriod())
-    let expLowerSkipped = h.Skip(expectedLower, envelope.IdlePeriod())
+    let expUpperSkipped = h.Skip(expectedUpper, envelope.idlePeriod())
+    let expMiddleSkipped = h.Skip(expectedMiddle, envelope.idlePeriod())
+    let expLowerSkipped = h.Skip(expectedLower, envelope.idlePeriod())
 
     match (h.CheckFloatEquals(actualUpper, expUpperSkipped)) {
         case Some(err) => fail("Upper: " + err)
@@ -57,16 +57,16 @@ public func test_envelope_ema_basic() {
     let expectedMiddle = h.Map(inputs[2], { d: EnvelopeData => d.Middle })
     let expectedLower = h.Map(inputs[3], { d: EnvelopeData => d.Lower })
 
-    let envelope = NewEnvelopeWithEma()
+    let envelope = Envelope(Ema(), 20.0)
     let (actualUpperRaw, actualMiddleRaw, actualLowerRaw) = envelope.compute(closing)
 
     let actualUpper = h.RoundDigits(actualUpperRaw, 2)
     let actualMiddle = h.RoundDigits(actualMiddleRaw, 2)
     let actualLower = h.RoundDigits(actualLowerRaw, 2)
 
-    let expUpperSkipped = h.Skip(expectedUpper, envelope.IdlePeriod())
-    let expMiddleSkipped = h.Skip(expectedMiddle, envelope.IdlePeriod())
-    let expLowerSkipped = h.Skip(expectedLower, envelope.IdlePeriod())
+    let expUpperSkipped = h.Skip(expectedUpper, envelope.idlePeriod())
+    let expMiddleSkipped = h.Skip(expectedMiddle, envelope.idlePeriod())
+    let expLowerSkipped = h.Skip(expectedLower, envelope.idlePeriod())
 
     match (h.CheckFloatEquals(actualUpper, expUpperSkipped)) {
         case Some(err) => fail("Upper: " + err)

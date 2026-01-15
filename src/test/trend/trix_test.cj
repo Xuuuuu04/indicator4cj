@@ -21,7 +21,7 @@ public func test_trix_basic() {
 
     let trix = Trix()
     let actual = h.RoundDigits(trix.compute(closing), 4)
-    let expectedSkipped = h.Skip(expected, trix.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, trix.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)

@@ -28,7 +28,7 @@ public func po_basic() {
 
     let po = Po(50)
     var actual = RoundDigits(po.compute(highs, lows, closings), 2)
-    expected = Skip(expected, po.IdlePeriod())
+    expected = Skip(expected, po.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

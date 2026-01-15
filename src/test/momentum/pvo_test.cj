@@ -23,7 +23,7 @@ public func pvo_basic() {
     let pvo = Pvo()
     var actual = pvo.compute(volumes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, pvo.IdlePeriod())
+    expected = Skip(expected, pvo.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

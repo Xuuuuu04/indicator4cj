@@ -32,7 +32,7 @@ public func donchian_channel_basic() {
     actMiddle = RoundDigits(actMiddle, 2)
     actLower = RoundDigits(actLower, 2)
 
-    let skip = dc.IdlePeriod()
+    let skip = dc.idlePeriod()
     let eUpper = Skip(expUpper, skip)
     let eMiddle = Skip(expMiddle, skip)
     let eLower = Skip(expLower, skip)

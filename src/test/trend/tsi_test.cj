@@ -21,7 +21,7 @@ public func test_tsi_basic() {
 
     let tsi = Tsi()
     let actual = h.RoundDigits(tsi.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, tsi.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, tsi.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)

@@ -19,7 +19,7 @@ class MfiTest {
 
         let mfi = Mfi()
         let actual = RoundDigits(mfi.compute(highs, lows, closings, volumes), 2)
-        expected = Skip(expected, mfi.IdlePeriod())
+        expected = Skip(expected, mfi.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

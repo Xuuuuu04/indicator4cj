@@ -21,7 +21,7 @@ public func test_moving_std_basic() {
 
     let std = MovingStd(20)
     let actual = h.RoundDigits(std.compute(closings), 2)
-    let expectedSkipped = h.Skip(expected, std.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, std.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)

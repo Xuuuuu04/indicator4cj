@@ -32,7 +32,7 @@ public func bollinger_bands_basic() {
     actualMiddle = RoundDigits(actualMiddle, 2)
     actualLower = RoundDigits(actualLower, 2)
 
-    let idle = bb.IdlePeriod()
+    let idle = bb.idlePeriod()
     let expUpper = Skip(upper, idle)
     let expMiddle = Skip(middle, idle)
     let expLower = Skip(lower, idle)

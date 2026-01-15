@@ -19,7 +19,7 @@ class AdTest {
 
         let ad = Ad()
         let actual = RoundDigits(ad.compute(highs, lows, closes, volumes), 2)
-        expected = Skip(expected, ad.IdlePeriod())
+        expected = Skip(expected, ad.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

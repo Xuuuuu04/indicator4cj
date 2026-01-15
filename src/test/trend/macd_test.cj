@@ -30,7 +30,7 @@ public func macd_basic() {
     let actualMacds = RoundDigits(actualMacdsRaw, 2)
     let actualSignals = RoundDigits(actualSignalsRaw, 2)
 
-    let expectedStream = Skip(inputs[1], macd.IdlePeriod())
+    let expectedStream = Skip(inputs[1], macd.idlePeriod())
 
     for (row in expectedStream) {
         match (actualMacds.next()) {

@@ -17,7 +17,7 @@ class FiTest {
 
         let fi = Fi()
         let actual = RoundDigits(fi.compute(closes, volumes), 2)
-        expected = Skip(expected, fi.IdlePeriod())
+        expected = Skip(expected, fi.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

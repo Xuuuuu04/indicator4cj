@@ -26,7 +26,7 @@ public func awesome_basic() {
     let ao = AwesomeOscillator()
     var actual = ao.compute(highs, lows)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, ao.IdlePeriod())
+    expected = Skip(expected, ao.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

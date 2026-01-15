@@ -34,7 +34,7 @@ public func stochastic_oscillator_basic() {
     actK = RoundDigits(actK, 2)
     actD = RoundDigits(actD, 2)
 
-    let skip = so.IdlePeriod()
+    let skip = so.idlePeriod()
     expK = Skip(expK, skip)
     expD = Skip(expD, skip)
 

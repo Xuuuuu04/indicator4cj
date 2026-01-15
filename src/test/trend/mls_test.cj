@@ -29,8 +29,8 @@ public func test_mls_basic() {
     let actualM = h.RoundDigits(actualMraw, 2)
     let actualB = h.RoundDigits(actualBRaw, 2)
 
-    let expMSkipped = h.Skip(expectedM, mls.IdlePeriod())
-    let expBSkipped = h.Skip(expectedB, mls.IdlePeriod())
+    let expMSkipped = h.Skip(expectedM, mls.idlePeriod())
+    let expBSkipped = h.Skip(expectedB, mls.idlePeriod())
 
     match (h.CheckFloatEquals(actualM, expMSkipped)) {
         case Some(err) => fail("M: " + err)

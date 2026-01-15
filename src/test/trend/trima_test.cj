@@ -22,7 +22,7 @@ public func test_trima_odd_basic() {
     let trima = Trima()
     trima.Period = 15
     let actual = h.RoundDigits(trima.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, trima.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, trima.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)
@@ -40,7 +40,7 @@ public func test_trima_even_basic() {
     let trima = Trima()
     trima.Period = 20
     let actual = h.RoundDigits(trima.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, trima.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, trima.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)

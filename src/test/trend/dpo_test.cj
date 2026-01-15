@@ -21,7 +21,7 @@ public func test_dpo_basic() {
 
     let dpo = Dpo()
     let actual = h.RoundDigits(dpo.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, dpo.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, dpo.idlePeriod())
 
     let actIter = actual
     let expIter = expectedSkipped

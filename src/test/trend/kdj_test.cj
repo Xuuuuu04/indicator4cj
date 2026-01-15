@@ -34,9 +34,9 @@ public func test_kdj_basic() {
     let actualD = h.RoundDigits(actualDRaw, 2)
     let actualJ = h.RoundDigits(actualJRaw, 2)
 
-    let actualKShifted = h.Shift(actualK, kdj.IdlePeriod(), 0.0)
-    let actualDShifted = h.Shift(actualD, kdj.IdlePeriod(), 0.0)
-    let actualJShifted = h.Shift(actualJ, kdj.IdlePeriod(), 0.0)
+    let actualKShifted = h.Shift(actualK, kdj.idlePeriod(), 0.0)
+    let actualDShifted = h.Shift(actualD, kdj.idlePeriod(), 0.0)
+    let actualJShifted = h.Shift(actualJ, kdj.idlePeriod(), 0.0)
 
     match (h.CheckFloatEquals(actualKShifted, expectedK)) {
         case Some(err) => fail("K: " + err.toString())

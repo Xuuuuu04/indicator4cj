@@ -23,7 +23,7 @@ public func momentum_basic() {
     let m = Momentum(10)
     var actual = m.compute(closes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, m.IdlePeriod())
+    expected = Skip(expected, m.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

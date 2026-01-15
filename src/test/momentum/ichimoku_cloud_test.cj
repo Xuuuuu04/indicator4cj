@@ -46,7 +46,7 @@ public func ichimoku_cloud_basic() {
     actB = RoundDigits(actB, 2)
     actChikou = RoundDigits(actChikou, 2)
 
-    let skip = ichimoku.IdlePeriod()
+    let skip = ichimoku.idlePeriod()
     expTenkan = Skip(expTenkan, skip)
     expKijun = Skip(expKijun, skip)
     expA = Skip(expA, skip)

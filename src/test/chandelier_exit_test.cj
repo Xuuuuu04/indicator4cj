@@ -34,7 +34,7 @@ public func chandelier_exit_basic() {
     actLong = RoundDigits(actLong, 2)
     actShort = RoundDigits(actShort, 2)
 
-    let skip = ce.IdlePeriod()
+    let skip = ce.idlePeriod()
     let eLong = Skip(expLong, skip)
     let eShort = Skip(expShort, skip)
 

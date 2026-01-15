@@ -17,7 +17,7 @@ class VptTest {
 
         let vpt = Vpt()
         let actual = RoundDigits(vpt.compute(closings, volumes), 2)
-        expected = Skip(expected, vpt.IdlePeriod())
+        expected = Skip(expected, vpt.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

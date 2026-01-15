@@ -23,7 +23,7 @@ public func test_mlr_basic() {
 
     let mlr = Mlr(4)
     let actual = h.RoundDigits(mlr.compute(x, y), 2)
-    let expectedSkipped = h.Skip(expected, mlr.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, mlr.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)

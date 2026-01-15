@@ -21,7 +21,7 @@ public func test_rma_basic() {
 
     let rma = Rma(15)
     let actual = h.RoundDigits(rma.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, rma.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, rma.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)

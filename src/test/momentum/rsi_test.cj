@@ -23,7 +23,7 @@ public func rsi_basic() {
     let rsi = Rsi(14)
     var actual = rsi.compute(closes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, rsi.IdlePeriod())
+    expected = Skip(expected, rsi.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

@@ -31,7 +31,7 @@ public func test_aroon_basic() {
     let expectedUp = h.Map(inputs[2], { row: AroonData => row.Up })
     let expectedDown = h.Map(inputs[3], { row: AroonData => row.Down })
 
-    let aroon = NewAroon()
+    let aroon = Aroon()
     let expectedUpSkipped = h.Skip(expectedUp, aroon.Period - 1)
     let expectedDownSkipped = h.Skip(expectedDown, aroon.Period - 1)
 
@@ -72,7 +72,7 @@ public func test_aroon_compare_rust() {
     let expectedUp = h.Map(inputs[2], { row: AroonData => row.Up })
     let expectedDown = h.Map(inputs[3], { row: AroonData => row.Down })
 
-    let aroon = NewAroon()
+    let aroon = Aroon()
     let expectedUpSkipped = h.Skip(expectedUp, aroon.Period - 1)
     let expectedDownSkipped = h.Skip(expectedDown, aroon.Period - 1)
 

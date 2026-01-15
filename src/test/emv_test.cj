@@ -18,7 +18,7 @@ class EmvTest {
 
         let emv = Emv()
         let actual = RoundDigits(emv.compute(highs, lows, volumes), 2)
-        expected = Skip(expected, emv.IdlePeriod())
+        expected = Skip(expected, emv.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

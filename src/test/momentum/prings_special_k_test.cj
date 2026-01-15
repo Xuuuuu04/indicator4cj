@@ -23,7 +23,7 @@ public func prings_special_k_basic() {
     let sk = PringsSpecialK()
     var actual = sk.compute(closes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, sk.IdlePeriod())
+    expected = Skip(expected, sk.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

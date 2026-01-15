@@ -18,7 +18,7 @@ class MfmTest {
 
         let mfm = Mfm()
         let actual = RoundDigits(mfm.compute(highs, lows, closes), 2)
-        expected = Skip(expected, mfm.IdlePeriod())
+        expected = Skip(expected, mfm.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

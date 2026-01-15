@@ -24,7 +24,7 @@ public func percent_b_basic() {
     var actual = pb.compute(closing)
     actual = RoundDigits(actual, 2)
 
-    let exp = Skip(expected, pb.IdlePeriod())
+    let exp = Skip(expected, pb.idlePeriod())
 
     match (CheckEquals(actual, exp)) {
         case Some(err) => fail(err)

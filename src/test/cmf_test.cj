@@ -19,7 +19,7 @@ class CmfTest {
 
         let cmf = Cmf()
         let actual = RoundDigits(cmf.compute(highs, lows, closes, volumes), 2)
-        expected = Skip(expected, cmf.IdlePeriod())
+        expected = Skip(expected, cmf.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

@@ -24,7 +24,7 @@ public func ulcer_index_basic() {
     var actual = ui.compute(closings)
     actual = RoundDigits(actual, 2)
 
-    expected = Skip(expected, ui.IdlePeriod())
+    expected = Skip(expected, ui.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

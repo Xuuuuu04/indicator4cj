@@ -19,7 +19,7 @@ class MfvTest {
 
         let mfv = Mfv()
         let actual = RoundDigits(mfv.compute(highs, lows, closes, volumes), 2)
-        expected = Skip(expected, mfv.IdlePeriod())
+        expected = Skip(expected, mfv.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

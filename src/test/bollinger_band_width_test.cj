@@ -24,7 +24,7 @@ public func bollinger_band_width_basic() {
     var actual = bbw.compute(closings)
     actual = RoundDigits(actual, 2)
 
-    let exp = Skip(expected, bbw.IdlePeriod())
+    let exp = Skip(expected, bbw.idlePeriod())
 
     match (CheckEquals(actual, exp)) {
         case Some(err) => fail(err)

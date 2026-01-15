@@ -17,7 +17,7 @@ class VwapTest {
 
         let vwap = Vwap()
         let actual = RoundDigits(vwap.compute(closings, volumes), 2)
-        expected = Skip(expected, vwap.IdlePeriod())
+        expected = Skip(expected, vwap.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

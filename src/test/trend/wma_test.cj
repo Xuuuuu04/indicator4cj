@@ -22,7 +22,7 @@ public func test_wma_simple() {
     let input = ArrayList<Float64>([1.0, 2.0, 3.0, 4.0, 5.0])
     let expected = ArrayList<Float64>([10.0/6.0, 16.0/6.0, 22.0/6.0])
     
-    let wma = NewWmaWith(3)
+    let wma = Wma(3)
     let actual = wma.compute(input.iterator())
     
     match (h.CheckFloatEquals(actual, expected.iterator())) {
@@ -39,14 +39,14 @@ public func test_wma_basic() {
     let expectedWma3 = h.Map(inputs[1], { row: WmaData => row.Wma3 })
     let expectedWma5 = h.Map(inputs[2], { row: WmaData => row.Wma5 })
 
-    let wma3 = NewWmaWith(3)
-    let wma5 = NewWmaWith(5)
+    let wma3 = Wma(3)
+    let wma5 = Wma(5)
 
     let actualWma3 = h.RoundDigits(wma3.compute(closing[0]), 3)
     let actualWma5 = h.RoundDigits(wma5.compute(closing[1]), 3)
 
-    let expWma3Skipped = h.Skip(expectedWma3, wma3.IdlePeriod())
-    let expWma5Skipped = h.Skip(expectedWma5, wma5.IdlePeriod())
+    let expWma3Skipped = h.Skip(expectedWma3, wma3.idlePeriod())
+    let expWma5Skipped = h.Skip(expectedWma5, wma5.idlePeriod())
 
     match (h.CheckFloatEquals(actualWma3, expWma3Skipped)) {
         case Some(err) => fail("WMA3 mismatch: " + err.toString())

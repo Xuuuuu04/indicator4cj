@@ -21,7 +21,7 @@ public func test_tema_basic() {
 
     let tema = Tema()
     let actual = h.RoundDigits(tema.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, tema.IdlePeriod())
+    let expectedSkipped = h.Skip(expected, tema.idlePeriod())
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)

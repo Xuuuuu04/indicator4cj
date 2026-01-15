@@ -28,7 +28,7 @@ public func super_trend_basic() {
 
     let st = SuperTrend()
     var actual = RoundDigits(st.compute(highs, lows, closings), 2)
-    expected = Skip(expected, st.IdlePeriod())
+    expected = Skip(expected, st.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

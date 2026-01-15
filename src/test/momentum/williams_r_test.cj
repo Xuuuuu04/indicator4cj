@@ -29,7 +29,7 @@ public func williams_r_basic() {
     let wr = WilliamsR(14)
     var actual = wr.compute(highs, lows, closes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, wr.IdlePeriod())
+    expected = Skip(expected, wr.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

@@ -38,7 +38,7 @@ public func keltner_channel_basic() {
     actMiddle = RoundDigits(actMiddle, 2)
     actLower = RoundDigits(actLower, 2)
 
-    let skip = kc.IdlePeriod()
+    let skip = kc.idlePeriod()
     let eUpper = Skip(expUpper, skip)
     let eMiddle = Skip(expMiddle, skip)
     let eLower = Skip(expLower, skip)

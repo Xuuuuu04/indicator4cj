@@ -17,7 +17,7 @@ class ObvTest {
 
         let obv = Obv()
         let actual = RoundDigits(obv.compute(closings, volumes), 2)
-        expected = Skip(expected, obv.IdlePeriod())
+        expected = Skip(expected, obv.idlePeriod())
 
         match (CheckEquals(actual, expected)) {
             case Some(err) => @Fail(err)

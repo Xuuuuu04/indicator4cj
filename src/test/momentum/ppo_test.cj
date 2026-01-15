@@ -23,7 +23,7 @@ public func ppo_basic() {
     let ppo = Ppo()
     var actual = ppo.compute(closes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, ppo.IdlePeriod())
+    expected = Skip(expected, ppo.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

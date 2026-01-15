@@ -26,7 +26,7 @@ public func qstick_basic() {
     let qs = Qstick(10)
     var actual = qs.compute(opens, closes)
     actual = RoundDigits(actual, 2)
-    expected = Skip(expected, qs.IdlePeriod())
+    expected = Skip(expected, qs.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)

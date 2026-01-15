@@ -23,7 +23,7 @@ public func test_mass_index_basic() {
 
     let mi = MassIndex()
     let actual = h.RoundDigits(mi.compute(highs, lows), 2)
-    let actualShifted = h.Shift(actual, mi.IdlePeriod(), 0.0)
+    let actualShifted = h.Shift(actual, mi.idlePeriod(), 0.0)
 
     match (h.CheckFloatEquals(actualShifted, expected)) {
         case Some(err) => fail(err.toString())

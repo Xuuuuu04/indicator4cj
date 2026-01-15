@@ -28,7 +28,7 @@ public func atr_basic() {
 
     let atr = Atr(50)
     var actual = RoundDigits(atr.compute(highs, lows, closings), 2)
-    expected = Skip(expected, atr.IdlePeriod())
+    expected = Skip(expected, atr.idlePeriod())
 
     match (CheckEquals(actual, expected)) {
         case Some(err) => fail(err)
