@@ -6,26 +6,26 @@ public func Count<T>(from: Int64, other: Iterator<T>): Iterator<Int64> {
 }
 
 public class CountIterator<T> <: Iterator<Int64> {
-    private var _current: Int64
-    private let _other: Iterator<T>
-    private var _done: Bool = false
+    private var current: Int64
+    private let other: Iterator<T>
+    private var done: Bool = false
 
     public init(_start: Int64, other: Iterator<T>) {
-        this._current = _start
-        this._other = other
+        this.current = _start
+        this.other = other
     }
 
     public func next(): Option<Int64> {
-        if (_done) {
+        if (done) {
             return None
         }
-        match (_other.next()) {
+        match (other.next()) {
             case Some(_) =>
-                let v = _current
-                _current += 1
+                let v = current
+                current += 1
                 return Some(v)
             case None =>
-                _done = true
+                done = true
                 return None
         }
     }

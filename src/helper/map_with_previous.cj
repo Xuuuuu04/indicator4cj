@@ -6,27 +6,27 @@ public func MapWithPrevious<F, T>(iter: Iterator<F>, f: (T, F) -> T, previous: T
 }
 
 public class MapWithPreviousIterator<F, T> <: Iterator<T> {
-    private let _source: Iterator<F>
-    private let _f: (T, F) -> T
-    private var _prev: T
-    private var _done: Bool = false
+    private let source: Iterator<F>
+    private let f: (T, F) -> T
+    private var prev: T
+    private var done: Bool = false
 
     public init(source: Iterator<F>, f: (T, F) -> T, previous: T) {
-        this._source = source
-        this._f = f
-        this._prev = previous
+        this.source = source
+        this.f = f
+        this.prev = previous
     }
 
     public func next(): Option<T> {
-        if (_done) {
+        if (done) {
             return None
         }
-        match (_source.next()) {
+        match (source.next()) {
             case Some(n) =>
-                _prev = _f(_prev, n)
-                return Some(_prev)
+                prev = f(prev, n)
+                return Some(prev)
             case None =>
-                _done = true
+                done = true
                 return None
         }
     }

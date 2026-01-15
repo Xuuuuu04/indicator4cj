@@ -16,23 +16,23 @@ public interface ReportColumn {
 
 // Report 报告类，用于生成和输出数据报告
 public class Report {
-    private var _title: String
-    private let _date: Iterator<DateTime>
-    private let _columns = ArrayList<ReportColumn>()
-    private let _views = ArrayList<ArrayList<Int64>>()
-    private var _dateFormat: String = "yyyy-MM-dd"
-    private var _generatedOn: String
+    private var title: String
+    private let date: Iterator<DateTime>
+    private let columns = ArrayList<ReportColumn>()
+    private let views = ArrayList<ArrayList<Int64>>()
+    private var dateFormat: String = "yyyy-MM-dd"
+    private var generatedOn: String
 
     public Report(title: String, date: Iterator<DateTime>) {
-        this._title = title
-        this._date = date
-        this._generatedOn = DateTime.now().format("yyyy-MM-dd HH:mm:ss")
-        this._views.add(ArrayList<Int64>()) // 主图
+        this.title = title
+        this.date = date
+        this.generatedOn = DateTime.now().format("yyyy-MM-dd HH:mm:ss")
+        this.views.add(ArrayList<Int64>()) // 主图
     }
 
     public func addChart(): Int64 {
-        _views.add(ArrayList<Int64>())
-        return Int64(_views.size - 1)
+        views.add(ArrayList<Int64>())
+        return Int64(views.size - 1)
     }
 
     public func addColumn(column: ReportColumn): Unit {
@@ -40,29 +40,29 @@ public class Report {
     }
 
     public func addColumn(column: ReportColumn, charts: ArrayList<Int64>): Unit {
-        _columns.add(column)
-        let cid = Int64(_columns.size) // 1-based 索引
+        columns.add(column)
+        let cid = Int64(columns.size) // 1-based 索引
         if (charts.isEmpty()) {
-            _views[0].add(cid)
+            views[0].add(cid)
         } else {
             for (c in charts) {
-                _views[Int64(c)].add(cid)
+                views[Int64(c)].add(cid)
             }
         }
     }
 
     public func writeToWriter(writer: OutputStream) {
         // 简化：输出为可读文本而非模板。
-        let header = "Report: ${_title}\nGeneratedOn: ${_generatedOn}\n"
+        let header = "Report: ${title}\nGeneratedOn: ${generatedOn}\n"
         writer.write(ascii(header))
 
         // 输出数据行：Date + 每列 value()
         while (true) {
-            match (_date.next()) {
+            match (date.next()) {
                 case Some(dt) =>
                     let sb = StringBuilder()
-                    sb.append(dt.format(_dateFormat))
-                    for (col in _columns) {
+                    sb.append(dt.format(dateFormat))
+                    for (col in columns) {
                         sb.append(",")
                         sb.append(col.value())
                     }

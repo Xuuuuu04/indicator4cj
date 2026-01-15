@@ -8,24 +8,24 @@ public func SkipLast<T>(iter: Iterator<T>, count: Int64): Iterator<T> {
 }
 
 public class SkipLastIterator<T> <: Iterator<T> {
-    private let _source: Iterator<T>
-    private let _tail: Int64
-    private let _buffer = ArrayList<T>()
+    private let source: Iterator<T>
+    private let tail: Int64
+    private let buffer = ArrayList<T>()
 
     public init(source: Iterator<T>, tail: Int64) {
-        this._source = source
-        this._tail = tail
+        this.source = source
+        this.tail = tail
     }
 
     public func next(): Option<T> {
-        while (_buffer.size <= _tail) {
-            match (_source.next()) {
-                case Some(v) => _buffer.add(v)
+        while (buffer.size <= tail) {
+            match (source.next()) {
+                case Some(v) => buffer.add(v)
                 case None => return None
             }
         }
-        let out = _buffer[0]
-        _buffer.remove(at: 0)
+        let out = buffer[0]
+        buffer.remove(at: 0)
         return Some(out)
     }
 }

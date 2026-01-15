@@ -5,17 +5,17 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class KeltnerChannel {
-    private let _atr: Atr
-    private let _ema: Ema
+    private let atr: Atr
+    private let ema: Ema
 
     public KeltnerChannel() {
-        this._atr = Atr(20)
-        this._ema = Ema(20)
+        this.atr = Atr(20)
+        this.ema = Ema(20)
     }
 
     public init(period: Int64) {
-        this._atr = Atr(period)
-        this._ema = Ema(period)
+        this.atr = Atr(period)
+        this.ema = Ema(period)
     }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
@@ -23,15 +23,15 @@ public class KeltnerChannel {
 
         let atrs = Duplicate(
             MultiplyBy(
-                _atr.compute(highs, lows, closes[0]),
+                atr.compute(highs, lows, closes[0]),
                 2.0
             ),
             2
         )
 
-        let skipCnt = _atr.idlePeriod() - _ema.idlePeriod()
+        let skipCnt = atr.idlePeriod() - ema.idlePeriod()
         let middles = Duplicate(
-            Skip(_ema.compute(closes[1]), skipCnt),
+            Skip(ema.compute(closes[1]), skipCnt),
             3
         )
 
@@ -41,6 +41,6 @@ public class KeltnerChannel {
         return (upper, middles[2], lower)
     }
 
-    public func idlePeriod(): Int64 { return _atr.idlePeriod() }
+    public func idlePeriod(): Int64 { return atr.idlePeriod() }
 }
 

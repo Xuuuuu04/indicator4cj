@@ -18,37 +18,37 @@ public class Rma {
 }
 
 private class RmaIterator <: Iterator<Float64> {
-    private let _source: Iterator<Float64>
-    private let _period: Int64
-    private var _initialized: Bool = false
-    private var _prev: Float64 = 0.0
+    private let source: Iterator<Float64>
+    private let period: Int64
+    private var initialized: Bool = false
+    private var prev: Float64 = 0.0
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this._source = source
-        this._period = period
+        this.source = source
+        this.period = period
     }
 
     public func next(): Option<Float64> {
         // Initial SMA over first period elements.
-        if (!_initialized) {
+        if (!initialized) {
             let buf = ArrayList<Float64>()
-            while (buf.size < _period) {
-                match (_source.next()) {
+            while (buf.size < period) {
+                match (source.next()) {
                     case Some(v) => buf.add(v)
                     case None => return None
                 }
             }
             var sum: Float64 = 0.0
             for (v in buf) { sum += v }
-            _prev = sum / Float64(_period)
-            _initialized = true
-            return Some(_prev)
+            prev = sum / Float64(period)
+            initialized = true
+            return Some(prev)
         }
 
-        match (_source.next()) {
+        match (source.next()) {
             case Some(v) =>
-                _prev = (_prev * Float64(_period - 1) + v) / Float64(_period)
-                return Some(_prev)
+                prev = (prev * Float64(period - 1) + v) / Float64(period)
+                return Some(prev)
             case None => return None
         }
     }

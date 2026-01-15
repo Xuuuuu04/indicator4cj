@@ -7,19 +7,19 @@ import indicator4cj.asset.*
 
 public class AndStrategy <: Strategy {
     public var Strategies: ArrayList<Strategy>
-    private let _name: String
+    private let strategyName: String
 
     public init(name: String, strategies: ArrayList<Strategy>) {
-        this._name = name
+        this.strategyName = name
         this.Strategies = strategies
     }
 
     public init(name: String) {
-        this._name = name
+        this.strategyName = name
         this.Strategies = ArrayList<Strategy>()
     }
 
-    public func name(): String { return _name }
+    public func name(): String { return strategyName }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let result = ArrayList<Action>()

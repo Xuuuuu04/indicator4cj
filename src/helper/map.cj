@@ -2,17 +2,17 @@ package indicator4cj.helper
 
 // MapIterator 映射迭代器，对源迭代器的每个元素应用映射函数
 public class MapIterator<F, T> <: Iterator<T> {
-    private let _source: Iterator<F>
-    private let _mapper: (F) -> T
+    private let source: Iterator<F>
+    private let mapper: (F) -> T
 
     public init(source: Iterator<F>, mapper: (F) -> T) {
-        this._source = source
-        this._mapper = mapper
+        this.source = source
+        this.mapper = mapper
     }
 
     public func next(): Option<T> {
-        match (_source.next()) {
-            case Some(v) => return Some(_mapper(v))
+        match (source.next()) {
+            case Some(v) => return Some(mapper(v))
             case None => return None
         }
     }

@@ -11,14 +11,14 @@ public class BstNode {
 }
 
 public class Bst {
-    private let _data = ArrayList<Float64>()
+    private let data = ArrayList<Float64>()
 
     public func Insert(value: Float64): Unit {
-        _data.add(value)
+        data.add(value)
     }
 
     public func Contains(value: Float64): Bool {
-        for (v in _data) {
+        for (v in data) {
             if (v == value) {
                 return true
             }
@@ -28,9 +28,9 @@ public class Bst {
 
     public func Remove(value: Float64): Bool {
         var idx: Int64 = 0
-        while (idx < _data.size) {
-            if (_data[idx] == value) {
-                _data.remove(at: idx)
+        while (idx < data.size) {
+            if (data[idx] == value) {
+                data.remove(at: idx)
                 return true
             }
             idx += 1
@@ -39,12 +39,12 @@ public class Bst {
     }
 
     public func Min(): Float64 {
-        if (_data.isEmpty()) {
+        if (data.isEmpty()) {
             return 0.0
         }
-        var m = _data[0]
-        for (i in 1.._data.size) {
-            let v = _data[i]
+        var m = data[0]
+        for (i in 1..data.size) {
+            let v = data[i]
             if (v < m) {
                 m = v
             }
@@ -53,12 +53,12 @@ public class Bst {
     }
 
     public func Max(): Float64 {
-        if (_data.isEmpty()) {
+        if (data.isEmpty()) {
             return 0.0
         }
-        var m = _data[0]
-        for (i in 1.._data.size) {
-            let v = _data[i]
+        var m = data[0]
+        for (i in 1..data.size) {
+            let v = data[i]
             if (v > m) {
                 m = v
             }

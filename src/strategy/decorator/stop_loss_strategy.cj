@@ -51,28 +51,28 @@ public func NewStopLossStrategy(innerStrategy: Strategy, percentage: Float64): S
 }
 
 private class StopLossIterator <: Iterator<Action> {
-    private let _actions: Iterator<Action>
-    private let _closings: Iterator<Float64>
-    private let _percentage: Float64
-    private var _stopLossAt: Float64 = 0.0
+    private let actions: Iterator<Action>
+    private let closings: Iterator<Float64>
+    private let percentage: Float64
+    private var stopLossAt: Float64 = 0.0
 
     public init(actions: Iterator<Action>, closings: Iterator<Float64>, percentage: Float64) {
-        this._actions = actions
-        this._closings = closings
-        this._percentage = percentage
+        this.actions = actions
+        this.closings = closings
+        this.percentage = percentage
     }
 
     public func next(): Option<Action> {
-        match (_actions.next()) {
+        match (actions.next()) {
             case Some(a) =>
-                match (_closings.next()) {
+                match (closings.next()) {
                     case Some(price) =>
-                        if ((a == Action.Buy) && (_stopLossAt == 0.0)) {
-                            _stopLossAt = price * (1.0 - _percentage)
+                        if ((a == Action.Buy) && (stopLossAt == 0.0)) {
+                            stopLossAt = price * (1.0 - percentage)
                             return Some(Action.Buy)
                         }
-                        if ((_stopLossAt != 0.0) && ((a == Action.Sell) || (price <= _stopLossAt))) {
-                            _stopLossAt = 0.0
+                        if ((stopLossAt != 0.0) && ((a == Action.Sell) || (price <= stopLossAt))) {
+                            stopLossAt = 0.0
                             return Some(Action.Sell)
                         }
                         return Some(Action.Hold)

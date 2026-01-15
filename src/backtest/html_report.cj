@@ -29,28 +29,28 @@ private class HtmlReportResult {
 
 // HtmlReport HTML 报告实现，将回测结果生成为 HTML 文件
 public class HtmlReport <: Report {
-    private var _outputDir: String
-    private let _assetResults = HashMap<String, ArrayList<HtmlReportResult>>()
-    private let _bestResults = ArrayList<HtmlReportResult>()
-    private var _writeStrategyReports: Bool = DefaultWriteStrategyReports
-    private var _dateFormat: String = "yyyy-MM-dd"
+    private var outputDir: String
+    private let assetResults = HashMap<String, ArrayList<HtmlReportResult>>()
+    private let bestResults = ArrayList<HtmlReportResult>()
+    private var writeStrategyReports: Bool = DefaultWriteStrategyReports
+    private var dateFormat: String = "yyyy-MM-dd"
 
     public init(outputDir: String) {
-        this._outputDir = outputDir
+        this.outputDir = outputDir
     }
 
     public func begin(assetNames: ArrayList<String>, _: ArrayList<Strategy>): Unit {
-        _bestResults.clear()
-        _assetResults.clear()
+        bestResults.clear()
+        assetResults.clear()
         for (n in assetNames) {
-            _assetResults.add(n, ArrayList<HtmlReportResult>())
+            assetResults.add(n, ArrayList<HtmlReportResult>())
         }
     }
 
     public func assetBegin(name: String, strategies: ArrayList<Strategy>): Unit {
         _ = strategies.size // 标记已使用以消除告警
-        if (!_assetResults.contains(name)) {
-            _assetResults.add(name, ArrayList<HtmlReportResult>())
+        if (!assetResults.contains(name)) {
+            assetResults.add(name, ArrayList<HtmlReportResult>())
         }
     }
 
@@ -79,11 +79,11 @@ public class HtmlReport <: Report {
         let lastOutcome = if (outcomesList.isEmpty()) { 0.0 } else { outcomesList[outcomesList.size - 1] * 100.0 }
 
         let result = HtmlReportResult(assetName, currentStrategy.name(), lastAction, since, lastOutcome, tx)
-        _assetResults[assetName].add(result)
+        assetResults[assetName].add(result)
 
-        if (_writeStrategyReports) {
+        if (writeStrategyReports) {
             let report = currentStrategy.report(snapsList.iterator())
-            let path = _outputDir + "/" + assetName + " - " + currentStrategy.name() + ".txt"
+            let path = outputDir + "/" + assetName + " - " + currentStrategy.name() + ".txt"
             try {
                 report.writeToFile(path)
             } catch (e: Exception) {
@@ -93,10 +93,10 @@ public class HtmlReport <: Report {
     }
 
     public func assetEnd(name: String): Unit {
-        if (!_assetResults.contains(name)) {
+        if (!assetResults.contains(name)) {
             throw Exception("asset not begun: " + name)
         }
-        let results = _assetResults[name]
+        let results = assetResults[name]
         if (results.isEmpty()) {
             return
         }
@@ -105,13 +105,13 @@ public class HtmlReport <: Report {
         for (r in results) {
             if (r.Outcome > best.Outcome) { best = r }
         }
-        _bestResults.add(best)
+        bestResults.add(best)
         writeAssetReport(name, results)
     }
 
     public func end(): Unit {
-        if (!_bestResults.isEmpty()) {
-            writeIndex(_bestResults)
+        if (!bestResults.isEmpty()) {
+            writeIndex(bestResults)
         }
     }
 
@@ -129,7 +129,7 @@ public class HtmlReport <: Report {
             sb += "</tr>\n"
         }
         sb += "</table>\n</body></html>"
-        writeStringToFile(_outputDir + "/" + name + ".html", sb)
+        writeStringToFile(outputDir + "/" + name + ".html", sb)
     }
 
     private func writeIndex(results: ArrayList<HtmlReportResult>) {
@@ -145,7 +145,7 @@ public class HtmlReport <: Report {
             sb += "</tr>\n"
         }
         sb += "</table>\n</body></html>"
-        writeStringToFile(_outputDir + "/index.html", sb)
+        writeStringToFile(outputDir + "/index.html", sb)
     }
 
     private func writeStringToFile(path: String, content: String) {

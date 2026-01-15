@@ -16,26 +16,26 @@ public class Nvi {
 }
 
 private class NviIterator <: Iterator<Float64> {
-    private let _closingRatios: Iterator<Float64>
-    private let _volumeChanges: Iterator<Float64>
-    private var _previous: Float64
+    private let closingRatios: Iterator<Float64>
+    private let volumeChanges: Iterator<Float64>
+    private var previous: Float64
 
     public init(closings: Iterator<Float64>, volumes: Iterator<Float64>, initial: Float64) {
-        this._closingRatios = ChangeRatio(closings, 1)
-        this._volumeChanges = Change(volumes, 1)
-        this._previous = initial
+        this.closingRatios = ChangeRatio(closings, 1)
+        this.volumeChanges = Change(volumes, 1)
+        this.previous = initial
     }
 
     public func next(): Option<Float64> {
-        match (_closingRatios.next()) {
+        match (closingRatios.next()) {
             case Some(cr) =>
-                match (_volumeChanges.next()) {
+                match (volumeChanges.next()) {
                     case Some(dv) =>
-                        var current = _previous
+                        var current = previous
                         if (dv <= 0.0) {
-                            current = current + cr * _previous
+                            current = current + cr * previous
                         }
-                        _previous = current
+                        previous = current
                         return Some(current)
                     case None => return None
                 }

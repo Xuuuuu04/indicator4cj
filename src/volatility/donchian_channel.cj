@@ -5,24 +5,24 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class DonchianChannel {
-    private let _max: MovingMax
-    private let _min: MovingMin
+    private let max: MovingMax
+    private let min: MovingMin
 
     public DonchianChannel() {
-        this._max = MovingMax(20)
-        this._min = MovingMin(20)
+        this.max = MovingMax(20)
+        this.min = MovingMin(20)
     }
 
     public init(period: Int64) {
-        this._max = MovingMax(period)
-        this._min = MovingMin(period)
+        this.max = MovingMax(period)
+        this.min = MovingMin(period)
     }
 
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let closings = Duplicate(c, 2)
 
-        let uppers = Duplicate(_max.compute(closings[0]), 2)
-        let lowers = Duplicate(_min.compute(closings[1]), 2)
+        let uppers = Duplicate(max.compute(closings[0]), 2)
+        let lowers = Duplicate(min.compute(closings[1]), 2)
 
         let middle = DivideBy(
             Add(uppers[0], lowers[0]),
@@ -32,6 +32,6 @@ public class DonchianChannel {
         return (uppers[1], middle, lowers[1])
     }
 
-    public func idlePeriod(): Int64 { return _max.idlePeriod() }
+    public func idlePeriod(): Int64 { return max.idlePeriod() }
 }
 

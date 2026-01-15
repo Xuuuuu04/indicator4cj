@@ -10,21 +10,21 @@ public const DefaultTsiSecondSmoothingPeriod: Int64 = 13
 public class Tsi {
     public let FirstSmoothing: Ma
     public let SecondSmoothing: Ma
-    private let _firstPeriod: Int64
-    private let _secondPeriod: Int64
+    private let firstPeriod: Int64
+    private let secondPeriod: Int64
 
     public Tsi() {
-        this._firstPeriod = DefaultTsiFirstSmoothingPeriod
-        this._secondPeriod = DefaultTsiSecondSmoothingPeriod
-        this.FirstSmoothing = Ema(_firstPeriod)
-        this.SecondSmoothing = Ema(_secondPeriod)
+        this.firstPeriod = DefaultTsiFirstSmoothingPeriod
+        this.secondPeriod = DefaultTsiSecondSmoothingPeriod
+        this.FirstSmoothing = Ema(firstPeriod)
+        this.SecondSmoothing = Ema(secondPeriod)
     }
 
     public init(firstSmoothingPeriod: Int64, secondSmoothingPeriod: Int64) {
-        this._firstPeriod = firstSmoothingPeriod
-        this._secondPeriod = secondSmoothingPeriod
-        this.FirstSmoothing = Ema(_firstPeriod)
-        this.SecondSmoothing = Ema(_secondPeriod)
+        this.firstPeriod = firstSmoothingPeriod
+        this.secondPeriod = secondSmoothingPeriod
+        this.FirstSmoothing = Ema(firstPeriod)
+        this.SecondSmoothing = Ema(secondPeriod)
     }
 
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
@@ -42,7 +42,7 @@ public class Tsi {
     }
 
     public func toString(): String {
-        return "TSI(${_firstPeriod},${_secondPeriod})"
+        return "TSI(${firstPeriod},${secondPeriod})"
     }
 }
 

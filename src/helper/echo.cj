@@ -12,46 +12,46 @@ public func Echo<T>(iter: Iterator<T>, last: Int64, count: Int64): Iterator<T> {
 }
 
 public class EchoIterator<T> <: Iterator<T> {
-    private let _source: Iterator<T>
-    private let _window: Int64
-    private var _remainingRounds: Int64
-    private let _buf: ArrayList<T>
-    private var _reading: Bool = true
-    private var _replayIndex: Int64 = 0
+    private let source: Iterator<T>
+    private let window: Int64
+    private var remainingRounds: Int64
+    private let buf: ArrayList<T>
+    private var reading: Bool = true
+    private var replayIndex: Int64 = 0
 
     public init(source: Iterator<T>, last: Int64, count: Int64) {
-        this._source = source
-        this._window = last
-        this._remainingRounds = count
-        this._buf = ArrayList<T>()
+        this.source = source
+        this.window = last
+        this.remainingRounds = count
+        this.buf = ArrayList<T>()
     }
 
     public func next(): Option<T> {
-        if (_reading) {
-            match (_source.next()) {
+        if (reading) {
+            match (source.next()) {
                 case Some(v) =>
-                    if (_buf.size == _window) {
-                        _buf.remove(at: 0)
+                    if (buf.size == window) {
+                        buf.remove(at: 0)
                     }
-                    _buf.add(v)
+                    buf.add(v)
                     return Some(v)
                 case None =>
-                    _reading = false
-                    if (_buf.isEmpty() || _remainingRounds <= 0) {
+                    reading = false
+                    if (buf.isEmpty() || remainingRounds <= 0) {
                         return None
                     }
             }
         }
 
-        if (_remainingRounds <= 0 || _buf.isEmpty()) {
+        if (remainingRounds <= 0 || buf.isEmpty()) {
             return None
         }
 
-        let idx = _replayIndex % _buf.size
-        let v = _buf[Int64(idx)]
-        _replayIndex += 1
-        if (_replayIndex % _buf.size == 0) {
-            _remainingRounds -= 1
+        let idx = replayIndex % buf.size
+        let v = buf[Int64(idx)]
+        replayIndex += 1
+        if (replayIndex % buf.size == 0) {
+            remainingRounds -= 1
         }
         return Some(v)
     }

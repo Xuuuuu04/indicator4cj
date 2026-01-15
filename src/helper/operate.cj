@@ -6,21 +6,21 @@ public func Operate<A, B, R>(a: Iterator<A>, b: Iterator<B>, op: (A, B) -> R): I
 }
 
 public class OperateIterator<A, B, R> <: Iterator<R> {
-    private let _a: Iterator<A>
-    private let _b: Iterator<B>
-    private let _op: (A, B) -> R
+    private let a: Iterator<A>
+    private let b: Iterator<B>
+    private let op: (A, B) -> R
 
     public init(a: Iterator<A>, b: Iterator<B>, op: (A, B) -> R) {
-        this._a = a
-        this._b = b
-        this._op = op
+        this.a = a
+        this.b = b
+        this.op = op
     }
 
     public func next(): Option<R> {
-        match (_a.next()) {
+        match (a.next()) {
             case Some(av) =>
-                match (_b.next()) {
-                    case Some(bv) => return Some(_op(av, bv))
+                match (b.next()) {
+                    case Some(bv) => return Some(op(av, bv))
                     case None => return None
                 }
             case None => return None

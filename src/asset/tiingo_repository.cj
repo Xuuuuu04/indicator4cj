@@ -74,14 +74,14 @@ public struct TiingoEndOfDay {
 
 // TiingoRepository Tiingo API 仓储实现，从 Tiingo 金融数据 API 获取资产数据
 public class TiingoRepository <: Repository {
-    private var _apiKey: String = ""
-    private var _baseUrl: String = "https://api.tiingo.com"
+    private var apiKey: String = ""
+    private var baseUrl: String = "https://api.tiingo.com"
 
     // 构造函数
     public TiingoRepository() {}
 
-    public init(_apiKey: String) {
-        this._apiKey = _apiKey
+    public init(apiKey: String) {
+        this.apiKey = apiKey
     }
 
     // assets 返回所有资产名称列表（Tiingo 不支持，抛出异常）
@@ -97,7 +97,7 @@ public class TiingoRepository <: Repository {
 
     // getSince 获取指定资产从指定日期开始的快照数据
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
-        let url = _baseUrl + "/tiingo/daily/" + name + "/prices?startDate=" + formatDate(date) + "&token=" + _apiKey
+        let url = baseUrl + "/tiingo/daily/" + name + "/prices?startDate=" + formatDate(date) + "&token=" + apiKey
         let client = ClientBuilder().build()
         try {
             let resp = client.get(url)
@@ -128,7 +128,7 @@ public class TiingoRepository <: Repository {
 
     // lastDate 返回指定资产的最新日期
     public func lastDate(name: String): DateTime {
-        let url = _baseUrl + "/tiingo/daily/" + name + "?token=" + _apiKey
+        let url = baseUrl + "/tiingo/daily/" + name + "?token=" + apiKey
         let client = ClientBuilder().build()
         try {
             let resp = client.get(url)

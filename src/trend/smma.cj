@@ -27,19 +27,19 @@ public class Smma {
 }
 
 private class SmmaIterator <: Iterator<Float64> {
-    private let _source: Iterator<Float64>
-    private let _period: Int64
-    private var _initialized: Bool = false
-    private var _prev: Float64 = 0.0
+    private let source: Iterator<Float64>
+    private let period: Int64
+    private var initialized: Bool = false
+    private var prev: Float64 = 0.0
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this._source = source
-        this._period = period
+        this.source = source
+        this.period = period
     }
 
     public func next(): Option<Float64> {
-        if (!_initialized) {
-            let head = Head(_source, _period)
+        if (!initialized) {
+            let head = Head(source, period)
             var sum: Float64 = 0.0
             var count: Int64 = 0
             while (true) {
@@ -50,18 +50,18 @@ private class SmmaIterator <: Iterator<Float64> {
                     case None => break
                 }
             }
-            if (count < _period) {
+            if (count < period) {
                 return None
             }
-            _prev = sum / Float64(_period)
-            _initialized = true
-            return Some(_prev)
+            prev = sum / Float64(period)
+            initialized = true
+            return Some(prev)
         }
 
-        match (_source.next()) {
+        match (source.next()) {
             case Some(v) =>
-                _prev = (_prev * Float64(_period - 1) + v) / Float64(_period)
-                return Some(_prev)
+                prev = (prev * Float64(period - 1) + v) / Float64(period)
+                return Some(prev)
             case None => return None
         }
     }

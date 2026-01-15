@@ -18,43 +18,43 @@ public class MovingSum {
 }
 
 private class MovingSumIterator <: Iterator<Float64> {
-    private let _source: Iterator<Float64>
-    private let _period: Int64
-    private var _buffer: ArrayList<Float64>
-    private var _initialized: Bool = false
-    private var _sum: Float64 = 0.0
-    private var _index: Int64 = 0
+    private let source: Iterator<Float64>
+    private let period: Int64
+    private var buffer: ArrayList<Float64>
+    private var initialized: Bool = false
+    private var sum: Float64 = 0.0
+    private var index: Int64 = 0
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this._source = source
-        this._period = period
-        this._buffer = ArrayList<Float64>()
+        this.source = source
+        this.period = period
+        this.buffer = ArrayList<Float64>()
     }
 
     public func next(): Option<Float64> {
-        while (_buffer.size < _period) {
-            match (_source.next()) {
+        while (buffer.size < period) {
+            match (source.next()) {
                 case Some(v) =>
-                    _buffer.add(v)
-                    _sum += v
+                    buffer.add(v)
+                    sum += v
                 case None => return None
             }
         }
 
         // First emission after filling buffer.
-        if (!_initialized) {
-            _initialized = true
-            return Some(_sum)
+        if (!initialized) {
+            initialized = true
+            return Some(sum)
         }
 
         // Slide window: drop oldest, add next.
-        match (_source.next()) {
+        match (source.next()) {
             case Some(v) =>
-                let old = _buffer[0]
-                _buffer.remove(at: 0)
-                _buffer.add(v)
-                _sum = _sum - old + v
-                return Some(_sum)
+                let old = buffer[0]
+                buffer.remove(at: 0)
+                buffer.add(v)
+                sum = sum - old + v
+                return Some(sum)
             case None => return None
         }
     }

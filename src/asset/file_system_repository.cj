@@ -8,19 +8,19 @@ import indicator4cj.helper.*
 
 // FileSystemRepository 文件系统仓储实现，从磁盘 CSV 文件读取资产数据（按资产名 {asset}.csv）
 public class FileSystemRepository <: Repository {
-    private var _root: String = "."
+    private var root: String = "."
 
     // 构造函数
     public FileSystemRepository() {}
 
-    public init(_root: String) {
-        this._root = _root
+    public init(root: String) {
+        this.root = root
     }
 
     // assets 返回所有资产名称列表
     public func assets(): ArrayList<String> {
         try {
-            let entries = Directory.readFrom(_root)
+            let entries = Directory.readFrom(root)
             let res = ArrayList<String>()
             for (e in entries) {
                 let p = e.path
@@ -31,13 +31,13 @@ public class FileSystemRepository <: Repository {
             }
             return res
         } catch (e: Exception) {
-            throw Exception("filesystem: failed to read assets from '${_root}': ${e.toString()}")
+            throw Exception("filesystem: failed to read assets from '${root}': ${e.toString()}")
         }
     }
 
     // get 获取指定资产的全部快照数据
     public func get(name: String): Iterator<Snapshot> {
-        let path = _root + "/" + name + ".csv"
+        let path = root + "/" + name + ".csv"
         let it = Csv<Snapshot>().readFromFile(path)
         match (it.next()) {
             case Some(first) =>
@@ -80,7 +80,7 @@ public class FileSystemRepository <: Repository {
         for (s in snapshots) {
             merged.add(s)
         }
-        let path = _root + "/" + name + ".csv"
+        let path = root + "/" + name + ".csv"
         try {
             Csv<Snapshot>().appendOrWriteToFile(path, merged.iterator())
         } catch (e: Exception) {

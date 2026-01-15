@@ -14,22 +14,22 @@ public const DefaultTsiStrategySignalPeriod: Int64 = 12
 public class TsiStrategy <: Strategy {
     public let Indicator: Tsi
     public let Signal: Ma
-    private let _signalPeriod: Int64
+    private let signalPeriod: Int64
 
     public init() {
         this.Indicator = Tsi()
         this.Signal = Ema(DefaultTsiStrategySignalPeriod)
-        this._signalPeriod = DefaultTsiStrategySignalPeriod
+        this.signalPeriod = DefaultTsiStrategySignalPeriod
     }
 
     public init(firstSmoothing: Int64, secondSmoothing: Int64, signalPeriod: Int64) {
         this.Indicator = Tsi(firstSmoothing, secondSmoothing)
         this.Signal = Ema(signalPeriod)
-        this._signalPeriod = signalPeriod
+        this.signalPeriod = signalPeriod
     }
 
     public func name(): String {
-        return "Tsi Strategy (${Indicator.toString()},EMA(${_signalPeriod}))"
+        return "Tsi Strategy (${Indicator.toString()},EMA(${signalPeriod}))"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {

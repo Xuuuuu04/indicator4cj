@@ -6,10 +6,10 @@ import indicator4cj.trend.*
 
 // Ease of Movement.
 public class Emv {
-    private let _sma = Sma()
+    private let sma = Sma()
 
-    public init() { _sma.period = 14 }
-    public init(period: Int64) { _sma.period = period }
+    public init() { sma.period = 14 }
+    public init(period: Int64) { sma.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let hs = Duplicate(highs, 2)
@@ -28,11 +28,11 @@ public class Emv {
             Subtract(hs[1], ls[1])
         )
 
-        return _sma.compute(
+        return sma.compute(
             Divide(distanceMoved, boxRatio)
         )
     }
 
-    public func idlePeriod(): Int64 { return _sma.idlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return sma.idlePeriod() + 1 }
 }
 

@@ -4,10 +4,10 @@ import std.core.*
 
 // AnnotationReportColumn 注释报告列，将字符串迭代器包装为报告列
 public class AnnotationReportColumn <: ReportColumn {
-    private let _values: Iterator<String>
+    private let values: Iterator<String>
 
     public init(values: Iterator<String>) {
-        this._values = values
+        this.values = values
     }
 
     public func name(): String { return "" }
@@ -15,7 +15,7 @@ public class AnnotationReportColumn <: ReportColumn {
     public func role(): String { return "annotation" }
 
     public func value(): String {
-        match (_values.next()) {
+        match (values.next()) {
             case Some(v) =>
                 if (v.isEmpty()) { return "null" }
                 return "\"" + v + "\""

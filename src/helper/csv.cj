@@ -148,9 +148,9 @@ public class Csv<T> {
 }
 
 public class CsvOption<T> {
-    private let _applyFn: (Csv<T>) -> Unit
-    public init(apply: (Csv<T>) -> Unit) { this._applyFn = apply }
-    public func apply(c: Csv<T>): Unit { _applyFn(c) }
+    private let applyFn: (Csv<T>) -> Unit
+    public init(apply: (Csv<T>) -> Unit) { this.applyFn = apply }
+    public func apply(c: Csv<T>): Unit { applyFn(c) }
 }
 
 public func WithoutCsvHeader<T>(): CsvOption<T> {
