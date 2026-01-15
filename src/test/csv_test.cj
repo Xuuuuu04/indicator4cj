@@ -12,8 +12,10 @@ class CsvTest {
     @TestCase
     public func read_with_header() {
         let reader = MemoryInputStream(ascii("Date,Asset,Open,Close\n\"2023-11-26 00:00:00\",\"SP500\",10.2,30.4\n"))
-        let csv = NewCsv<CsvRow>()
-        let iter = csv.ReadFromReader(reader)
+        let opts = ArrayList<CsvOption<CsvRow>>()
+        opts.add(WithCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
+        let csv = NewCsv<CsvRow>(opts)
+        let iter = csv.readFromReader(reader)
         match (iter.next()) {
             case Some(r) =>
                 @Expect(r.Close, 30.4)
@@ -28,7 +30,7 @@ class CsvTest {
         let opts = ArrayList<CsvOption<CsvRow>>()
         opts.add(WithoutCsvHeader<CsvRow>())
         let csv = NewCsv<CsvRow>(opts)
-        let iter = csv.ReadFromReader(reader)
+        let iter = csv.readFromReader(reader)
         match (iter.next()) {
             case Some(r) => @Expect(r.Close, 10.2)
             case None => @Fail("no row")
@@ -37,8 +39,10 @@ class CsvTest {
 
     @TestCase
     public func read_from_file() {
-        let csv = NewCsv<CsvRow>()
-        let iter = csv.ReadFromFile("src/test/testdata/with_header.csv")
+        let opts = ArrayList<CsvOption<CsvRow>>()
+        opts.add(WithCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
+        let csv = NewCsv<CsvRow>(opts)
+        let iter = csv.readFromFile("src/test/testdata/with_header.csv")
         match (iter.next()) {
             case Some(r) => @Expect(r.Close, 30.4)
             case None => @Fail("no row")
@@ -52,11 +56,12 @@ class CsvTest {
         rows.add(CsvRow(30.0, 40.0))
         let csv = NewCsv<CsvRow>()
         let path = "test_csv_write.csv"
-        match (csv.WriteToFile(path, rows.iterator())) {
-            case Some(err) => @Fail(err.message)
-            case None => ()
+        try {
+            csv.writeToFile(path, rows.iterator())
+        } catch (e: Exception) {
+            @Fail(e.message)
         }
-        let iter = csv.ReadFromFile(path)
+        let iter = csv.readFromFile(path)
         let expected = rows.iterator()
         match (CheckEquals(iter, expected)) {
             case Some(err) => @Fail(err)

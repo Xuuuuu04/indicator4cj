@@ -16,15 +16,16 @@ class ReportTest {
         let annos = ArrayList<String>([""]).iterator()
 
         let report = NewReport("Test Report", dates)
-        report.AddChart()
-        report.AddColumn(NewNumericReportColumn("High", highs))
-        report.AddColumn(NewNumericReportColumn("Low", lows))
-        report.AddColumn(NewAnnotationReportColumn(annos), ArrayList<Int64>([0, 1]))
+        report.addChart()
+        report.addColumn(NewNumericReportColumn("High", highs))
+        report.addColumn(NewNumericReportColumn("Low", lows))
+        report.addColumn(NewAnnotationReportColumn(annos), ArrayList<Int64>([0, 1]))
 
         let path = "report.html"
-        match (report.WriteToFile(path)) {
-            case Some(err) => @Fail(err.message)
-            case None => ()
+        try {
+            report.writeToFile(path)
+        } catch (e: Exception) {
+            @Fail(e.message)
         }
         Remove(path)
     }
@@ -33,9 +34,11 @@ class ReportTest {
     public func write_report_fail() {
         let dates = ArrayList<DateTime>([DateTime.now()]).iterator()
         let report = NewReport("Test", dates)
-        match (report.WriteToFile("")) {
-            case Some(_) => ()
-            case None => @Fail("expected error")
+        try {
+            report.writeToFile("")
+            @Fail("expected error")
+        } catch (e: Exception) {
+            // Expected error
         }
     }
 }

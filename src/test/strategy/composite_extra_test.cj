@@ -12,16 +12,16 @@ import indicator4cj.strategy.*
 public class MockActionStrategy <: Strategy {
     private let action: Action
     public init(a: Action) { this.action = a }
-    public func Name(): String { "Mock" }
-    public func Compute(_: Iterator<Snapshot>): Iterator<Action> {
+    public func name(): String { "Mock" }
+    public func compute(_: Iterator<Snapshot>): Iterator<Action> {
         let list = ArrayList<Action>()
         list.add(action)
         return list.iterator()
     }
-    public func Report(_: Iterator<Snapshot>): HelperReport {
+    public func report(_: Iterator<Snapshot>): HelperReport {
         return NewReport("Mock", ArrayList<DateTime>().iterator())
     }
-    public func IdlePeriod(): Int64 { 0 }
+    public func idlePeriod(): Int64 { 0 }
 }
 
 @Test

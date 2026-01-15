@@ -30,7 +30,7 @@ public class Csv<T> {
         for (opt in options) { opt.apply(this) }
     }
 
-    public func ReadFromReader(reader: InputStream): Iterator<T> {
+    public func readFromReader(reader: InputStream): Iterator<T> {
         let content = readAll(reader)
         let rows = parseLines(content)
         if (rows.isEmpty()) {
@@ -78,10 +78,10 @@ public class Csv<T> {
         return out.iterator()
     }
 
-    public func ReadFromFile(path: String): Iterator<T> {
+    public func readFromFile(path: String): Iterator<T> {
         try {
             let file = File(path, OpenMode.Read)
-            let iter = ReadFromReader(file)
+            let iter = readFromReader(file)
             file.close()
             return iter
         } catch (e: Exception) {
@@ -90,13 +90,13 @@ public class Csv<T> {
         }
     }
 
-    public func WriteToFile(path: String, rows: Iterator<T>) {
+    public func writeToFile(path: String, rows: Iterator<T>) {
         let f = File(path, OpenMode.Write)
         writeCommon(f, rows, true)
         f.close()
     }
 
-    public func AppendToFile(path: String, rows: Iterator<T>) {
+    public func appendToFile(path: String, rows: Iterator<T>) {
         let f = File(path, OpenMode.Append)
         writeCommon(f, rows, false)
         f.close()
@@ -146,11 +146,11 @@ public func WithCsvDefaultDateTimeFormat<T>(format: String): CsvOption<T> {
 }
 
 public func ReadFromCsvFile<T>(path: String, options: ArrayList<CsvOption<T>>): Iterator<T> {
-    return Csv<T>(options).ReadFromFile(path)
+    return Csv<T>(options).readFromFile(path)
 }
 
 public func ReadFromCsvFile<T>(path: String): Iterator<T> {
-    return Csv<T>().ReadFromFile(path)
+    return Csv<T>().readFromFile(path)
 }
 
 // NewCsv 创建 CSV 实例（公共 API，保持向后兼容）
@@ -169,13 +169,13 @@ public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>, options: 
         let size = f.length
         f.close()
         if (size > 0) {
-            Csv<T>(options).AppendToFile(path, rows)
+            Csv<T>(options).appendToFile(path, rows)
             return
         }
     } catch (_: Exception) {
         // ignore, treat as new file
     }
-    Csv<T>(options).WriteToFile(path, rows)
+    Csv<T>(options).writeToFile(path, rows)
 }
 
 public func AppendOrWriteToCsvFile<T>(path: String, rows: Iterator<T>) {
