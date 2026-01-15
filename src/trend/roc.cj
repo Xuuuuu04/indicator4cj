@@ -7,9 +7,9 @@ public const DefaultRocPeriod: Int64 = 9
 
 // Rate Of Change (ROC) = (price - price_n) / price_n
 public class Roc {
-    public var period: Int64
+    public var period: Int64 = DefaultRocPeriod
 
-    public Roc() { this.period = DefaultRocPeriod }
+    public Roc() { this.period = period }
     public init(period: Int64) {
         if (period <= 0) {
             this.period = DefaultRocPeriod

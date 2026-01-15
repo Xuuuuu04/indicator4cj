@@ -7,9 +7,9 @@ public const DefaultCciPeriod: Int64 = 20
 
 // Commodity Channel Index (CCI)
 public class Cci {
-    public var period: Int64
+    public var period: Int64 = DefaultCciPeriod
 
-    public Cci() { this.period = DefaultCciPeriod }
+    public Cci() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {

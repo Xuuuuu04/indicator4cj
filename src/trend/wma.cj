@@ -5,12 +5,14 @@ import std.collection.*
 
 // Weighted Moving Average (WMA) for Float64.
 public class Wma {
-    public var period: Int64
+    public var period: Int64 = 20
 
     public init(period: Int64) {
         if (period <= 0) { throw Exception("period must be > 0") }
         this.period = period
     }
+
+    public Wma() { this.period = period }
 
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
         return WmaIterator(values, this.period)

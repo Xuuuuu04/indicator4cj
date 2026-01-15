@@ -5,9 +5,9 @@ import indicator4cj.helper.*
 
 // Simple Moving Average (Float64).
 public class Sma {
-    public var period: Int64
+    public var period: Int64 = 50
 
-    public Sma() { this.period = 50 }
+    public Sma() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

@@ -5,9 +5,9 @@ import std.collection.*
 
 // Moving Sum over a fixed period (Float64 version).
 public class MovingSum {
-    public var period: Int64
+    public var period: Int64 = 1
 
-    public MovingSum() { this.period = 1 }
+    public MovingSum() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

@@ -7,9 +7,9 @@ public const DefaultAroonPeriod: Int64 = 25
 
 // Aroon Up/Down 指标。
 public class Aroon {
-    public var period: Int64
+    public var period: Int64 = DefaultAroonPeriod
 
-    public Aroon() { this.period = DefaultAroonPeriod }
+    public Aroon() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {

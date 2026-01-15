@@ -5,17 +5,17 @@ import std.core.*
 
 // Exponential Moving Average (Float64).
 public class Ema {
-    public var period: Int64
-    public var smoothing: Float64
+    public var period: Int64 = 20
+    public var smoothing: Float64 = 2.0
 
     public Ema() {
-        this.period = 20
-        this.smoothing = 2.0
+        this.period = period
+        this.smoothing = smoothing
     }
 
     public init(period: Int64) {
         this.period = period
-        this.smoothing = 2.0
+        this.smoothing = smoothing
     }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

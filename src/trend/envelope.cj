@@ -9,11 +9,11 @@ public const DefaultEnvelopePeriod: Int64 = 20
 // 价格包络线：上下轨为 MA*(1±pct)。
 public class Envelope {
     public let MaIndicator: Ma
-    public var Percentage: Float64
+    public var Percentage: Float64 = DefaultEnvelopePercentage
 
     public Envelope() {
         this.MaIndicator = Sma(DefaultEnvelopePeriod)
-        this.Percentage = DefaultEnvelopePercentage
+        this.Percentage = Percentage
     }
 
     public init(ma: Ma, percentage: Float64) {

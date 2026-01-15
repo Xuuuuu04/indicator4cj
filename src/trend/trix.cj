@@ -7,9 +7,9 @@ public const DefaultTrixPeriod: Int64 = 15
 
 // Triple Exponential Average (TRIX): EMA3 diff ratio.
 public class Trix {
-    public var period: Int64
+    public var period: Int64 = DefaultTrixPeriod
 
-    public Trix() { this.period = DefaultTrixPeriod }
+    public Trix() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

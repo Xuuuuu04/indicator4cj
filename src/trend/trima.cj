@@ -6,10 +6,10 @@ public const DefaultTrimaPeriod: Int64 = 15
 
 // Triangular Moving Average (TRIMA)
 public class Trima {
-    public var period: Int64
+    public var period: Int64 = DefaultTrimaPeriod
 
     public Trima() {
-        this.period = DefaultTrimaPeriod
+        this.period = period
     }
 
     public init(period: Int64) {

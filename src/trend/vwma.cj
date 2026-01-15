@@ -7,9 +7,9 @@ public const DefaultVwmaPeriod: Int64 = 20
 
 // Volume Weighted Moving Average (VWMA)
 public class Vwma {
-    public var period: Int64
+    public var period: Int64 = DefaultVwmaPeriod
 
-    public Vwma() { this.period = DefaultVwmaPeriod }
+    public Vwma() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(closing: Iterator<Float64>, volume: Iterator<Float64>): Iterator<Float64> {

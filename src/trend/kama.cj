@@ -9,14 +9,14 @@ public const DefaultKamaSlowScPeriod: Int64 = 30
 
 // Kaufman's Adaptive Moving Average (KAMA)
 public class Kama {
-    public var ErPeriod: Int64
-    public var FastScPeriod: Int64
-    public var SlowScPeriod: Int64
+    public var ErPeriod: Int64 = DefaultKamaErPeriod
+    public var FastScPeriod: Int64 = DefaultKamaFastScPeriod
+    public var SlowScPeriod: Int64 = DefaultKamaSlowScPeriod
 
     public Kama() {
-        this.ErPeriod = DefaultKamaErPeriod
-        this.FastScPeriod = DefaultKamaFastScPeriod
-        this.SlowScPeriod = DefaultKamaSlowScPeriod
+        this.ErPeriod = ErPeriod
+        this.FastScPeriod = FastScPeriod
+        this.SlowScPeriod = SlowScPeriod
     }
 
     public init(erPeriod: Int64, fastScPeriod: Int64, slowScPeriod: Int64) {

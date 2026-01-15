@@ -5,9 +5,9 @@ import indicator4cj.helper.*
 
 // Moving maximum over window using Float64 Bst.
 public class MovingMax {
-    public var period: Int64
+    public var period: Int64 = 1
 
-    public MovingMax() { this.period = 1 }
+    public MovingMax() { this.period = period }
     public init(period: Int64) { this.period = period }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

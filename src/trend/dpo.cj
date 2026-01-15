@@ -7,9 +7,9 @@ public const DefaultDpoPeriod: Int64 = 20
 
 // Detrended Price Oscillator (DPO)
 public class Dpo {
-    public var period: Int64
+    public var period: Int64 = DefaultDpoPeriod
 
-    public Dpo() { this.period = DefaultDpoPeriod }
+    public Dpo() { this.period = period }
     public init(period: Int64) {
         if (period <= 1) {
             this.period = DefaultDpoPeriod
