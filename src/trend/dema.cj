@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import indicator4cj.helper.*
 
-// Double Exponential Moving Average (DEMA) = 2*EMA1 - EMA2(EMA1)
+// 双重指数移动平均线(DEMA) = 2*EMA1 - EMA2(EMA1)
 public class Dema {
     // 快速EMA
     public let Ema1: Ema

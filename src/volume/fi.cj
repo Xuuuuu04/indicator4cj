@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Force Index.
+// 强力指数。
 public class Fi {
     private let ema = Ema()
 

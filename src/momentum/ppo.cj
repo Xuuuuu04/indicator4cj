@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// PPO = 100 * (EMA_fast - EMA_slow) / EMA_slow
+// PPO = 100 * (EMA_快速周期 - EMA_慢速周期) / EMA_慢速周期
 public class Ppo {
     // 快速周期
     public var fastPeriod: Int64 = 12

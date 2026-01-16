@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Projection Oscillator (PO) for Float64.
+// 投影振荡器（Float64）。
 public class Po {
     // 最小二乘指标
     private let mls: Mls
@@ -34,7 +34,7 @@ public class Po {
         let x = Map(Count(1, cs[0]), { i: Int64 => Float64(i) })
         let xSplice = Duplicate(x, 2)
 
-        // PL = Min(period, (high + MLS(period, x, high)))
+        // PL = Min(周期, (最高价 + MLS(周期, x, 最高价)))
         let (plM, plB) = mls.compute(xSplice[0], hs[0])
         Drain(plB)
         hs[1] = Skip(hs[1], mls.idlePeriod())
@@ -45,13 +45,13 @@ public class Po {
             2
         )
 
-        // PH = Max(period, (low + MLS(period, x, low)))
+        // PH = Max(周期, (最低价 + MLS(周期, x, 最低价)))
         let (phM, phB) = mls.compute(xSplice[1], ls[0])
         Drain(phB)
         ls[1] = Skip(ls[1], mls.idlePeriod())
         let ph = max.compute(Add(ls[1], phM))
 
-        // PO = 100 * (Closing - PL) / (PH - PL)
+        // PO = 100 * (收盘价 - PL) / (PH - PL)
         cs[1] = Skip(cs[1], mls.idlePeriod() + min.idlePeriod())
         let po = MultiplyBy(
             Divide(

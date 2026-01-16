@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import std.collection.*
 
-// Rolling Moving Average (RMA) with Wilder smoothing.
+// 滚动移动平均线（RMA），使用 Wilder 平滑。
 public class Rma {
     // 周期
     public var period: Int64 = 20
@@ -35,7 +35,7 @@ private class RmaIterator <: Iterator<Float64> {
     }
 
     public func next(): Option<Float64> {
-        // Initial SMA over first period elements.
+        // 初始 SMA 覆盖首个周期元素。
         if (!initialized) {
             let buf = ArrayList<Float64>()
             while (buf.size < period) {

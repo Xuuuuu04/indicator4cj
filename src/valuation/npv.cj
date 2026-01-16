@@ -3,7 +3,7 @@ package indicator4cj.valuation
 import std.math.*
 import std.collection.*
 
-// Net Present Value: sum(cashflow_i / (1+rate) ** (i+1))
+// 净现值：sum(现金流_i / (1+利率) ** (i+1))
 public func npv(rate: Float64, cashFlows: ArrayList<Float64>): Float64 {
     var acc = 0.0
     var idx: Int64 = 0

@@ -5,7 +5,7 @@ import indicator4cj.helper.*
 
 public const DefaultVwmaPeriod: Int64 = 20
 
-// Volume Weighted Moving Average (VWMA)
+// 成交量加权移动平均线（VWMA）
 public class Vwma {
     // 周期
     public var period: Int64 = DefaultVwmaPeriod

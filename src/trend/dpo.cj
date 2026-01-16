@@ -5,7 +5,7 @@ import indicator4cj.helper.*
 
 public const DefaultDpoPeriod: Int64 = 20
 
-// Detrended Price Oscillator (DPO)
+// 去趋势价格震荡器（DPO）
 public class Dpo {
     // 周期
     public var period: Int64 = DefaultDpoPeriod

@@ -4,7 +4,7 @@ import std.core.*
 
 public const DefaultTrimaPeriod: Int64 = 15
 
-// Triangular Moving Average (TRIMA)
+// 三角移动平均线（TRIMA）
 public class Trima {
     // 周期
     public var period: Int64 = DefaultTrimaPeriod

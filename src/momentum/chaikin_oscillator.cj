@@ -4,11 +4,11 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Chaikin Oscillator = EMA(ad, 3) - EMA(ad, 10)
+// 蔡金振荡器 = EMA(累积派发线, 3) - EMA(累积派发线, 10)
 public class ChaikinOscillator {
     // compute 计算蔡金振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        // AD = ((Close - Low) - (High - Close)) / (High - Low) * Volume
+        // AD = ((收盘价 - 最低价) - (最高价 - 收盘价)) / (最高价 - 最低价) * 成交量
         let hl = Subtract(highs, lows)
         let mfm = Divide(
             Subtract(

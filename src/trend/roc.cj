@@ -5,7 +5,7 @@ import indicator4cj.helper.*
 
 public const DefaultRocPeriod: Int64 = 9
 
-// Rate Of Change (ROC) = (price - price_n) / price_n
+// 变化率(ROC) = (当前价格 - n周期前价格) / n周期前价格
 public class Roc {
     // 周期
     public var period: Int64 = DefaultRocPeriod

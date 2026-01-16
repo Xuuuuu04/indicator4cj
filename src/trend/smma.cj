@@ -5,7 +5,7 @@ import indicator4cj.helper.*
 
 public const DefaultSmmaPeriod: Int64 = 7
 
-// Smoothed Moving Average (SMMA)
+// 平滑移动平均线（SMMA）
 public class Smma {
     // 周期
     public var period: Int64 = DefaultSmmaPeriod

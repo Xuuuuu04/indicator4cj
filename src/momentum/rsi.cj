@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// RSI: 100 - 100 / (1 + RS), RS = AvgGain/AvgLoss over period.
+// RSI：100 - 100 / (1 + RS)，RS = 周期内平均涨幅/平均跌幅。
 public class Rsi {
     // 周期
     public var period: Int64 = 14

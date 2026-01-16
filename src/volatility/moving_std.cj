@@ -4,7 +4,7 @@ import std.core.*
 import std.math.*
 import indicator4cj.helper.*
 
-// Moving Standard Deviation over fixed period (Float64).
+// 固定周期移动标准差（Float64）。
 public class MovingStd {
     // 周期
     public var period: Int64 = 1
@@ -26,7 +26,7 @@ public class MovingStd {
     public func idlePeriod(): Int64 { return period - 1 }
 }
 
-// Iterator maintaining ring buffer and running mean.
+// 维护环形缓冲区和运行均值的迭代器。
 private class MovingStdIterator <: Iterator<Float64> {
     private let source: Iterator<Float64>
     private let period: Int64

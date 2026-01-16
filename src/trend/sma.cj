@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import indicator4cj.helper.*
 
-// Simple Moving Average (Float64).
+// 简单移动平均线（Float64）。
 public class Sma {
     // 周期
     public var period: Int64 = 50

@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import indicator4cj.helper.*
 
-// Triple Exponential Moving Average (TEMA) = 3*EMA1 - 3*EMA2 + EMA3
+// 三重指数移动平均线(TEMA) = 3*EMA1 - 3*EMA2 + EMA3
 public class Tema {
     // 快速EMA
     public let Ema1: Ema

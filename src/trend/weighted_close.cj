@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import indicator4cj.helper.*
 
-// Weighted Close = (High + Low + (Close * 2)) / 4
+// 加权收盘价 = (最高价 + 最低价 + (收盘价 * 2)) / 4
 public class WeightedClose {
     public WeightedClose() {
     }

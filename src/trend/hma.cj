@@ -4,16 +4,16 @@ import std.core.*
 import std.math.*
 import indicator4cj.helper.*
 
-// Hull Moving Average (HMA) for Float64.
+// Hull 移动平均线（HMA）（Float64）。
 public class Hma {
     private let wma1: Wma
     private let wma2: Wma
     private let wma3: Wma
 
     public Hma(period: Int64) {
-        // Empirically, to match Go's test data (hma.csv), we must use ROUNDING,
-        // even though Go source code suggests truncation.
-        // This implies the CSV might be generated with a different version or logic.
+        // 根据经验，为了匹配 Go 的测试数据（hma.csv），我们必须使用四舍五入，
+        // 尽管 Go 源代码建议截断。
+        // 这表明 CSV 可能是用不同版本或逻辑生成的。
         let p1 = Int64(round(Float64(period) / 2.0))
         let p3 = Int64(round(sqrt(Float64(period))))
 
@@ -43,5 +43,5 @@ public class Hma {
     public func toString(): String { return "HMA(${wma2.period})" }
 }
 
-// Hma conforms to Ma.
+// Hma 符合 Ma 接口。
 extend Hma <: Ma {}

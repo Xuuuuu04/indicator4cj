@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import indicator4cj.helper.*
 
-// Balance of Power (BoP) = (Close - Open) / (High - Low)
+// 动能平衡指标(BoP) = (收盘价 - 开盘价) / (最高价 - 最低价)
 public class Bop {
     public Bop() {
     }

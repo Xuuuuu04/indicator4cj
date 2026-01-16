@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Pring's Special K: weighted ROC sums smoothed by EMA(10).
+// Pring's Special K：加权 ROC 总和经 EMA(10) 平滑。
 public class PringsSpecialK {
     // compute 计算普林特殊K指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
@@ -37,7 +37,7 @@ public class PringsSpecialK {
     public func idlePeriod(): Int64 { return 530 - 1 }
 }
 
-// Rate of Change helper: (curr - prev_n) / prev_n * 100
+// 变化率辅助函数：(curr - prev_n) / prev_n * 100
 private func Roc(values: Iterator<Float64>, period: Int64): Iterator<Float64> {
     return MultiplyBy(ChangeRatio(values, period), 100.0)
 }

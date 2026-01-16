@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Williams %R = -100 * (HighestHigh - Close) / (HighestHigh - LowestLow)
+// 威廉姆斯百分比R = -100 * (N周期最高价 - 收盘价) / (N周期最高价 - N周期最低价)
 public class WilliamsR {
     // 周期
     public var period: Int64 = 14

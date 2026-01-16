@@ -3,7 +3,7 @@ package indicator4cj.volume
 import std.core.*
 import indicator4cj.helper.*
 
-// Money Flow Multiplier (Float64).
+// 资金流量乘数（Float64）。
 public class Mfm {
     public init() {
     }

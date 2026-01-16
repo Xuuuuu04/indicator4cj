@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// PVO = 100 * (EMA_fast(volume) - EMA_slow(volume)) / EMA_slow(volume)
+// PVO = 100 * (EMA_快速周期(成交量) - EMA_慢速周期(成交量)) / EMA_慢速周期(成交量)
 public class Pvo {
     // 快速周期
     public var fastPeriod: Int64 = 12

@@ -5,7 +5,7 @@ import indicator4cj.helper.*
 
 public const DefaultTrixPeriod: Int64 = 15
 
-// Triple Exponential Average (TRIX): EMA3 diff ratio.
+// 三重指数移动平均线(TRIX)：三重EMA的差值比率。
 public class Trix {
     // 周期
     public var period: Int64 = DefaultTrixPeriod

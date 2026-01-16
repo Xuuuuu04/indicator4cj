@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import indicator4cj.helper.*
 
-// Moving Least Squares (slope m and intercept b).
+// 移动最小二乘法（斜率 m 和截距 b）。
 public class Mls {
     // 移动求和
     public let Sum: MovingSum
@@ -25,7 +25,7 @@ public class Mls {
         let sumYSplice = Duplicate(Sum.compute(ySplice[1]), 2)
         let sumX2 = Sum.compute(Pow(xSplice[2], 2.0))
 
-        // m = (period * sumXY - sumX * sumY) / (period * sumX2 - sumX * sumX)
+        // m = (周期 * sumXY - sumX * sumY) / (周期 * sumX2 - sumX * sumX)
         let mSplice = Duplicate(
             Divide(
                 Subtract(
@@ -40,7 +40,7 @@ public class Mls {
             2
         )
 
-        // b = (sumY - m * sumX) / period
+        // b = (sumY - m * sumX) / 周期
         let b = DivideBy(
             Subtract(
                 sumYSplice[1],

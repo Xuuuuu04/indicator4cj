@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Average True Range (ATR) with pluggable moving average (Ma).
+// 平均真实波幅（ATR），支持可插拔的移动平均线（Ma）。
 public class Atr {
     // 移动平均指标
     public var ma: Ma = Sma(14)
@@ -23,7 +23,7 @@ public class Atr {
 
     // compute 计算平均真实范围指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
-        // align highs/lows to use previous closing
+        // 对齐最高价/最低价以使用前收盘价
         let hs = Skip(highs, 1)
         let ls = Skip(lows, 1)
 

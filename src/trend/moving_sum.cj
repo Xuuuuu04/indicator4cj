@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import std.collection.*
 
-// Moving Sum over a fixed period (Float64 version).
+// 固定周期移动求和（Float64 版本）。
 public class MovingSum {
     // 周期
     public var period: Int64 = 1
@@ -49,13 +49,13 @@ private class MovingSumIterator <: Iterator<Float64> {
             }
         }
 
-        // First emission after filling buffer.
+        // 缓冲区填满后的首次输出。
         if (!initialized) {
             initialized = true
             return Some(sum)
         }
 
-        // Slide window: drop oldest, add next.
+        // 滑动窗口：移除最旧的，添加下一个。
         match (source.next()) {
             case Some(v) =>
                 let old = buffer[0]

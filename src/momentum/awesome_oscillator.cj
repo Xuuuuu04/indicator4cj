@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Awesome Oscillator = SMA(high/low median, 5) - SMA(high/low median, 34)
+// 绝妙振荡器 = SMA(最高价/最低价中位数, 5) - SMA(最高价/最低价中位数, 34)
 public class AwesomeOscillator {
     // compute 计算绝妙振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>): Iterator<Float64> {

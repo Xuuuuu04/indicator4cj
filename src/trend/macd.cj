@@ -7,7 +7,7 @@ public const DefaultMacdPeriod1: Int64 = 12
 public const DefaultMacdPeriod2: Int64 = 26
 public const DefaultMacdPeriod3: Int64 = 9
 
-// MACD = EMA(period1) - EMA(period2); Signal = EMA(period3) of MACD
+// MACD = EMA(周期1) - EMA(周期2)；信号线 = MACD的EMA(周期3)
 public class Macd {
     // 快速EMA
     public let Ema1: Ema

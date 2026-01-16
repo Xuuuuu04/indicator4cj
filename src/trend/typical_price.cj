@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 import indicator4cj.helper.*
 
-// Typical Price = (High + Low + Close) / 3
+// 典型价格 = (最高价 + 最低价 + 收盘价) / 3
 public class TypicalPrice {
     public TypicalPrice() {
     }

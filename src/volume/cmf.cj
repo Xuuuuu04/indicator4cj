@@ -4,7 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Chaikin Money Flow.
+// Chaikin 资金流量。
 public class Cmf {
     private let mfv = Mfv()
     private let sum = MovingSum()

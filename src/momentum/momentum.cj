@@ -3,7 +3,7 @@ package indicator4cj.momentum
 import std.core.*
 import indicator4cj.helper.*
 
-// Momentum = Current - value N steps before.
+// 动量指标 = 当前值 - N个周期前的值。
 public class Momentum {
     // 周期
     public var period: Int64 = 10

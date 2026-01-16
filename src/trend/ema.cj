@@ -3,7 +3,7 @@ package indicator4cj.trend
 import std.core.*
 // no collection import needed
 
-// Exponential Moving Average (Float64).
+// 指数移动平均线（Float64）。
 public class Ema {
     // 周期
     public var period: Int64 = 20

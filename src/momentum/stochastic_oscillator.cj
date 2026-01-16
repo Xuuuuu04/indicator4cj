@@ -4,8 +4,8 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// Stochastic Oscillator: %K = 100 * (Close - LowN) / (HighN - LowN)
-// %D = SMA(%K, period)
+// 随机振荡器：%K = 100 * (收盘价 - N周期最低价) / (N周期最高价 - N周期最低价)
+// %D = SMA(%K, 周期)
 public class StochasticOscillator {
     // 周期
     public var period: Int64 = 14
