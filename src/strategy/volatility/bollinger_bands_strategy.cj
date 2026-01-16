@@ -12,7 +12,9 @@ import indicator4cj.volatility.*
 public class BollingerBandsStrategy <: Strategy {
     public let Indicator: BollingerBands
 
-    public init() { this.Indicator = BollingerBands() }
+    public init() {
+        this.Indicator = BollingerBands()
+    }
 
     public func name(): String { return "Bollinger Bands Strategy" }
 

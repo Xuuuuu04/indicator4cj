@@ -9,8 +9,13 @@ public const DefaultVwmaPeriod: Int64 = 20
 public class Vwma {
     public var period: Int64 = DefaultVwmaPeriod
 
-    public Vwma() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public Vwma() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     public func compute(closing: Iterator<Float64>, volume: Iterator<Float64>): Iterator<Float64> {
         let vols = Duplicate(volume, 2)

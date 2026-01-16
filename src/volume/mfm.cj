@@ -5,7 +5,8 @@ import indicator4cj.helper.*
 
 // Money Flow Multiplier (Float64).
 public class Mfm {
-    public init() {}
+    public init() {
+    }
 
     // compute 计算资金流量乘数指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {

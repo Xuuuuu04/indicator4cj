@@ -8,8 +8,13 @@ import indicator4cj.helper.*
 public class MovingStd {
     public var period: Int64 = 1
 
-    public init() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public init() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算移动标准差指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

@@ -12,7 +12,9 @@ public class Wma {
         this.period = period
     }
 
-    public Wma() { this.period = period }
+    public Wma() {
+        this.period = period
+    }
 
     // compute 计算加权移动平均线。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {

@@ -7,8 +7,13 @@ import indicator4cj.helper.*
 public class Sma {
     public var period: Int64 = 50
 
-    public Sma() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public Sma() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算简单移动平均线。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

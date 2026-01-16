@@ -78,7 +78,8 @@ public class TiingoRepository <: Repository {
     private var baseUrl: String = "https://api.tiingo.com"
 
     // 构造函数
-    public TiingoRepository() {}
+    public TiingoRepository() {
+}
 
     public init(apiKey: String) {
         this.apiKey = apiKey

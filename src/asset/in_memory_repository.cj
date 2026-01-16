@@ -10,7 +10,8 @@ public class InMemoryRepository <: Repository {
     private let storage = HashMap<String, ArrayList<Snapshot>>()
 
     // 构造函数
-    public InMemoryRepository() {}
+    public InMemoryRepository() {
+}
 
     // assets 返回所有资产名称列表
     public func assets(): ArrayList<String> {

@@ -11,7 +11,9 @@ import indicator4cj.trend.*
 public class AroonStrategy <: Strategy {
     public let Indicator: Aroon
 
-    public init() { this.Indicator = Aroon() }
+    public init() {
+        this.Indicator = Aroon()
+    }
 
     public func name(): String { return "Aroon Strategy" }
 

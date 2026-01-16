@@ -9,8 +9,13 @@ public class Cmf {
     private let mfv = Mfv()
     private let sum = MovingSum()
 
-    public Cmf() { sum.period = 20 }
-    public init(period: Int64) { sum.period = period }
+    public Cmf() {
+        sum.period = 20
+    }
+
+    public init(period: Int64) {
+        sum.period = period
+    }
 
     // compute 计算蔡金资金流量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {

@@ -12,8 +12,13 @@ import indicator4cj.volume.*
 public class ForceIndexStrategy <: Strategy {
     public let Indicator: Fi
 
-    public init() { this.Indicator = Fi() }
-    public init(period: Int64) { this.Indicator = Fi(period) }
+    public init() {
+        this.Indicator = Fi()
+    }
+
+    public init(period: Int64) {
+        this.Indicator = Fi(period)
+    }
 
     public func name(): String {
         return "Force Index Strategy (${Indicator.idlePeriod() + 1})"

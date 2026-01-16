@@ -12,8 +12,13 @@ import indicator4cj.volume.*
 public class EaseOfMovementStrategy <: Strategy {
     public let Indicator: Emv
 
-    public init() { this.Indicator = Emv() }
-    public init(period: Int64) { this.Indicator = Emv(period) }
+    public init() {
+        this.Indicator = Emv()
+    }
+
+    public init(period: Int64) {
+        this.Indicator = Emv(period)
+    }
 
     public func name(): String {
         return "Ease of Movement Strategy (${Indicator.idlePeriod() + 1})"

@@ -8,9 +8,17 @@ import indicator4cj.trend.*
 public class Atr {
     public var ma: Ma = Sma(14)
 
-    public Atr() { this.ma = ma }
-    public init(period: Int64) { this.ma = Sma(period) }
-    public init(ma: Ma) { this.ma = ma }
+    public Atr() {
+        this.ma = ma
+    }
+
+    public init(period: Int64) {
+        this.ma = Sma(period)
+    }
+
+    public init(ma: Ma) {
+        this.ma = ma
+    }
 
     // compute 计算平均真实范围指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {

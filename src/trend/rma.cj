@@ -7,8 +7,13 @@ import std.collection.*
 public class Rma {
     public var period: Int64 = 20
 
-    public Rma() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public Rma() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         return RmaIterator(c, this.period)

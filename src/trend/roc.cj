@@ -9,7 +9,9 @@ public const DefaultRocPeriod: Int64 = 9
 public class Roc {
     public var period: Int64 = DefaultRocPeriod
 
-    public Roc() { this.period = period }
+    public Roc() {
+        this.period = period
+    }
     public init(period: Int64) {
         if (period <= 0) {
             this.period = DefaultRocPeriod

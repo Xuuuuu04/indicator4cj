@@ -7,8 +7,13 @@ import indicator4cj.trend.*
 public class BollingerBands {
     public var period: Int64 = 20
 
-    public BollingerBands() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public BollingerBands() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算布林带指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {

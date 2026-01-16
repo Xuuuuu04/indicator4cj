@@ -7,8 +7,13 @@ import indicator4cj.helper.*
 public class MovingMin {
     public var period: Int64 = 1
 
-    public MovingMin() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public MovingMin() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
 // compute 计算指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

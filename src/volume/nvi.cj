@@ -6,7 +6,9 @@ import indicator4cj.helper.*
 public class Nvi {
     public var Initial: Float64 = 1000.0
 
-    public Nvi() { this.Initial = Initial }
+    public Nvi() {
+        this.Initial = Initial
+    }
 
     // compute 计算负量指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {

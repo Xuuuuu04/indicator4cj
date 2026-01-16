@@ -10,7 +10,9 @@ import indicator4cj.strategy.momentum as m
 public class TripleRsiStrategy <: Strategy {
     private let impl: m.TripleRsiStrategy
 
-    public init() { this.impl = m.TripleRsiStrategy() }
+    public init() {
+        this.impl = m.TripleRsiStrategy()
+    }
 
     public func name(): String { return impl.name() }
 

@@ -24,7 +24,8 @@ public class Csv<T> {
     public var hasHeader: Bool = true
     public var defaultDateTimeFormat: String = "yyyy-MM-dd"
 
-    public Csv() {}
+    public Csv() {
+}
 
     public init(options: ArrayList<CsvOption<T>>) {
         for (opt in options) { opt.apply(this) }
@@ -149,7 +150,9 @@ public class Csv<T> {
 
 public class CsvOption<T> {
     private let applyFn: (Csv<T>) -> Unit
-    public init(apply: (Csv<T>) -> Unit) { this.applyFn = apply }
+    public init(apply: (Csv<T>) -> Unit) {
+        this.applyFn = apply
+    }
     public func apply(c: Csv<T>): Unit { applyFn(c) }
 }
 

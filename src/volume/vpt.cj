@@ -5,7 +5,8 @@ import indicator4cj.helper.*
 
 // VPT：Volume Price Trend（Float64）。
 public class Vpt {
-    public init() {}
+    public init() {
+    }
 
     // compute 计算成交量价格趋势指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {

@@ -7,8 +7,13 @@ import indicator4cj.trend.*
 public class UlcerIndex {
     public var period: Int64 = 14
 
-    public init() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public init() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算溃疡指数指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {

@@ -9,8 +9,13 @@ import indicator4cj.trend.*
 public class StochasticOscillator {
     public var period: Int64 = 14
 
-    public StochasticOscillator() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public StochasticOscillator() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算随机振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {

@@ -11,7 +11,8 @@ public class FileSystemRepository <: Repository {
     private var root: String = "."
 
     // 构造函数
-    public FileSystemRepository() {}
+    public FileSystemRepository() {
+}
 
     public init(root: String) {
         this.root = root

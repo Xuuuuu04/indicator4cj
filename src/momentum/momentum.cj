@@ -7,8 +7,13 @@ import indicator4cj.helper.*
 public class Momentum {
     public var period: Int64 = 10
 
-    public Momentum() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public Momentum() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算动量指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {

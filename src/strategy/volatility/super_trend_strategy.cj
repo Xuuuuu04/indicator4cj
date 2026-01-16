@@ -12,7 +12,9 @@ import indicator4cj.volatility.*
 public class SuperTrendStrategy <: Strategy {
     public let Indicator: SuperTrend
 
-    public init() { this.Indicator = SuperTrend() }
+    public init() {
+        this.Indicator = SuperTrend()
+    }
     public init(period: Int64, multiplier: Float64) {
         this.Indicator = SuperTrend(period, multiplier)
     }

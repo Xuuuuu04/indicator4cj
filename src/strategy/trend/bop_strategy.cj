@@ -12,7 +12,9 @@ import indicator4cj.trend.*
 public class BopStrategy <: Strategy {
     public let Indicator: Bop
 
-    public init() { this.Indicator = Bop() }
+    public init() {
+        this.Indicator = Bop()
+    }
 
     public func name(): String { return "BoP Strategy" }
 

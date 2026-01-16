@@ -5,7 +5,8 @@ import indicator4cj.helper.*
 
 // Weighted Close = (High + Low + (Close * 2)) / 4
 public class WeightedClose {
-    public WeightedClose() {}
+    public WeightedClose() {
+    }
 
 // compute 计算指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {

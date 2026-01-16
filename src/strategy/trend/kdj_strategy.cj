@@ -12,7 +12,9 @@ import indicator4cj.trend.*
 public class KdjStrategy <: Strategy {
     public let Indicator: Kdj
 
-    public init() { this.Indicator = Kdj() }
+    public init() {
+        this.Indicator = Kdj()
+    }
 
     public func name(): String { return "KDJ Strategy" }
 

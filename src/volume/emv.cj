@@ -8,8 +8,13 @@ import indicator4cj.trend.*
 public class Emv {
     private let sma = Sma()
 
-    public Emv() { sma.period = 14 }
-    public init(period: Int64) { sma.period = period }
+    public Emv() {
+        sma.period = 14
+    }
+
+    public init(period: Int64) {
+        sma.period = period
+    }
 
     // compute 计算 ease of movement 指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {

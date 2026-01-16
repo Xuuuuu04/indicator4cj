@@ -8,8 +8,13 @@ import indicator4cj.trend.*
 public class Fi {
     private let ema = Ema()
 
-    public Fi() { ema.period = 13 }
-    public init(period: Int64) { ema.period = period }
+    public Fi() {
+        ema.period = 13
+    }
+
+    public init(period: Int64) {
+        ema.period = period
+    }
 
     // compute 计算力量指数指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {

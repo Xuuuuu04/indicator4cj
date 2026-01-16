@@ -12,7 +12,9 @@ import indicator4cj.trend.*
 public class TrixStrategy <: Strategy {
     public let Indicator: Trix
 
-    public init() { this.Indicator = Trix() }
+    public init() {
+        this.Indicator = Trix()
+    }
 
     public func name(): String { return "TRIX Strategy" }
 

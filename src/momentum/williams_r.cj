@@ -8,8 +8,13 @@ import indicator4cj.trend.*
 public class WilliamsR {
     public var period: Int64 = 14
 
-    public WilliamsR() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public WilliamsR() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算威廉姆斯百分比R指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {

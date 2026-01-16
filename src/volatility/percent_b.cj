@@ -6,8 +6,12 @@ import indicator4cj.helper.*
 public class PercentB {
     private let bands = BollingerBands()
 
-    public init() {}
-    public init(period: Int64) { bands.period = period }
+    public init() {
+    }
+
+    public init(period: Int64) {
+        bands.period = period
+    }
 
     // compute 计算百分比B指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {

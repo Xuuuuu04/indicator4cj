@@ -7,8 +7,13 @@ import indicator4cj.trend.*
 public class AccelerationBands {
     public var period: Int64 = 20
 
-    public AccelerationBands() { this.period = period }
-    public init(period: Int64) { this.period = period }
+    public AccelerationBands() {
+        this.period = period
+    }
+
+    public init(period: Int64) {
+        this.period = period
+    }
 
     // compute 计算加速度带指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {

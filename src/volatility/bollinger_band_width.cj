@@ -6,7 +6,8 @@ import indicator4cj.helper.*
 public class BollingerBandWidth {
     private let bands = BollingerBands()
 
-    public BollingerBandWidth() {}
+    public BollingerBandWidth() {
+    }
 
     // compute 计算布林带宽度指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {

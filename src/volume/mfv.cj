@@ -7,7 +7,8 @@ import indicator4cj.helper.*
 public class Mfv {
     private let mfm = Mfm()
 
-    public init() {}
+    public init() {
+    }
 
     // compute 计算资金流量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
