@@ -6,18 +6,18 @@ import indicator4cj.trend.*
 
 public class KeltnerChannel {
     // ATR指标
-    private let atr: Atr
+    private let _atr: Atr
     // 指标
-    private let ema: Ema
+    private let _ema: Ema
 
     public KeltnerChannel() {
-        this.atr = Atr(20)
-        this.ema = Ema(20)
+        this._atr = Atr(20)
+        this._ema = Ema(20)
     }
 
     public init(period: Int64) {
-        this.atr = Atr(period)
-        this.ema = Ema(period)
+        this._atr = Atr(period)
+        this._ema = Ema(period)
     }
 
     // compute 计算肯特纳通道指标。
@@ -26,15 +26,15 @@ public class KeltnerChannel {
 
         let atrs = Duplicate(
             MultiplyBy(
-                atr.compute(highs, lows, closes[0]),
+                _atr.compute(highs, lows, closes[0]),
                 2.0
             ),
             2
         )
 
-        let skipCnt = atr.idlePeriod() - ema.idlePeriod()
+        let skipCnt = _atr.idlePeriod() - _ema.idlePeriod()
         let middles = Duplicate(
-            Skip(ema.compute(closes[1]), skipCnt),
+            Skip(_ema.compute(closes[1]), skipCnt),
             3
         )
 
@@ -45,6 +45,6 @@ public class KeltnerChannel {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return atr.idlePeriod() }
+    public func idlePeriod(): Int64 { return _atr.idlePeriod() }
 }
 

@@ -6,26 +6,26 @@ public func Since(iter: Iterator<Float64>): Iterator<Int64> {
 }
 
 public class SinceIterator <: Iterator<Int64> {
-    private let source: Iterator<Float64>
-    private var isFirst: Bool = true
-    private var lastValue: Float64 = 0.0
-    private var counter: Int64 = 0
+    private let _source: Iterator<Float64>
+    private var _isFirst: Bool = true
+    private var _lastValue: Float64 = 0.0
+    private var _counter: Int64 = 0
 
     public init(source: Iterator<Float64>) {
-        this.source = source
+        this._source = source
     }
 
     public func next(): Option<Int64> {
-        match (source.next()) {
+        match (_source.next()) {
             case Some(v) =>
-                if (isFirst || v != lastValue) {
-                    isFirst = false
-                    lastValue = v
-                    counter = 0
+                if (_isFirst || v != _lastValue) {
+                    _isFirst = false
+                    _lastValue = v
+                    _counter = 0
                 } else {
-                    counter += 1
+                    _counter += 1
                 }
-                return Some(counter)
+                return Some(_counter)
             case None => return None
         }
     }

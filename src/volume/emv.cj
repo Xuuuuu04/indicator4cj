@@ -6,14 +6,14 @@ import indicator4cj.trend.*
 
 // Ease of Movement.
 public class Emv {
-    private let sma = Sma()
+    private let _sma = Sma()
 
     public Emv() {
-        sma.period = 14
+        _sma.period = 14
     }
 
     public init(period: Int64) {
-        sma.period = period
+        _sma.period = period
     }
 
     // compute 计算 ease of movement 指标。
@@ -34,12 +34,12 @@ public class Emv {
             Subtract(hs[1], ls[1])
         )
 
-        return sma.compute(
+        return _sma.compute(
             Divide(distanceMoved, boxRatio)
         )
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return sma.idlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return _sma.idlePeriod() + 1 }
 }
 

@@ -5,27 +5,27 @@ public func Count<T>(from: Int64, other: Iterator<T>): Iterator<Int64> {
     return CountIterator<T>(from, other)
 }
 
-public class CountIterator<T> <: Iterator<Int64> {
-    private var current: Int64
-    private let other: Iterator<T>
-    private var done: Bool = false
+public class CountIterator<TElement> <: Iterator<Int64> {
+    private var _current: Int64
+    private let _other: Iterator<TElement>
+    private var _done: Bool = false
 
-    public init(_start: Int64, other: Iterator<T>) {
-        this.current = _start
-        this.other = other
+    public init(_start: Int64, other: Iterator<TElement>) {
+        this._current = _start
+        this._other = other
     }
 
     public func next(): Option<Int64> {
-        if (done) {
+        if (_done) {
             return None
         }
-        match (other.next()) {
+        match (_other.next()) {
             case Some(_) =>
-                let v = current
-                current += 1
+                let v = _current
+                _current += 1
                 return Some(v)
             case None =>
-                done = true
+                _done = true
                 return None
         }
     }

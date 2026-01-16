@@ -8,19 +8,19 @@ import indicator4cj.asset.*
 public class MajorityStrategy <: Strategy {
     // 策略集合
     public var strategies: ArrayList<Strategy>
-    private let strategyName: String
+    private let _strategyName: String
 
     public init(name: String, strategies: ArrayList<Strategy>) {
-        this.strategyName = name
+        this._strategyName = name
         this.strategies = strategies
     }
 
     public init(name: String) {
-        this.strategyName = name
+        this._strategyName = name
         this.strategies = ArrayList<Strategy>()
     }
 
-    public func name(): String { return strategyName }
+    public func name(): String { return _strategyName }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let result = ArrayList<Action>()

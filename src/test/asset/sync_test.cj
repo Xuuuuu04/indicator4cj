@@ -6,11 +6,11 @@ import std.time.*
 import indicator4cj.asset.*
 
 private class MockRepository <: Repository {
-    private var assetsFunc: () -> ArrayList<String>
-    private var getFunc: (String) -> Iterator<Snapshot>
-    private var getSinceFunc: (String, DateTime) -> Iterator<Snapshot>
-    private var lastDateFunc: (String) -> DateTime
-    private var appendFunc: (String, Iterator<Snapshot>) -> Unit
+    private var _assetsFunc: () -> ArrayList<String>
+    private var _getFunc: (String) -> Iterator<Snapshot>
+    private var _getSinceFunc: (String, DateTime) -> Iterator<Snapshot>
+    private var _lastDateFunc: (String) -> DateTime
+    private var _appendFunc: (String, Iterator<Snapshot>) -> Unit
     public var shouldFailAssets: Bool = false
     public var shouldFailGet: Bool = false
     public var shouldFailLastDate: Bool = false
@@ -23,35 +23,35 @@ private class MockRepository <: Repository {
         lastDateFunc: (String) -> DateTime,
         appendFunc: (String, Iterator<Snapshot>) -> Unit
     ) {
-        this.assetsFunc = assetsFunc
-        this.getFunc = getFunc
-        this.getSinceFunc = getSinceFunc
-        this.lastDateFunc = lastDateFunc
-        this.appendFunc = appendFunc
+        this._assetsFunc = assetsFunc
+        this._getFunc = getFunc
+        this._getSinceFunc = getSinceFunc
+        this._lastDateFunc = lastDateFunc
+        this._appendFunc = appendFunc
     }
 
     public func assets(): ArrayList<String> {
         if (shouldFailAssets) { throw Exception("assets error") }
-        return assetsFunc()
+        return _assetsFunc()
     }
 
     public func get(name: String): Iterator<Snapshot> {
         if (shouldFailGet) { throw Exception("get error") }
-        return getFunc(name)
+        return _getFunc(name)
     }
 
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
-        return getSinceFunc(name, date)
+        return _getSinceFunc(name, date)
     }
 
     public func lastDate(name: String): DateTime {
         if (shouldFailLastDate) { throw Exception("lastDate error") }
-        return lastDateFunc(name)
+        return _lastDateFunc(name)
     }
 
     public func append(name: String, snapshots: Iterator<Snapshot>): Unit {
         if (shouldFailAppend) { throw Exception("append error") }
-        appendFunc(name, snapshots)
+        _appendFunc(name, snapshots)
     }
 }
 

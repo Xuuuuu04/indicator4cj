@@ -5,22 +5,22 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class Mfi {
-    private let typicalPrice = TypicalPrice()
-    private let sum = MovingSum()
+    private let _typicalPrice = TypicalPrice()
+    private let _sum = MovingSum()
 
     public Mfi() {
-        sum.period = 14
+        _sum.period = 14
     }
 
     public init(period: Int64) {
-        sum.period = period
+        _sum.period = period
     }
 
     // compute 计算资金流量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let rawFlowSplice = Duplicate(
             Multiply(
-                typicalPrice.compute(highs, lows, closings),
+                _typicalPrice.compute(highs, lows, closings),
                 volumes
             ),
             2
@@ -35,8 +35,8 @@ public class Mfi {
         )
 
         let moneyRatio = Divide(
-            sum.compute(KeepPositives(moneyFlowSplice[0])),
-            sum.compute(MultiplyBy(KeepNegatives(moneyFlowSplice[1]), -1.0))
+            _sum.compute(KeepPositives(moneyFlowSplice[0])),
+            _sum.compute(MultiplyBy(KeepNegatives(moneyFlowSplice[1]), -1.0))
         )
 
         return IncrementBy(
@@ -52,6 +52,6 @@ public class Mfi {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return sum.idlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return _sum.idlePeriod() + 1 }
 }
 

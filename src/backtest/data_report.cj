@@ -24,19 +24,19 @@ public class DataStrategyResult {
 
 // DataReport 数据报告实现，将回测结果存储在内存中供程序访问
 public class DataReport <: Report {
-    public var _results = HashMap<String, ArrayList<DataStrategyResult>>()
+    public var results = HashMap<String, ArrayList<DataStrategyResult>>()
 
     public DataReport() {}
 
     public func begin(assetNames: ArrayList<String>, strategies: ArrayList<Strategy>): Unit {
         _ = strategies.size // 标记已使用以消除告警
-        for (n in assetNames) { _results.add(n, ArrayList<DataStrategyResult>()) }
+        for (n in assetNames) { results.add(n, ArrayList<DataStrategyResult>()) }
     }
 
     public func assetBegin(name: String, strategies: ArrayList<Strategy>): Unit {
         _ = strategies.size // 标记已使用以消除告警
-        if (!_results.contains(name)) {
-            _results.add(name, ArrayList<DataStrategyResult>())
+        if (!results.contains(name)) {
+            results.add(name, ArrayList<DataStrategyResult>())
         }
     }
 
@@ -54,7 +54,7 @@ public class DataReport <: Report {
                 match (lastActionIter.next()) {
                     case Some(action) =>
                         let res = DataStrategyResult(assetName, currentStrategy, outcome, action, transactionsList)
-                        _results[assetName].add(res)
+                        results[assetName].add(res)
                     case None => ()
                 }
             case None => ()

@@ -5,11 +5,11 @@ import std.time.*
 import std.unittest.*
 import indicator4cj.asset.*
 
-private let repositoryBase = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy/repository"
+private let _repositoryBase = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy/repository"
 
 @Test
 public func test_file_system_repository_assets() {
-    let repo = FileSystemRepository(repositoryBase)
+    let repo = FileSystemRepository(_repositoryBase)
     try {
         let assets = repo.assets()
 
@@ -28,7 +28,7 @@ public func test_file_system_repository_assets() {
 
 @Test
 public func test_file_system_repository_get() {
-    let repo = FileSystemRepository(repositoryBase)
+    let repo = FileSystemRepository(_repositoryBase)
     try {
         let snaps = repo.get("brk-b")
 
@@ -47,7 +47,7 @@ public func test_file_system_repository_get() {
 
 @Test
 public func test_file_system_repository_last_date() {
-    let repo = FileSystemRepository(repositoryBase)
+    let repo = FileSystemRepository(_repositoryBase)
     try {
         let lastDate = repo.lastDate("brk-b")
         let expected = DateTime.parse("2023-11-29", "yyyy-MM-dd")

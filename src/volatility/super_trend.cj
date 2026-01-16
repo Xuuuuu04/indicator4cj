@@ -6,18 +6,18 @@ import indicator4cj.trend.*
 
 public class SuperTrend {
     // ATR指标
-    private let atr: Atr
+    private let _atr: Atr
     // 倍数
-    private let multiplier: Float64
+    private let _multiplier: Float64
 
     public init() {
-        this.atr = Atr(Hma(14))
-        this.multiplier = 2.5
+        this._atr = Atr(Hma(14))
+        this._multiplier = 2.5
     }
 
     public init(period: Int64, multiplier: Float64) {
-        this.atr = Atr(Hma(period))
-        this.multiplier = multiplier
+        this._atr = Atr(Hma(period))
+        this._multiplier = multiplier
     }
 
     // compute 计算超级趋势指标。
@@ -31,82 +31,82 @@ public class SuperTrend {
                 Add(hs[0], ls[0]),
                 2.0
             ),
-            atr.idlePeriod()
+            _atr.idlePeriod()
         )
 
         let atrMult = MultiplyBy(
-            atr.compute(hs[1], ls[1], cs[0]),
-            multiplier
+            _atr.compute(hs[1], ls[1], cs[0]),
+            _multiplier
         )
 
-        cs[1] = Skip(cs[1], atr.idlePeriod())
+        cs[1] = Skip(cs[1], _atr.idlePeriod())
 
         return SuperTrendIterator(medians, atrMult, cs[1])
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return atr.idlePeriod() }
+    public func idlePeriod(): Int64 { return _atr.idlePeriod() }
 }
 
 private class SuperTrendIterator <: Iterator<Float64> {
-    private let medians: Iterator<Float64>
-    private let atrs: Iterator<Float64>
-    private let closes: Iterator<Float64>
+    private let _medians: Iterator<Float64>
+    private let _atrs: Iterator<Float64>
+    private let _closes: Iterator<Float64>
 
-    private var isFirst: Bool = true
-    private var upTrend: Bool = false
-    private var prevClose: Float64 = 0.0
-    private var finalUpper: Float64 = 0.0
-    private var finalLower: Float64 = 0.0
+    private var _isFirst: Bool = true
+    private var _upTrend: Bool = false
+    private var _prevClose: Float64 = 0.0
+    private var _finalUpper: Float64 = 0.0
+    private var _finalLower: Float64 = 0.0
 
     public init(medians: Iterator<Float64>, atrs: Iterator<Float64>, closes: Iterator<Float64>) {
-        this.medians = medians
-        this.atrs = atrs
-        this.closes = closes
+        this._medians = medians
+        this._atrs = atrs
+        this._closes = closes
     }
 
     public func next(): Option<Float64> {
-        match (medians.next()) {
+        match (_medians.next()) {
             case Some(median) =>
-                match (atrs.next()) {
+                match (_atrs.next()) {
                     case Some(a) =>
-                        match (closes.next()) {
+                        match (_closes.next()) {
                             case Some(close) =>
                                 let basicUpper = median + a
                                 let basicLower = median - a
                                 var superVal = 0.0
 
-                                if (isFirst) {
-                                    isFirst = false
-                                    finalUpper = basicUpper
-                                    finalLower = basicLower
-                                    superVal = finalLower
+                                if (_isFirst) {
+                                    _isFirst = false
+                                    _finalUpper = basicUpper
+                                    _finalLower = basicLower
+                                    superVal = _finalLower
                                 } else {
-                                    if ((basicUpper < finalUpper) || (prevClose > finalUpper)) {
-                                        finalUpper = basicUpper
+                                    if ((basicUpper < _finalUpper) || (_prevClose > _finalUpper)) {
+                                        _finalUpper = basicUpper
                                     }
-                                    if ((basicLower > finalLower) || (prevClose < finalLower)) {
-                                        finalLower = basicLower
+                                    if ((basicLower > _finalLower) || (_prevClose < _finalLower)) {
+                                        _finalLower = basicLower
                                     }
 
-                                    if (upTrend) {
-                                        if (close <= finalUpper) {
-                                            superVal = finalUpper
+                                    if (_upTrend) {
+                                        if (close <= _finalUpper) {
+                                            superVal = _finalUpper
                                         } else {
-                                            superVal = finalLower
-                                            upTrend = false
+                                            superVal = _finalLower
+                                            _upTrend = false
                                         }
                                     } else {
-                                        if (close >= finalLower) {
-                                            superVal = finalLower
+                                        if (close >= _finalLower) {
+                                            superVal = _finalLower
                                         } else {
-                                            superVal = finalUpper
-                                            upTrend = true
+                                            superVal = _finalUpper
+                                            _upTrend = true
                                         }
                                     }
                                 }
 
-                                prevClose = close
+                                _prevClose = close
                                 return Some(superVal)
                             case None => return None
                         }

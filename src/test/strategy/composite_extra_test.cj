@@ -10,12 +10,12 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 
 public class MockActionStrategy <: Strategy {
-    private let action: Action
-    public init(a: Action) { this.action = a }
+    private let _action: Action
+    public init(a: Action) { this._action = a }
     public func name(): String { "Mock" }
     public func compute(_: Iterator<Snapshot>): Iterator<Action> {
         let list = ArrayList<Action>()
-        list.add(action)
+        list.add(_action)
         return list.iterator()
     }
     public func report(_: Iterator<Snapshot>): HelperReport {

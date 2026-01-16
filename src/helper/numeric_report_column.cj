@@ -4,20 +4,20 @@ import std.core.*
 
 // NumericReportColumn 数值报告列，将浮点数迭代器包装为报告列
 public class NumericReportColumn <: ReportColumn {
-    private let columnName: String
-    private let values: Iterator<Float64>
+    private let _columnName: String
+    private let _values: Iterator<Float64>
 
     public init(name: String, values: Iterator<Float64>) {
-        this.columnName = name
-        this.values = values
+        this._columnName = name
+        this._values = values
     }
 
-    public func name(): String { return columnName }
+    public func name(): String { return _columnName }
     public func getType(): String { return "number" }
     public func role(): String { return "data" }
 
     public func value(): String {
-        match (values.next()) {
+        match (_values.next()) {
             case Some(v) => return "${v}"
             case None => return "null"
         }

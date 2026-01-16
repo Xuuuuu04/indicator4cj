@@ -12,21 +12,21 @@ public class Tsi {
     public let firstSmoothing: Ma
     // 二次平滑
     public let secondSmoothing: Ma
-    private let firstPeriod: Int64
-    private let secondPeriod: Int64
+    private let _firstPeriod: Int64
+    private let _secondPeriod: Int64
 
     public Tsi() {
-        this.firstPeriod = DefaultTsiFirstSmoothingPeriod
-        this.secondPeriod = DefaultTsiSecondSmoothingPeriod
-        this.firstSmoothing = Ema(firstPeriod)
-        this.secondSmoothing = Ema(secondPeriod)
+        this._firstPeriod = DefaultTsiFirstSmoothingPeriod
+        this._secondPeriod = DefaultTsiSecondSmoothingPeriod
+        this.firstSmoothing = Ema(_firstPeriod)
+        this.secondSmoothing = Ema(_secondPeriod)
     }
 
     public init(firstSmoothingPeriod: Int64, secondSmoothingPeriod: Int64) {
-        this.firstPeriod = firstSmoothingPeriod
-        this.secondPeriod = secondSmoothingPeriod
-        this.firstSmoothing = Ema(firstPeriod)
-        this.secondSmoothing = Ema(secondPeriod)
+        this._firstPeriod = firstSmoothingPeriod
+        this._secondPeriod = secondSmoothingPeriod
+        this.firstSmoothing = Ema(_firstPeriod)
+        this.secondSmoothing = Ema(_secondPeriod)
     }
 
 // compute 计算真实强度指标。
@@ -47,6 +47,6 @@ public class Tsi {
 
 // toString 返回指标的字符串表示。
     public func toString(): String {
-        return "TSI(${firstPeriod},${secondPeriod})"
+        return "TSI(${_firstPeriod},${_secondPeriod})"
     }
 }

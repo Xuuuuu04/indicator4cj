@@ -13,7 +13,7 @@ public class Sync {
     public var workers: Int64 = DefaultSyncWorkers
     // delaySeconds
     public var delaySeconds: Int64 = DefaultSyncDelaySeconds
-    private var assets: ArrayList<String> = ArrayList<String>()
+    private var _assets: ArrayList<String> = ArrayList<String>()
 
     // 构造函数
     public Sync() {
@@ -22,7 +22,7 @@ public class Sync {
     // run 执行同步操作，从 source 同步到 target
     // 如果 assets 为空，则同步 target 中所有资产
     public func run(source: Repository, target: Repository, defaultStartDate: DateTime): Unit {
-        var assetNames = assets
+        var assetNames = _assets
         if (assetNames.isEmpty()) {
             assetNames = target.assets()
         }

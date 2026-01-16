@@ -22,22 +22,22 @@ class JsonToChanTest {
 }
 
 private class MemoryInputStream <: InputStream {
-    private let data: Array<Byte>
-    private var pos: Int64 = 0
+    private let _data: Array<Byte>
+    private var _pos: Int64 = 0
 
     public init(bytes: Array<Byte>) {
-        this.data = bytes
+        this._data = bytes
     }
 
     public func read(buffer: Array<Byte>): Int64 {
-        if (pos >= data.size) {
+        if (_pos >= _data.size) {
             return 0
         }
         var i: Int64 = 0
-        while (i < buffer.size && pos < data.size) {
-            buffer[i] = data[pos]
+        while (i < buffer.size && _pos < _data.size) {
+            buffer[i] = _data[_pos]
             i += 1
-            pos += 1
+            _pos += 1
         }
         return i
     }

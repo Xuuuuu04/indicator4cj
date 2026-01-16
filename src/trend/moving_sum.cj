@@ -26,43 +26,43 @@ public class MovingSum {
 }
 
 private class MovingSumIterator <: Iterator<Float64> {
-    private let source: Iterator<Float64>
-    private let period: Int64
-    private var buffer: ArrayList<Float64>
-    private var initialized: Bool = false
-    private var sum: Float64 = 0.0
-    private var index: Int64 = 0
+    private let _source: Iterator<Float64>
+    private let _period: Int64
+    private var _buffer: ArrayList<Float64>
+    private var _initialized: Bool = false
+    private var _sum: Float64 = 0.0
+    private var _index: Int64 = 0
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this.source = source
-        this.period = period
-        this.buffer = ArrayList<Float64>()
+        this._source = source
+        this._period = period
+        this._buffer = ArrayList<Float64>()
     }
 
     public func next(): Option<Float64> {
-        while (buffer.size < period) {
-            match (source.next()) {
+        while (_buffer.size < _period) {
+            match (_source.next()) {
                 case Some(v) =>
-                    buffer.add(v)
-                    sum += v
+                    _buffer.add(v)
+                    _sum += v
                 case None => return None
             }
         }
 
         // 缓冲区填满后的首次输出。
-        if (!initialized) {
-            initialized = true
-            return Some(sum)
+        if (!_initialized) {
+            _initialized = true
+            return Some(_sum)
         }
 
         // 滑动窗口：移除最旧的，添加下一个。
-        match (source.next()) {
+        match (_source.next()) {
             case Some(v) =>
-                let old = buffer[0]
-                buffer.remove(at: 0)
-                buffer.add(v)
-                sum = sum - old + v
-                return Some(sum)
+                let old = _buffer[0]
+                _buffer.remove(at: 0)
+                _buffer.add(v)
+                _sum = _sum - old + v
+                return Some(_sum)
             case None => return None
         }
     }

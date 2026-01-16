@@ -5,26 +5,26 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class Vwap {
-    private let sum: MovingSum
+    private let _sum: MovingSum
 
     public init() {
-        this.sum = MovingSum(14)
+        this._sum = MovingSum(14)
     }
 
     public init(period: Int64) {
-        this.sum = MovingSum(period)
+        this._sum = MovingSum(period)
     }
 
     // compute 计算成交量加权平均价格指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let vols = Duplicate(volumes, 2)
         return Divide(
-            sum.compute(Multiply(closings, vols[0])),
-            sum.compute(vols[1])
+            _sum.compute(Multiply(closings, vols[0])),
+            _sum.compute(vols[1])
         )
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return sum.idlePeriod() }
+    public func idlePeriod(): Int64 { return _sum.idlePeriod() }
 }
 

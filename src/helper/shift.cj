@@ -6,22 +6,22 @@ public func Shift<T>(iter: Iterator<T>, count: Int64, fill: T): Iterator<T> {
 }
 
 public class ShiftIterator<T> <: Iterator<T> {
-    private let source: Iterator<T>
-    private var remaining: Int64
-    private let fill: T
+    private let _source: Iterator<T>
+    private var _remaining: Int64
+    private let _fill: T
 
     public init(source: Iterator<T>, count: Int64, fill: T) {
-        this.source = source
-        this.remaining = count
-        this.fill = fill
+        this._source = source
+        this._remaining = count
+        this._fill = fill
     }
 
     public func next(): Option<T> {
-        if (remaining > 0) {
-            remaining -= 1
-            return Some(fill)
+        if (_remaining > 0) {
+            _remaining -= 1
+            return Some(_fill)
         }
-        return source.next()
+        return _source.next()
     }
 }
 

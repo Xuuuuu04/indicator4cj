@@ -12,16 +12,16 @@ public class BstNode {
 }
 
 public class Bst {
-    private let data = ArrayList<Float64>()
+    private let _data = ArrayList<Float64>()
 
     // insert 插入数值。
     public func insert(value: Float64): Unit {
-        data.add(value)
+        _data.add(value)
     }
 
     // contains 检查是否包含数值。
     public func contains(value: Float64): Bool {
-        for (v in data) {
+        for (v in _data) {
             if (v == value) {
                 return true
             }
@@ -32,9 +32,9 @@ public class Bst {
     // remove 移除数值。
     public func remove(value: Float64): Bool {
         var idx: Int64 = 0
-        while (idx < data.size) {
-            if (data[idx] == value) {
-                data.remove(at: idx)
+        while (idx < _data.size) {
+            if (_data[idx] == value) {
+                _data.remove(at: idx)
                 return true
             }
             idx += 1
@@ -44,12 +44,12 @@ public class Bst {
 
     // min 获取最小值。
     public func min(): Float64 {
-        if (data.isEmpty()) {
+        if (_data.isEmpty()) {
             return 0.0
         }
-        var m = data[0]
-        for (i in 1..data.size) {
-            let v = data[i]
+        var m = _data[0]
+        for (i in 1.._data.size) {
+            let v = _data[i]
             if (v < m) {
                 m = v
             }
@@ -59,12 +59,12 @@ public class Bst {
 
     // max 获取最大值。
     public func max(): Float64 {
-        if (data.isEmpty()) {
+        if (_data.isEmpty()) {
             return 0.0
         }
-        var m = data[0]
-        for (i in 1..data.size) {
-            let v = data[i]
+        var m = _data[0]
+        for (i in 1.._data.size) {
+            let v = _data[i]
             if (v > m) {
                 m = v
             }

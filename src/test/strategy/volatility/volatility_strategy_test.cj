@@ -14,7 +14,7 @@ private class ActionRow {
     public init() { this.action = 0 }
 }
 
-private let basePath = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy"
+private let _basePath = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy"
 
 private class SnapshotCsvRow {
     public var date: String
@@ -37,7 +37,7 @@ private class SnapshotCsvRow {
 
 private func loadSnapshots(): Iterator<Snapshot> {
     // 与 Go 测试一致，使用 repository/brk-b 数据源（volatility 目录下为空占位）。
-    let path = "${basePath}/repository/brk-b.csv"
+    let path = "${_basePath}/repository/brk-b.csv"
     // 移除冗余的 File(path, OpenMode.Read) 检查，ReadFromCsvFile 内部会处理文件读取。
     let rows = Csv<SnapshotCsvRow>().readFromFile(path)
     let snaps = ArrayList<Snapshot>()
@@ -61,7 +61,7 @@ private func loadExpected(path: String): Iterator<Action> {
 @Test
 public func bollinger_bands_strategy_basic() {
     let snaps = loadSnapshots()
-    let expected = loadExpected("${basePath}/volatility/bollinger_bands_strategy.csv")
+    let expected = loadExpected("${_basePath}/volatility/bollinger_bands_strategy.csv")
     let s = BollingerBandsStrategy()
     let actual = s.compute(snaps)
     match (CheckEquals<Action>(actual, expected)) {

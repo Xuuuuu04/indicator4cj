@@ -14,7 +14,7 @@ public class DecoratorStrategyResultRow {
     public init() { this.action = 0 }
 }
 
-private let basePath = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy"
+private let _basePath = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy"
 
 private class SnapshotCsvRow {
     public var date: String
@@ -37,7 +37,7 @@ private class SnapshotCsvRow {
 
 @Test
 public func inverse_strategy_basic() {
-    let snapRows = h.Csv<SnapshotCsvRow>().readFromFile("${basePath}/repository/brk-b.csv")
+    let snapRows = h.Csv<SnapshotCsvRow>().readFromFile("${_basePath}/repository/brk-b.csv")
     let snapList = ArrayList<Snapshot>()
     while (true) {
         match (snapRows.next()) {
@@ -48,7 +48,7 @@ public func inverse_strategy_basic() {
         }
     }
     let snapshots = snapList.iterator()
-    let results = h.Csv<DecoratorStrategyResultRow>().readFromFile("${basePath}/decorator/inverse_strategy.csv")
+    let results = h.Csv<DecoratorStrategyResultRow>().readFromFile("${_basePath}/decorator/inverse_strategy.csv")
     let expected = h.Map(results, { r: DecoratorStrategyResultRow => ActionFromInt(r.action) })
 
     let inner = MacdStrategy()

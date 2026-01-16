@@ -27,31 +27,31 @@ public class Wma {
 }
 
 private class WmaIterator <: Iterator<Float64> {
-    private let source: Iterator<Float64>
-    private let period: Int64
-    private let buffer = ArrayList<Float64>()
-    private let divisor: Float64
+    private let _source: Iterator<Float64>
+    private let _period: Int64
+    private let _buffer = ArrayList<Float64>()
+    private let _divisor: Float64
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this.source = source
-        this.period = period
-        this.divisor = Float64(period) * (Float64(period) + 1.0) / 2.0
+        this._source = source
+        this._period = period
+        this._divisor = Float64(period) * (Float64(period) + 1.0) / 2.0
     }
 
     public func next(): Option<Float64> {
         while (true) {
-            match (source.next()) {
+            match (_source.next()) {
                 case Some(v) =>
-                    buffer.add(v)
-                    if (buffer.size < period) {
+                    _buffer.add(v)
+                    if (_buffer.size < _period) {
                         continue
                     }
-                    if (buffer.size > period) {
-                        buffer.remove(at: 0)
+                    if (_buffer.size > _period) {
+                        _buffer.remove(at: 0)
                     }
                     var sum = 0.0
                     var i: Int64 = 0
-                    while (i < period) {
+                    while (i < _period) {
                         // 权重应该是：最新的（索引 period-1）具有权重 'period'
                         // 最旧的（索引 0）具有权重 '1'
                         // 公式：(P*D_t + (P-1)*D_{t-1} + ... + 1*D_{t-P+1}) / 除数
@@ -69,11 +69,11 @@ private class WmaIterator <: Iterator<Float64> {
                         // i=period-1 -> weight=1。（最新获得最小权重？错误！）
 
                         // 匹配 Go 实现：最旧的获得最高权重（周期）。
-                        let weight = Float64(period - i)
-                        sum += buffer[i] * weight
+                        let weight = Float64(_period - i)
+                        sum += _buffer[i] * weight
                         i += 1
                     }
-                    return Some(sum / divisor)
+                    return Some(sum / _divisor)
                 case None => return None
             }
         }

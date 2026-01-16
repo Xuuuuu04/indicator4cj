@@ -18,10 +18,10 @@ class ChanToJsonTest {
 }
 
 private class MemoryOutputStream <: OutputStream {
-    private let data = ArrayList<Byte>()
+    private let _data = ArrayList<Byte>()
 
     public func write(bytes: Array<Byte>): Unit {
-        for (b in bytes) { data.add(b) }
+        for (b in bytes) { _data.add(b) }
     }
 
     public func flush(): Unit {
@@ -30,7 +30,7 @@ private class MemoryOutputStream <: OutputStream {
 
     public func toStringValue(): String {
         let runes = ArrayList<Rune>()
-        for (b in data) {
+        for (b in _data) {
             runes.add(Rune(Int64(b)))
         }
         return String(runes.toArray())

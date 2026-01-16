@@ -6,31 +6,31 @@ public func Seq(from: Float64, to: Float64, increment: Float64): Iterator<Float6
 }
 
 public class SeqIterator <: Iterator<Float64> {
-    private var current: Float64
-    private let to: Float64
-    private let inc: Float64
-    private var finished: Bool = false
+    private var _current: Float64
+    private let _to: Float64
+    private let _inc: Float64
+    private var _finished: Bool = false
 
     public init(current: Float64, to: Float64, inc: Float64) {
-        this.current = current
-        this.to = to
-        this.inc = inc
+        this._current = current
+        this._to = to
+        this._inc = inc
         if (inc == 0.0) {
             throw Exception("increment must not be zero")
         }
         if ((inc > 0.0 && current >= to) || (inc < 0.0 && current <= to)) {
-            finished = true
+            _finished = true
         }
     }
 
     public func next(): Option<Float64> {
-        if (finished) {
+        if (_finished) {
             return None
         }
-        let v = current
-        current = current + inc
-        if ((inc > 0.0 && current >= to) || (inc < 0.0 && current <= to)) {
-            finished = true
+        let v = _current
+        _current = _current + _inc
+        if ((_inc > 0.0 && _current >= _to) || (_inc < 0.0 && _current <= _to)) {
+            _finished = true
         }
         return Some(v)
     }

@@ -8,12 +8,12 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.backtest.*
 
-private let repositoryBase = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy/repository"
+private let _repositoryBase = "I:/indicator4cj/indicator4cj/src/test/testdata/strategy/repository"
 
 @Test
 public func test_data_report_basic() {
     try {
-        let repo = FileSystemRepository(repositoryBase)
+        let repo = FileSystemRepository(_repositoryBase)
         let assets = ArrayList<String>(["brk-b"])
         let strategies = ArrayList<Strategy>([BuyAndHoldStrategy()])
 
@@ -31,7 +31,7 @@ public func test_data_report_basic() {
         report.assetEnd("brk-b")
         report.end()
 
-        if (report._results.size != 1) { fail("results size ${report._results.size}") }
+        if (report.results.size != 1) { fail("results size ${report.results.size}") }
     } catch (e: Exception) {
         fail(e.toString())
     }

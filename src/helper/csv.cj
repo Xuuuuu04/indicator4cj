@@ -20,7 +20,7 @@ private struct CsvColumn {
     }
 }
 
-public class Csv<T> {
+public class Csv<TData> {
     // hasHeader
     public var hasHeader: Bool = true
     // 日期
@@ -29,18 +29,18 @@ public class Csv<T> {
     public Csv() {
 }
 
-    public init(options: ArrayList<CsvOption<T>>) {
+    public init(options: ArrayList<CsvOption<TData>>) {
         for (opt in options) { opt.apply(this) }
     }
 
-    public func readFromReader(reader: InputStream): Iterator<T> {
+    public func readFromReader(reader: InputStream): Iterator<TData> {
         let content = readAll(reader)
         let rows = parseLines(content)
         if (rows.isEmpty()) {
-            return ArrayList<T>().iterator()
+            return ArrayList<TData>().iterator()
         }
 
-        let typeInfo = ClassTypeInfo.of<T>()
+        let typeInfo = ClassTypeInfo.of<TData>()
         let vars = ArrayList<InstanceVariableInfo>()
         for (v in typeInfo.instanceVariables) { vars.add(v) }
 
@@ -65,10 +65,10 @@ public class Csv<T> {
             }
         }
 
-        let out = ArrayList<T>()
+        let out = ArrayList<TData>()
         for (idx in startRow..rows.size) {
             let record = splitCsvRow(rows[Int64(idx)])
-            match (constructInstance<T>()) {
+            match (constructInstance<TData>()) {
                 case Some(instance) =>
                     for (col in columns) {
                         if (col.columnIndex >= record.size) { continue }
@@ -81,7 +81,7 @@ public class Csv<T> {
         return out.iterator()
     }
 
-    public func readFromFile(path: String): Iterator<T> {
+    public func readFromFile(path: String): Iterator<TData> {
         try {
             let file = File(path, OpenMode.Read)
             let iter = readFromReader(file)
@@ -89,23 +89,23 @@ public class Csv<T> {
             return iter
         } catch (e: Exception) {
             println("CSV Read Error: " + e.toString() + " at path: " + path)
-            return ArrayList<T>().iterator()
+            return ArrayList<TData>().iterator()
         }
     }
 
-    public func writeToFile(path: String, rows: Iterator<T>) {
+    public func writeToFile(path: String, rows: Iterator<TData>) {
         let f = File(path, OpenMode.Write)
         writeCommon(f, rows, true)
         f.close()
     }
 
-    public func appendToFile(path: String, rows: Iterator<T>) {
+    public func appendToFile(path: String, rows: Iterator<TData>) {
         let f = File(path, OpenMode.Append)
         writeCommon(f, rows, false)
         f.close()
     }
 
-    public func appendOrWriteToFile(path: String, rows: Iterator<T>) {
+    public func appendOrWriteToFile(path: String, rows: Iterator<TData>) {
         // 如果文件存在且非空则 append，否则写入新文件。
         try {
             let f = File(path, OpenMode.Read)
@@ -121,8 +121,8 @@ public class Csv<T> {
         writeToFile(path, rows)
     }
 
-    private func writeCommon(output: OutputStream, rows: Iterator<T>, writeHeader: Bool) {
-        let typeInfo = ClassTypeInfo.of<T>()
+    private func writeCommon(output: OutputStream, rows: Iterator<TData>, writeHeader: Bool) {
+        let typeInfo = ClassTypeInfo.of<TData>()
         let vars = ArrayList<InstanceVariableInfo>()
         for (v in typeInfo.instanceVariables) { vars.add(v) }
 
@@ -150,20 +150,20 @@ public class Csv<T> {
     }
 }
 
-public class CsvOption<T> {
-    private let applyFn: (Csv<T>) -> Unit
-    public init(apply: (Csv<T>) -> Unit) {
-        this.applyFn = apply
+public class CsvOption<TData> {
+    private let _applyFn: (Csv<TData>) -> Unit
+    public init(apply: (Csv<TData>) -> Unit) {
+        this._applyFn = apply
     }
-    public func apply(c: Csv<T>): Unit { applyFn(c) }
+    public func apply(c: Csv<TData>): Unit { _applyFn(c) }
 }
 
-public func WithoutCsvHeader<T>(): CsvOption<T> {
-    return CsvOption<T>({ c => c.hasHeader = false })
+public func WithoutCsvHeader<TData>(): CsvOption<TData> {
+    return CsvOption<TData>({ c => c.hasHeader = false })
 }
 
-public func WithCsvDefaultDateTimeFormat<T>(format: String): CsvOption<T> {
-    return CsvOption<T>({ c => c.defaultDateTimeFormat = format })
+public func WithCsvDefaultDateTimeFormat<TData>(format: String): CsvOption<TData> {
+    return CsvOption<TData>({ c => c.defaultDateTimeFormat = format })
 }
 
 
@@ -272,11 +272,11 @@ private func findVar(vars: ArrayList<InstanceVariableInfo>, name: String): Optio
     return None
 }
 
-private func constructInstance<T>(): Option<T> {
-    let ty = ClassTypeInfo.of<T>()
+private func constructInstance<TData>(): Option<TData> {
+    let ty = ClassTypeInfo.of<TData>()
     try {
         let anyObj = ty.construct(Array<Any>(0, { _ => () }))
-        match (anyObj as T) {
+        match (anyObj as TData) {
             case Some(obj) => return Some(obj)
             case None => return None
         }

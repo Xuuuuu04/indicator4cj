@@ -6,25 +6,25 @@ public func Operate3<A, B, C, R>(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>,
 }
 
 public class Operate3Iterator<A, B, C, R> <: Iterator<R> {
-    private let a: Iterator<A>
-    private let b: Iterator<B>
-    private let c: Iterator<C>
-    private let op: (A, B, C) -> R
+    private let _a: Iterator<A>
+    private let _b: Iterator<B>
+    private let _c: Iterator<C>
+    private let _op: (A, B, C) -> R
 
     public init(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>, op: (A, B, C) -> R) {
-        this.a = a
-        this.b = b
-        this.c = c
-        this.op = op
+        this._a = a
+        this._b = b
+        this._c = c
+        this._op = op
     }
 
     public func next(): Option<R> {
-        match (a.next()) {
+        match (_a.next()) {
             case Some(av) =>
-                match (b.next()) {
+                match (_b.next()) {
                     case Some(bv) =>
-                        match (c.next()) {
-                            case Some(cv) => return Some(op(av, bv, cv))
+                        match (_c.next()) {
+                            case Some(cv) => return Some(_op(av, bv, cv))
                             case None => return None
                         }
                     case None => return None

@@ -24,37 +24,37 @@ public class Rma {
 }
 
 private class RmaIterator <: Iterator<Float64> {
-    private let source: Iterator<Float64>
-    private let period: Int64
-    private var initialized: Bool = false
-    private var prev: Float64 = 0.0
+    private let _source: Iterator<Float64>
+    private let _period: Int64
+    private var _initialized: Bool = false
+    private var _prev: Float64 = 0.0
 
     public init(source: Iterator<Float64>, period: Int64) {
-        this.source = source
-        this.period = period
+        this._source = source
+        this._period = period
     }
 
     public func next(): Option<Float64> {
         // 初始 SMA 覆盖首个周期元素。
-        if (!initialized) {
+        if (!_initialized) {
             let buf = ArrayList<Float64>()
-            while (buf.size < period) {
-                match (source.next()) {
+            while (buf.size < _period) {
+                match (_source.next()) {
                     case Some(v) => buf.add(v)
                     case None => return None
                 }
             }
             var sum: Float64 = 0.0
             for (v in buf) { sum += v }
-            prev = sum / Float64(period)
-            initialized = true
-            return Some(prev)
+            _prev = sum / Float64(_period)
+            _initialized = true
+            return Some(_prev)
         }
 
-        match (source.next()) {
+        match (_source.next()) {
             case Some(v) =>
-                prev = (prev * Float64(period - 1) + v) / Float64(period)
-                return Some(prev)
+                _prev = (_prev * Float64(_period - 1) + v) / Float64(_period)
+                return Some(_prev)
             case None => return None
         }
     }

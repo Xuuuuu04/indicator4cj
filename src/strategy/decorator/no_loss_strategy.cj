@@ -50,26 +50,26 @@ public func NewNoLossStrategy(innerStrategy: Strategy): NoLossStrategy {
 }
 
 private class NoLossIterator <: Iterator<Action> {
-    private let actions: Iterator<Action>
-    private let closings: Iterator<Float64>
-    private var boughtAt: Float64 = 0.0
+    private let _actions: Iterator<Action>
+    private let _closings: Iterator<Float64>
+    private var _boughtAt: Float64 = 0.0
 
     public init(actions: Iterator<Action>, closings: Iterator<Float64>) {
-        this.actions = actions
-        this.closings = closings
+        this._actions = actions
+        this._closings = closings
     }
 
     public func next(): Option<Action> {
-        match (actions.next()) {
+        match (_actions.next()) {
             case Some(a) =>
-                match (closings.next()) {
+                match (_closings.next()) {
                     case Some(price) =>
-                        if ((a == Action.Buy) && (boughtAt == 0.0)) {
-                            boughtAt = price
+                        if ((a == Action.Buy) && (_boughtAt == 0.0)) {
+                            _boughtAt = price
                             return Some(Action.Buy)
                         }
-                        if ((a == Action.Sell) && (boughtAt != 0.0) && (boughtAt < price)) {
-                            boughtAt = 0.0
+                        if ((a == Action.Sell) && (_boughtAt != 0.0) && (_boughtAt < price)) {
+                            _boughtAt = 0.0
                             return Some(Action.Sell)
                         }
                         return Some(Action.Hold)

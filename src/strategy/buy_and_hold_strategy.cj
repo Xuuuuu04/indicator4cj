@@ -6,7 +6,7 @@ import indicator4cj.helper.*
 
 // Buy on first tick, hold thereafter.
 public class BuyAndHoldStrategy <: Strategy {
-    private var first: Bool = true
+    private var _first: Bool = true
 
     public func name(): String { return "BuyAndHold" }
 
@@ -21,18 +21,18 @@ public class BuyAndHoldStrategy <: Strategy {
 }
 
 class BuyAndHoldIterator <: Iterator<Action> {
-    private let source: Iterator<Snapshot>
-    private var isFirst: Bool = true
+    private let _source: Iterator<Snapshot>
+    private var _isFirst: Bool = true
 
     public init(source: Iterator<Snapshot>) {
-        this.source = source
+        this._source = source
     }
 
     public func next(): Option<Action> {
-        match (source.next()) {
+        match (_source.next()) {
             case Some(_) =>
-                if (isFirst) {
-                    isFirst = false
+                if (_isFirst) {
+                    _isFirst = false
                     return Some(Action.Buy)
                 }
                 return Some(Action.Hold)

@@ -6,26 +6,26 @@ import indicator4cj.trend.*
 
 public class DonchianChannel {
     // 最大值指标
-    private let max: MovingMax
+    private let _max: MovingMax
     // 最小值指标
-    private let min: MovingMin
+    private let _min: MovingMin
 
     public DonchianChannel() {
-        this.max = MovingMax(20)
-        this.min = MovingMin(20)
+        this._max = MovingMax(20)
+        this._min = MovingMin(20)
     }
 
     public init(period: Int64) {
-        this.max = MovingMax(period)
-        this.min = MovingMin(period)
+        this._max = MovingMax(period)
+        this._min = MovingMin(period)
     }
 
     // compute 计算唐奇安通道指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let closings = Duplicate(c, 2)
 
-        let uppers = Duplicate(max.compute(closings[0]), 2)
-        let lowers = Duplicate(min.compute(closings[1]), 2)
+        let uppers = Duplicate(_max.compute(closings[0]), 2)
+        let lowers = Duplicate(_min.compute(closings[1]), 2)
 
         let middle = DivideBy(
             Add(uppers[0], lowers[0]),
@@ -36,6 +36,6 @@ public class DonchianChannel {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return max.idlePeriod() }
+    public func idlePeriod(): Int64 { return _max.idlePeriod() }
 }
 

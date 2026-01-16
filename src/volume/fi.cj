@@ -6,19 +6,19 @@ import indicator4cj.trend.*
 
 // 强力指数。
 public class Fi {
-    private let ema = Ema()
+    private let _ema = Ema()
 
     public Fi() {
-        ema.period = 13
+        _ema.period = 13
     }
 
     public init(period: Int64) {
-        ema.period = period
+        _ema.period = period
     }
 
     // compute 计算力量指数指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        return ema.compute(
+        return _ema.compute(
             Multiply(
                 Change(closings, 1),
                 volumes
@@ -27,6 +27,6 @@ public class Fi {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return ema.idlePeriod() + 1 }
+    public func idlePeriod(): Int64 { return _ema.idlePeriod() + 1 }
 }
 

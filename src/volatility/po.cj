@@ -7,22 +7,22 @@ import indicator4cj.trend.*
 // 投影振荡器（Float64）。
 public class Po {
     // 最小二乘指标
-    private let mls: Mls
+    private let _mls: Mls
     // 最小值指标
-    private let min: MovingMin
+    private let _min: MovingMin
     // 最大值指标
-    private let max: MovingMax
+    private let _max: MovingMax
 
     public init() {
-        this.mls = Mls(14)
-        this.min = MovingMin(14)
-        this.max = MovingMax(14)
+        this._mls = Mls(14)
+        this._min = MovingMin(14)
+        this._max = MovingMax(14)
     }
 
     public init(period: Int64) {
-        this.mls = Mls(period)
-        this.min = MovingMin(period)
-        this.max = MovingMax(period)
+        this._mls = Mls(period)
+        this._min = MovingMin(period)
+        this._max = MovingMax(period)
     }
 
     // compute 计算投影振荡器指标。
@@ -35,24 +35,24 @@ public class Po {
         let xSplice = Duplicate(x, 2)
 
         // PL = Min(周期, (最高价 + MLS(周期, x, 最高价)))
-        let (plM, plB) = mls.compute(xSplice[0], hs[0])
+        let (plM, plB) = _mls.compute(xSplice[0], hs[0])
         Drain(plB)
-        hs[1] = Skip(hs[1], mls.idlePeriod())
+        hs[1] = Skip(hs[1], _mls.idlePeriod())
         let plSplice = Duplicate(
-            min.compute(
+            _min.compute(
                 Add(hs[1], plM)
             ),
             2
         )
 
         // PH = Max(周期, (最低价 + MLS(周期, x, 最低价)))
-        let (phM, phB) = mls.compute(xSplice[1], ls[0])
+        let (phM, phB) = _mls.compute(xSplice[1], ls[0])
         Drain(phB)
-        ls[1] = Skip(ls[1], mls.idlePeriod())
-        let ph = max.compute(Add(ls[1], phM))
+        ls[1] = Skip(ls[1], _mls.idlePeriod())
+        let ph = _max.compute(Add(ls[1], phM))
 
         // PO = 100 * (收盘价 - PL) / (PH - PL)
-        cs[1] = Skip(cs[1], mls.idlePeriod() + min.idlePeriod())
+        cs[1] = Skip(cs[1], _mls.idlePeriod() + _min.idlePeriod())
         let po = MultiplyBy(
             Divide(
                 Subtract(cs[1], plSplice[0]),
@@ -66,7 +66,7 @@ public class Po {
 
     // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
-        return mls.idlePeriod() + min.idlePeriod()
+        return _mls.idlePeriod() + _min.idlePeriod()
     }
 }
 
