@@ -7,18 +7,18 @@ import indicator4cj.strategy.*
 import indicator4cj.helper.*
 
 public class DataStrategyResult {
-    public let Asset: String
-    public let StrategyInst: Strategy
-    public let Outcome: Float64
-    public let ActionVal: Action
-    public let Transactions: ArrayList<Action>
+    public let asset: String
+    public let strategyInst: Strategy
+    public let outcome: Float64
+    public let actionVal: Action
+    public let transactions: ArrayList<Action>
 
     public init(asset: String, strategyInst: Strategy, outcome: Float64, action: Action, transactions: ArrayList<Action>) {
-        this.Asset = asset
-        this.StrategyInst = strategyInst
-        this.Outcome = outcome
-        this.ActionVal = action
-        this.Transactions = transactions
+        this.asset = asset
+        this.strategyInst = strategyInst
+        this.outcome = outcome
+        this.actionVal = action
+        this.transactions = transactions
     }
 }
 

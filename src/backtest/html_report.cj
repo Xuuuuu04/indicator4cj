@@ -10,20 +10,20 @@ import indicator4cj.helper.*
 public const DefaultWriteStrategyReports: Bool = true
 
 private class HtmlReportResult {
-    public let AssetName: String
-    public let StrategyName: String
-    public let ActionVal: Action
-    public let Since: Int64
-    public let Outcome: Float64
-    public let Transactions: Int64
+    public let assetName: String
+    public let strategyName: String
+    public let actionVal: Action
+    public let since: Int64
+    public let outcome: Float64
+    public let transactions: Int64
 
     public init(asset: String, strategy: String, actionVal: Action, since: Int64, outcome: Float64, tx: Int64) {
-        this.AssetName = asset
-        this.StrategyName = strategy
-        this.ActionVal = actionVal
-        this.Since = since
-        this.Outcome = outcome
-        this.Transactions = tx
+        this.assetName = asset
+        this.strategyName = strategy
+        this.actionVal = actionVal
+        this.since = since
+        this.outcome = outcome
+        this.transactions = tx
     }
 }
 
@@ -103,7 +103,7 @@ public class HtmlReport <: Report {
         // 选择最佳
         var best = results[0]
         for (r in results) {
-            if (r.Outcome > best.Outcome) { best = r }
+            if (r.outcome > best.outcome) { best = r }
         }
         bestResults.add(best)
         writeAssetReport(name, results)
@@ -121,11 +121,11 @@ public class HtmlReport <: Report {
         sb += "<table border='1'><tr><th>Strategy</th><th>Action</th><th>Since</th><th>Outcome</th><th>Transactions</th></tr>\n"
         for (r in results) {
             sb += "<tr>"
-            sb += "<td>${r.StrategyName}</td>"
-            sb += "<td>${r.ActionVal.toString()}</td>"
-            sb += "<td>${r.Since.toString()}</td>"
-            sb += "<td>${r.Outcome.toString()}</td>"
-            sb += "<td>${r.Transactions.toString()}</td>"
+            sb += "<td>${r.strategyName}</td>"
+            sb += "<td>${r.actionVal.toString()}</td>"
+            sb += "<td>${r.since.toString()}</td>"
+            sb += "<td>${r.outcome.toString()}</td>"
+            sb += "<td>${r.transactions.toString()}</td>"
             sb += "</tr>\n"
         }
         sb += "</table>\n</body></html>"
@@ -138,10 +138,10 @@ public class HtmlReport <: Report {
         sb += "<table border='1'><tr><th>Asset</th><th>Strategy</th><th>Action</th><th>Outcome</th></tr>\n"
         for (r in results) {
             sb += "<tr>"
-            sb += "<td>${r.AssetName}</td>"
-            sb += "<td>${r.StrategyName}</td>"
-            sb += "<td>${r.ActionVal.toString()}</td>"
-            sb += "<td>${r.Outcome.toString()}</td>"
+            sb += "<td>${r.assetName}</td>"
+            sb += "<td>${r.strategyName}</td>"
+            sb += "<td>${r.actionVal.toString()}</td>"
+            sb += "<td>${r.outcome.toString()}</td>"
             sb += "</tr>\n"
         }
         sb += "</table>\n</body></html>"
