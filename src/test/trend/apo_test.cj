@@ -21,7 +21,7 @@ public func test_apo_basic() {
 
     let apo = Apo()
     let actual = h.RoundDigits(apo.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, apo.SlowPeriod - 1)
+    let expectedSkipped = h.Skip(expected, apo.slowPeriod - 1)
 
     match (h.CheckFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err.toString())

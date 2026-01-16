@@ -27,8 +27,8 @@ public class ForceIndexStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 2)
-        let closings = SnapshotsAsClosings(snaps[0])
-        let volumes = SnapshotsAsVolumes(snaps[1])
+        let closings = snapshotsAsClosings(snaps[0])
+        let volumes = snapshotsAsVolumes(snaps[1])
 
         let fis = Indicator.compute(closings, volumes)
         let actions = h.Map(fis, { v: Float64 =>
@@ -41,9 +41,9 @@ public class ForceIndexStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.idlePeriod())
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
-        let volumes = SnapshotsAsVolumes(snaps[2])
+        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let volumes = snapshotsAsVolumes(snaps[2])
 
         let fis = Indicator.compute(closingsDup[0], volumes)
         closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())

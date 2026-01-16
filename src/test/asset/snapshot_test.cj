@@ -15,12 +15,12 @@ public func test_snapshots_as() {
     
     let copies = Duplicate(snaps.iterator(), 7)
     
-    let dates = SnapshotsAsDates(copies[1])
-    let openings = SnapshotsAsOpenings(copies[2])
-    let highs = SnapshotsAsHighs(copies[3])
-    let lows = SnapshotsAsLows(copies[4])
-    let closings = SnapshotsAsClosings(copies[5])
-    let volumes = SnapshotsAsVolumes(copies[6])
+    let dates = snapshotsAsDates(copies[1])
+    let openings = snapshotsAsOpenings(copies[2])
+    let highs = snapshotsAsHighs(copies[3])
+    let lows = snapshotsAsLows(copies[4])
+    let closings = snapshotsAsClosings(copies[5])
+    let volumes = snapshotsAsVolumes(copies[6])
     
     match (copies[0].next()) {
         case Some(s0) =>

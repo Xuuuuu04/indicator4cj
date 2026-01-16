@@ -20,8 +20,8 @@ public class AroonStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 2)
-        let highs = SnapshotsAsHighs(snaps[0])
-        let lows = SnapshotsAsLows(snaps[1])
+        let highs = snapshotsAsHighs(snaps[0])
+        let lows = snapshotsAsLows(snaps[1])
 
         let (ups, downs) = Indicator.compute(highs, lows)
         let actions = Operate(ups, downs, { up: Float64, down: Float64 =>
@@ -35,10 +35,10 @@ public class AroonStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 5)
-        let dates = SnapshotsAsDates(snaps[0])
-        let highs = SnapshotsAsHighs(snaps[1])
-        let lows = SnapshotsAsLows(snaps[2])
-        let closings = SnapshotsAsClosings(snaps[3])
+        let dates = snapshotsAsDates(snaps[0])
+        let highs = snapshotsAsHighs(snaps[1])
+        let lows = snapshotsAsLows(snaps[2])
+        let closings = snapshotsAsClosings(snaps[3])
 
         var (ups, downs) = Indicator.compute(highs, lows)
         ups = Shift(ups, Indicator.period - 1, 0.0)

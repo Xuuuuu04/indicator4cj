@@ -25,7 +25,7 @@ public func actionSources(strategies: ArrayList<Strategy>, snapshots: Iterator<S
 public func computeWithOutcome(s: Strategy, snapshots: Iterator<Snapshot>): (Iterator<Action>, Iterator<Float64>) {
     let snaps = Duplicate(snapshots, 2)
     let actions = Duplicate(s.compute(snaps[0]), 2)
-    let closings = SnapshotsAsClosings(snaps[1])
+    let closings = snapshotsAsClosings(snaps[1])
     let outcomes = Outcome(closings, actions[1])
     return (actions[0], outcomes)
 }

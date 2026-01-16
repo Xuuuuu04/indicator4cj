@@ -11,11 +11,11 @@ import indicator4cj.strategy.*
 public func and_strategy_basic() {
     let snapshots = Csv<Snapshot>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let results = Csv<Result>().readFromFile("src/test/testdata/strategy/and.csv")
-    let expected = h.Map(results, { r: Result => ActionFromInt(r.Action) })
+    let expected = h.Map(results, { r: Result => ActionFromInt(r.action) })
 
     let s = NewAndStrategy("And Strategy")
-    s.Strategies.add(BuyAndHoldStrategy())
-    s.Strategies.add(BuyAndHoldStrategy())
+    s.strategies.add(BuyAndHoldStrategy())
+    s.strategies.add(BuyAndHoldStrategy())
 
     let actual = s.compute(snapshots)
     match (CheckEquals<Action>(actual, expected)) {

@@ -21,10 +21,10 @@ public class BopStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 4)
-        let openings = SnapshotsAsOpenings(snaps[0])
-        let highs = SnapshotsAsHighs(snaps[1])
-        let lows = SnapshotsAsLows(snaps[2])
-        let closings = SnapshotsAsClosings(snaps[3])
+        let openings = snapshotsAsOpenings(snaps[0])
+        let highs = snapshotsAsHighs(snaps[1])
+        let lows = snapshotsAsLows(snaps[2])
+        let closings = snapshotsAsClosings(snaps[3])
 
         let bops = Indicator.compute(openings, highs, lows, closings)
         return h.Map(bops, { v: Float64 =>
@@ -36,11 +36,11 @@ public class BopStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 6)
-        let dates = SnapshotsAsDates(snaps[0])
-        let openings = SnapshotsAsOpenings(snaps[1])
-        let highs = SnapshotsAsHighs(snaps[2])
-        let lows = SnapshotsAsLows(snaps[3])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[4]), 2)
+        let dates = snapshotsAsDates(snaps[0])
+        let openings = snapshotsAsOpenings(snaps[1])
+        let highs = snapshotsAsHighs(snaps[2])
+        let lows = snapshotsAsLows(snaps[3])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[4]), 2)
 
         let bop = Indicator.compute(openings, highs, lows, closingsDup[1])
 

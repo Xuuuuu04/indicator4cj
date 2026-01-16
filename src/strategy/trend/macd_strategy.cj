@@ -24,7 +24,7 @@ public class MacdStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = SnapshotsAsClosings(snapshots)
+        let closings = snapshotsAsClosings(snapshots)
         let (macdsRaw, signalsRaw) = Macd.compute(closings)
         let macds = Duplicate(macdsRaw, 2)
         let signals = Duplicate(signalsRaw, 2)
@@ -44,8 +44,8 @@ public class MacdStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
+        let dates = snapshotsAsDates(snaps[0])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
 
         var (macds, signals) = Macd.compute(closingsDup[0])
         macds = Shift(macds, Macd.idlePeriod(), 0.0)

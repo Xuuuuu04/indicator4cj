@@ -34,8 +34,8 @@ public class NegativeVolumeIndexStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 2)
-        let closings = SnapshotsAsClosings(snaps[0])
-        let volumes = SnapshotsAsVolumes(snaps[1])
+        let closings = snapshotsAsClosings(snaps[0])
+        let volumes = snapshotsAsVolumes(snaps[1])
 
         let nvis = Duplicate(Indicator.compute(closings, volumes), 2)
         nvis[0] = Skip(nvis[0], EmaIndicator.idlePeriod())
@@ -53,10 +53,10 @@ public class NegativeVolumeIndexStrategy <: Strategy {
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
         let period = Indicator.idlePeriod() + EmaIndicator.idlePeriod()
-        let dates = Skip(SnapshotsAsDates(snaps[0]), period)
+        let dates = Skip(snapshotsAsDates(snaps[0]), period)
 
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
-        let volumes = SnapshotsAsVolumes(snaps[2])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let volumes = snapshotsAsVolumes(snaps[2])
 
         let nvis = Duplicate(Indicator.compute(closingsDup[0], volumes), 2)
         nvis[0] = Skip(nvis[0], EmaIndicator.idlePeriod())

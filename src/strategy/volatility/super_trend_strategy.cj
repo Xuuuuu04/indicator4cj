@@ -26,9 +26,9 @@ public class SuperTrendStrategy <: Strategy {
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(snapshots, 3)
-        let highs = SnapshotsAsHighs(snaps[0])
-        let lows = SnapshotsAsLows(snaps[1])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
+        let highs = snapshotsAsHighs(snaps[0])
+        let lows = snapshotsAsLows(snaps[1])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[2]), 2)
 
         let superTrends = Indicator.compute(highs, lows, closingsDup[0])
         closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())
@@ -44,10 +44,10 @@ public class SuperTrendStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 5)
-        let dates = SnapshotsAsDates(snaps[0])
-        let highs = SnapshotsAsHighs(snaps[1])
-        let lows = SnapshotsAsLows(snaps[2])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[3]), 2)
+        let dates = snapshotsAsDates(snaps[0])
+        let highs = snapshotsAsHighs(snaps[1])
+        let lows = snapshotsAsLows(snaps[2])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[3]), 2)
 
         var superTrends = Indicator.compute(highs, lows, closingsDup[0])
         superTrends = Shift(superTrends, Indicator.idlePeriod(), 0.0)

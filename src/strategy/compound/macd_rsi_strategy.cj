@@ -49,8 +49,8 @@ public class MacdRsiStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 3)
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var (macds, signals) = MacdStrategyInst.Macd.compute(closings[0])
         macds = Shift(macds, MacdStrategyInst.Macd.idlePeriod(), 0.0)

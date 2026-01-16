@@ -19,8 +19,8 @@ public class QstickStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 2)
-        let openings = SnapshotsAsOpenings(snaps[0])
-        let closings = SnapshotsAsClosings(snaps[1])
+        let openings = snapshotsAsOpenings(snaps[0])
+        let closings = snapshotsAsClosings(snaps[1])
 
         // 保持与 Go 实现一致：直接使用指标输出并做轻量缓冲。
         var qstick = Indicator.compute(openings, closings)
@@ -41,9 +41,9 @@ public class QstickStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
-        let dates = SnapshotsAsDates(snaps[0])
-        let openingsDup = Duplicate(SnapshotsAsOpenings(snaps[1]), 2)
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
+        let dates = snapshotsAsDates(snaps[0])
+        let openingsDup = Duplicate(snapshotsAsOpenings(snaps[1]), 2)
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[2]), 2)
 
         var qstick = Indicator.compute(openingsDup[0], closingsDup[0])
         qstick = Shift(qstick, Indicator.period - 1, 0.0)

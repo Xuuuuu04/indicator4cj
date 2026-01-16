@@ -38,7 +38,7 @@ public class AlligatorStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(SnapshotsAsClosings(snapshots), 3)
+        let closings = Duplicate(snapshotsAsClosings(snapshots), 3)
         var jaws = Jaw.compute(closings[0])
         var teeths = Teeth.compute(closings[1])
         var lips = Lip.compute(closings[2])
@@ -59,8 +59,8 @@ public class AlligatorStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        var dates = SnapshotsAsDates(snaps[0])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 4)
+        var dates = snapshotsAsDates(snaps[0])
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 4)
 
         var jaws = Jaw.compute(closings[1])
         var teeths = Teeth.compute(closings[2])

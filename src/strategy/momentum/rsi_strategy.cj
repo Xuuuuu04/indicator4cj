@@ -33,7 +33,7 @@ public class RsiStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = SnapshotsAsClosings(c)
+        let closings = snapshotsAsClosings(c)
         let rsiVals = Indicator.compute(closings)
 
         let actions = h.Map(rsiVals, { v: Float64 =>
@@ -48,8 +48,8 @@ public class RsiStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
+        let dates = snapshotsAsDates(snaps[0])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[2]), 2)
         let rsiShifted = Shift(Indicator.compute(closingsDup[1]), Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])

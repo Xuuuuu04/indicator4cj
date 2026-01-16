@@ -48,26 +48,32 @@ public class Snapshot <: ToString {
     }
 }
 
-public func SnapshotsAsDates(snaps: Iterator<Snapshot>): Iterator<DateTime> {
+// snapshotsAsDates 提取日期序列。
+public func snapshotsAsDates(snaps: Iterator<Snapshot>): Iterator<DateTime> {
     return Map(snaps, { s: Snapshot => s.date })
 }
 
-public func SnapshotsAsOpenings(snaps: Iterator<Snapshot>): Iterator<Float64> {
+// snapshotsAsOpenings 提取开盘价序列。
+public func snapshotsAsOpenings(snaps: Iterator<Snapshot>): Iterator<Float64> {
     return Map(snaps, { s: Snapshot => s.open })
 }
 
-public func SnapshotsAsHighs(snaps: Iterator<Snapshot>): Iterator<Float64> {
+// snapshotsAsHighs 提取最高价序列。
+public func snapshotsAsHighs(snaps: Iterator<Snapshot>): Iterator<Float64> {
     return Map(snaps, { s: Snapshot => s.high })
 }
 
-public func SnapshotsAsLows(snaps: Iterator<Snapshot>): Iterator<Float64> {
+// snapshotsAsLows 提取最低价序列。
+public func snapshotsAsLows(snaps: Iterator<Snapshot>): Iterator<Float64> {
     return Map(snaps, { s: Snapshot => s.low })
 }
 
-public func SnapshotsAsClosings(snaps: Iterator<Snapshot>): Iterator<Float64> {
+// snapshotsAsClosings 提取收盘价序列。
+public func snapshotsAsClosings(snaps: Iterator<Snapshot>): Iterator<Float64> {
     return Map(snaps, { s: Snapshot => s.close })
 }
 
-public func SnapshotsAsVolumes(snaps: Iterator<Snapshot>): Iterator<Float64> {
+// snapshotsAsVolumes 提取成交量序列。
+public func snapshotsAsVolumes(snaps: Iterator<Snapshot>): Iterator<Float64> {
     return Map(snaps, { s: Snapshot => s.volume })
 }

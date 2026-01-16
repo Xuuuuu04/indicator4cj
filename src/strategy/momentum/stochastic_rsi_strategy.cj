@@ -36,7 +36,7 @@ public class StochasticRsiStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = SnapshotsAsClosings(c)
+        let closings = snapshotsAsClosings(c)
         let stochasticRsi = Indicator.compute(closings)
 
         let actions = h.Map(stochasticRsi, { v: Float64 =>
@@ -50,9 +50,9 @@ public class StochasticRsiStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        var dates = SnapshotsAsDates(snaps[0])
+        var dates = snapshotsAsDates(snaps[0])
 
-        let closings = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
+        let closings = Duplicate(snapshotsAsClosings(snaps[2]), 2)
         closings[0] = Skip(closings[0], Indicator.idlePeriod())
 
         let stochasticRsi = Indicator.compute(closings[1])

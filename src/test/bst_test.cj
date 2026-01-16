@@ -13,10 +13,10 @@ class BstTest {
         input.add(2.0); input.add(1.0); input.add(3.0); input.add(4.0); input.add(0.0); input.add(6.0); input.add(6.0); input.add(10.0); input.add(-1.0); input.add(9.0)
         let bst = Bst()
         for (n in input) {
-            bst.Insert(n)
+            bst.insert(n)
         }
         for (n in input) {
-            @Expect(bst.Contains(n), true)
+            @Expect(bst.contains(n), true)
         }
     }
 
@@ -26,10 +26,10 @@ class BstTest {
         input.add(2.0); input.add(1.0); input.add(3.0); input.add(4.0); input.add(0.0); input.add(6.0); input.add(6.0); input.add(10.0); input.add(-1.0); input.add(9.0)
         let bst = Bst()
         for (n in input) {
-            bst.Insert(n)
+            bst.insert(n)
         }
         for (n in input) {
-            @Expect(bst.Remove(n), true)
+            @Expect(bst.remove(n), true)
         }
     }
 
@@ -39,9 +39,9 @@ class BstTest {
         input.add(2.0); input.add(1.0); input.add(3.0); input.add(4.0); input.add(0.0); input.add(6.0); input.add(6.0); input.add(10.0); input.add(-1.0); input.add(9.0)
         let bst = Bst()
         for (n in input) {
-            bst.Insert(n)
+            bst.insert(n)
         }
-        @Expect(bst.Remove(8.0), false)
+        @Expect(bst.remove(8.0), false)
     }
 
     @TestCase
@@ -55,9 +55,9 @@ class BstTest {
         let bst = Bst()
         var idx: Int64 = 0
         for (n in input) {
-            bst.Insert(n)
-            @Expect(bst.Min(), mins[idx])
-            @Expect(bst.Max(), maxs[idx])
+            bst.insert(n)
+            @Expect(bst.min(), mins[idx])
+            @Expect(bst.max(), maxs[idx])
             idx += 1
         }
     }
@@ -65,8 +65,8 @@ class BstTest {
     @TestCase
     public func min_max_empty() {
         let bst = Bst()
-        @Expect(bst.Min(), 0.0)
-        @Expect(bst.Max(), 0.0)
+        @Expect(bst.min(), 0.0)
+        @Expect(bst.max(), 0.0)
     }
 }
 

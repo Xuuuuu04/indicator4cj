@@ -24,9 +24,9 @@ public class MovingMin {
         let bst = Bst()
 
         let mins = Operate(cs[0], cs[1], { v: Float64, b: Float64 =>
-            bst.Insert(v)
-            bst.Remove(b)
-            return bst.Min()
+            bst.insert(v)
+            bst.remove(b)
+            return bst.min()
         })
 
         return Skip(mins, this.period - 1)

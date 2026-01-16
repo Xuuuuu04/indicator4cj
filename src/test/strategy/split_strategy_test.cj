@@ -11,7 +11,7 @@ import indicator4cj.strategy.trend.*
 public func split_strategy_basic() {
     let snapshots = Csv<Snapshot>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let results = Csv<Result>().readFromFile("src/test/testdata/strategy/split.csv")
-    let expected = h.Map(results, { r: Result => ActionFromInt(r.Action) })
+    let expected = h.Map(results, { r: Result => ActionFromInt(r.action) })
 
     let s = SplitStrategy(MacdStrategy(), ApoStrategy())
 

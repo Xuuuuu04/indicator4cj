@@ -38,8 +38,8 @@ public class VwmaStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = SnapshotsAsClosings(snaps[1])
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = snapshotsAsClosings(snaps[1])
 
         var (smas, vwmas) = calculateSmaAndVwma(snaps[2])
         smas = Shift(smas, VwmaIndicator.period - 1, 0.0)
@@ -62,8 +62,8 @@ public class VwmaStrategy <: Strategy {
 
     private func calculateSmaAndVwma(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>) {
         let snaps = Duplicate(c, 2)
-        let closings = Duplicate(SnapshotsAsClosings(snaps[0]), 2)
-        let volumes = SnapshotsAsVolumes(snaps[1])
+        let closings = Duplicate(snapshotsAsClosings(snaps[0]), 2)
+        let volumes = snapshotsAsVolumes(snaps[1])
         let smas = SmaIndicator.compute(closings[0])
         let vwmas = VwmaIndicator.compute(closings[1], volumes)
         return (smas, vwmas)

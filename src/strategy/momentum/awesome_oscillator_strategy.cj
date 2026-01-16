@@ -22,8 +22,8 @@ public class AwesomeOscillatorStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 2)
-        let highs = SnapshotsAsHighs(snaps[0])
-        let lows = SnapshotsAsLows(snaps[1])
+        let highs = snapshotsAsHighs(snaps[0])
+        let lows = snapshotsAsLows(snaps[1])
 
         let ao = Indicator.compute(highs, lows)
         let actions = h.Map(ao, { v: Float64 =>
@@ -37,10 +37,10 @@ public class AwesomeOscillatorStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 5)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = SnapshotsAsClosings(snaps[2])
-        let highs = SnapshotsAsHighs(snaps[3])
-        let lows = SnapshotsAsLows(snaps[4])
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = snapshotsAsClosings(snaps[2])
+        let highs = snapshotsAsHighs(snaps[3])
+        let lows = snapshotsAsLows(snaps[4])
 
         let ao = Shift(Indicator.compute(highs, lows), Indicator.idlePeriod(), 0.0)
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])

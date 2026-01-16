@@ -41,8 +41,8 @@ public class GoldenCrossStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
+        let dates = Skip(snapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
         closings[0] = Skip(closings[0], SlowEma.idlePeriod())
 
         let (fastEmas, slowEmas) = calculateEmas(snaps[2])
@@ -64,7 +64,7 @@ public class GoldenCrossStrategy <: Strategy {
     }
 
     private func calculateEmas(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>) {
-        let closings = Duplicate(SnapshotsAsClosings(c), 2)
+        let closings = Duplicate(snapshotsAsClosings(c), 2)
         let fastEmas = Skip(FastEma.compute(closings[0]), SlowEma.idlePeriod() - FastEma.idlePeriod())
         let slowEmas = SlowEma.compute(closings[1])
         return (fastEmas, slowEmas)

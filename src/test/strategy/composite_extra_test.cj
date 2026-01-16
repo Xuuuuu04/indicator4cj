@@ -32,20 +32,20 @@ public func test_composite_strategies_branches() {
     
     // 1. OrStrategy 组合
     let or1 = NewOrStrategy("Or1")
-    or1.Strategies.add(buyS)
-    or1.Strategies.add(holdS)
+    or1.strategies.add(buyS)
+    or1.strategies.add(holdS)
     let res1 = or1.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     if (res1 != Action.Buy) { fail("OrStrategy Buy|Hold failed") }
     
     let or2 = NewOrStrategy("Or2")
-    or2.Strategies.add(sellS)
-    or2.Strategies.add(holdS)
+    or2.strategies.add(sellS)
+    or2.strategies.add(holdS)
     let res2 = or2.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     if (res2 != Action.Sell) { fail("OrStrategy Sell|Hold failed") }
     
     let or3 = NewOrStrategy("Or3")
-    or3.Strategies.add(buyS)
-    or3.Strategies.add(sellS)
+    or3.strategies.add(buyS)
+    or3.strategies.add(sellS)
     let res3 = or3.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     // 根据 CountActions 逻辑，(buy > 0 && sell > 0) 会返回 Hold
     if (res3 != Action.Hold) { fail("OrStrategy Buy|Sell failed") }

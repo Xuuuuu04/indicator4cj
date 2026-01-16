@@ -31,7 +31,7 @@ public class DemaStrategy <: Strategy {
     public func name(): String { return "DEMA Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(SnapshotsAsClosings(c), 2)
+        let closings = Duplicate(snapshotsAsClosings(c), 2)
 
         var demas1 = Dema1.compute(closings[0])
         demas1 = Shift(demas1, Dema1.idlePeriod(), 0.0)
@@ -51,8 +51,8 @@ public class DemaStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 3)
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var demas1 = Dema1.compute(closings[0])
         demas1 = Shift(demas1, Dema1.idlePeriod(), 0.0)

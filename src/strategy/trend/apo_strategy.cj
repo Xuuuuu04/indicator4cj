@@ -10,18 +10,18 @@ import indicator4cj.trend.*
 
 // APO 过零点判多空，使用快/慢 EMA 差值。
 public class ApoStrategy <: Strategy {
-    // Indicator
-    public let Indicator: Apo
+    // 指标
+    public let indicator: Apo
 
     public init() {
-        this.Indicator = Apo()
+        this.indicator = Apo()
     }
 
     public func name(): String { return "Apo Strategy" }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = SnapshotsAsClosings(snapshots)
-        let apoRaw = Indicator.compute(closings)
+        let closings = snapshotsAsClosings(snapshots)
+        let apoRaw = indicator.compute(closings)
         // 需要前后值比较，复制两份
         let inputs = Duplicate(apoRaw, 2)
         inputs[1] = Skip(inputs[1], 1)
@@ -32,14 +32,14 @@ public class ApoStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.SlowPeriod, Action.Hold)
+        return Shift(actions, indicator.slowPeriod, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
-        let apo = Shift(Indicator.compute(closingsDup[1]), Indicator.SlowPeriod, 0.0)
+        let dates = snapshotsAsDates(snaps[0])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[2]), 2)
+        let apo = Shift(indicator.compute(closingsDup[1]), indicator.slowPeriod, 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
         let annotations = ActionsToAnnotations(actions)

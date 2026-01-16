@@ -33,9 +33,9 @@ public class WeightedCloseStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 3)
-        let highs = SnapshotsAsHighs(snaps[0])
-        let lows = SnapshotsAsLows(snaps[1])
-        let closings = SnapshotsAsClosings(snaps[2])
+        let highs = snapshotsAsHighs(snaps[0])
+        let lows = snapshotsAsLows(snaps[1])
+        let closings = snapshotsAsClosings(snaps[2])
 
         let wcDup = Duplicate(Indicator.compute(highs, lows, closings), 2)
         let mas = Ma.compute(wcDup[1])
@@ -51,10 +51,10 @@ public class WeightedCloseStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 5)
-        var dates = SnapshotsAsDates(snaps[0])
-        let highs = SnapshotsAsHighs(snaps[1])
-        let lows = SnapshotsAsLows(snaps[2])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[3]), 2)
+        var dates = snapshotsAsDates(snaps[0])
+        let highs = snapshotsAsHighs(snaps[1])
+        let lows = snapshotsAsLows(snaps[2])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[3]), 2)
 
         let wcDup = Duplicate(Indicator.compute(highs, lows, closingsDup[1]), 2)
         let mas = Ma.compute(wcDup[1])

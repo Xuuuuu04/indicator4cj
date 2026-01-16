@@ -27,8 +27,8 @@ public class WeightedAveragePriceStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 2)
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[0]), 2)
-        let volumes = SnapshotsAsVolumes(snaps[1])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[0]), 2)
+        let volumes = snapshotsAsVolumes(snaps[1])
 
         let vwaps = Indicator.compute(closingsDup[1], volumes)
         closingsDup[0] = Skip(closingsDup[0], Indicator.idlePeriod())
@@ -44,10 +44,10 @@ public class WeightedAveragePriceStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
 
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
-        let volumes = SnapshotsAsVolumes(snaps[2])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let volumes = snapshotsAsVolumes(snaps[2])
 
         let vwaps = Indicator.compute(closingsDup[0], volumes)
         closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())

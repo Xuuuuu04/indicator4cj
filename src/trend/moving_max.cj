@@ -24,9 +24,9 @@ public class MovingMax {
         let bst = Bst()
 
         let maxs = Operate(cs[0], cs[1], { v: Float64, b: Float64 =>
-            bst.Insert(v)
-            bst.Remove(b)
-            return bst.Max()
+            bst.insert(v)
+            bst.remove(b)
+            return bst.max()
         })
 
         return Skip(maxs, this.period - 1)

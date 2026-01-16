@@ -20,7 +20,7 @@ public class BollingerBandsStrategy <: Strategy {
     public func name(): String { return "Bollinger Bands Strategy" }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(SnapshotsAsClosings(snapshots), 2)
+        let closings = Duplicate(snapshotsAsClosings(snapshots), 2)
         let (uppers, _, lowers) = Indicator.compute(closings[0])
         closings[1] = Skip(closings[1], Indicator.idlePeriod())
 
@@ -35,8 +35,8 @@ public class BollingerBandsStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
 
         var (uppers, middles, lowers) = Indicator.compute(closings[0])
         uppers = Shift(uppers, Indicator.idlePeriod(), 0.0)

@@ -32,8 +32,8 @@ public class InverseStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = SnapshotsAsClosings(snaps[1])
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = snapshotsAsClosings(snaps[1])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = ActionsToAnnotations(actions)

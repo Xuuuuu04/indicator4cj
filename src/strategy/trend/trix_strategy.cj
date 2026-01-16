@@ -20,7 +20,7 @@ public class TrixStrategy <: Strategy {
     public func name(): String { return "TRIX Strategy" }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = SnapshotsAsClosings(snapshots)
+        let closings = snapshotsAsClosings(snapshots)
         let trixs = Indicator.compute(closings)
         let actions = h.Map(trixs, { v: Float64 =>
             if (v > 0.0) { return Action.Buy }
@@ -32,8 +32,8 @@ public class TrixStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
 
         var trixs = Indicator.compute(closings[0])
         trixs = Shift(trixs, Indicator.idlePeriod(), 0.0)

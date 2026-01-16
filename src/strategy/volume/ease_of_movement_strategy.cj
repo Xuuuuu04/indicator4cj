@@ -27,9 +27,9 @@ public class EaseOfMovementStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 3)
-        let highs = SnapshotsAsHighs(snaps[0])
-        let lows = SnapshotsAsLows(snaps[1])
-        let volumes = SnapshotsAsVolumes(snaps[2])
+        let highs = snapshotsAsHighs(snaps[0])
+        let lows = snapshotsAsLows(snaps[1])
+        let volumes = snapshotsAsVolumes(snaps[2])
 
         let emvs = Indicator.compute(highs, lows, volumes)
         let actions = h.Map(emvs, { v: Float64 =>
@@ -42,11 +42,11 @@ public class EaseOfMovementStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 6)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.idlePeriod())
-        let highs = SnapshotsAsHighs(snaps[1])
-        let lows = SnapshotsAsLows(snaps[2])
-        let volumes = SnapshotsAsVolumes(snaps[3])
-        let closings = Skip(SnapshotsAsClosings(snaps[4]), Indicator.idlePeriod())
+        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let highs = snapshotsAsHighs(snaps[1])
+        let lows = snapshotsAsLows(snaps[2])
+        let volumes = snapshotsAsVolumes(snaps[3])
+        let closings = Skip(snapshotsAsClosings(snaps[4]), Indicator.idlePeriod())
 
         let emvs = Indicator.compute(highs, lows, volumes)
 

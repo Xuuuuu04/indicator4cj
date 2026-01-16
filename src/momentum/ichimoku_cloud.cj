@@ -7,25 +7,25 @@ import indicator4cj.trend.*
 // Ichimoku Cloud，对齐逻辑与 Go 版一致：先对齐窗口 idle，再生成领先/滞后线。
 public class IchimokuCloud {
     // 转换周期
-    public var ConversionPeriod: Int64 = 9
+    public var conversionPeriod: Int64 = 9
     // 基准周期
-    public var BasePeriod: Int64 = 26
+    public var basePeriod: Int64 = 26
     // 领先周期
-    public var LeadingPeriod: Int64 = 52
+    public var leadingPeriod: Int64 = 52
     // 滞后平移
-    public var LaggingShift: Int64 = 26
+    public var laggingShift: Int64 = 26
 
     // compute 计算一目均衡表指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highsSp = Duplicate(highs, 3)
         let lowsSp = Duplicate(lows, 3)
 
-        let convMax = MovingMax(ConversionPeriod)
-        let convMin = MovingMin(ConversionPeriod)
-        let baseMax = MovingMax(BasePeriod)
-        let baseMin = MovingMin(BasePeriod)
-        let leadMax = MovingMax(LeadingPeriod)
-        let leadMin = MovingMin(LeadingPeriod)
+        let convMax = MovingMax(conversionPeriod)
+        let convMin = MovingMin(conversionPeriod)
+        let baseMax = MovingMax(basePeriod)
+        let baseMin = MovingMin(basePeriod)
+        let leadMax = MovingMax(leadingPeriod)
+        let leadMin = MovingMin(leadingPeriod)
 
         // Tenkan
         let conv = Duplicate(
@@ -67,14 +67,14 @@ public class IchimokuCloud {
 
         let senkouB = senkouB_raw
 
-        // Chikou：向左移 LaggingShift，相当于向右平移 lagging 并裁掉领先 idle。
-        let chikouShifted = Shift(closes, LaggingShift, 0.0)
+        // Chikou：向左移 laggingShift，相当于向右平移 lagging 并裁掉领先 idle。
+        let chikouShifted = Shift(closes, laggingShift, 0.0)
         let chikou = Skip(chikouShifted, leadMax.idlePeriod())
 
         return (conv[1], base[1], senkouA, senkouB, chikou)
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return LeadingPeriod - 1 }
+    public func idlePeriod(): Int64 { return leadingPeriod - 1 }
 }
 

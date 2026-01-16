@@ -15,7 +15,7 @@ public class BuyAndHoldStrategy <: Strategy {
     }
 
     public func report(snapshots: Iterator<Snapshot>): Report {
-        let dates = SnapshotsAsDates(snapshots)
+        let dates = snapshotsAsDates(snapshots)
         return Report(this.name(), dates)
     }
 }

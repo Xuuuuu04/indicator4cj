@@ -33,7 +33,7 @@ public class SmmaStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closingsDup = Duplicate(SnapshotsAsClosings(snapshots), 2)
+        let closingsDup = Duplicate(snapshotsAsClosings(snapshots), 2)
         var shortSmmas = ShortSmma.compute(closingsDup[0])
         var longSmmas = LongSmma.compute(closingsDup[1])
 
@@ -52,8 +52,8 @@ public class SmmaStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        var dates = SnapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[1]), 3)
+        var dates = snapshotsAsDates(snaps[0])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var shortSmmas = ShortSmma.compute(closingsDup[1])
         var longSmmas = LongSmma.compute(closingsDup[2])

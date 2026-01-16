@@ -27,10 +27,10 @@ public class ChaikinMoneyFlowStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 4)
-        let highs = SnapshotsAsHighs(snaps[0])
-        let lows = SnapshotsAsLows(snaps[1])
-        let closings = SnapshotsAsClosings(snaps[2])
-        let volumes = SnapshotsAsVolumes(snaps[3])
+        let highs = snapshotsAsHighs(snaps[0])
+        let lows = snapshotsAsLows(snaps[1])
+        let closings = snapshotsAsClosings(snaps[2])
+        let volumes = snapshotsAsVolumes(snaps[3])
 
         let cmfs = Indicator.compute(highs, lows, closings, volumes)
         let actions = h.Map(cmfs, { v: Float64 =>
@@ -43,11 +43,11 @@ public class ChaikinMoneyFlowStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 6)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.idlePeriod())
-        let highs = SnapshotsAsHighs(snaps[1])
-        let lows = SnapshotsAsLows(snaps[2])
-        let closingsDup = Duplicate(SnapshotsAsClosings(snaps[3]), 2)
-        let volumes = SnapshotsAsVolumes(snaps[4])
+        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let highs = snapshotsAsHighs(snaps[1])
+        let lows = snapshotsAsLows(snaps[2])
+        let closingsDup = Duplicate(snapshotsAsClosings(snaps[3]), 2)
+        let volumes = snapshotsAsVolumes(snaps[4])
 
         let cmfs = Indicator.compute(highs, lows, closingsDup[0], volumes)
         closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())

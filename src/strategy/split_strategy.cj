@@ -6,7 +6,9 @@ import indicator4cj.helper.*
 import indicator4cj.asset.*
 
 public class SplitStrategy <: Strategy {
+    // 买入
     public let BuyStrategy: Strategy
+    // 卖出
     public let SellStrategy: Strategy
 
     public init(buyStrategy: Strategy, sellStrategy: Strategy) {
@@ -45,8 +47,8 @@ public class SplitStrategy <: Strategy {
 
     public func report(snapshots: Iterator<Snapshot>): Report {
         let snaps = Duplicate(snapshots, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = SnapshotsAsClosings(snaps[1])
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = snapshotsAsClosings(snaps[1])
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)

@@ -24,7 +24,7 @@ public class KamaStrategy <: Strategy {
     public func name(): String { return Indicator.toString() }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(SnapshotsAsClosings(c), 2)
+        let closings = Duplicate(snapshotsAsClosings(c), 2)
         closings[1] = Skip(closings[1], Indicator.idlePeriod())
 
         let kamas = Indicator.compute(closings[0])
@@ -40,9 +40,9 @@ public class KamaStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
 
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
         closings[1] = Skip(closings[1], Indicator.idlePeriod())
 
         let kamas = Indicator.compute(closings[0])

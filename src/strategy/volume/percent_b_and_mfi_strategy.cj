@@ -53,10 +53,10 @@ public class PercentBandMFIStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = Duplicate(c, 4)
-        let highs = SnapshotsAsHighs(snaps[0])
-        let lows = SnapshotsAsLows(snaps[1])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[2]), 2)
-        let volumes = SnapshotsAsVolumes(snaps[3])
+        let highs = snapshotsAsHighs(snaps[0])
+        let lows = snapshotsAsLows(snaps[1])
+        let closings = Duplicate(snapshotsAsClosings(snaps[2]), 2)
+        let volumes = snapshotsAsVolumes(snaps[3])
 
         var mfis = MoneyFlowIndex.compute(highs, lows, closings[0], volumes)
         // 对齐到 %B 起点。
@@ -75,11 +75,11 @@ public class PercentBandMFIStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 6)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), MoneyFlowIndex.idlePeriod())
-        let highs = SnapshotsAsHighs(snaps[1])
-        let lows = SnapshotsAsLows(snaps[2])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[3]), 3)
-        let volumes = SnapshotsAsVolumes(snaps[4])
+        let dates = Skip(snapshotsAsDates(snaps[0]), MoneyFlowIndex.idlePeriod())
+        let highs = snapshotsAsHighs(snaps[1])
+        let lows = snapshotsAsLows(snaps[2])
+        let closings = Duplicate(snapshotsAsClosings(snaps[3]), 3)
+        let volumes = snapshotsAsVolumes(snaps[4])
 
         var mfis = MoneyFlowIndex.compute(highs, lows, closings[0], volumes)
         mfis = Shift(mfis, PercentBInd.idlePeriod() - MoneyFlowIndex.idlePeriod(), 0.0)

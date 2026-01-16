@@ -31,7 +31,7 @@ public class TrimaStrategy <: Strategy {
     public func name(): String { return "TRIMA Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(SnapshotsAsClosings(c), 2)
+        let closings = Duplicate(snapshotsAsClosings(c), 2)
         var shorts = Short.compute(closings[0])
         let longs = Long.compute(closings[1])
 
@@ -48,8 +48,8 @@ public class TrimaStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = SnapshotsAsDates(snaps[0])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 3)
+        let dates = snapshotsAsDates(snaps[0])
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var shorts = Short.compute(closings[0])
         var longs = Long.compute(closings[1])

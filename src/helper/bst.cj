@@ -14,11 +14,13 @@ public class BstNode {
 public class Bst {
     private let data = ArrayList<Float64>()
 
-    public func Insert(value: Float64): Unit {
+    // insert 插入数值。
+    public func insert(value: Float64): Unit {
         data.add(value)
     }
 
-    public func Contains(value: Float64): Bool {
+    // contains 检查是否包含数值。
+    public func contains(value: Float64): Bool {
         for (v in data) {
             if (v == value) {
                 return true
@@ -27,7 +29,8 @@ public class Bst {
         return false
     }
 
-    public func Remove(value: Float64): Bool {
+    // remove 移除数值。
+    public func remove(value: Float64): Bool {
         var idx: Int64 = 0
         while (idx < data.size) {
             if (data[idx] == value) {
@@ -39,7 +42,8 @@ public class Bst {
         return false
     }
 
-    public func Min(): Float64 {
+    // min 获取最小值。
+    public func min(): Float64 {
         if (data.isEmpty()) {
             return 0.0
         }
@@ -53,7 +57,8 @@ public class Bst {
         return m
     }
 
-    public func Max(): Float64 {
+    // max 获取最大值。
+    public func max(): Float64 {
         if (data.isEmpty()) {
             return 0.0
         }

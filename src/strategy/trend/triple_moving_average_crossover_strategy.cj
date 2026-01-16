@@ -49,10 +49,10 @@ public class TripleMovingAverageCrossoverStrategy <: Strategy {
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 4)
 
-        let dates = Skip(SnapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
+        let dates = Skip(snapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
 
         let closings = Duplicate(
-            Skip(SnapshotsAsClosings(snaps[1]), SlowEma.idlePeriod()),
+            Skip(snapshotsAsClosings(snaps[1]), SlowEma.idlePeriod()),
             2
         )
 
@@ -76,7 +76,7 @@ public class TripleMovingAverageCrossoverStrategy <: Strategy {
     }
 
     private func calculateEmas(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
-        let closings = Duplicate(SnapshotsAsClosings(c), 3)
+        let closings = Duplicate(snapshotsAsClosings(c), 3)
 
         let fastEmas = Skip(FastEma.compute(closings[0]), SlowEma.idlePeriod() - FastEma.idlePeriod())
         let mediumEmas = Skip(MediumEma.compute(closings[1]), SlowEma.idlePeriod() - MediumEma.idlePeriod())

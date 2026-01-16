@@ -35,7 +35,7 @@ public class TsiStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = SnapshotsAsClosings(snapshots)
+        let closings = snapshotsAsClosings(snapshots)
         let tsis = Duplicate(Indicator.compute(closings), 2)
         tsis[0] = Skip(tsis[0], Signal.idlePeriod())
         let signals = Signal.compute(tsis[1])
@@ -51,8 +51,8 @@ public class TsiStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        let dates = Skip(SnapshotsAsDates(snaps[0]), IdlePeriod())
-        let closings = Duplicate(SnapshotsAsClosings(snaps[1]), 2)
+        let dates = Skip(snapshotsAsDates(snaps[0]), IdlePeriod())
+        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
         closings[1] = Skip(closings[1], IdlePeriod())
 
         let tsis = Duplicate(Indicator.compute(closings[0]), 2)

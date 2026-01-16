@@ -57,7 +57,7 @@ public class TripleRsiStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closingsSplice = Duplicate(SnapshotsAsClosings(c), 3)
+        let closingsSplice = Duplicate(snapshotsAsClosings(c), 3)
 
         var rsis = RsiIndicator.compute(closingsSplice[0])
         let smas = SmaIndicator.compute(closingsSplice[1])
@@ -108,8 +108,8 @@ public class TripleRsiStrategy <: Strategy {
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = Duplicate(c, 3)
-        var dates = SnapshotsAsDates(snaps[0])
-        let closings = Duplicate(SnapshotsAsClosings(snaps[2]), 3)
+        var dates = snapshotsAsDates(snaps[0])
+        let closings = Duplicate(snapshotsAsClosings(snaps[2]), 3)
 
         var rsis = RsiIndicator.compute(closings[1])
         let smas = SmaIndicator.compute(closings[2])
