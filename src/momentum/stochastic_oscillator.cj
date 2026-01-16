@@ -12,6 +12,7 @@ public class StochasticOscillator {
     public StochasticOscillator() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+    // compute 计算随机振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let hh = MovingMax(this.period).compute(highs)
         let ll = MovingMin(this.period).compute(lows)
@@ -32,6 +33,7 @@ public class StochasticOscillator {
         return (k, d)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period - 1 }
 }
 

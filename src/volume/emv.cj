@@ -11,6 +11,7 @@ public class Emv {
     public Emv() { sma.period = 14 }
     public init(period: Int64) { sma.period = period }
 
+    // compute 计算 ease of movement 指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
@@ -33,6 +34,7 @@ public class Emv {
         )
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return sma.idlePeriod() + 1 }
 }
 

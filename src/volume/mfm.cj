@@ -7,6 +7,7 @@ import indicator4cj.helper.*
 public class Mfm {
     public init() {}
 
+    // compute 计算资金流量乘数指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
@@ -20,6 +21,7 @@ public class Mfm {
         )
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return 0 }
 }
 

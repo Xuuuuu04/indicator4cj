@@ -10,6 +10,7 @@ public class BollingerBands {
     public BollingerBands() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+    // compute 计算布林带指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let cs = Duplicate(c, 2)
         let sma = Sma()
@@ -33,6 +34,7 @@ public class BollingerBands {
         return (upperBand, middleBands[2], lowerBand)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period - 1 }
 }
 

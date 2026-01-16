@@ -11,6 +11,7 @@ public class Qstick {
     public Qstick() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+    // compute 计算QStick指标。
     public func compute(opens: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
         let diff = Subtract(closes, opens)
         let sma = Sma()
@@ -18,6 +19,7 @@ public class Qstick {
         return sma.compute(diff)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period - 1 }
 }
 

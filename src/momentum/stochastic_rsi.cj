@@ -26,6 +26,7 @@ public class StochasticRsi {
 
     // 计算公式同 Go：
     // (RSI - Min(RSI)) / (Max(RSI) - Min(RSI))
+    // compute 计算随机相对强弱指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let rsisSplice = Duplicate(RsiIndicator.compute(values), 3)
 
@@ -44,6 +45,7 @@ public class StochasticRsi {
     }
 
     // IdlePeriod = RSI.IdlePeriod + Min/Max.IdlePeriod
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return RsiIndicator.idlePeriod() + MinIndicator.idlePeriod()
     }

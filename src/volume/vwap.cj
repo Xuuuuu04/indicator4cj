@@ -15,6 +15,7 @@ public class Vwap {
         this.sum = MovingSum(period)
     }
 
+    // compute 计算成交量加权平均价格指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let vols = Duplicate(volumes, 2)
         return Divide(
@@ -23,6 +24,7 @@ public class Vwap {
         )
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return sum.idlePeriod() }
 }
 

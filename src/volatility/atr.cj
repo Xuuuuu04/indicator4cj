@@ -12,6 +12,7 @@ public class Atr {
     public init(period: Int64) { this.ma = Sma(period) }
     public init(ma: Ma) { this.ma = ma }
 
+    // compute 计算平均真实范围指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         // align highs/lows to use previous closing
         let hs = Skip(highs, 1)
@@ -28,6 +29,7 @@ public class Atr {
         return ma.compute(tr)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return ma.idlePeriod() + 1 }
 }
 

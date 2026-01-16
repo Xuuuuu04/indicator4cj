@@ -18,6 +18,7 @@ public class KeltnerChannel {
         this.ema = Ema(period)
     }
 
+    // compute 计算肯特纳通道指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let closes = Duplicate(closings, 2)
 
@@ -41,6 +42,7 @@ public class KeltnerChannel {
         return (upper, middles[2], lower)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return atr.idlePeriod() }
 }
 

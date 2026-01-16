@@ -10,6 +10,7 @@ public class UlcerIndex {
     public init() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+    // compute 计算溃疡指数指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let cs = Duplicate(closings, 2)
 
@@ -33,6 +34,7 @@ public class UlcerIndex {
         return Sqrt(squaredAvg)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return (this.period - 1) * 2 }
 }
 

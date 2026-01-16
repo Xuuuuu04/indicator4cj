@@ -16,6 +16,7 @@ public class Mfi {
         sum.period = period
     }
 
+    // compute 计算资金流量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         let rawFlowSplice = Duplicate(
             Multiply(
@@ -50,6 +51,7 @@ public class Mfi {
         )
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return sum.idlePeriod() + 1 }
 }
 

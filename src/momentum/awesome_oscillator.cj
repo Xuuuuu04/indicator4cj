@@ -6,6 +6,7 @@ import indicator4cj.trend.*
 
 // Awesome Oscillator = SMA(high/low median, 5) - SMA(high/low median, 34)
 public class AwesomeOscillator {
+    // compute 计算绝妙振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>): Iterator<Float64> {
         let medianDup = Duplicate(
             DivideBy(
@@ -25,6 +26,7 @@ public class AwesomeOscillator {
         return Subtract(fast, slow)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return 34 - 1 }
 }
 

@@ -18,6 +18,7 @@ public class Rsi {
         this.rma = Rma(period)
     }
 
+    // compute 计算相对强弱指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let changes = Change(values, 1)
         let dup = Duplicate(changes, 2)
@@ -29,6 +30,7 @@ public class Rsi {
         return rsi
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return rma.idlePeriod() + 1 }
 }
 

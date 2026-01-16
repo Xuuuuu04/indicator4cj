@@ -18,6 +18,7 @@ public class SuperTrend {
         this.multiplier = multiplier
     }
 
+    // compute 计算超级趋势指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
@@ -41,6 +42,7 @@ public class SuperTrend {
         return SuperTrendIterator(medians, atrMult, cs[1])
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return atr.idlePeriod() }
 }
 

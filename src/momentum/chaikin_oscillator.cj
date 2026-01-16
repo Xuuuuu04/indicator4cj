@@ -6,6 +6,7 @@ import indicator4cj.trend.*
 
 // Chaikin Oscillator = EMA(ad, 3) - EMA(ad, 10)
 public class ChaikinOscillator {
+    // compute 计算蔡金振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         // AD = ((Close - Low) - (High - Close)) / (High - Low) * Volume
         let hl = Subtract(highs, lows)
@@ -23,6 +24,7 @@ public class ChaikinOscillator {
         return Subtract(e3.compute(ad), e10.compute(ad))
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return 10 - 1 }
 }
 

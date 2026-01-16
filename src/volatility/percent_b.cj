@@ -9,6 +9,7 @@ public class PercentB {
     public init() {}
     public init(period: Int64) { bands.period = period }
 
+    // compute 计算百分比B指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let closes = Duplicate(closings, 2)
         let (upper, middle, lower) = bands.compute(closes[0])
@@ -20,6 +21,7 @@ public class PercentB {
         })
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return bands.idlePeriod() }
 
     public func toString(): String { return "%B(${bands.period})" }

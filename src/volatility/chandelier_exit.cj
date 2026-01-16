@@ -18,6 +18,7 @@ public class ChandelierExit {
         this.multiplier = multiplier
     }
 
+    // compute 计算吊灯退出指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
@@ -46,6 +47,7 @@ public class ChandelierExit {
         return (ceLong, ceShort)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period }
 }
 

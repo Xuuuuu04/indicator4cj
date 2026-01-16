@@ -8,10 +8,12 @@ public class Nvi {
 
     public Nvi() { this.Initial = Initial }
 
+    // compute 计算负量指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         return NviIterator(closings, volumes, Initial)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return 1 }
 }
 

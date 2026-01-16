@@ -18,6 +18,7 @@ public class DonchianChannel {
         this.min = MovingMin(period)
     }
 
+    // compute 计算唐奇安通道指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let closings = Duplicate(c, 2)
 
@@ -32,6 +33,7 @@ public class DonchianChannel {
         return (uppers[1], middle, lowers[1])
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return max.idlePeriod() }
 }
 

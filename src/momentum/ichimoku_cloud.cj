@@ -11,6 +11,7 @@ public class IchimokuCloud {
     public var LeadingPeriod: Int64 = 52
     public var LaggingShift: Int64 = 26
 
+    // compute 计算一目均衡表指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highsSp = Duplicate(highs, 3)
         let lowsSp = Duplicate(lows, 3)
@@ -69,6 +70,7 @@ public class IchimokuCloud {
         return (conv[1], base[1], senkouA, senkouB, chikou)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return LeadingPeriod - 1 }
 }
 

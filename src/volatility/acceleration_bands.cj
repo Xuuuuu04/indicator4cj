@@ -10,6 +10,7 @@ public class AccelerationBands {
     public AccelerationBands() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+    // compute 计算加速度带指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highs = Duplicate(high, 3)
         let lows = Duplicate(low, 3)
@@ -50,6 +51,7 @@ public class AccelerationBands {
         return (upper, middle, lower)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period - 1 }
 }
 

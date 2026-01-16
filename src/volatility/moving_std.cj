@@ -11,10 +11,12 @@ public class MovingStd {
     public init() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+    // compute 计算移动标准差指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         return MovingStdIterator(c, this.period)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period - 1 }
 }
 
