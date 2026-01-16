@@ -11,6 +11,7 @@ public class Mls {
         this.Sum = MovingSum(period)
     }
 
+// compute 计算指标。
     public func compute(x: Iterator<Float64>, y: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let xSplice = Duplicate(x, 3)
         let ySplice = Duplicate(y, 2)
@@ -50,5 +51,6 @@ public class Mls {
         return (mSplice[0], b)
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return Sum.idlePeriod() }
 }

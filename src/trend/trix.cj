@@ -12,6 +12,7 @@ public class Trix {
     public Trix() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+// compute 计算指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let ema1 = Ema(this.period)
         let ema2 = Ema(this.period)
@@ -22,8 +23,8 @@ public class Trix {
         return trix
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return (this.period * 3) - 3 + 1
     }
 }
-

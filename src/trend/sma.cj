@@ -10,14 +10,17 @@ public class Sma {
     public Sma() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+    // compute 计算简单移动平均线。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let sum = MovingSum()
         sum.period = this.period
         return DivideBy(sum.compute(c), Float64(this.period))
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period - 1 }
 
+    // toString 返回指标的字符串表示。
     public func toString(): String { return "SMA(${this.period})" }
 }
 

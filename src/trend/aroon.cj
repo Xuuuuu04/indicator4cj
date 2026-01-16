@@ -12,6 +12,7 @@ public class Aroon {
     public Aroon() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+// compute 计算指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let movingMax = MovingMax(this.period)
         let movingMin = MovingMin(this.period)
@@ -28,4 +29,3 @@ public class Aroon {
         return (aroonUp, aroonDown)
     }
 }
-

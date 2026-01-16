@@ -10,6 +10,7 @@ public class MovingMax {
     public MovingMax() { this.period = period }
     public init(period: Int64) { this.period = period }
 
+// compute 计算指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let cs = Duplicate(c, 2)
         cs[1] = Shift(cs[1], this.period, 0.0)
@@ -25,6 +26,6 @@ public class MovingMax {
         return Skip(maxs, this.period - 1)
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period - 1 }
 }
-

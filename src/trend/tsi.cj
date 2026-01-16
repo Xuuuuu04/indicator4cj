@@ -27,6 +27,7 @@ public class Tsi {
         this.SecondSmoothing = Ema(secondPeriod)
     }
 
+// compute 计算真实强度指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let pcs = Duplicate(Change(closings, 1), 2)
 
@@ -37,12 +38,13 @@ public class Tsi {
         return tsi
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return FirstSmoothing.idlePeriod() + SecondSmoothing.idlePeriod() + 1
     }
 
+// toString 返回指标的字符串表示。
     public func toString(): String {
         return "TSI(${firstPeriod},${secondPeriod})"
     }
 }
-

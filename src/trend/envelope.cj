@@ -21,6 +21,7 @@ public class Envelope {
         this.Percentage = percentage
     }
 
+// compute 计算指标。
     public func compute(closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let middleSplice = Duplicate(MaIndicator.compute(closings), 3)
 
@@ -30,8 +31,9 @@ public class Envelope {
         return (upper, middleSplice[1], lower)
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return MaIndicator.idlePeriod() }
 
+// toString 返回指标的字符串表示。
     public func toString(): String { return "Envelope(${Percentage})" }
 }
-

@@ -13,6 +13,7 @@ public class Dema {
         this.Ema2 = Ema()
     }
 
+    // compute 计算双重指数移动平均线。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let ema1 = Duplicate(Ema1.compute(c), 2)
         let ema2 = Ema2.compute(ema1[1])
@@ -23,6 +24,7 @@ public class Dema {
         return Subtract(doubleEma1, ema2)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return Ema1.period + Ema2.period - 2
     }

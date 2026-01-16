@@ -11,6 +11,7 @@ public class Mlr {
         this.MlsIndicator = Mls(period)
     }
 
+// compute 计算线性回归预测值。
     public func compute(x: Iterator<Float64>, y: Iterator<Float64>): Iterator<Float64> {
         // 需要两份 x：一份给 Mls 计算斜率截距，一份用于生成预测值
         let xCopies = Duplicate(x, 2)
@@ -22,8 +23,10 @@ public class Mlr {
         return Add(mx, bIter)
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return MlsIndicator.idlePeriod() }
 
+// toString 返回指标的字符串表示。
     public func toString(): String { return "MLR(${MlsIndicator.Sum.period})" }
 }
 

@@ -40,4 +40,3 @@ public class Tema {
         return Ema1.period + Ema2.period + Ema3.period - 3
     }
 }
-

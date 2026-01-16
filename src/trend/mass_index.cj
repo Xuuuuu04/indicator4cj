@@ -19,6 +19,7 @@ public class MassIndex {
         this.MovingSumInd = MovingSum(DefaultMassIndexPeriod3)
     }
 
+    // compute 计算质量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>): Iterator<Float64> {
         let ema1 = Duplicate(
             Ema1.compute(
@@ -35,6 +36,7 @@ public class MassIndex {
         return mi
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return Ema1.period + Ema2.period + MovingSumInd.period - 3
     }

@@ -22,6 +22,7 @@ public class Apo {
         this.SlowSmoothing = DefaultApoSlowSmoothing
     }
 
+    // compute 计算绝对价格震荡指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         // Buffered 为保持与 Go 签名一致（当前直通）
         let buffered = Buffered(c, this.SlowPeriod)
@@ -38,7 +39,7 @@ public class Apo {
         return Subtract(cs[0], cs[1])
     }
 
-    // IdlePeriod 取慢周期，策略侧按 Go 版 Shift 使用。
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return this.SlowPeriod
     }

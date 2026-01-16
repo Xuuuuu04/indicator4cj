@@ -7,6 +7,7 @@ import indicator4cj.helper.*
 public class TypicalPrice {
     public TypicalPrice() {}
 
+// compute 计算指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, close: Iterator<Float64>): Iterator<Float64> {
         return DivideBy(
             Add(
@@ -17,4 +18,3 @@ public class TypicalPrice {
         )
     }
 }
-

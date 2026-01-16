@@ -25,6 +25,7 @@ public class Macd {
         this.Ema3 = Ema(period3)
     }
 
+// compute 计算MACD指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let snaps = Duplicate(c, 2)
         var ema1 = Ema1.compute(snaps[0])
@@ -37,6 +38,7 @@ public class Macd {
         return (macds[0], signal)
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return Ema2.period + Ema3.period - 2
     }
@@ -49,4 +51,3 @@ public func NewMacd(): Macd {
 public func NewMacdWithPeriod(period1: Int64, period2: Int64, period3: Int64): Macd {
     return Macd(period1, period2, period3)
 }
-

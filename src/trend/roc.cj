@@ -18,6 +18,7 @@ public class Roc {
         }
     }
 
+// compute 计算指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let window = Ring<Float64>(this.period)
         var rocs = Map(values, { v: Float64 =>
@@ -38,8 +39,9 @@ public class Roc {
         return rocs
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return this.period }
 
+// toString 返回指标的字符串表示。
     public func toString(): String { return "ROC(${this.period})" }
 }
-

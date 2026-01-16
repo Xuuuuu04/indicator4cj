@@ -18,6 +18,7 @@ public class Dpo {
         }
     }
 
+// compute 计算指标。
     public func compute(closing: Iterator<Float64>): Iterator<Float64> {
         let k = this.period / 2 + 1
         let dup = Duplicate(closing, 2)
@@ -34,10 +35,11 @@ public class Dpo {
         })
     }
 
+// idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return (this.period - 1) + (this.period / 2 + 1)
     }
 
+// toString 返回指标的字符串表示。
     public func toString(): String { return "DPO(${this.period})" }
 }
-

@@ -24,4 +24,3 @@ public class Vwma {
 
     public func idlePeriod(): Int64 { return this.period - 1 }
 }
-

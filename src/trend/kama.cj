@@ -95,4 +95,3 @@ private class KamaIterator <: Iterator<Float64> {
         }
     }
 }
-

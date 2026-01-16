@@ -66,4 +66,3 @@ private class SmmaIterator <: Iterator<Float64> {
         }
     }
 }
-

@@ -43,4 +43,3 @@ public class Trima {
 
     public func toString(): String { return "TRIMA(${this.period})" }
 }
-

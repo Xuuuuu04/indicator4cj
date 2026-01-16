@@ -18,12 +18,15 @@ public class Ema {
         this.smoothing = smoothing
     }
 
+    // compute 计算指数移动平均线。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         return EmaIterator(c, period, smoothing)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 { return period - 1 }
 
+    // toString 返回指标的字符串表示。
     public func toString(): String { return "EMA(${period})" }
 }
 

@@ -53,5 +53,3 @@ private class RmaIterator <: Iterator<Float64> {
         }
     }
 }
-
-

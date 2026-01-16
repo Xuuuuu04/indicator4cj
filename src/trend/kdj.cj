@@ -21,6 +21,7 @@ public class Kdj {
         this.Sma2 = Sma(DefaultKdjSma2Period)
     }
 
+    // compute 计算KDJ指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highest = MovingMaxInd.compute(high)
         let lowests = Duplicate(MovingMinInd.compute(low), 2)
@@ -46,6 +47,7 @@ public class Kdj {
         return (ks[2], ds[1], j)
     }
 
+    // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return MovingMaxInd.period + Sma1.period + Sma2.period - 3
     }
