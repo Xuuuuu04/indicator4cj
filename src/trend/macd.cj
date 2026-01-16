@@ -10,40 +10,40 @@ public const DefaultMacdPeriod3: Int64 = 9
 // MACD = EMA(周期1) - EMA(周期2)；信号线 = MACD的EMA(周期3)
 public class Macd {
     // 快速EMA
-    public let Ema1: Ema
+    public let ema1: Ema
     // 慢速EMA
-    public let Ema2: Ema
+    public let ema2: Ema
     // 信号EMA
-    public let Ema3: Ema
+    public let ema3: Ema
 
     public Macd() {
-        this.Ema1 = Ema(DefaultMacdPeriod1)
-        this.Ema2 = Ema(DefaultMacdPeriod2)
-        this.Ema3 = Ema(DefaultMacdPeriod3)
+        this.ema1 = Ema(DefaultMacdPeriod1)
+        this.ema2 = Ema(DefaultMacdPeriod2)
+        this.ema3 = Ema(DefaultMacdPeriod3)
     }
 
     public init(period1: Int64, period2: Int64, period3: Int64) {
-        this.Ema1 = Ema(period1)
-        this.Ema2 = Ema(period2)
-        this.Ema3 = Ema(period3)
+        this.ema1 = Ema(period1)
+        this.ema2 = Ema(period2)
+        this.ema3 = Ema(period3)
     }
 
 // compute 计算MACD指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let snaps = Duplicate(c, 2)
-        var ema1 = Ema1.compute(snaps[0])
-        ema1 = Skip(ema1, Ema2.period - Ema1.period)
-        let ema2 = Ema2.compute(snaps[1])
+        var ema1 = this.ema1.compute(snaps[0])
+        ema1 = Skip(ema1, this.ema2.period - this.ema1.period)
+        let ema2 = this.ema2.compute(snaps[1])
 
         let macds = Duplicate(Subtract(ema1, ema2), 2)
-        macds[0] = Skip(macds[0], Ema3.period - 1)
-        let signal = Ema3.compute(macds[1])
+        macds[0] = Skip(macds[0], this.ema3.period - 1)
+        let signal = this.ema3.compute(macds[1])
         return (macds[0], signal)
     }
 
 // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
-        return Ema2.period + Ema3.period - 2
+        return this.ema2.period + this.ema3.period - 2
     }
 }
 

@@ -20,7 +20,7 @@ public class MacdStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "MACD Strategy (${Macd.Ema1.period},${Macd.Ema2.period},${Macd.Ema3.period})"
+        return "MACD Strategy (${Macd.ema1.period},${Macd.ema2.period},${Macd.ema3.period})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {

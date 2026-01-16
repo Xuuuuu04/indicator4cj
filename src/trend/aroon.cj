@@ -5,7 +5,7 @@ import indicator4cj.helper.*
 
 public const DefaultAroonPeriod: Int64 = 25
 
-// Aroon Up/Down 指标。
+// Aroon 上升/下降指标。
 public class Aroon {
     // 周期
     public var period: Int64 = DefaultAroonPeriod

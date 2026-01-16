@@ -19,11 +19,11 @@ public class DemaStrategy <: Strategy {
 
     public init() {
         let d1 = Dema()
-        d1.Ema1.period = DefaultDemaStrategyPeriod1
-        d1.Ema2.period = DefaultDemaStrategyPeriod1
+        d1.ema1.period = DefaultDemaStrategyPeriod1
+        d1.ema2.period = DefaultDemaStrategyPeriod1
         let d2 = Dema()
-        d2.Ema1.period = DefaultDemaStrategyPeriod2
-        d2.Ema2.period = DefaultDemaStrategyPeriod2
+        d2.ema1.period = DefaultDemaStrategyPeriod2
+        d2.ema2.period = DefaultDemaStrategyPeriod2
         this.Dema1 = d1
         this.Dema2 = d2
     }
@@ -67,8 +67,8 @@ public class DemaStrategy <: Strategy {
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[2]))
-        report.addColumn(NumericReportColumn("Dema ${Dema1.Ema1.period}-day", demas1), ArrayList<Int64>([1]))
-        report.addColumn(NumericReportColumn("Dema ${Dema2.Ema1.period}-day", demas2), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Dema ${Dema1.ema1.period}-day", demas1), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("Dema ${Dema2.ema1.period}-day", demas2), ArrayList<Int64>([1]))
         report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
         report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
         return report

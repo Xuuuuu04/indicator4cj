@@ -6,35 +6,35 @@ import indicator4cj.helper.*
 public const DefaultTsiFirstSmoothingPeriod: Int64 = 25
 public const DefaultTsiSecondSmoothingPeriod: Int64 = 13
 
-// True Strength Index (TSI)
+// 真实强度指数（TSI）
 public class Tsi {
     // 初次平滑
-    public let FirstSmoothing: Ma
+    public let firstSmoothing: Ma
     // 二次平滑
-    public let SecondSmoothing: Ma
+    public let secondSmoothing: Ma
     private let firstPeriod: Int64
     private let secondPeriod: Int64
 
     public Tsi() {
         this.firstPeriod = DefaultTsiFirstSmoothingPeriod
         this.secondPeriod = DefaultTsiSecondSmoothingPeriod
-        this.FirstSmoothing = Ema(firstPeriod)
-        this.SecondSmoothing = Ema(secondPeriod)
+        this.firstSmoothing = Ema(firstPeriod)
+        this.secondSmoothing = Ema(secondPeriod)
     }
 
     public init(firstSmoothingPeriod: Int64, secondSmoothingPeriod: Int64) {
         this.firstPeriod = firstSmoothingPeriod
         this.secondPeriod = secondSmoothingPeriod
-        this.FirstSmoothing = Ema(firstPeriod)
-        this.SecondSmoothing = Ema(secondPeriod)
+        this.firstSmoothing = Ema(firstPeriod)
+        this.secondSmoothing = Ema(secondPeriod)
     }
 
 // compute 计算真实强度指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let pcs = Duplicate(Change(closings, 1), 2)
 
-        let pcds = FirstSmoothing.compute(SecondSmoothing.compute(pcs[0]))
-        let apcds = FirstSmoothing.compute(SecondSmoothing.compute(Abs(pcs[1])))
+        let pcds = firstSmoothing.compute(secondSmoothing.compute(pcs[0]))
+        let apcds = firstSmoothing.compute(secondSmoothing.compute(Abs(pcs[1])))
 
         let tsi = MultiplyBy(Divide(pcds, apcds), 100.0)
         return tsi
@@ -42,7 +42,7 @@ public class Tsi {
 
 // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
-        return FirstSmoothing.idlePeriod() + SecondSmoothing.idlePeriod() + 1
+        return firstSmoothing.idlePeriod() + secondSmoothing.idlePeriod() + 1
     }
 
 // toString 返回指标的字符串表示。
