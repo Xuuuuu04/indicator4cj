@@ -6,7 +6,9 @@ import indicator4cj.trend.*
 
 // PPO = 100 * (EMA_fast - EMA_slow) / EMA_slow
 public class Ppo {
+    // 快速周期
     public var FastPeriod: Int64 = 12
+    // 慢速周期
     public var SlowPeriod: Int64 = 26
 
     public Ppo() {

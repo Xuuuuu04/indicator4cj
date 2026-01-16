@@ -7,6 +7,7 @@ public const DefaultCciPeriod: Int64 = 20
 
 // Commodity Channel Index (CCI)
 public class Cci {
+    // 周期
     public var period: Int64 = DefaultCciPeriod
 
     public Cci() {

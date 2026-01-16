@@ -8,6 +8,7 @@ import indicator4cj.trend.*
 import indicator4cj.strategy.*
 
 public class MacdStrategy <: Strategy {
+    // MACD
     public let Macd: Macd
 
     public init() {

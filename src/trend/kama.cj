@@ -9,8 +9,11 @@ public const DefaultKamaSlowScPeriod: Int64 = 30
 
 // Kaufman's Adaptive Moving Average (KAMA)
 public class Kama {
+    // 效率周期
     public var ErPeriod: Int64 = DefaultKamaErPeriod
+    // 快速平滑周期
     public var FastScPeriod: Int64 = DefaultKamaFastScPeriod
+    // 慢速平滑周期
     public var SlowScPeriod: Int64 = DefaultKamaSlowScPeriod
 
     public Kama() {

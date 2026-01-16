@@ -9,7 +9,9 @@ import indicator4cj.strategy.*
 
 // StopLoss：买入后设置止损价，触发或主动卖出时清空。
 public class StopLossStrategy <: Strategy {
+    // 策略
     public let InnerStrategy: Strategy
+    // 百分比
     public let Percentage: Float64
 
     public init(innerStrategy: Strategy, percentage: Float64) {

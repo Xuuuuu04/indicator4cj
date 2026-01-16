@@ -7,6 +7,7 @@ public const DefaultTrixPeriod: Int64 = 15
 
 // Triple Exponential Average (TRIX): EMA3 diff ratio.
 public class Trix {
+    // 周期
     public var period: Int64 = DefaultTrixPeriod
 
     public Trix() {

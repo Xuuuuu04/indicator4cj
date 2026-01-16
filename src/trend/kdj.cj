@@ -9,9 +9,13 @@ public const DefaultKdjSma2Period: Int64 = 3
 
 // KDJ 指标：返回 K、D、J。
 public class Kdj {
+    // 最高价移动
     public let MovingMaxInd: MovingMax
+    // 最低价移动
     public let MovingMinInd: MovingMin
+    // K值平滑
     public let Sma1: Sma
+    // D值平滑
     public let Sma2: Sma
 
     public Kdj() {

@@ -5,7 +5,9 @@ import std.core.*
 
 // Exponential Moving Average (Float64).
 public class Ema {
+    // 周期
     public var period: Int64 = 20
+    // 平滑系数
     public var smoothing: Float64 = 2.0
 
     public Ema() {

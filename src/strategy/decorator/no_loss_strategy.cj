@@ -9,6 +9,7 @@ import indicator4cj.strategy.*
 
 // NoLoss：只在不亏的情况下卖出。
 public class NoLossStrategy <: Strategy {
+    // 策略
     public let InnerStrategy: Strategy
 
     public init(innerStrategy: Strategy) {

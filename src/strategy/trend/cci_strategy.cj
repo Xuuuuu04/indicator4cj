@@ -10,6 +10,7 @@ import indicator4cj.trend.*
 
 // CCI 上穿 +100 买入，下穿 -100 卖出。
 public class CciStrategy <: Strategy {
+    // Indicator
     public let Indicator: Cci
 
     public init() {

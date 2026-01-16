@@ -10,6 +10,7 @@ import indicator4cj.volume.*
 
 // CMF 过零：上穿买，下穿卖。
 public class ChaikinMoneyFlowStrategy <: Strategy {
+    // Indicator
     public let Indicator: Cmf
 
     public init() {

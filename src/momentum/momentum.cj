@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 
 // Momentum = Current - value N steps before.
 public class Momentum {
+    // 周期
     public var period: Int64 = 10
 
     public Momentum() {

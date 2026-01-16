@@ -9,7 +9,9 @@ public const DefaultSyncDelaySeconds: Int64 = 5
 
 // Sync 仓储同步器，在源仓储和目标仓储之间同步资产快照数据
 public class Sync {
+    // workers
     public var workers: Int64 = DefaultSyncWorkers
+    // delaySeconds
     public var delaySeconds: Int64 = DefaultSyncDelaySeconds
     private var assets: ArrayList<String> = ArrayList<String>()
 

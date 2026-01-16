@@ -5,6 +5,7 @@ import std.collection.*
 
 // Rolling Moving Average (RMA) with Wilder smoothing.
 public class Rma {
+    // 周期
     public var period: Int64 = 20
 
     public Rma() {

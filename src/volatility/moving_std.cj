@@ -6,6 +6,7 @@ import indicator4cj.helper.*
 
 // Moving Standard Deviation over fixed period (Float64).
 public class MovingStd {
+    // 周期
     public var period: Int64 = 1
 
     public init() {

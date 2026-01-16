@@ -6,8 +6,11 @@ import indicator4cj.trend.*
 
 // Projection Oscillator (PO) for Float64.
 public class Po {
+    // 最小二乘指标
     private let mls: Mls
+    // 最小值指标
     private let min: MovingMin
+    // 最大值指标
     private let max: MovingMax
 
     public init() {

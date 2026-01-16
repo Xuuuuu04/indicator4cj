@@ -6,6 +6,7 @@ import indicator4cj.trend.*
 
 // QStick = SMA(period, Close - Open)
 public class Qstick {
+    // 周期
     public var period: Int64 = 20
 
     public Qstick() {

@@ -5,6 +5,7 @@ import std.collection.*
 
 // Weighted Moving Average (WMA) for Float64.
 public class Wma {
+    // 周期
     public var period: Int64 = 20
 
     public init(period: Int64) {

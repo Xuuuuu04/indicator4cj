@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 
 // MLR：基于最小二乘的线性回归预测 y_hat = m*x + b
 public class Mlr {
+    // 最小二乘
     public let MlsIndicator: Mls
 
     public Mlr(period: Int64) {

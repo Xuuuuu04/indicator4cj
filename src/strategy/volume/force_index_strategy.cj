@@ -10,6 +10,7 @@ import indicator4cj.volume.*
 
 // Force Index 过零：上穿买，下穿卖。
 public class ForceIndexStrategy <: Strategy {
+    // Indicator
     public let Indicator: Fi
 
     public init() {

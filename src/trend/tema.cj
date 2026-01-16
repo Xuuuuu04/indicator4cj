@@ -5,8 +5,11 @@ import indicator4cj.helper.*
 
 // Triple Exponential Moving Average (TEMA) = 3*EMA1 - 3*EMA2 + EMA3
 public class Tema {
+    // 快速EMA
     public let Ema1: Ema
+    // 中速EMA
     public let Ema2: Ema
+    // 慢速EMA
     public let Ema3: Ema
 
     public Tema() {

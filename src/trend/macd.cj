@@ -9,8 +9,11 @@ public const DefaultMacdPeriod3: Int64 = 9
 
 // MACD = EMA(period1) - EMA(period2); Signal = EMA(period3) of MACD
 public class Macd {
+    // 快速EMA
     public let Ema1: Ema
+    // 慢速EMA
     public let Ema2: Ema
+    // 信号EMA
     public let Ema3: Ema
 
     public Macd() {

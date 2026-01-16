@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 
 // Simple Moving Average (Float64).
 public class Sma {
+    // 周期
     public var period: Int64 = 50
 
     public Sma() {

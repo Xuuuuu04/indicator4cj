@@ -5,7 +5,9 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class ChandelierExit {
+    // 周期
     public var period: Int64 = 22
+    // 倍数
     public var multiplier: Float64 = 3.0
 
     public ChandelierExit() {

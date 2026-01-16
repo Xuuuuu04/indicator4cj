@@ -6,9 +6,13 @@ import indicator4cj.trend.*
 
 // Ichimoku Cloud，对齐逻辑与 Go 版一致：先对齐窗口 idle，再生成领先/滞后线。
 public class IchimokuCloud {
+    // 转换周期
     public var ConversionPeriod: Int64 = 9
+    // 基准周期
     public var BasePeriod: Int64 = 26
+    // 领先周期
     public var LeadingPeriod: Int64 = 52
+    // 滞后平移
     public var LaggingShift: Int64 = 26
 
     // compute 计算一目均衡表指标。

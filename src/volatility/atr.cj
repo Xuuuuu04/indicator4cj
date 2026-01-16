@@ -6,6 +6,7 @@ import indicator4cj.trend.*
 
 // Average True Range (ATR) with pluggable moving average (Ma).
 public class Atr {
+    // 移动平均指标
     public var ma: Ma = Sma(14)
 
     public Atr() {

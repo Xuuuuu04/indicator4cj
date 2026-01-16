@@ -5,6 +5,7 @@ import std.collection.*
 
 // Moving Sum over a fixed period (Float64 version).
 public class MovingSum {
+    // 周期
     public var period: Int64 = 1
 
     public MovingSum() {

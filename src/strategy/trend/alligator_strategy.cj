@@ -14,8 +14,11 @@ public const DefaultAlligatorStrategyLipPeriod: Int64 = 5
 
 // Alligator：三条 SMMA（Jaw/Teeth/Lip），Lip 同时高于 Teeth/Jaw 买入，反之卖出。
 public class AlligatorStrategy <: Strategy {
+    // Jaw
     public let Jaw: Smma
+    // Teeth
     public let Teeth: Smma
+    // Lip
     public let Lip: Smma
 
     public init() {

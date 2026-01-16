@@ -4,6 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 
 public class Nvi {
+    // 初始值
     public var Initial: Float64 = 1000.0
 
     public Nvi() {

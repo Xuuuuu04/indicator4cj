@@ -10,9 +10,13 @@ public const DefaultApoSlowSmoothing: Float64 = 2.0
 
 // Absolute Price Oscillator (APO) = EMA(fast) - EMA(slow)
 public class Apo {
+    // 快速周期
     public var FastPeriod: Int64
+    // 快速平滑
     public var FastSmoothing: Float64
+    // 慢速周期
     public var SlowPeriod: Int64
+    // 慢速平滑
     public var SlowSmoothing: Float64
 
     public Apo() {

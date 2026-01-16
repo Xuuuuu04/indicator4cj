@@ -12,7 +12,9 @@ public const DefaultGoldenCrossStrategySlowPeriod: Int64 = 200
 
 // 金叉/死叉：快 EMA 上穿慢买，下穿卖。
 public class GoldenCrossStrategy <: Strategy {
+    // 快速
     public let FastEma: Ema
+    // 最低价
     public let SlowEma: Ema
 
     public init() {

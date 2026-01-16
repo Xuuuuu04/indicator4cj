@@ -9,8 +9,11 @@ public const DefaultMassIndexPeriod3: Int64 = 25
 
 // Mass Index
 public class MassIndex {
+    // 快速EMA
     public let Ema1: Ema
+    // 慢速EMA
     public let Ema2: Ema
+    // 移动求和
     public let MovingSumInd: MovingSum
 
     public MassIndex() {

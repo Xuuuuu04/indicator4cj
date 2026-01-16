@@ -14,7 +14,9 @@ public const DefaultMacdRsiStrategySellAt: Float64 = 70.0
 
 // MACD 与 RSI 一致时给出同向信号，否则 Hold。
 public class MacdRsiStrategy <: Strategy {
+    // 策略
     public let MacdStrategyInst: MacdStrategy
+    // 策略
     public let RsiStrategyInst: RsiStrategy
 
     public init() {

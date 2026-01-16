@@ -10,6 +10,7 @@ import indicator4cj.trend.*
 
 // 收盘上穿 KAMA 买入，下穿卖出。
 public class KamaStrategy <: Strategy {
+    // Indicator
     public let Indicator: Kama
 
     public init() {

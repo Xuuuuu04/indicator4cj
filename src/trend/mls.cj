@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 
 // Moving Least Squares (slope m and intercept b).
 public class Mls {
+    // 移动求和
     public let Sum: MovingSum
 
     public Mls(period: Int64) {

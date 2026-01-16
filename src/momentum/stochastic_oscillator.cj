@@ -7,6 +7,7 @@ import indicator4cj.trend.*
 // Stochastic Oscillator: %K = 100 * (Close - LowN) / (HighN - LowN)
 // %D = SMA(%K, period)
 public class StochasticOscillator {
+    // 周期
     public var period: Int64 = 14
 
     public StochasticOscillator() {

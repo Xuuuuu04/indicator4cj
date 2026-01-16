@@ -12,7 +12,9 @@ public const DefaultDemaStrategyPeriod2: Int64 = 35
 
 // 双均线 DEMA 交叉：短上穿长买，反之卖。
 public class DemaStrategy <: Strategy {
+    // EMA
     public let Dema1: Dema
+    // EMA
     public let Dema2: Dema
 
     public init() {

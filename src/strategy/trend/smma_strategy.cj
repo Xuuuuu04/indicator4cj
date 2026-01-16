@@ -13,7 +13,9 @@ public const DefaultSmmaStrategyLongPeriod: Int64 = 50
 
 // 短期 SMMA 上穿长期看多，下穿看空。
 public class SmmaStrategy <: Strategy {
+    // SMMA
     public let ShortSmma: Smma
+    // SMMA
     public let LongSmma: Smma
 
     public init() {

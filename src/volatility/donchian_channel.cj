@@ -5,7 +5,9 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class DonchianChannel {
+    // 最大值指标
     private let max: MovingMax
+    // 最小值指标
     private let min: MovingMin
 
     public DonchianChannel() {

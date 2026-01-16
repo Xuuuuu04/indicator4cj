@@ -10,6 +10,7 @@ import indicator4cj.trend.*
 
 // KDJ：J 同时高于 K/D 买入，低于 K/D 卖出。
 public class KdjStrategy <: Strategy {
+    // Indicator
     public let Indicator: Kdj
 
     public init() {

@@ -7,6 +7,7 @@ public const DefaultVwmaPeriod: Int64 = 20
 
 // Volume Weighted Moving Average (VWMA)
 public class Vwma {
+    // 周期
     public var period: Int64 = DefaultVwmaPeriod
 
     public Vwma() {

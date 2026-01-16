@@ -9,6 +9,7 @@ import indicator4cj.strategy.*
 import indicator4cj.momentum.*
 
 public class AwesomeOscillatorStrategy <: Strategy {
+    // Indicator
     public let Indicator: AwesomeOscillator
 
     public init() {

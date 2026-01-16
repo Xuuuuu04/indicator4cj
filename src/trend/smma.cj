@@ -7,6 +7,7 @@ public const DefaultSmmaPeriod: Int64 = 7
 
 // Smoothed Moving Average (SMMA)
 public class Smma {
+    // 周期
     public var period: Int64 = DefaultSmmaPeriod
 
     public Smma() {

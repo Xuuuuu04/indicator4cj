@@ -10,6 +10,7 @@ import indicator4cj.volume.*
 
 // EMV 过零：上穿买，下穿卖。
 public class EaseOfMovementStrategy <: Strategy {
+    // Indicator
     public let Indicator: Emv
 
     public init() {

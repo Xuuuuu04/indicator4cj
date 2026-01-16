@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 
 // Moving maximum over window using Float64 Bst.
 public class MovingMax {
+    // 周期
     public var period: Int64 = 1
 
     public MovingMax() {

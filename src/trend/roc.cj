@@ -7,6 +7,7 @@ public const DefaultRocPeriod: Int64 = 9
 
 // Rate Of Change (ROC) = (price - price_n) / price_n
 public class Roc {
+    // 周期
     public var period: Int64 = DefaultRocPeriod
 
     public Roc() {

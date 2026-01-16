@@ -12,7 +12,9 @@ public const DefaultTsiStrategySignalPeriod: Int64 = 12
 
 // 当 TSI>0 且高于信号线买入，TSI<0 且低于信号线卖出。
 public class TsiStrategy <: Strategy {
+    // Indicator
     public let Indicator: Tsi
+    // 信号
     public let Signal: Ma
     private let signalPeriod: Int64
 

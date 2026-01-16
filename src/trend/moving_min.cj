@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 
 // Moving minimum over window using Float64 Bst.
 public class MovingMin {
+    // 周期
     public var period: Int64 = 1
 
     public MovingMin() {

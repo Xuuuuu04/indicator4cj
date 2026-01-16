@@ -8,7 +8,9 @@ public const DefaultTsiSecondSmoothingPeriod: Int64 = 13
 
 // True Strength Index (TSI)
 public class Tsi {
+    // 初次平滑
     public let FirstSmoothing: Ma
+    // 二次平滑
     public let SecondSmoothing: Ma
     private let firstPeriod: Int64
     private let secondPeriod: Int64

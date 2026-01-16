@@ -5,7 +5,9 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class SuperTrend {
+    // ATR指标
     private let atr: Atr
+    // 倍数
     private let multiplier: Float64
 
     public init() {

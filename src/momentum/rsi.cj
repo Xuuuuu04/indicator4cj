@@ -6,6 +6,7 @@ import indicator4cj.trend.*
 
 // RSI: 100 - 100 / (1 + RS), RS = AvgGain/AvgLoss over period.
 public class Rsi {
+    // 周期
     public var period: Int64 = 14
     private let rma: Rma
 

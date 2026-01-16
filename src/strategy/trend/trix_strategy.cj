@@ -10,6 +10,7 @@ import indicator4cj.trend.*
 
 // TRIX 过零判多空。
 public class TrixStrategy <: Strategy {
+    // Indicator
     public let Indicator: Trix
 
     public init() {

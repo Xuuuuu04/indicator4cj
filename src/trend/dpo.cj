@@ -7,6 +7,7 @@ public const DefaultDpoPeriod: Int64 = 20
 
 // Detrended Price Oscillator (DPO)
 public class Dpo {
+    // 周期
     public var period: Int64 = DefaultDpoPeriod
 
     public Dpo() {

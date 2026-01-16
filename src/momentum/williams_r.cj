@@ -6,6 +6,7 @@ import indicator4cj.trend.*
 
 // Williams %R = -100 * (HighestHigh - Close) / (HighestHigh - LowestLow)
 public class WilliamsR {
+    // 周期
     public var period: Int64 = 14
 
     public WilliamsR() {

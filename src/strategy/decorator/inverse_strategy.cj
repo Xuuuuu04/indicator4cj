@@ -9,6 +9,7 @@ import indicator4cj.strategy.*
 
 // 反转内部策略：Buy<->Sell，其余 Hold。
 public class InverseStrategy <: Strategy {
+    // 策略
     public let InnerStrategy: Strategy
 
     public init(innerStrategy: Strategy) {

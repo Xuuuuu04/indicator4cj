@@ -10,6 +10,7 @@ import indicator4cj.trend.*
 
 // APO 过零点判多空，使用快/慢 EMA 差值。
 public class ApoStrategy <: Strategy {
+    // Indicator
     public let Indicator: Apo
 
     public init() {

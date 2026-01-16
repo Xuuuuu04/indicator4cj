@@ -2,8 +2,11 @@ package indicator4cj.helper
 
 // SimpleDate：简化日期，仅年/月/日，用于 DaysBetween 计算。
 public struct SimpleDate {
+    // year
     public let year: Int64
+    // month
     public let month: Int64 // 1-12
+    // day
     public let day: Int64   // 1-31
 
     public init(year: Int64, month: Int64, day: Int64) {

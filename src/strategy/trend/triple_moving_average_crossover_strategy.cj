@@ -13,8 +13,11 @@ public const DefaultTripleMovingAverageCrossoverStrategySlowPeriod: Int64 = 200
 
 // 三均线交叉：快线同时高于中/慢买入，快线同时低于中/慢卖出。
 public class TripleMovingAverageCrossoverStrategy <: Strategy {
+    // 快速
     public let FastEma: Ema
+    // EMA
     public let MediumEma: Ema
+    // 最低价
     public let SlowEma: Ema
 
     public init() {

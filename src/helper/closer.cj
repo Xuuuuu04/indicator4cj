@@ -21,6 +21,7 @@ public func CloseAndLogErrorWithLogger(closer: Closeable, _: String, _: Option<S
 
 // 简单的内存型 Closeable，用于测试。
 public class DummyCloser <: Closeable {
+    // 计数
     public var closedCount: Int64 = 0
 
     public func close(): Unit {

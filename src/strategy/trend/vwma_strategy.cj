@@ -12,7 +12,9 @@ public const DefaultVwmaStrategyPeriod: Int64 = 20
 
 // VWMA 高于 SMA 买入，低于卖出。
 public class VwmaStrategy <: Strategy {
+    // VWMA
     public let VwmaIndicator: Vwma
+    // SMA
     public let SmaIndicator: Sma
 
     public init() {

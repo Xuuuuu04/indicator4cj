@@ -5,7 +5,9 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class KeltnerChannel {
+    // ATR指标
     private let atr: Atr
+    // 指标
     private let ema: Ema
 
     public KeltnerChannel() {

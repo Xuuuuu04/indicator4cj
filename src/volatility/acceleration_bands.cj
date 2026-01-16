@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class AccelerationBands {
+    // 周期
     public var period: Int64 = 20
 
     public AccelerationBands() {

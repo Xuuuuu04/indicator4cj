@@ -16,11 +16,17 @@ public const DefaultPercentBandMFIStrategyMfiSellAt: Float64 = 20.0
 
 // %B 与 MFI 组合：%B>buy且MFI>buy 买，%B<sell且MFI<sell 卖。
 public class PercentBandMFIStrategy <: Strategy {
+    // 指标
     public let MoneyFlowIndex: Mfi
+    // PercentBInd
     public let PercentBInd: PercentB
+    // 卖出
     public let SellPercentBAt: Float64
+    // 买入
     public let BuyPercentBAt: Float64
+    // 卖出
     public let SellMfiAt: Float64
+    // 买入
     public let BuyMfiAt: Float64
 
     public init() {

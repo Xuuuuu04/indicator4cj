@@ -6,7 +6,9 @@ import indicator4cj.trend.*
 
 // PVO = 100 * (EMA_fast(volume) - EMA_slow(volume)) / EMA_slow(volume)
 public class Pvo {
+    // 快速周期
     public var FastPeriod: Int64 = 12
+    // 慢速周期
     public var SlowPeriod: Int64 = 26
 
     public Pvo() {

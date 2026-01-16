@@ -4,6 +4,7 @@ import std.core.*
 import indicator4cj.helper.*
 
 public class BollingerBandWidth {
+    // 布林带指标
     private let bands = BollingerBands()
 
     public BollingerBandWidth() {

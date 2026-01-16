@@ -17,11 +17,17 @@ public const DefaultTripleRsiStrategyBuyAt: Float64 = 30.0
 public const DefaultTripleRsiStrategySellAt: Float64 = 50.0
 
 public class TripleRsiStrategy <: Strategy {
+    // RSI
     public let RsiIndicator: Rsi
+    // SMA
     public let SmaIndicator: Sma
+    // DownDays
     public let DownDays: Int64
+    // 买入
     public let BuySignalAt: Float64
+    // 买入
     public let BuyAt: Float64
+    // 卖出
     public let SellAt: Float64
 
     public init() {

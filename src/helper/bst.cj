@@ -4,6 +4,7 @@ import std.collection.*
 
 // 二叉搜索树，存储 Float64（覆盖原 Go Number 用途）。
 public class BstNode {
+    // 数值
     public var value: Float64
     public init(value: Float64) {
         this.value = value

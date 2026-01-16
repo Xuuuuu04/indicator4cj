@@ -7,6 +7,7 @@ public const DefaultAroonPeriod: Int64 = 25
 
 // Aroon Up/Down 指标。
 public class Aroon {
+    // 周期
     public var period: Int64 = DefaultAroonPeriod
 
     public Aroon() {

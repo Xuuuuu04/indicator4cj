@@ -8,7 +8,9 @@ public const DefaultEnvelopePeriod: Int64 = 20
 
 // 价格包络线：上下轨为 MA*(1±pct)。
 public class Envelope {
+    // 移动平均指标
     public let MaIndicator: Ma
+    // 百分比
     public var Percentage: Float64 = DefaultEnvelopePercentage
 
     public Envelope() {

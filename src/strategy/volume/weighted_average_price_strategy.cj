@@ -10,6 +10,7 @@ import indicator4cj.volume.*
 
 // VWAP：收盘低于 VWAP 买，高于卖。
 public class WeightedAveragePriceStrategy <: Strategy {
+    // Indicator
     public let Indicator: Vwap
 
     public init() {

@@ -21,7 +21,9 @@ private struct CsvColumn {
 }
 
 public class Csv<T> {
+    // hasHeader
     public var hasHeader: Bool = true
+    // 日期
     public var defaultDateTimeFormat: String = "yyyy-MM-dd"
 
     public Csv() {

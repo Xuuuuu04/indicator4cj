@@ -5,7 +5,9 @@ import indicator4cj.helper.*
 
 // Double Exponential Moving Average (DEMA) = 2*EMA1 - EMA2(EMA1)
 public class Dema {
+    // 快速EMA
     public let Ema1: Ema
+    // 慢速EMA
     public let Ema2: Ema
 
     public Dema() {

@@ -5,6 +5,7 @@ import indicator4cj.helper.*
 import indicator4cj.trend.*
 
 public class UlcerIndex {
+    // 周期
     public var period: Int64 = 14
 
     public init() {
