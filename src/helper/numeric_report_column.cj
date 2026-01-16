@@ -24,7 +24,7 @@ public class NumericReportColumn <: ReportColumn {
     }
 }
 
-// NewNumericReportColumn 创建数值报告列（公共 API，保持向后兼容）
+// 创建NumericReportColumn 创建数值报告列（公共 API，保持向后兼容）
 public func NewNumericReportColumn(name: String, values: Iterator<Float64>): ReportColumn {
     return NumericReportColumn(name, values)
 }

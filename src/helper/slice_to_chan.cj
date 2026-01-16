@@ -8,7 +8,7 @@ public func sliceToChan<T>(list: ArrayList<T>): Iterator<T> {
     return list.iterator()
 }
 
-// Go 同名兼容导出。
+// Go同名兼容导出。
 public func SliceToChan<T>(list: ArrayList<T>): Iterator<T> {
     return sliceToChan(list)
 }

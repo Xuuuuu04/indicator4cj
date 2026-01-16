@@ -9,7 +9,7 @@ import indicator4cj.strategy.*
 import indicator4cj.momentum.*
 
 public class RsiStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: Rsi
     // 买入
     public let BuyAt: Float64

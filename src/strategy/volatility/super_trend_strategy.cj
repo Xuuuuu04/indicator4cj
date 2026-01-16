@@ -10,7 +10,7 @@ import indicator4cj.volatility.*
 
 // SuperTrend：收盘高于 superTrend 买，低于卖。
 public class SuperTrendStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: SuperTrend
 
     public init() {

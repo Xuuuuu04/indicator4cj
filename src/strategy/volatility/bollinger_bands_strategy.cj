@@ -10,7 +10,7 @@ import indicator4cj.volatility.*
 
 // Bollinger Bands：收盘高于上轨卖，低于下轨买。
 public class BollingerBandsStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: BollingerBands
 
     public init() {

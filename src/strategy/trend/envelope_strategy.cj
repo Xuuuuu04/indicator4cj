@@ -10,7 +10,7 @@ import indicator4cj.trend.*
 
 // Envelope：低于下轨买，高于上轨卖。
 public class EnvelopeStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: Envelope
 
     public init() {

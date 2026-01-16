@@ -21,7 +21,7 @@ public class TripleRsiStrategy <: Strategy {
     public let RsiIndicator: Rsi
     // SMA
     public let SmaIndicator: Sma
-    // DownDays
+    // 下跌天数
     public let DownDays: Int64
     // 买入
     public let BuySignalAt: Float64

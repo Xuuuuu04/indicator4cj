@@ -70,7 +70,7 @@ public func setReflectValue(field: InstanceVariableInfo, instance: Any, raw: Str
     }
 }
 
-// getReflectValue：从实例读取变量并转为字符串。
+// 获取ReflectValue：从实例读取变量并转为字符串。
 public func getReflectValue(field: InstanceVariableInfo, instance: Any, format: String): String {
     let anyVal = field.getValue(instance)
     let typeName = field.typeInfo.toString()

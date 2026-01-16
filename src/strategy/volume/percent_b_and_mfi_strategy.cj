@@ -18,7 +18,7 @@ public const DefaultPercentBandMFIStrategyMfiSellAt: Float64 = 20.0
 public class PercentBandMFIStrategy <: Strategy {
     // 指标
     public let MoneyFlowIndex: Mfi
-    // PercentBInd
+    // 百分比B指标
     public let PercentBInd: PercentB
     // 卖出
     public let SellPercentBAt: Float64

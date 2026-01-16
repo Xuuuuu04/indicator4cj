@@ -5,7 +5,7 @@ public func applyIter<T>(iter: Iterator<T>, mapper: (T) -> T): Iterator<T> {
     return mapIter(iter, mapper)
 }
 
-// Go 同名兼容导出。
+// Go同名兼容导出。
 public func Apply<T>(iter: Iterator<T>, mapper: (T) -> T): Iterator<T> {
     return applyIter(iter, mapper)
 }

@@ -13,7 +13,7 @@ public const DefaultNegativeVolumeIndexStrategyEmaPeriod: Int64 = 255
 
 // NVI 与其 EMA 对比：NVI 下穿 EMA 买，上穿卖。
 public class NegativeVolumeIndexStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: Nvi
     // EMA
     public let EmaIndicator: Ema

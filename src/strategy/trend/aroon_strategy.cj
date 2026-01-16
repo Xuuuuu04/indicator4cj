@@ -9,7 +9,7 @@ import indicator4cj.strategy.*
 import indicator4cj.trend.*
 
 public class AroonStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: Aroon
 
     public init() {

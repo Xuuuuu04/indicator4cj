@@ -10,7 +10,7 @@ import indicator4cj.trend.*
 
 // BoP > 0 买，<0 卖。
 public class BopStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: Bop
 
     public init() {

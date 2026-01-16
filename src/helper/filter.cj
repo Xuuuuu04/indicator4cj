@@ -5,7 +5,7 @@ public func filterIter<T>(iter: Iterator<T>, predicate: (T) -> Bool): Iterator<T
     return FilterIterator<T>(iter, predicate)
 }
 
-// Go 同名兼容导出。
+// Go同名兼容导出。
 public func Filter<T>(iter: Iterator<T>, predicate: (T) -> Bool): Iterator<T> {
     return filterIter(iter, predicate)
 }

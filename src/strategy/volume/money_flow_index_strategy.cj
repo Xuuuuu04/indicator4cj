@@ -13,7 +13,7 @@ public const DefaultMoneyFlowIndexStrategyBuyAt: Float64 = 20.0
 
 // MFI 过 80 卖，低于 20 买。
 public class MoneyFlowIndexStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: Mfi
     // 卖出
     public let SellAt: Float64

@@ -13,9 +13,9 @@ public const DefaultTrimaStrategyLongPeriod: Int64 = 50
 
 // TRIMA 短长均线交叉。
 public class TrimaStrategy <: Strategy {
-    // Short
+    // 短周期
     public let Short: Trima
-    // Long
+    // 长周期
     public let Long: Trima
 
     public init() {

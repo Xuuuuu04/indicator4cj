@@ -24,7 +24,7 @@ public class AnnotationReportColumn <: ReportColumn {
     }
 }
 
-// NewAnnotationReportColumn 创建注释报告列（公共 API，保持向后兼容）
+// 创建AnnotationReportColumn 创建注释报告列（公共 API，保持向后兼容）
 public func NewAnnotationReportColumn(values: Iterator<String>): ReportColumn {
     return AnnotationReportColumn(values)
 }

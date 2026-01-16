@@ -27,7 +27,7 @@ public class IchimokuCloud {
         let leadMax = MovingMax(leadingPeriod)
         let leadMin = MovingMin(leadingPeriod)
 
-        // Tenkan
+        // 转换线
         let conv = Duplicate(
             DivideBy(
             Add(convMax.compute(highsSp[0]), convMin.compute(lowsSp[0])),
@@ -36,7 +36,7 @@ public class IchimokuCloud {
             2
         )
 
-        // Kijun
+        // 基准线
         let base = Duplicate(
             DivideBy(
             Add(baseMax.compute(highsSp[1]), baseMin.compute(lowsSp[1])),
@@ -50,10 +50,10 @@ public class IchimokuCloud {
         conv[0] = Skip(conv[0], diffConvBase)
         conv[1] = Skip(conv[1], diffConvBase)
 
-        // Senkou A
+        // 先行带A
         var senkouA = DivideBy(Add(conv[0], base[0]), 2.0)
 
-        // Senkou B
+        // 先行带B
         let senkouB_raw = DivideBy(
             Add(leadMax.compute(highsSp[2]), leadMin.compute(lowsSp[2])),
             2.0

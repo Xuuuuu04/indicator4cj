@@ -8,7 +8,7 @@ import indicator4cj.strategy.*
 import indicator4cj.momentum.*
 
 public class QstickStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: Qstick
 
     public init() {

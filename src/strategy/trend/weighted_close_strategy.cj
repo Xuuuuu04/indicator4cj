@@ -12,7 +12,7 @@ public const DefaultWeightedCloseStrategyMaPeriod: Int64 = 20
 
 // Weighted Close crossing MA：上穿看多，下穿看空。
 public class WeightedCloseStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: WeightedClose
     // Ma
     public let Ma: Ma

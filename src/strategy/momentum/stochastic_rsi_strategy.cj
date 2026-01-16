@@ -12,7 +12,7 @@ public const DefaultStochasticRsiStrategyBuyAt: Float64 = 0.8
 public const DefaultStochasticRsiStrategySellAt: Float64 = 0.2
 
 public class StochasticRsiStrategy <: Strategy {
-    // Indicator
+    // 指标
     public let Indicator: StochasticRsi
     // 买入
     public let BuyAt: Float64

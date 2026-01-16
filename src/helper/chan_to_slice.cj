@@ -14,7 +14,7 @@ public func chanToSlice<T>(iter: Iterator<T>): ArrayList<T> {
     return out
 }
 
-// Go 同名兼容导出。
+// Go同名兼容导出。
 public func ChanToSlice<T>(iter: Iterator<T>): ArrayList<T> {
     return chanToSlice(iter)
 }

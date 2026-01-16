@@ -9,13 +9,13 @@ import stdx.encoding.json.*
 
 // Tiingo 元数据，与 Go 版字段保持一致。
 public struct TiingoMeta {
-    // Ticker
+    // 代码
     public let Ticker: String
     // 名称
     public let Name: String
     // 变化
     public let ExchangeCode: String
-    // Description
+    // 描述
     public let Description: String
     // 日期
     public let StartDate: DateTime
@@ -58,7 +58,7 @@ public struct TiingoEndOfDay {
     public let AdjVolume: Int64
     // 标识
     public let Dividend: Float64
-    // Split
+    // 拆分
     public let Split: Float64
 
     public init() {

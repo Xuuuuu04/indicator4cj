@@ -48,7 +48,7 @@ public class StochasticRsi {
         return result
     }
 
-    // IdlePeriod = RSI.IdlePeriod + Min/Max.IdlePeriod
+    // idlePeriod返回RSI的空闲周期加最小最大值的空闲周期
     // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
         return RsiIndicator.idlePeriod() + MinIndicator.idlePeriod()
