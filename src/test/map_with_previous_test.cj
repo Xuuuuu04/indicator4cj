@@ -1,0 +1,22 @@
+package indicator4cj.test
+
+import std.collection.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import indicator4cj.helper.*
+
+@Test
+class MapWithPreviousTest {
+    @TestCase
+    public func cumulative_sum() {
+        let input = SliceToChan(ArrayList<Int64>([1, 2, 3, 4]))
+        let expected = SliceToChan(ArrayList<Int64>([1, 3, 6, 10]))
+
+        let actual = MapWithPrevious<Int64, Int64>(input, { prev, curr => prev + curr }, Int64(0))
+        match (CheckEquals(actual, expected)) {
+            case Some(err) => @Fail(err)
+            case None => ()
+        }
+    }
+}
+

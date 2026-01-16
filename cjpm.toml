@@ -1,0 +1,24 @@
+[package]
+  name = "indicator4cj"
+  version = "1.0.0"
+  cjc-version = "1.0.4"
+  description = "Technical analysis indicators, strategies, and backtesting framework in Cangjie (ported from cinar/indicator v2)"
+  output-type = "static"
+  src-dir = ""
+  target-dir = ""
+  compile-option = ""
+link-option = ""
+override-compile-option = ""
+package-configuration = {}
+
+[[executable]]
+name = "indicator-backtest"
+src-dir = "cmd/backtest"
+
+[[executable]]
+name = "indicator-sync"
+src-dir = "cmd/sync"
+
+[target.x86_64-w64-mingw32]
+  [target.x86_64-w64-mingw32.bin-dependencies]
+    path-option = ["D:\\CangJie\\cangjie_stdx\\0141\\dynamic\\stdx"]

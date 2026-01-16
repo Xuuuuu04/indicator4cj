@@ -1,0 +1,47 @@
+package indicator4cj.volume
+
+import std.core.*
+
+// OBV：On-Balance Volume 指标（Float64）。
+public class Obv {
+    public init() {}
+
+    // compute 计算平衡交易量指标。
+    public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
+        return ObvIterator(closings, volumes)
+    }
+
+    // idlePeriod 返回空闲周期数。
+    public func idlePeriod(): Int64 { return 0 }
+}
+
+private class ObvIterator <: Iterator<Float64> {
+    private let _closings: Iterator<Float64>
+    private let _volumes: Iterator<Float64>
+    private var _previous: Float64 = 0.0
+
+    public init(closings: Iterator<Float64>, volumes: Iterator<Float64>) {
+        this._closings = closings
+        this._volumes = volumes
+    }
+
+    public func next(): Option<Float64> {
+        match (_closings.next()) {
+            case Some(c) =>
+                match (_volumes.next()) {
+                    case Some(v) =>
+                        var current = _previous
+                        if (c > _previous) {
+                            current = current + v
+                        } else if (c < _previous) {
+                            current = current - v
+                        }
+                        _previous = current
+                        return Some(current)
+                    case None => return None
+                }
+            case None => return None
+        }
+    }
+}
+

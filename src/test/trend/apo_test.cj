@@ -1,0 +1,30 @@
+package indicator4cj.test.trend
+
+import std.core.*
+import std.collection.*
+import std.unittest.*
+import indicator4cj.helper.*
+import indicator4cj.helper as h
+import indicator4cj.trend.*
+
+class ApoData {
+    public var close: Float64 = 0.0
+    public var Apo: Float64 = 0.0
+}
+
+@Test
+public func test_apo_basic() {
+    let input = Csv<ApoData>().readFromFile("src/test/testdata/trend/apo.csv")
+    let inputs = Duplicate(input, 2)
+    let closing = h.Map(inputs[0], { row: ApoData => row.close })
+    let expected = h.Map(inputs[1], { row: ApoData => row.Apo })
+
+    let apo = Apo()
+    let actual = h.RoundDigits(apo.compute(closing), 2)
+    let expectedSkipped = h.Skip(expected, apo.slowPeriod - 1)
+
+    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+        case Some(err) => fail(err.toString())
+        case None => ()
+    }
+}
