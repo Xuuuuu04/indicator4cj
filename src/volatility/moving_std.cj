@@ -19,11 +19,11 @@ public class MovingStd {
 
     // compute 计算移动标准差指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return MovingStdIterator(c, this.period)
+        return MovingStdIterator(c, period)
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 
 // Iterator maintaining ring buffer and running mean.

@@ -21,11 +21,11 @@ public class Qstick {
     public func compute(opens: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
         let diff = Subtract(closes, opens)
         let sma = Sma()
-        sma.period = this.period
+        sma.period = period
         return sma.compute(diff)
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 

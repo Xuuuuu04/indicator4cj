@@ -18,11 +18,11 @@ public class MovingSum {
 
 // compute 计算指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return MovingSumIterator(c, this.period)
+        return MovingSumIterator(c, period)
     }
 
 // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 
 private class MovingSumIterator <: Iterator<Float64> {

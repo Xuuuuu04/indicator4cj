@@ -30,7 +30,7 @@ public class AccelerationBands {
         )
 
         let sma = Sma()
-        sma.period = this.period
+        sma.period = period
 
         let upper = sma.compute(
             Multiply(
@@ -58,6 +58,6 @@ public class AccelerationBands {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 

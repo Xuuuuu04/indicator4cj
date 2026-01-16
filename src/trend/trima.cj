@@ -32,15 +32,15 @@ public class Trima {
     private func calculatePeriods(): (Int64, Int64) {
         var p1: Int64
         var p2: Int64
-        if (this.period % 2 == 0) {
-            p1 = this.period / 2
+        if (period % 2 == 0) {
+            p1 = period / 2
             p2 = p1 + 1
         } else {
-            p1 = (this.period + 1) / 2
+            p1 = (period + 1) / 2
             p2 = p1
         }
         return (p1, p2)
     }
 
-    public func toString(): String { return "TRIMA(${this.period})" }
+    public func toString(): String { return "TRIMA(${period})" }
 }

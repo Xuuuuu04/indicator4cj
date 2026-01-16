@@ -19,7 +19,7 @@ public class MovingMin {
 // compute 计算指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let cs = Duplicate(c, 2)
-        cs[1] = Shift(cs[1], this.period, 0.0)
+        cs[1] = Shift(cs[1], period, 0.0)
 
         let bst = Bst()
 
@@ -29,9 +29,9 @@ public class MovingMin {
             return bst.min()
         })
 
-        return Skip(mins, this.period - 1)
+        return Skip(mins, period - 1)
     }
 
 // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }

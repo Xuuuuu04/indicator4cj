@@ -42,7 +42,7 @@ private class EmaIterator <: Iterator<Float64> {
     public init(source: Iterator<Float64>, period: Int64, smoothing: Float64) {
         this.source = source
         this.period = period
-        this.multiplier = smoothing / Float64(period + 1)
+        multiplier = smoothing / Float64(period + 1)
     }
 
     public func next(): Option<Float64> {

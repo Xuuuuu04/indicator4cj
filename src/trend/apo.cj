@@ -29,13 +29,13 @@ public class Apo {
     // compute 计算绝对价格震荡指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         // Buffered 为保持与 Go 签名一致（当前直通）
-        let buffered = Buffered(c, this.slowPeriod)
+        let buffered = Buffered(c, slowPeriod)
         let cs = Duplicate(buffered, 2)
 
-        let fastEma = Ema(this.fastPeriod)
-        fastEma.smoothing = this.fastSmoothing
-        let slowEma = Ema(this.slowPeriod)
-        slowEma.smoothing = this.slowSmoothing
+        let fastEma = Ema(fastPeriod)
+        fastEma.smoothing = fastSmoothing
+        let slowEma = Ema(slowPeriod)
+        slowEma.smoothing = slowSmoothing
 
         cs[0] = fastEma.compute(cs[0])
         cs[1] = slowEma.compute(cs[1])
@@ -45,7 +45,7 @@ public class Apo {
 
     // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
-        return this.slowPeriod
+        return slowPeriod
     }
 }
 

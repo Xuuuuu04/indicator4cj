@@ -25,9 +25,9 @@ public class ChandelierExit {
         let hs = Duplicate(highs, 2)
         let ls = Duplicate(lows, 2)
 
-        let movingMax = MovingMax(this.period)
-        let movingMin = MovingMin(this.period)
-        let atr = Atr(this.period)
+        let movingMax = MovingMax(period)
+        let movingMin = MovingMin(period)
+        let atr = Atr(period)
 
         let skipMax = atr.idlePeriod() - movingMax.idlePeriod()
         let skipMin = atr.idlePeriod() - movingMin.idlePeriod()
@@ -38,7 +38,7 @@ public class ChandelierExit {
         let atrScaled = Duplicate(
             MultiplyBy(
                 atr.compute(hs[1], ls[1], closings),
-                this.multiplier
+                multiplier
             ),
             2
         )
@@ -50,6 +50,6 @@ public class ChandelierExit {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period }
+    public func idlePeriod(): Int64 { return period }
 }
 

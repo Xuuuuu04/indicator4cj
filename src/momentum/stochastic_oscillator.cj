@@ -20,9 +20,9 @@ public class StochasticOscillator {
 
     // compute 计算随机振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
-        let hh = MovingMax(this.period).compute(highs)
-        let ll = MovingMin(this.period).compute(lows)
-        let closeAdj = Skip(closes, this.period - 1)
+        let hh = MovingMax(period).compute(highs)
+        let ll = MovingMin(period).compute(lows)
+        let closeAdj = Skip(closes, period - 1)
 
         let k = MultiplyBy(
             Divide(
@@ -33,13 +33,13 @@ public class StochasticOscillator {
         )
 
         let sma = Sma()
-        sma.period = this.period
+        sma.period = period
         let d = sma.compute(k)
 
         return (k, d)
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 

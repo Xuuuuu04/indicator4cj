@@ -19,10 +19,10 @@ public class WilliamsR {
 
     // compute 计算威廉姆斯百分比R指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
-        let hh = MovingMax(this.period).compute(highs)
-        let ll = MovingMin(this.period).compute(lows)
+        let hh = MovingMax(period).compute(highs)
+        let ll = MovingMin(period).compute(lows)
 
-        let closesAdj = Skip(closes, this.period - 1)
+        let closesAdj = Skip(closes, period - 1)
 
         return Operate3(hh, ll, closesAdj, { h: Float64, l: Float64, c: Float64 =>
             let denom = h - l
@@ -32,6 +32,6 @@ public class WilliamsR {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 

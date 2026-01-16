@@ -69,7 +69,7 @@ public class WeightedCloseStrategy <: Strategy {
         annotations = Skip(annotations, Ma.idlePeriod())
         outcomes = Skip(outcomes, Ma.idlePeriod())
 
-        let report = Report(this.name(), dates)
+        let report = Report(name(), dates)
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closingsDup[0]))
         report.addColumn(NumericReportColumn("Weighted Close", wcDup[0]))

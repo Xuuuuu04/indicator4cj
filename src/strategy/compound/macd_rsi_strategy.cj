@@ -63,7 +63,7 @@ public class MacdRsiStrategy <: Strategy {
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = Report(this.name(), dates)
+        let report = Report(name(), dates)
         report.addChart()
         report.addChart()
         report.addChart()

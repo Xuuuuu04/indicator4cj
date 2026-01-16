@@ -20,16 +20,16 @@ public class Aroon {
 
 // compute 计算指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
-        let movingMax = MovingMax(this.period)
-        let movingMin = MovingMin(this.period)
+        let movingMax = MovingMax(period)
+        let movingMin = MovingMin(period)
 
-        let sinceLastHigh = MaxSince(movingMax.compute(high), this.period)
-        let sinceLastLow = MinSince(movingMin.compute(low), this.period)
+        let sinceLastHigh = MaxSince(movingMax.compute(high), period)
+        let sinceLastLow = MinSince(movingMin.compute(low), period)
 
-        var aroonUp = MultiplyBy(IncrementBy(MultiplyBy(sinceLastHigh, -1.0), Float64(this.period)), 100.0 / Float64(this.period))
+        var aroonUp = MultiplyBy(IncrementBy(MultiplyBy(sinceLastHigh, -1.0), Float64(period)), 100.0 / Float64(period))
         aroonUp = RoundDigits(aroonUp, 0)
 
-        var aroonDown = MultiplyBy(IncrementBy(MultiplyBy(sinceLastLow, -1.0), Float64(this.period)), 100.0 / Float64(this.period))
+        var aroonDown = MultiplyBy(IncrementBy(MultiplyBy(sinceLastLow, -1.0), Float64(period)), 100.0 / Float64(period))
         aroonDown = RoundDigits(aroonDown, 0)
 
         return (aroonUp, aroonDown)

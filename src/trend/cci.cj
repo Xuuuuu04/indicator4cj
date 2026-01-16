@@ -21,8 +21,8 @@ public class Cci {
 // compute 计算指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         let tp = TypicalPrice()
-        let sma1 = Sma(this.period)
-        let sma2 = Sma(this.period)
+        let sma1 = Sma(period)
+        let sma2 = Sma(period)
 
         let tps = Duplicate(tp.compute(highs, lows, closings), 3)
 
@@ -50,6 +50,6 @@ public class Cci {
 
 // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
-        return (this.period * 2) - 2
+        return (period * 2) - 2
     }
 }

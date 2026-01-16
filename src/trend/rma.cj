@@ -17,10 +17,10 @@ public class Rma {
     }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return RmaIterator(c, this.period)
+        return RmaIterator(c, period)
     }
 
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 
 private class RmaIterator <: Iterator<Float64> {

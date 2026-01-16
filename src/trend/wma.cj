@@ -19,11 +19,11 @@ public class Wma {
 
     // compute 计算加权移动平均线。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        return WmaIterator(values, this.period)
+        return WmaIterator(values, period)
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 
 private class WmaIterator <: Iterator<Float64> {

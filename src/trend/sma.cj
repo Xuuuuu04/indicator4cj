@@ -19,14 +19,14 @@ public class Sma {
     // compute 计算简单移动平均线。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let sum = MovingSum()
-        sum.period = this.period
-        return DivideBy(sum.compute(c), Float64(this.period))
+        sum.period = period
+        return DivideBy(sum.compute(c), Float64(period))
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 
     // toString 返回指标的字符串表示。
-    public func toString(): String { return "SMA(${this.period})" }
+    public func toString(): String { return "SMA(${period})" }
 }
 

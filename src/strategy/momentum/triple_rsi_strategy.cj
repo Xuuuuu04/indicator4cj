@@ -124,7 +124,7 @@ public class TripleRsiStrategy <: Strategy {
         annotations = Skip(annotations, IdlePeriod())
         outcomes = Skip(outcomes, IdlePeriod())
 
-        let report = Report(this.name(), dates)
+        let report = Report(name(), dates)
         report.addChart()
         report.addChart()
 

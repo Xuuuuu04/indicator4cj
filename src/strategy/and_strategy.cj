@@ -48,7 +48,7 @@ public class AndStrategy <: Strategy {
         let annotations = ActionsToAnnotations(actions)
         let outcomes = MultiplyBy(outcomesRaw, 100.0)
 
-        let report = Report(this.name(), dates)
+        let report = Report(name(), dates)
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings))
         report.addColumn(AnnotationReportColumn(annotations))

@@ -79,7 +79,7 @@ public class AlligatorStrategy <: Strategy {
         annotations = Skip(annotations, common)
         outcomes = Skip(outcomes, common)
 
-        let report = Report(this.name(), dates)
+        let report = Report(name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[0]))

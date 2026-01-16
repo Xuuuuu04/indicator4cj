@@ -62,7 +62,7 @@ public class TripleMovingAverageCrossoverStrategy <: Strategy {
         let annotations = Skip(ActionsToAnnotations(actions), SlowEma.idlePeriod())
         let outcomes = MultiplyBy(Skip(outcomesRaw, SlowEma.idlePeriod()), 100.0)
 
-        let report = Report(this.name(), dates)
+        let report = Report(name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[0]))

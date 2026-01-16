@@ -65,7 +65,7 @@ public class StochasticRsiStrategy <: Strategy {
         annotations = Skip(annotations, Indicator.idlePeriod())
         outcomes = Skip(outcomes, Indicator.idlePeriod())
 
-        let report = Report(this.name(), dates)
+        let report = Report(name(), dates)
         report.addChart()
         report.addChart()
         report.addColumn(NumericReportColumn("Close", closings[0]))

@@ -20,7 +20,7 @@ public class UlcerIndex {
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
         let cs = Duplicate(closings, 2)
 
-        let movingMax = MovingMax(this.period)
+        let movingMax = MovingMax(period)
         let highs = Duplicate(movingMax.compute(cs[0]), 2)
 
         cs[1] = Skip(cs[1], movingMax.idlePeriod())
@@ -34,13 +34,13 @@ public class UlcerIndex {
         )
 
         let sma = Sma()
-        sma.period = this.period
+        sma.period = period
         let squaredAvg = Pow(sma.compute(drawdown), 2.0)
 
         return Sqrt(squaredAvg)
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return (this.period - 1) * 2 }
+    public func idlePeriod(): Int64 { return (period - 1) * 2 }
 }
 

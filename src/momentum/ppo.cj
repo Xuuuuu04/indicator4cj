@@ -23,13 +23,13 @@ public class Ppo {
 
     // compute 计算价格振荡器指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        let fastEma = Ema(this.fastPeriod).compute(values)
-        let slowEma = Ema(this.slowPeriod).compute(values)
+        let fastEma = Ema(fastPeriod).compute(values)
+        let slowEma = Ema(slowPeriod).compute(values)
         let diff = Subtract(fastEma, slowEma)
         return MultiplyBy(Divide(diff, slowEma), 100.0)
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.slowPeriod - 1 }
+    public func idlePeriod(): Int64 { return slowPeriod - 1 }
 }
 

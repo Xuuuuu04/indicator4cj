@@ -20,9 +20,9 @@ public class Trix {
 
 // compute 计算指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        let ema1 = Ema(this.period)
-        let ema2 = Ema(this.period)
-        let ema3 = Ema(this.period)
+        let ema1 = Ema(period)
+        let ema2 = Ema(period)
+        let ema3 = Ema(period)
 
         let emas = ema3.compute(ema2.compute(ema1.compute(c)))
         let trix = ChangeRatio(emas, 1)
@@ -31,6 +31,6 @@ public class Trix {
 
 // idlePeriod 返回空闲周期数。
     public func idlePeriod(): Int64 {
-        return (this.period * 3) - 3 + 1
+        return (period * 3) - 3 + 1
     }
 }

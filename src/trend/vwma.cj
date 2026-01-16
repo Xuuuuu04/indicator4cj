@@ -21,12 +21,12 @@ public class Vwma {
     public func compute(closing: Iterator<Float64>, volume: Iterator<Float64>): Iterator<Float64> {
         let vols = Duplicate(volume, 2)
         let sum = MovingSum()
-        sum.period = this.period
+        sum.period = period
         return Divide(
             sum.compute(Multiply(closing, vols[0])),
             sum.compute(vols[1])
         )
     }
 
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }

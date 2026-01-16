@@ -20,9 +20,9 @@ public class BollingerBands {
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let cs = Duplicate(c, 2)
         let sma = Sma()
-        sma.period = this.period
+        sma.period = period
         let std = MovingStd()
-        std.period = this.period
+        std.period = period
 
         let middleBands = Duplicate(
             sma.compute(cs[0]),
@@ -41,6 +41,6 @@ public class BollingerBands {
     }
 
     // idlePeriod 返回空闲周期数。
-    public func idlePeriod(): Int64 { return this.period - 1 }
+    public func idlePeriod(): Int64 { return period - 1 }
 }
 
