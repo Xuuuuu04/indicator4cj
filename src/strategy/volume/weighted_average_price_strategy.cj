@@ -26,37 +26,37 @@ public class WeightedAveragePriceStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 2)
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[0]), 2)
+        let snaps = duplicate(c, 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[0]), 2)
         let volumes = snapshotsAsVolumes(snaps[1])
 
         let vwaps = Indicator.compute(closingsDup[1], volumes)
-        closingsDup[0] = Skip(closingsDup[0], Indicator.idlePeriod())
+        closingsDup[0] = skip(closingsDup[0], Indicator.idlePeriod())
 
-        let actions = Operate(closingsDup[0], vwaps, { close: Float64, vwap: Float64 =>
+        let actions = operate(closingsDup[0], vwaps, { close: Float64, vwap: Float64 =>
             if (vwap > close) { return Action.Buy }
             if (vwap < close) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 4)
-        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let snaps = duplicate(c, 4)
+        let dates = skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
 
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 2)
         let volumes = snapshotsAsVolumes(snaps[2])
 
         let vwaps = Indicator.compute(closingsDup[0], volumes)
-        closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())
+        closingsDup[1] = skip(closingsDup[1], Indicator.idlePeriod())
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
-        actions = Skip(actions, Indicator.idlePeriod())
-        outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        actions = skip(actions, Indicator.idlePeriod())
+        outcomesRaw = skip(outcomesRaw, Indicator.idlePeriod())
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -68,7 +68,7 @@ public class WeightedAveragePriceStrategy <: Strategy {
     }
 }
 
-public func NewWeightedAveragePriceStrategyWith(period: Int64): WeightedAveragePriceStrategy {
+public func newWeightedAveragePriceStrategyWith(period: Int64): WeightedAveragePriceStrategy {
     return WeightedAveragePriceStrategy(period)
 }
 

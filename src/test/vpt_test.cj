@@ -10,16 +10,16 @@ class VptTest {
     @TestCase
     public func vpt_basic() {
         let input = Csv<VptData>().readFromFile("src/test/testdata/volume/vpt.csv")
-        let inputs = Duplicate(input, 3)
-        let closings = Map(inputs[0], { m => m.close })
-        let volumes = Map(inputs[1], { m => Float64(m.volume) })
-        var expected = Map(inputs[2], { m => m.Vpt })
+        let inputs = duplicate(input, 3)
+        let closings = map(inputs[0], { m => m.close })
+        let volumes = map(inputs[1], { m => Float64(m.volume) })
+        var expected = map(inputs[2], { m => m.Vpt })
 
         let vpt = Vpt()
-        let actual = RoundDigits(vpt.compute(closings, volumes), 2)
-        expected = Skip(expected, vpt.idlePeriod())
+        let actual = roundDigits(vpt.compute(closings, volumes), 2)
+        expected = skip(expected, vpt.idlePeriod())
 
-        match (CheckEquals(actual, expected)) {
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

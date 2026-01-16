@@ -19,10 +19,10 @@ class SkipLastTest {
         expectedArr.add(2)
         expectedArr.add(4)
 
-        let actual = SkipLast(SliceToChan(inputArr), 2)
-        let expected = SliceToChan(expectedArr)
+        let actual = skipLast(sliceToChan(inputArr), 2)
+        let expected = sliceToChan(expectedArr)
 
-        @Expect(CheckEquals(actual, expected) == None, true)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

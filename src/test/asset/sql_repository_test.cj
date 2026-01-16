@@ -5,12 +5,12 @@ import std.unittest.*
 import indicator4cj.asset.*
 
 public class MockDialect <: SQLRepositoryDialect {
-    public func CreateTable(): String { "" }
-    public func DropTable(): String { "" }
-    public func Assets(): String { "" }
-    public func GetSince(): String { "" }
-    public func LastDate(): String { "" }
-    public func Append(): String { "" }
+    public func createTable(): String { "" }
+    public func dropTable(): String { "" }
+    public func assets(): String { "" }
+    public func getSince(): String { "" }
+    public func lastDate(): String { "" }
+    public func append(): String { "" }
 }
 
 @Test

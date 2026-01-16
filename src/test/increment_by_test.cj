@@ -15,10 +15,10 @@ class IncrementByTest {
 
     @TestCase
     public func increment_basic() {
-        let input = SliceToChan(make([1,2,3,4]))
-        let expected = SliceToChan(make([2,3,4,5]))
-        let actual = IncrementBy(input, 1.0)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([1,2,3,4]))
+        let expected = sliceToChan(make([2,3,4,5]))
+        let actual = incrementBy(input, 1.0)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

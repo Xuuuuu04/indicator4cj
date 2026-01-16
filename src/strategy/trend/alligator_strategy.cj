@@ -38,46 +38,46 @@ public class AlligatorStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(snapshotsAsClosings(snapshots), 3)
+        let closings = duplicate(snapshotsAsClosings(snapshots), 3)
         var jaws = Jaw.compute(closings[0])
         var teeths = Teeth.compute(closings[1])
         var lips = Lip.compute(closings[2])
 
-        let common = CommonPeriod(ArrayList<Int64>([Jaw.period, Teeth.period, Lip.period]))
-        jaws = SyncPeriod(common, Jaw.period, jaws)
-        teeths = SyncPeriod(common, Teeth.period, teeths)
-        lips = SyncPeriod(common, Lip.period, lips)
+        let common = commonPeriod(ArrayList<Int64>([Jaw.period, Teeth.period, Lip.period]))
+        jaws = syncPeriod(common, Jaw.period, jaws)
+        teeths = syncPeriod(common, Teeth.period, teeths)
+        lips = syncPeriod(common, Lip.period, lips)
 
-        let actions = Operate3(jaws, teeths, lips, { jaw: Float64, teeth: Float64, lip: Float64 =>
+        let actions = operate3(jaws, teeths, lips, { jaw: Float64, teeth: Float64, lip: Float64 =>
             if ((lip > teeth) && (lip > jaw)) { return Action.Buy }
             if ((lip < teeth) && (lip < jaw)) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, common, Action.Hold)
+        return shift(actions, common, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         var dates = snapshotsAsDates(snaps[0])
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 4)
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 4)
 
         var jaws = Jaw.compute(closings[1])
         var teeths = Teeth.compute(closings[2])
         var lips = Lip.compute(closings[3])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        var annotations = ActionsToAnnotations(actions)
-        var outcomes = MultiplyBy(outcomesRaw, 100.0)
+        var annotations = actionsToAnnotations(actions)
+        var outcomes = multiplyBy(outcomesRaw, 100.0)
 
-        let common = CommonPeriod(ArrayList<Int64>([Jaw.period, Teeth.period, Lip.period]))
-        dates = SyncPeriod(common, 0, dates)
-        closings[0] = Skip(closings[0], common)
-        jaws = SyncPeriod(common, Jaw.period, jaws)
-        teeths = SyncPeriod(common, Teeth.period, teeths)
-        lips = SyncPeriod(common, Lip.period, lips)
-        annotations = Skip(annotations, common)
-        outcomes = Skip(outcomes, common)
+        let common = commonPeriod(ArrayList<Int64>([Jaw.period, Teeth.period, Lip.period]))
+        dates = syncPeriod(common, 0, dates)
+        closings[0] = skip(closings[0], common)
+        jaws = syncPeriod(common, Jaw.period, jaws)
+        teeths = syncPeriod(common, Teeth.period, teeths)
+        lips = syncPeriod(common, Lip.period, lips)
+        annotations = skip(annotations, common)
+        outcomes = skip(outcomes, common)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -92,7 +92,7 @@ public class AlligatorStrategy <: Strategy {
     }
 }
 
-public func NewAlligatorStrategyWith(jawPeriod: Int64, teethPeriod: Int64, lipPeriod: Int64): AlligatorStrategy {
+public func newAlligatorStrategyWith(jawPeriod: Int64, teethPeriod: Int64, lipPeriod: Int64): AlligatorStrategy {
     return AlligatorStrategy(jawPeriod, teethPeriod, lipPeriod)
 }
 

@@ -6,7 +6,7 @@ import indicator4cj.strategy.*
 public func allStrategies(): ArrayList<Strategy> {
     let arr = ArrayList<Strategy>()
     arr.add(MacdRsiStrategy())
-    arr.add(NewMacdRsiStrategyWith(20.0, 80.0))
+    arr.add(newMacdRsiStrategyWith(20.0, 80.0))
     return arr
 }
 

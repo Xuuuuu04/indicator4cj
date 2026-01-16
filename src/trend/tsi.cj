@@ -31,12 +31,12 @@ public class Tsi {
 
 // compute 计算真实强度指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
-        let pcs = Duplicate(Change(closings, 1), 2)
+        let pcs = duplicate(change(closings, 1), 2)
 
         let pcds = firstSmoothing.compute(secondSmoothing.compute(pcs[0]))
-        let apcds = firstSmoothing.compute(secondSmoothing.compute(Abs(pcs[1])))
+        let apcds = firstSmoothing.compute(secondSmoothing.compute(abs(pcs[1])))
 
-        let tsi = MultiplyBy(Divide(pcds, apcds), 100.0)
+        let tsi = multiplyBy(divide(pcds, apcds), 100.0)
         return tsi
     }
 

@@ -56,11 +56,11 @@ public class HtmlReport <: Report {
 
     public func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Unit {
         // 物化 snapshots 供报告使用
-        let snapsList = ChanToSlice(snapshots)
+        let snapsList = chanToSlice(snapshots)
 
         // 复制 actions/outcomes
-        let actionsDup = Duplicate(actions, 2)
-        let actionsList = ChanToSlice(actionsDup[1])
+        let actionsDup = duplicate(actions, 2)
+        let actionsList = chanToSlice(actionsDup[1])
 
         var lastAction = Action.Hold
         var since: Int64 = 0
@@ -75,7 +75,7 @@ public class HtmlReport <: Report {
             if (a != Action.Hold) { tx += 1 }
         }
 
-        let outcomesList = ChanToSlice(outcomes)
+        let outcomesList = chanToSlice(outcomes)
         let lastOutcome = if (outcomesList.isEmpty()) { 0.0 } else { outcomesList[outcomesList.size - 1] * 100.0 }
 
         let result = HtmlReportResult(assetName, currentStrategy.name(), lastAction, since, lastOutcome, tx)

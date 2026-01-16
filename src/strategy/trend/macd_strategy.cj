@@ -12,11 +12,11 @@ public class MacdStrategy <: Strategy {
     public let Macd: Macd
 
     public init() {
-        this.Macd = NewMacd()
+        this.Macd = newMacd()
     }
 
     public init(period1: Int64, period2: Int64, period3: Int64) {
-        this.Macd = NewMacdWithPeriod(period1, period2, period3)
+        this.Macd = newMacdWithPeriod(period1, period2, period3)
     }
 
     public func name(): String {
@@ -26,10 +26,10 @@ public class MacdStrategy <: Strategy {
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = snapshotsAsClosings(snapshots)
         let (macdsRaw, signalsRaw) = Macd.compute(closings)
-        let macds = Duplicate(macdsRaw, 2)
-        let signals = Duplicate(signalsRaw, 2)
+        let macds = duplicate(macdsRaw, 2)
+        let signals = duplicate(signalsRaw, 2)
 
-        let actions = Operate(macds[0], signals[0], { macd: Float64, signal: Float64 =>
+        let actions = operate(macds[0], signals[0], { macd: Float64, signal: Float64 =>
             if ((macd > signal) && (macd < 0.0)) {
                 return Action.Buy
             }
@@ -39,21 +39,21 @@ public class MacdStrategy <: Strategy {
             return Action.Hold
         })
 
-        return Shift(actions, Macd.idlePeriod(), Action.Hold)
+        return shift(actions, Macd.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 2)
 
         var (macds, signals) = Macd.compute(closingsDup[0])
-        macds = Shift(macds, Macd.idlePeriod(), 0.0)
-        signals = Shift(signals, Macd.idlePeriod(), 0.0)
+        macds = shift(macds, Macd.idlePeriod(), 0.0)
+        signals = shift(signals, Macd.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -67,7 +67,7 @@ public class MacdStrategy <: Strategy {
     }
 }
 
-public func NewMacdStrategyWith(period1: Int64, period2: Int64, period3: Int64): MacdStrategy {
+public func newMacdStrategyWith(period1: Int64, period2: Int64, period3: Int64): MacdStrategy {
     return MacdStrategy(period1, period2, period3)
 }
 

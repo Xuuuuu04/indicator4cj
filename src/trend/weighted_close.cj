@@ -10,7 +10,7 @@ public class WeightedClose {
 
 // compute 计算指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
-        return Operate3(highs, lows, closes, { h: Float64, l: Float64, c: Float64 =>
+        return operate3(highs, lows, closes, { h: Float64, l: Float64, c: Float64 =>
             return (h + l + (c * 2.0)) / 4.0
         })
     }

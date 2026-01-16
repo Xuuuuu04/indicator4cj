@@ -158,11 +158,11 @@ public class CsvOption<TData> {
     public func apply(c: Csv<TData>): Unit { _applyFn(c) }
 }
 
-public func WithoutCsvHeader<TData>(): CsvOption<TData> {
+public func withoutCsvHeader<TData>(): CsvOption<TData> {
     return CsvOption<TData>({ c => c.hasHeader = false })
 }
 
-public func WithCsvDefaultDateTimeFormat<TData>(format: String): CsvOption<TData> {
+public func withCsvDefaultDateTimeFormat<TData>(format: String): CsvOption<TData> {
     return CsvOption<TData>({ c => c.defaultDateTimeFormat = format })
 }
 

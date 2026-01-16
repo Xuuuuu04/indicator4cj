@@ -15,14 +15,14 @@ class PipeTest {
         data.add(6)
         data.add(8)
 
-        let input = SliceToChan(data)
+        let input = sliceToChan(data)
         let received = ArrayList<Int64>()
 
-        Pipe(input, { v => received.add(v) })
+        pipe(input, { v => received.add(v) })
 
-        let actual = SliceToChan(received)
-        let expected = SliceToChan(data)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let actual = sliceToChan(received)
+        let expected = sliceToChan(data)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

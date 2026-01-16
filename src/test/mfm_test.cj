@@ -10,17 +10,17 @@ class MfmTest {
     @TestCase
     public func mfm_basic() {
         let input = Csv<MfmRow>().readFromFile("src/test/testdata/volume/mfm.csv")
-        let inputs = Duplicate(input, 4)
-        let highs = Map(inputs[0], { m => m.high })
-        let lows = Map(inputs[1], { m => m.low })
-        let closes = Map(inputs[2], { m => m.close })
-        var expected = Map(inputs[3], { m => m.Mfm })
+        let inputs = duplicate(input, 4)
+        let highs = map(inputs[0], { m => m.high })
+        let lows = map(inputs[1], { m => m.low })
+        let closes = map(inputs[2], { m => m.close })
+        var expected = map(inputs[3], { m => m.Mfm })
 
         let mfm = Mfm()
-        let actual = RoundDigits(mfm.compute(highs, lows, closes), 2)
-        expected = Skip(expected, mfm.idlePeriod())
+        let actual = roundDigits(mfm.compute(highs, lows, closes), 2)
+        expected = skip(expected, mfm.idlePeriod())
 
-        match (CheckEquals(actual, expected)) {
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

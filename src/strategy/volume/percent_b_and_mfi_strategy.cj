@@ -52,42 +52,42 @@ public class PercentBandMFIStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 4)
+        let snaps = duplicate(c, 4)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
-        let closings = Duplicate(snapshotsAsClosings(snaps[2]), 2)
+        let closings = duplicate(snapshotsAsClosings(snaps[2]), 2)
         let volumes = snapshotsAsVolumes(snaps[3])
 
         var mfis = MoneyFlowIndex.compute(highs, lows, closings[0], volumes)
         // 对齐到 %B 起点。
-        mfis = Shift(mfis, PercentBInd.idlePeriod() - MoneyFlowIndex.idlePeriod(), 0.0)
+        mfis = shift(mfis, PercentBInd.idlePeriod() - MoneyFlowIndex.idlePeriod(), 0.0)
         let pb = PercentBInd.compute(closings[1])
 
-        let actions = Operate(pb, mfis, { b: Float64, mfi: Float64 =>
+        let actions = operate(pb, mfis, { b: Float64, mfi: Float64 =>
             if ((b < SellPercentBAt) && (mfi < SellMfiAt)) { return Action.Buy }
             if ((b > BuyPercentBAt) && (mfi > BuyMfiAt)) { return Action.Sell }
             return Action.Hold
         })
 
         // 前置填充 Idle，与 Go 版一致。
-        return Shift(actions, PercentBInd.idlePeriod(), Action.Hold)
+        return shift(actions, PercentBInd.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 6)
-        let dates = Skip(snapshotsAsDates(snaps[0]), MoneyFlowIndex.idlePeriod())
+        let snaps = duplicate(c, 6)
+        let dates = skip(snapshotsAsDates(snaps[0]), MoneyFlowIndex.idlePeriod())
         let highs = snapshotsAsHighs(snaps[1])
         let lows = snapshotsAsLows(snaps[2])
-        let closings = Duplicate(snapshotsAsClosings(snaps[3]), 3)
+        let closings = duplicate(snapshotsAsClosings(snaps[3]), 3)
         let volumes = snapshotsAsVolumes(snaps[4])
 
         var mfis = MoneyFlowIndex.compute(highs, lows, closings[0], volumes)
-        mfis = Shift(mfis, PercentBInd.idlePeriod() - MoneyFlowIndex.idlePeriod(), 0.0)
+        mfis = shift(mfis, PercentBInd.idlePeriod() - MoneyFlowIndex.idlePeriod(), 0.0)
         let pb = PercentBInd.compute(closings[2])
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[5])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -102,7 +102,7 @@ public class PercentBandMFIStrategy <: Strategy {
     }
 }
 
-public func NewPercentBandMFIStrategyWith(sellPercentBAt: Float64, buyPercentBAt: Float64, sellMfiAt: Float64, buyMfiAt: Float64): PercentBandMFIStrategy {
+public func newPercentBandMFIStrategyWith(sellPercentBAt: Float64, buyPercentBAt: Float64, sellMfiAt: Float64, buyMfiAt: Float64): PercentBandMFIStrategy {
     return PercentBandMFIStrategy(sellPercentBAt, buyPercentBAt, sellMfiAt, buyMfiAt)
 }
 

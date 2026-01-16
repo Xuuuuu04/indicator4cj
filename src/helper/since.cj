@@ -1,7 +1,7 @@
 package indicator4cj.helper
 
-// Since：距离上次值变化的步数。
-public func Since(iter: Iterator<Float64>): Iterator<Int64> {
+// since：距离上次值变化的步数。
+public func since(iter: Iterator<Float64>): Iterator<Int64> {
     return SinceIterator(iter)
 }
 

@@ -52,27 +52,27 @@ public class TripleRsiStrategy <: Strategy {
         return "Triple RSI Strategy (${RsiIndicator.period},${SmaIndicator.period},${DownDays},${BuySignalAt},${BuyAt},${SellAt})"
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return SmaIndicator.idlePeriod()
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closingsSplice = Duplicate(snapshotsAsClosings(c), 3)
+        let closingsSplice = duplicate(snapshotsAsClosings(c), 3)
 
         var rsis = RsiIndicator.compute(closingsSplice[0])
         let smas = SmaIndicator.compute(closingsSplice[1])
         let memory = Ring<Float64>(DownDays)
 
         // Skip RSI 输出直至 SMA 就绪
-        rsis = Skip(rsis, SmaIndicator.idlePeriod() - RsiIndicator.idlePeriod())
+        rsis = skip(rsis, SmaIndicator.idlePeriod() - RsiIndicator.idlePeriod())
 
         // Skip 收盘价直至 SMA 就绪
-        closingsSplice[2] = Skip(closingsSplice[2], SmaIndicator.idlePeriod())
+        closingsSplice[2] = skip(closingsSplice[2], SmaIndicator.idlePeriod())
 
-        let actions = Operate3(rsis, smas, closingsSplice[2], { rsi: Float64, sma: Float64, closing: Float64 =>
-            memory.Put(rsi)
+        let actions = operate3(rsis, smas, closingsSplice[2], { rsi: Float64, sma: Float64, closing: Float64 =>
+            memory.put(rsi)
 
-            if (!memory.IsFull()) {
+            if (!memory.isFull()) {
                 return Action.Hold
             }
 
@@ -86,13 +86,13 @@ public class TripleRsiStrategy <: Strategy {
 
             var i: Int64 = 1
             while (i < DownDays) {
-                if (memory.At(i - 1) > memory.At(i)) {
+                if (memory.at(i - 1) > memory.at(i)) {
                     return Action.Hold
                 }
                 i += 1
             }
 
-            if (memory.At(0) >= BuySignalAt) {
+            if (memory.at(0) >= BuySignalAt) {
                 return Action.Hold
             }
 
@@ -103,26 +103,26 @@ public class TripleRsiStrategy <: Strategy {
             return Action.Buy
         })
 
-        return Shift(actions, SmaIndicator.idlePeriod(), Action.Hold)
+        return shift(actions, SmaIndicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         var dates = snapshotsAsDates(snaps[0])
-        let closings = Duplicate(snapshotsAsClosings(snaps[2]), 3)
+        let closings = duplicate(snapshotsAsClosings(snaps[2]), 3)
 
         var rsis = RsiIndicator.compute(closings[1])
         let smas = SmaIndicator.compute(closings[2])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
-        var annotations = ActionsToAnnotations(actions)
-        var outcomes = MultiplyBy(outcomesRaw, 100.0)
+        var annotations = actionsToAnnotations(actions)
+        var outcomes = multiplyBy(outcomesRaw, 100.0)
 
-        dates = Skip(dates, IdlePeriod())
-        closings[0] = Skip(closings[0], IdlePeriod())
-        rsis = Skip(rsis, IdlePeriod() - RsiIndicator.idlePeriod())
-        annotations = Skip(annotations, IdlePeriod())
-        outcomes = Skip(outcomes, IdlePeriod())
+        dates = skip(dates, idlePeriod())
+        closings[0] = skip(closings[0], idlePeriod())
+        rsis = skip(rsis, idlePeriod() - RsiIndicator.idlePeriod())
+        annotations = skip(annotations, idlePeriod())
+        outcomes = skip(outcomes, idlePeriod())
 
         let report = Report(name(), dates)
         report.addChart()
@@ -138,7 +138,7 @@ public class TripleRsiStrategy <: Strategy {
     }
 }
 
-public func NewTripleRsiStrategyWith(period: Int64, smaPeriod: Int64, downDays: Int64, buySignalAt: Float64, buyAt: Float64, sellAt: Float64): TripleRsiStrategy {
+public func newTripleRsiStrategyWith(period: Int64, smaPeriod: Int64, downDays: Int64, buySignalAt: Float64, buyAt: Float64, sellAt: Float64): TripleRsiStrategy {
     return TripleRsiStrategy(period, smaPeriod, downDays, buySignalAt, buyAt, sellAt)
 }
 

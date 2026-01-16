@@ -12,19 +12,19 @@ public interface Strategy {
 }
 
 public func actionSources(strategies: ArrayList<Strategy>, snapshots: Iterator<Snapshot>): ArrayList<Iterator<Action>> {
-    let snaps = Duplicate(snapshots, strategies.size)
+    let snaps = duplicate(snapshots, strategies.size)
     let res = ArrayList<Iterator<Action>>()
     var i: Int64 = 0
     while (i < strategies.size) {
-        res.add(DenormalizeActions(strategies[i].compute(snaps[i])))
+        res.add(denormalizeActions(strategies[i].compute(snaps[i])))
         i += 1
     }
     return res
 }
 
 public func computeWithOutcome(s: Strategy, snapshots: Iterator<Snapshot>): (Iterator<Action>, Iterator<Float64>) {
-    let snaps = Duplicate(snapshots, 2)
-    let actions = Duplicate(s.compute(snaps[0]), 2)
+    let snaps = duplicate(snapshots, 2)
+    let actions = duplicate(s.compute(snaps[0]), 2)
     let closings = snapshotsAsClosings(snaps[1])
     let outcomes = Outcome(closings, actions[1])
     return (actions[0], outcomes)

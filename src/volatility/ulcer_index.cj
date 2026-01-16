@@ -18,16 +18,16 @@ public class UlcerIndex {
 
     // compute 计算溃疡指数指标。
     public func compute(closings: Iterator<Float64>): Iterator<Float64> {
-        let cs = Duplicate(closings, 2)
+        let cs = duplicate(closings, 2)
 
         let movingMax = MovingMax(period)
-        let highs = Duplicate(movingMax.compute(cs[0]), 2)
+        let highs = duplicate(movingMax.compute(cs[0]), 2)
 
-        cs[1] = Skip(cs[1], movingMax.idlePeriod())
+        cs[1] = skip(cs[1], movingMax.idlePeriod())
 
-        let drawdown = MultiplyBy(
-            Divide(
-                Subtract(cs[1], highs[0]),
+        let drawdown = multiplyBy(
+            divide(
+                subtract(cs[1], highs[0]),
                 highs[1]
             ),
             100.0
@@ -35,9 +35,9 @@ public class UlcerIndex {
 
         let sma = Sma()
         sma.period = period
-        let squaredAvg = Pow(sma.compute(drawdown), 2.0)
+        let squaredAvg = pow(sma.compute(drawdown), 2.0)
 
-        return Sqrt(squaredAvg)
+        return sqrt(squaredAvg)
     }
 
     // idlePeriod 返回空闲周期数。

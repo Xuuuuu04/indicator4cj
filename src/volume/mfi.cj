@@ -18,31 +18,31 @@ public class Mfi {
 
     // compute 计算资金流量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        let rawFlowSplice = Duplicate(
-            Multiply(
+        let rawFlowSplice = duplicate(
+            multiply(
                 _typicalPrice.compute(highs, lows, closings),
                 volumes
             ),
             2
         )
 
-        let moneyFlowSplice = Duplicate(
-            Multiply(
-                Sign(Change(rawFlowSplice[0], 1)),
-                Skip(rawFlowSplice[1], 1)
+        let moneyFlowSplice = duplicate(
+            multiply(
+                sign(change(rawFlowSplice[0], 1)),
+                skip(rawFlowSplice[1], 1)
             ),
             2
         )
 
-        let moneyRatio = Divide(
-            _sum.compute(KeepPositives(moneyFlowSplice[0])),
-            _sum.compute(MultiplyBy(KeepNegatives(moneyFlowSplice[1]), -1.0))
+        let moneyRatio = divide(
+            _sum.compute(keepPositives(moneyFlowSplice[0])),
+            _sum.compute(multiplyBy(keepNegatives(moneyFlowSplice[1]), -1.0))
         )
 
-        return IncrementBy(
-            MultiplyBy(
-                Pow(
-                    IncrementBy(moneyRatio, 1.0),
+        return incrementBy(
+            multiplyBy(
+                pow(
+                    incrementBy(moneyRatio, 1.0),
                     -1.0
                 ),
                 -100.0

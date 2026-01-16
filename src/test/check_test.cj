@@ -9,8 +9,8 @@ import indicator4cj.helper.*
 class CheckEqualsTest {
     @TestCase
     public func not_pairs_returns_error() {
-        let a = SliceToChan(ArrayList<Int64>())
-        @Expect(CheckEquals(a) == None, false)
+        let a = sliceToChan(ArrayList<Int64>())
+        @Expect(checkEquals(a) == None, false)
     }
 
     @TestCase
@@ -23,7 +23,7 @@ class CheckEqualsTest {
         let b = ArrayList<Int64>()
         b.add(1)
         b.add(2)
-        let res = CheckEquals(SliceToChan(a), SliceToChan(b))
+        let res = checkEquals(sliceToChan(a), sliceToChan(b))
         @Expect(res == None, false)
     }
 
@@ -33,7 +33,7 @@ class CheckEqualsTest {
         a.add(1); a.add(2); a.add(3); a.add(4)
         let b = ArrayList<Int64>()
         b.add(1); b.add(3); b.add(3); b.add(4)
-        let res = CheckEquals(SliceToChan(a), SliceToChan(b))
+        let res = checkEquals(sliceToChan(a), sliceToChan(b))
         @Expect(res == None, false)
     }
 
@@ -43,7 +43,7 @@ class CheckEqualsTest {
         a.add(1); a.add(2); a.add(3); a.add(4)
         let b = ArrayList<Int64>()
         b.add(1); b.add(2); b.add(3); b.add(4)
-        let res = CheckEquals(SliceToChan(a), SliceToChan(b))
+        let res = checkEquals(sliceToChan(a), sliceToChan(b))
         @Expect(res == None, true)
     }
 }

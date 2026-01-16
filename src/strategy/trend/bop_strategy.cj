@@ -20,14 +20,14 @@ public class BopStrategy <: Strategy {
     public func name(): String { return "BoP Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 4)
+        let snaps = duplicate(c, 4)
         let openings = snapshotsAsOpenings(snaps[0])
         let highs = snapshotsAsHighs(snaps[1])
         let lows = snapshotsAsLows(snaps[2])
         let closings = snapshotsAsClosings(snaps[3])
 
         let bops = Indicator.compute(openings, highs, lows, closings)
-        return h.Map(bops, { v: Float64 =>
+        return h.map(bops, { v: Float64 =>
             if (v > 0.0) { return Action.Buy }
             if (v < 0.0) { return Action.Sell }
             return Action.Hold
@@ -35,18 +35,18 @@ public class BopStrategy <: Strategy {
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 6)
+        let snaps = duplicate(c, 6)
         let dates = snapshotsAsDates(snaps[0])
         let openings = snapshotsAsOpenings(snaps[1])
         let highs = snapshotsAsHighs(snaps[2])
         let lows = snapshotsAsLows(snaps[3])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[4]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[4]), 2)
 
         let bop = Indicator.compute(openings, highs, lows, closingsDup[1])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[5])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

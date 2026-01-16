@@ -23,14 +23,14 @@ public class Aroon {
         let movingMax = MovingMax(period)
         let movingMin = MovingMin(period)
 
-        let sinceLastHigh = MaxSince(movingMax.compute(high), period)
-        let sinceLastLow = MinSince(movingMin.compute(low), period)
+        let sinceLastHigh = maxSince(movingMax.compute(high), period)
+        let sinceLastLow = minSince(movingMin.compute(low), period)
 
-        var aroonUp = MultiplyBy(IncrementBy(MultiplyBy(sinceLastHigh, -1.0), Float64(period)), 100.0 / Float64(period))
-        aroonUp = RoundDigits(aroonUp, 0)
+        var aroonUp = multiplyBy(incrementBy(multiplyBy(sinceLastHigh, -1.0), Float64(period)), 100.0 / Float64(period))
+        aroonUp = roundDigits(aroonUp, 0)
 
-        var aroonDown = MultiplyBy(IncrementBy(MultiplyBy(sinceLastLow, -1.0), Float64(period)), 100.0 / Float64(period))
-        aroonDown = RoundDigits(aroonDown, 0)
+        var aroonDown = multiplyBy(incrementBy(multiplyBy(sinceLastLow, -1.0), Float64(period)), 100.0 / Float64(period))
+        aroonDown = roundDigits(aroonDown, 0)
 
         return (aroonUp, aroonDown)
     }

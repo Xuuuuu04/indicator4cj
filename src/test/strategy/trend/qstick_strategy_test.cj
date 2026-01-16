@@ -56,7 +56,7 @@ public func qstick_strategy_basic() {
         }
     }
     let expectedActs = Csv<QstickStrategyRow>().readFromFile("src/test/testdata/strategy/trend/qstick_strategy.csv")
-    let expectedIter = h.Map(expectedActs, { r: QstickStrategyRow => ActionFromInt(r.action) })
+    let expectedIter = h.map(expectedActs, { r: QstickStrategyRow => actionFromInt(r.action) })
     let expectedList = ArrayList<Action>()
     while (true) {
         match (expectedIter.next()) {
@@ -79,7 +79,7 @@ public func qstick_strategy_basic() {
         fail("size mismatch actual ${actualList.size} expected ${expectedList.size}")
     }
 
-    match (CheckEquals<Action>(actualList.iterator(), expectedList.iterator())) {
+    match (checkEquals<Action>(actualList.iterator(), expectedList.iterator())) {
         case Some(err) => fail(err)
         case None => ()
     }

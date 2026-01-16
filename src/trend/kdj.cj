@@ -28,25 +28,25 @@ public class Kdj {
     // compute 计算KDJ指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
         let highest = MovingMaxInd.compute(high)
-        let lowests = Duplicate(MovingMinInd.compute(low), 2)
+        let lowests = duplicate(MovingMinInd.compute(low), 2)
 
-        let closingShift = Skip(closing, MovingMaxInd.period - 1)
+        let closingShift = skip(closing, MovingMaxInd.period - 1)
 
-        let rsv = MultiplyBy(
-            Divide(
-                Subtract(closingShift, lowests[0]),
-                Subtract(highest, lowests[1])
+        let rsv = multiplyBy(
+            divide(
+                subtract(closingShift, lowests[0]),
+                subtract(highest, lowests[1])
             ),
             100.0
         )
 
-        let ks = Duplicate(Sma1.compute(rsv), 3)
-        let ds = Duplicate(Sma2.compute(ks[0]), 2)
+        let ks = duplicate(Sma1.compute(rsv), 3)
+        let ds = duplicate(Sma2.compute(ks[0]), 2)
 
-        ks[1] = Skip(ks[1], Sma2.period - 1)
-        ks[2] = Skip(ks[2], Sma2.period - 1)
+        ks[1] = skip(ks[1], Sma2.period - 1)
+        ks[2] = skip(ks[2], Sma2.period - 1)
 
-        let j = Subtract(MultiplyBy(ks[1], 3.0), MultiplyBy(ds[0], 2.0))
+        let j = subtract(multiplyBy(ks[1], 3.0), multiplyBy(ds[0], 2.0))
 
         return (ks[2], ds[1], j)
     }

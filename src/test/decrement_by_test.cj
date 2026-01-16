@@ -15,10 +15,10 @@ class DecrementByTest {
 
     @TestCase
     public func decrement_basic() {
-        let input = SliceToChan(make([1,2,3,4]))
-        let expected = SliceToChan(make([0,1,2,3]))
-        let actual = DecrementBy(input, 1.0)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([1,2,3,4]))
+        let expected = sliceToChan(make([0,1,2,3]))
+        let actual = decrementBy(input, 1.0)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

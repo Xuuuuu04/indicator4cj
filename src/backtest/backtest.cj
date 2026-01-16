@@ -43,7 +43,7 @@ public class Backtest {
 
         for (name in names) {
             let snapsIter = _repository.get(name)
-            let snapsList = ChanToSlice(snapsIter)
+            let snapsList = chanToSlice(snapsIter)
 
             try {
                 _report.assetBegin(name, strategies)
@@ -52,7 +52,7 @@ public class Backtest {
             }
 
             for (st in strategies) {
-                let dup = Duplicate(snapsList.iterator(), 2)
+                let dup = duplicate(snapsList.iterator(), 2)
                 let (actions, outcomes) = computeWithOutcome(st, dup[0])
                 try {
                     _report.write(name, st, dup[1], actions, outcomes)

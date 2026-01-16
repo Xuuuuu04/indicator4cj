@@ -55,7 +55,7 @@ public class FileSystemRepository <: Repository {
     // getSince 获取指定资产从指定日期开始的快照数据
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
         let iter = get(name)
-        return Filter<Snapshot>(iter, { s: Snapshot => (s.date == date) || (s.date > date) })
+        return filter<Snapshot>(iter, { s: Snapshot => (s.date == date) || (s.date > date) })
     }
 
     // lastDate 返回指定资产的最新日期

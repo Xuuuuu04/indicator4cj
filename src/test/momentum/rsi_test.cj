@@ -16,16 +16,16 @@ public class RsiRow {
 @Test
 public func rsi_basic() {
     let input = Csv<RsiRow>().readFromFile("src/test/testdata/momentum/rsi.csv")
-    let inputs = Duplicate(input, 2)
-    let closes = Map(inputs[0], { d: RsiRow => d.close })
-    var expected = Map(inputs[1], { d: RsiRow => d.Rsi })
+    let inputs = duplicate(input, 2)
+    let closes = map(inputs[0], { d: RsiRow => d.close })
+    var expected = map(inputs[1], { d: RsiRow => d.Rsi })
 
     let rsi = Rsi(14)
     var actual = rsi.compute(closes)
-    actual = RoundDigits(actual, 2)
-    expected = Skip(expected, rsi.idlePeriod())
+    actual = roundDigits(actual, 2)
+    expected = skip(expected, rsi.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

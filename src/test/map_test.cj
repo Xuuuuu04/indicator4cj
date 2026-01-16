@@ -23,7 +23,7 @@ public func test_map_basic() {
     ])
     let expected = ArrayList<Int64>([5, 15])
     let actual = h.Map<MapTestRow, Int64>(input.iterator(), { r: MapTestRow => r.low })
-    match (CheckEquals(actual, expected.iterator())) {
+    match (checkEquals(actual, expected.iterator())) {
         case Some(err) => fail(err)
         case None => ()
     }

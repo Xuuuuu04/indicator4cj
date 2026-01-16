@@ -60,7 +60,7 @@ public func rsi_strategy_basic() {
     }
     let expectedRows = Csv<RsiStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/rsi_strategy.csv")
     let expectedList = ArrayList<Action>()
-    let expectedIter = h.Map(expectedRows, { r: RsiStrategyRow => ActionFromInt(r.action) })
+    let expectedIter = h.map(expectedRows, { r: RsiStrategyRow => actionFromInt(r.action) })
     while (true) {
         match (expectedIter.next()) {
             case Some(a) => expectedList.add(a)
@@ -82,7 +82,7 @@ public func rsi_strategy_basic() {
         fail("size mismatch actual ${actualList.size} expected ${expectedList.size}")
     }
 
-    match (CheckEquals<Action>(actualList.iterator(), expectedList.iterator())) {
+    match (checkEquals<Action>(actualList.iterator(), expectedList.iterator())) {
         case Some(err) => fail(err)
         case None => ()
     }

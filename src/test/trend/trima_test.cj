@@ -15,16 +15,16 @@ class TrimaData {
 @Test
 public func test_trima_odd_basic() {
     let input = Csv<TrimaData>().readFromFile("src/test/testdata/trend/trima_odd.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TrimaData => d.close })
-    let expected = h.Map(inputs[1], { d: TrimaData => d.Trima })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { d: TrimaData => d.close })
+    let expected = h.map(inputs[1], { d: TrimaData => d.Trima })
 
     let trima = Trima()
     trima.period = 15
-    let actual = h.RoundDigits(trima.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, trima.idlePeriod())
+    let actual = h.roundDigits(trima.compute(closing), 2)
+    let expectedSkipped = h.skip(expected, trima.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)
         case None => ()
     }
@@ -33,16 +33,16 @@ public func test_trima_odd_basic() {
 @Test
 public func test_trima_even_basic() {
     let input = Csv<TrimaData>().readFromFile("src/test/testdata/trend/trima_even.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TrimaData => d.close })
-    let expected = h.Map(inputs[1], { d: TrimaData => d.Trima })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { d: TrimaData => d.close })
+    let expected = h.map(inputs[1], { d: TrimaData => d.Trima })
 
     let trima = Trima()
     trima.period = 20
-    let actual = h.RoundDigits(trima.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, trima.idlePeriod())
+    let actual = h.roundDigits(trima.compute(closing), 2)
+    let expectedSkipped = h.skip(expected, trima.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)
         case None => ()
     }

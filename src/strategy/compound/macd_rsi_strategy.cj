@@ -34,12 +34,12 @@ public class MacdRsiStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(snapshots, 2)
+        let snaps = duplicate(snapshots, 2)
 
-        let macdActions = DenormalizeActions(MacdStrategyInst.compute(snaps[0]))
-        let rsiActions = DenormalizeActions(RsiStrategyInst.compute(snaps[1]))
+        let macdActions = denormalizeActions(MacdStrategyInst.compute(snaps[0]))
+        let rsiActions = denormalizeActions(RsiStrategyInst.compute(snaps[1]))
 
-        let actions = Operate(macdActions, rsiActions, { ma: Action, ra: Action =>
+        let actions = operate(macdActions, rsiActions, { ma: Action, ra: Action =>
             if (ma == ra) { return ma }
             return Action.Hold
         })
@@ -48,20 +48,20 @@ public class MacdRsiStrategy <: Strategy {
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 3)
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var (macds, signals) = MacdStrategyInst.Macd.compute(closings[0])
-        macds = Shift(macds, MacdStrategyInst.Macd.idlePeriod(), 0.0)
-        signals = Shift(signals, MacdStrategyInst.Macd.idlePeriod(), 0.0)
+        macds = shift(macds, MacdStrategyInst.Macd.idlePeriod(), 0.0)
+        signals = shift(signals, MacdStrategyInst.Macd.idlePeriod(), 0.0)
 
         var rsiVals = RsiStrategyInst.Indicator.compute(closings[2])
-        rsiVals = Shift(rsiVals, RsiStrategyInst.Indicator.idlePeriod(), 0.0)
+        rsiVals = shift(rsiVals, RsiStrategyInst.Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -77,7 +77,7 @@ public class MacdRsiStrategy <: Strategy {
     }
 }
 
-public func NewMacdRsiStrategyWith(buyAt: Float64, sellAt: Float64): MacdRsiStrategy {
+public func newMacdRsiStrategyWith(buyAt: Float64, sellAt: Float64): MacdRsiStrategy {
     return MacdRsiStrategy(buyAt, sellAt)
 }
 

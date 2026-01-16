@@ -2,9 +2,9 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// Highest：窗口内最大值。
-public func Highest(iter: Iterator<Float64>, w: Int64): Iterator<Float64> {
-    return Window(iter, w, { buf, _ => maxInList(buf) })
+// highest：窗口内最大值。
+public func highest(iter: Iterator<Float64>, w: Int64): Iterator<Float64> {
+    return window(iter, w, { buf, _ => maxInList(buf) })
 }
 
 private func maxInList(buf: ArrayList<Float64>): Float64 {

@@ -24,10 +24,10 @@ public class Roc {
 // compute 计算指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let window = Ring<Float64>(period)
-        var rocs = Map(values, { v: Float64 =>
+        var rocs = map(values, { v: Float64 =>
             var res: Float64 = 0.0
-            if (window.IsFull()) {
-                match (window.Get()) {
+            if (window.isFull()) {
+                match (window.get()) {
                     case Some(p) =>
                         if (p != 0.0) {
                             res = (v - p) / p
@@ -35,10 +35,10 @@ public class Roc {
                     case None => ()
                 }
             }
-            window.Put(v)
+            window.put(v)
             return res
         })
-        rocs = Skip(rocs, idlePeriod())
+        rocs = skip(rocs, idlePeriod())
         return rocs
     }
 

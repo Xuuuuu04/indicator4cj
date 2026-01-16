@@ -10,14 +10,14 @@ class DaysBetweenTest {
     public func same_day() {
         let from = SimpleDate(2024, 9, 1)
         let to = SimpleDate(2024, 9, 1)
-        @Expect(DaysBetween(from, to), 0)
+        @Expect(daysBetween(from, to), 0)
     }
 
     @TestCase
     public func two_weeks() {
         let from = SimpleDate(2024, 9, 1)
         let to = SimpleDate(2024, 9, 15)
-        @Expect(DaysBetween(from, to), 14)
+        @Expect(daysBetween(from, to), 14)
     }
 }
 

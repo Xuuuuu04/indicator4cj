@@ -6,7 +6,7 @@ import std.io.*
 import std.fs.*
 import std.time.*
 
-// ReportColumn 报告列接口
+// reportColumn 报告列接口
 public interface ReportColumn {
     func name(): String
     func getType(): String
@@ -14,7 +14,7 @@ public interface ReportColumn {
     func value(): String
 }
 
-// Report 报告类，用于生成和输出数据报告
+// report 报告类，用于生成和输出数据报告
 public class Report {
     private var _title: String
     private let _date: Iterator<DateTime>
@@ -88,7 +88,7 @@ private func ascii(s: String): Array<Byte> {
 }
 
 // 创建Report 创建报告实例（保留以避免与 std.unittest.Report 的命名冲突）
-public func NewReport(title: String, date: Iterator<DateTime>): Report {
+public func newreport(title: String, date: Iterator<DateTime>): Report {
     return Report(title, date)
 }
 

@@ -12,7 +12,7 @@ class DuplicateTest {
         let expecteds = ArrayList<Float64>()
         expecteds.add(-10.0); expecteds.add(20.0); expecteds.add(-4.0); expecteds.add(-5.0)
 
-        let outputs = Duplicate(SliceToChan(expecteds), 4)
+        let outputs = duplicate(sliceToChan(expecteds), 4)
         for (i in 0..expecteds.size) {
             let expected = expecteds[i]
             for (out in outputs) {

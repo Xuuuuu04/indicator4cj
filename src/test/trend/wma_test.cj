@@ -25,7 +25,7 @@ public func test_wma_simple() {
     let wma = Wma(3)
     let actual = wma.compute(input.iterator())
     
-    match (h.CheckFloatEquals(actual, expected.iterator())) {
+    match (h.checkFloatEquals(actual, expected.iterator())) {
         case Some(err) => fail(err)
         case None => ()
     }
@@ -34,25 +34,25 @@ public func test_wma_simple() {
 @Test
 public func test_wma_basic() {
     let input = Csv<WmaData>().readFromFile("src/test/testdata/trend/wma.csv")
-    let inputs = Duplicate(input, 3)
-    let closing = Duplicate(h.Map(inputs[0], { row: WmaData => row.close }), 2)
-    let expectedWma3 = h.Map(inputs[1], { row: WmaData => row.Wma3 })
-    let expectedWma5 = h.Map(inputs[2], { row: WmaData => row.Wma5 })
+    let inputs = duplicate(input, 3)
+    let closing = duplicate(h.map(inputs[0], { row: WmaData => row.close }), 2)
+    let expectedWma3 = h.map(inputs[1], { row: WmaData => row.Wma3 })
+    let expectedWma5 = h.map(inputs[2], { row: WmaData => row.Wma5 })
 
     let wma3 = Wma(3)
     let wma5 = Wma(5)
 
-    let actualWma3 = h.RoundDigits(wma3.compute(closing[0]), 3)
-    let actualWma5 = h.RoundDigits(wma5.compute(closing[1]), 3)
+    let actualWma3 = h.roundDigits(wma3.compute(closing[0]), 3)
+    let actualWma5 = h.roundDigits(wma5.compute(closing[1]), 3)
 
-    let expWma3Skipped = h.Skip(expectedWma3, wma3.idlePeriod())
-    let expWma5Skipped = h.Skip(expectedWma5, wma5.idlePeriod())
+    let expWma3Skipped = h.skip(expectedWma3, wma3.idlePeriod())
+    let expWma5Skipped = h.skip(expectedWma5, wma5.idlePeriod())
 
-    match (h.CheckFloatEquals(actualWma3, expWma3Skipped)) {
+    match (h.checkFloatEquals(actualWma3, expWma3Skipped)) {
         case Some(err) => fail("WMA3 mismatch: " + err.toString())
         case None => ()
     }
-    match (h.CheckFloatEquals(actualWma5, expWma5Skipped)) {
+    match (h.checkFloatEquals(actualWma5, expWma5Skipped)) {
         case Some(err) => fail("WMA5 mismatch: " + err.toString())
         case None => ()
     }

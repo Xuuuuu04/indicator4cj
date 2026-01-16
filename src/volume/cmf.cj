@@ -19,9 +19,9 @@ public class Cmf {
 
     // compute 计算蔡金资金流量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        let vols = Duplicate(volumes, 2)
+        let vols = duplicate(volumes, 2)
         let mfvs = _mfv.compute(highs, lows, closings, vols[0])
-        return Divide(
+        return divide(
             _sum.compute(mfvs),
             _sum.compute(vols[1])
         )

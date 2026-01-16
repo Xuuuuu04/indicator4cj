@@ -2,8 +2,8 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// CommonPeriod：返回多个周期中的最大值，用于对齐。
-public func CommonPeriod(periods: ArrayList<Int64>): Int64 {
+// commonPeriod：返回多个周期中的最大值，用于对齐。
+public func commonPeriod(periods: ArrayList<Int64>): Int64 {
     if (periods.isEmpty()) {
         return 0
     }
@@ -17,11 +17,11 @@ public func CommonPeriod(periods: ArrayList<Int64>): Int64 {
     return maxVal
 }
 
-// SyncPeriod：将迭代器右移 (commonPeriod - period) 以对齐。
-public func SyncPeriod<T>(commonPeriod: Int64, period: Int64, iter: Iterator<T>): Iterator<T> {
+// syncPeriod：将迭代器右移 (commonPeriod - period) 以对齐。
+public func syncPeriod<T>(commonPeriod: Int64, period: Int64, iter: Iterator<T>): Iterator<T> {
     let forward = commonPeriod - period
     if (forward > 0) {
-        return Skip(iter, forward)
+        return skip(iter, forward)
     }
     return iter
 }

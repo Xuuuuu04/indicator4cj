@@ -20,17 +20,17 @@ public class PoRow {
 @Test
 public func po_basic() {
     let input = Csv<PoRow>().readFromFile("src/test/testdata/volatility/po.csv")
-    let inputs = Duplicate(input, 4)
-    let highs = Map(inputs[0], { d: PoRow => d.high })
-    let lows = Map(inputs[1], { d: PoRow => d.low })
-    let closings = Map(inputs[2], { d: PoRow => d.close })
-    var expected = Map(inputs[3], { d: PoRow => d.Po })
+    let inputs = duplicate(input, 4)
+    let highs = map(inputs[0], { d: PoRow => d.high })
+    let lows = map(inputs[1], { d: PoRow => d.low })
+    let closings = map(inputs[2], { d: PoRow => d.close })
+    var expected = map(inputs[3], { d: PoRow => d.Po })
 
     let po = Po(50)
-    var actual = RoundDigits(po.compute(highs, lows, closings), 2)
-    expected = Skip(expected, po.idlePeriod())
+    var actual = roundDigits(po.compute(highs, lows, closings), 2)
+    expected = skip(expected, po.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

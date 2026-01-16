@@ -4,8 +4,8 @@ import std.collection.*
 import std.io.*
 import std.core.*
 
-// ChanToJSON：将迭代器写为 JSON 数组到 writer。仅支持 Int64/Float64/Bool/String。
-public func ChanToJSON<T>(iter: Iterator<T>, writer: OutputStream) {
+// chanToJSON：将迭代器写为 JSON 数组到 writer。仅支持 Int64/Float64/Bool/String。
+public func chanToJSON<T>(iter: Iterator<T>, writer: OutputStream) {
     let open = ascii("[")
     let comma = ascii(",")
     let close = ascii("]")

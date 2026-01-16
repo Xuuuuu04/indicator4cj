@@ -21,9 +21,9 @@ public func test_roc_simple() {
     roc.period = 3
 
     let actual = roc.compute(closing.iterator())
-    let expectedSkipped = h.Skip(expected.iterator(), roc.idlePeriod())
+    let expectedSkipped = h.skip(expected.iterator(), roc.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err.toString())
         case None => ()
     }
@@ -32,15 +32,15 @@ public func test_roc_simple() {
 @Test
 public func test_roc_basic() {
     let input = Csv<RocData>().readFromFile("src/test/testdata/trend/roc.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { row: RocData => row.close })
-    let expected = h.Map(inputs[1], { row: RocData => row.Roc })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { row: RocData => row.close })
+    let expected = h.map(inputs[1], { row: RocData => row.Roc })
 
     let roc = Roc()
-    let actual = h.RoundDigits(roc.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, roc.idlePeriod())
+    let actual = h.roundDigits(roc.compute(closing), 2)
+    let expectedSkipped = h.skip(expected, roc.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err.toString())
         case None => ()
     }

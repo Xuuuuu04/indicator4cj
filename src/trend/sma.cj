@@ -20,7 +20,7 @@ public class Sma {
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let sum = MovingSum()
         sum.period = period
-        return DivideBy(sum.compute(c), Float64(period))
+        return divideBy(sum.compute(c), Float64(period))
     }
 
     // idlePeriod 返回空闲周期数。

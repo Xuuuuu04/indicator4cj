@@ -5,13 +5,13 @@ public interface Closeable {
     func close(): Unit
 }
 
-// CloseAndLogError：尝试关闭，忽略异常。message 保留以兼容签名。
-public func CloseAndLogError(closer: Closeable, message: String): Unit {
-    CloseAndLogErrorWithLogger(closer, message, None)
+// closeAndLogError：尝试关闭，忽略异常。message 保留以兼容签名。
+public func closeAndLogError(closer: Closeable, message: String): Unit {
+    closeAndLogErrorWithLogger(closer, message, None)
 }
 
-// CloseAndLogErrorWithLogger：可选传入日志信息，当前实现忽略日志，保持不抛异常。
-public func CloseAndLogErrorWithLogger(closer: Closeable, _: String, _: Option<String>): Unit {
+// closeAndLogErrorWithLogger：可选传入日志信息，当前实现忽略日志，保持不抛异常。
+public func closeAndLogErrorWithLogger(closer: Closeable, _: String, _: Option<String>): Unit {
     try {
         closer.close()
     } catch (_) {

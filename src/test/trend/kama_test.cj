@@ -15,12 +15,12 @@ class KamaData {
 @Test
 public func test_kama_basic() {
     let input = Csv<KamaData>().readFromFile("src/test/testdata/trend/kama.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { row: KamaData => row.close })
-    let expected = h.Map(inputs[1], { row: KamaData => row.Kama })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { row: KamaData => row.close })
+    let expected = h.map(inputs[1], { row: KamaData => row.Kama })
 
     let kama = Kama()
-    let actual = h.RoundDigits(kama.compute(closing), 2)
+    let actual = h.roundDigits(kama.compute(closing), 2)
     
     // Actual stream: Seed (p9), K(p10), K(p11)...
     // Seed = 109.24. K(p10) = 109.24. K(p11) = 109.22.
@@ -30,8 +30,8 @@ public func test_kama_basic() {
     // To match, we skip 10 from expected (0..9 are zero).
     // And skip 1 from actual (Seed).
     
-    let actualSkipped = h.Skip(actual, 1)
-    let expectedSkipped = h.Skip(expected, 10)
+    let actualSkipped = h.skip(actual, 1)
+    let expectedSkipped = h.skip(expected, 10)
 
     let actIter = actualSkipped
     let expIter = expectedSkipped

@@ -12,9 +12,9 @@ class JsonToChanTest {
     public func read_int_array() {
         let bytes = ascii("[1,2,3]")
         let reader = MemoryInputStream(bytes)
-        let iter = JSONToChan(reader)
-        let expected = SliceToChan(ArrayList<Int64>([1, 2, 3]))
-        match (CheckEquals(iter, expected)) {
+        let iter = jsonToChan(reader)
+        let expected = sliceToChan(ArrayList<Int64>([1, 2, 3]))
+        match (checkEquals(iter, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

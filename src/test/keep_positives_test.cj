@@ -15,10 +15,10 @@ class KeepPositivesTest {
 
     @TestCase
     public func keep_positives_basic() {
-        let input = SliceToChan(make([-10,20,4,-5]))
-        let expected = SliceToChan(make([0,20,4,0]))
-        let actual = KeepPositives(input)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([-10,20,4,-5]))
+        let expected = sliceToChan(make([0,20,4,0]))
+        let actual = keepPositives(input)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

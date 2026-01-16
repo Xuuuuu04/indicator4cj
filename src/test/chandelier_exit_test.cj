@@ -22,23 +22,23 @@ public class ChandelierRow {
 @Test
 public func chandelier_exit_basic() {
     let input = Csv<ChandelierRow>().readFromFile("src/test/testdata/volatility/chandelier_exit.csv")
-    let inputs = Duplicate(input, 5)
-    let highs = Map(inputs[0], { d: ChandelierRow => d.high })
-    let lows = Map(inputs[1], { d: ChandelierRow => d.low })
-    let closings = Map(inputs[2], { d: ChandelierRow => d.close })
-    let expLong = Map(inputs[3], { d: ChandelierRow => d.Long })
-    let expShort = Map(inputs[4], { d: ChandelierRow => d.Short })
+    let inputs = duplicate(input, 5)
+    let highs = map(inputs[0], { d: ChandelierRow => d.high })
+    let lows = map(inputs[1], { d: ChandelierRow => d.low })
+    let closings = map(inputs[2], { d: ChandelierRow => d.close })
+    let expLong = map(inputs[3], { d: ChandelierRow => d.Long })
+    let expShort = map(inputs[4], { d: ChandelierRow => d.Short })
 
     let ce = ChandelierExit()
     var (actLong, actShort) = ce.compute(highs, lows, closings)
-    actLong = RoundDigits(actLong, 2)
-    actShort = RoundDigits(actShort, 2)
+    actLong = roundDigits(actLong, 2)
+    actShort = roundDigits(actShort, 2)
 
-    let skip = ce.idlePeriod()
-    let eLong = Skip(expLong, skip)
-    let eShort = Skip(expShort, skip)
+    let skipCount = ce.idlePeriod()
+    let eLong = skip(expLong, skipCount)
+    let eShort = skip(expShort, skipCount)
 
-    match (CheckEquals(actLong, eLong)) { case Some(err) => fail("long " + err) case None => () }
-    match (CheckEquals(actShort, eShort)) { case Some(err) => fail("short " + err) case None => () }
+    match (checkEquals(actLong, eLong)) { case Some(err) => fail("long " + err) case None => () }
+    match (checkEquals(actShort, eShort)) { case Some(err) => fail("short " + err) case None => () }
 }
 

@@ -15,10 +15,10 @@ class SignTest {
 
     @TestCase
     public func sign_basic() {
-        let input = SliceToChan(make([-10,20,-4,0]))
-        let expected = SliceToChan(make([-1,1,-1,0]))
-        let actual = Sign(input)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([-10,20,-4,0]))
+        let expected = sliceToChan(make([-1,1,-1,0]))
+        let actual = sign(input)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

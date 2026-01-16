@@ -21,16 +21,16 @@ public class MacdRow {
 @Test
 public func macd_basic() {
     let input = Csv<MacdRow>().readFromFile("src/test/testdata/trend/macd.csv")
-    let inputs = Duplicate(input, 2)
-    let closes = Map(inputs[0], { d: MacdRow => d.close })
+    let inputs = duplicate(input, 2)
+    let closes = map(inputs[0], { d: MacdRow => d.close })
     
     let macd = Macd() 
     let (actualMacdsRaw, actualSignalsRaw) = macd.compute(closes)
 
-    let actualMacds = RoundDigits(actualMacdsRaw, 2)
-    let actualSignals = RoundDigits(actualSignalsRaw, 2)
+    let actualMacds = roundDigits(actualMacdsRaw, 2)
+    let actualSignals = roundDigits(actualSignalsRaw, 2)
 
-    let expectedStream = Skip(inputs[1], macd.idlePeriod())
+    let expectedStream = skip(inputs[1], macd.idlePeriod())
 
     for (row in expectedStream) {
         match (actualMacds.next()) {

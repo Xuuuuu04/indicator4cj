@@ -15,11 +15,11 @@ class AddTest {
 
     @TestCase
     public func add_seq() {
-        let ac = SliceToChan(make([1,2,3,4,5,6,7,8,9,10]))
-        let bc = SliceToChan(make([1,2,3,4,5,6,7,8,9,10]))
-        let expected = SliceToChan(make([2,4,6,8,10,12,14,16,18,20]))
-        let actual = Add(ac, bc)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let ac = sliceToChan(make([1,2,3,4,5,6,7,8,9,10]))
+        let bc = sliceToChan(make([1,2,3,4,5,6,7,8,9,10]))
+        let expected = sliceToChan(make([2,4,6,8,10,12,14,16,18,20]))
+        let actual = add(ac, bc)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

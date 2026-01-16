@@ -1,7 +1,7 @@
 package indicator4cj.helper
 
-// Shift：向右平移 count 个位置，用 fill 填充前缀。
-public func Shift<T>(iter: Iterator<T>, count: Int64, fill: T): Iterator<T> {
+// shift：向右平移 count 个位置，用 fill 填充前缀。
+public func shift<T>(iter: Iterator<T>, count: Int64, fill: T): Iterator<T> {
     return ShiftIterator<T>(iter, count, fill)
 }
 

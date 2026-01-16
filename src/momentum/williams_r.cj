@@ -22,9 +22,9 @@ public class WilliamsR {
         let hh = MovingMax(period).compute(highs)
         let ll = MovingMin(period).compute(lows)
 
-        let closesAdj = Skip(closes, period - 1)
+        let closesAdj = skip(closes, period - 1)
 
-        return Operate3(hh, ll, closesAdj, { h: Float64, l: Float64, c: Float64 =>
+        return operate3(hh, ll, closesAdj, { h: Float64, l: Float64, c: Float64 =>
             let denom = h - l
             if (denom == 0.0) { return 0.0 }
             return -100.0 * (h - c) / denom

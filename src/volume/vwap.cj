@@ -17,9 +17,9 @@ public class Vwap {
 
     // compute 计算成交量加权平均价格指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        let vols = Duplicate(volumes, 2)
-        return Divide(
-            _sum.compute(Multiply(closings, vols[0])),
+        let vols = duplicate(volumes, 2)
+        return divide(
+            _sum.compute(multiply(closings, vols[0])),
             _sum.compute(vols[1])
         )
     }

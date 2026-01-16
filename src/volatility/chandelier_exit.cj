@@ -22,8 +22,8 @@ public class ChandelierExit {
 
     // compute 计算吊灯退出指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
-        let hs = Duplicate(highs, 2)
-        let ls = Duplicate(lows, 2)
+        let hs = duplicate(highs, 2)
+        let ls = duplicate(lows, 2)
 
         let movingMax = MovingMax(period)
         let movingMin = MovingMin(period)
@@ -32,19 +32,19 @@ public class ChandelierExit {
         let skipMax = atr.idlePeriod() - movingMax.idlePeriod()
         let skipMin = atr.idlePeriod() - movingMin.idlePeriod()
 
-        let maxHighs = Skip(movingMax.compute(hs[0]), skipMax)
-        let minLows = Skip(movingMin.compute(ls[0]), skipMin)
+        let maxHighs = skip(movingMax.compute(hs[0]), skipMax)
+        let minLows = skip(movingMin.compute(ls[0]), skipMin)
 
-        let atrScaled = Duplicate(
-            MultiplyBy(
+        let atrScaled = duplicate(
+            multiplyBy(
                 atr.compute(hs[1], ls[1], closings),
                 multiplier
             ),
             2
         )
 
-        let ceLong = Subtract(maxHighs, atrScaled[0])
-        let ceShort = Add(minLows, atrScaled[1])
+        let ceLong = subtract(maxHighs, atrScaled[0])
+        let ceShort = add(minLows, atrScaled[1])
 
         return (ceLong, ceShort)
     }

@@ -63,11 +63,11 @@ class CsvTest {
         }
         let iter = csv.readFromFile(path)
         let expected = rows.iterator()
-        match (CheckEquals(iter, expected)) {
+        match (checkEquals(iter, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }
-        Remove(path)
+        remove(path)
     }
 }
 

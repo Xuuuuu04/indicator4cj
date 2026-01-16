@@ -27,12 +27,12 @@ private class StochRsiStrategyRow {
 public func test_stochastic_rsi_strategy_basic() {
     let snaps = loadBrkSnapsStoch()
     let expectedRows = Csv<StochRsiStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/stochastic_rsi_strategy.csv")
-    let expected = h.Map(expectedRows, { r: StochRsiStrategyRow => ActionFromInt(r.action) })
+    let expected = h.map(expectedRows, { r: StochRsiStrategyRow => actionFromInt(r.action) })
     
     let s = StochasticRsiStrategy()
     let actual = s.compute(snaps)
     
-    match (CheckEquals<Action>(actual, expected)) {
+    match (checkEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

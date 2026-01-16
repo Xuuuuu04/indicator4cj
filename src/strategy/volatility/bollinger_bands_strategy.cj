@@ -20,32 +20,32 @@ public class BollingerBandsStrategy <: Strategy {
     public func name(): String { return "Bollinger Bands Strategy" }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(snapshotsAsClosings(snapshots), 2)
+        let closings = duplicate(snapshotsAsClosings(snapshots), 2)
         let (uppers, _, lowers) = Indicator.compute(closings[0])
-        closings[1] = Skip(closings[1], Indicator.idlePeriod())
+        closings[1] = skip(closings[1], Indicator.idlePeriod())
 
-        let actions = Operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
+        let actions = operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
             if (close > up) { return Action.Sell }
             if (low > close) { return Action.Buy }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
 
         var (uppers, middles, lowers) = Indicator.compute(closings[0])
-        uppers = Shift(uppers, Indicator.idlePeriod(), 0.0)
-        middles = Shift(middles, Indicator.idlePeriod(), 0.0)
-        lowers = Shift(lowers, Indicator.idlePeriod(), 0.0)
+        uppers = shift(uppers, Indicator.idlePeriod(), 0.0)
+        middles = shift(middles, Indicator.idlePeriod(), 0.0)
+        lowers = shift(lowers, Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

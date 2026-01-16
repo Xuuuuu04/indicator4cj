@@ -32,42 +32,42 @@ public class WeightedCloseStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
         let closings = snapshotsAsClosings(snaps[2])
 
-        let wcDup = Duplicate(Indicator.compute(highs, lows, closings), 2)
+        let wcDup = duplicate(Indicator.compute(highs, lows, closings), 2)
         let mas = Ma.compute(wcDup[1])
-        wcDup[0] = Skip(wcDup[0], Ma.idlePeriod())
+        wcDup[0] = skip(wcDup[0], Ma.idlePeriod())
 
-        let actions = Operate(wcDup[0], mas, { wc: Float64, ma: Float64 =>
+        let actions = operate(wcDup[0], mas, { wc: Float64, ma: Float64 =>
             if (wc > ma) { return Action.Buy }
             return Action.Sell
         })
 
-        return Shift(actions, Ma.idlePeriod(), Action.Hold)
+        return shift(actions, Ma.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 5)
+        let snaps = duplicate(c, 5)
         var dates = snapshotsAsDates(snaps[0])
         let highs = snapshotsAsHighs(snaps[1])
         let lows = snapshotsAsLows(snaps[2])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[3]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
-        let wcDup = Duplicate(Indicator.compute(highs, lows, closingsDup[1]), 2)
+        let wcDup = duplicate(Indicator.compute(highs, lows, closingsDup[1]), 2)
         let mas = Ma.compute(wcDup[1])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
-        var annotations = ActionsToAnnotations(actions)
-        var outcomes = MultiplyBy(outcomesRaw, 100.0)
+        var annotations = actionsToAnnotations(actions)
+        var outcomes = multiplyBy(outcomesRaw, 100.0)
 
-        dates = Skip(dates, Ma.idlePeriod())
-        closingsDup[0] = Skip(closingsDup[0], Ma.idlePeriod())
-        wcDup[0] = Skip(wcDup[0], Ma.idlePeriod())
-        annotations = Skip(annotations, Ma.idlePeriod())
-        outcomes = Skip(outcomes, Ma.idlePeriod())
+        dates = skip(dates, Ma.idlePeriod())
+        closingsDup[0] = skip(closingsDup[0], Ma.idlePeriod())
+        wcDup[0] = skip(wcDup[0], Ma.idlePeriod())
+        annotations = skip(annotations, Ma.idlePeriod())
+        outcomes = skip(outcomes, Ma.idlePeriod())
 
         let report = Report(name(), dates)
         report.addChart()
@@ -80,7 +80,7 @@ public class WeightedCloseStrategy <: Strategy {
     }
 }
 
-public func NewWeightedCloseStrategyWith(maPeriod: Int64): WeightedCloseStrategy {
+public func newWeightedCloseStrategyWith(maPeriod: Int64): WeightedCloseStrategy {
     return WeightedCloseStrategy(maPeriod)
 }
 

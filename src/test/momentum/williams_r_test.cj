@@ -20,18 +20,18 @@ public class WilliamsRRow {
 @Test
 public func williams_r_basic() {
     let input = Csv<WilliamsRRow>().readFromFile("src/test/testdata/momentum/williams_r.csv")
-    let inputs = Duplicate(input, 4)
-    let highs = Map(inputs[0], { d: WilliamsRRow => d.high })
-    let lows = Map(inputs[1], { d: WilliamsRRow => d.low })
-    let closes = Map(inputs[2], { d: WilliamsRRow => d.close })
-    var expected = Map(inputs[3], { d: WilliamsRRow => d.WilliamsR })
+    let inputs = duplicate(input, 4)
+    let highs = map(inputs[0], { d: WilliamsRRow => d.high })
+    let lows = map(inputs[1], { d: WilliamsRRow => d.low })
+    let closes = map(inputs[2], { d: WilliamsRRow => d.close })
+    var expected = map(inputs[3], { d: WilliamsRRow => d.WilliamsR })
 
     let wr = WilliamsR(14)
     var actual = wr.compute(highs, lows, closes)
-    actual = RoundDigits(actual, 2)
-    expected = Skip(expected, wr.idlePeriod())
+    actual = roundDigits(actual, 2)
+    expected = skip(expected, wr.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

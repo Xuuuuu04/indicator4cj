@@ -36,34 +36,34 @@ public class TsiStrategy <: Strategy {
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = snapshotsAsClosings(snapshots)
-        let tsis = Duplicate(Indicator.compute(closings), 2)
-        tsis[0] = Skip(tsis[0], Signal.idlePeriod())
+        let tsis = duplicate(Indicator.compute(closings), 2)
+        tsis[0] = skip(tsis[0], Signal.idlePeriod())
         let signals = Signal.compute(tsis[1])
 
-        let actions = Operate(tsis[0], signals, { tsi: Float64, sig: Float64 =>
+        let actions = operate(tsis[0], signals, { tsi: Float64, sig: Float64 =>
             if ((tsi > 0.0) && (tsi > sig)) { return Action.Buy }
             if ((tsi < 0.0) && (tsi < sig)) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, IdlePeriod(), Action.Hold)
+        return shift(actions, idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
-        let dates = Skip(snapshotsAsDates(snaps[0]), IdlePeriod())
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
-        closings[1] = Skip(closings[1], IdlePeriod())
+        let snaps = duplicate(c, 3)
+        let dates = skip(snapshotsAsDates(snaps[0]), idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
+        closings[1] = skip(closings[1], idlePeriod())
 
-        let tsis = Duplicate(Indicator.compute(closings[0]), 2)
-        tsis[0] = Skip(tsis[0], Signal.idlePeriod())
+        let tsis = duplicate(Indicator.compute(closings[0]), 2)
+        tsis[0] = skip(tsis[0], Signal.idlePeriod())
         let signals = Signal.compute(tsis[1])
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        actions = Skip(actions, IdlePeriod())
-        outcomesRaw = Skip(outcomesRaw, IdlePeriod())
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        actions = skip(actions, idlePeriod())
+        outcomesRaw = skip(outcomesRaw, idlePeriod())
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -76,12 +76,12 @@ public class TsiStrategy <: Strategy {
         return report
     }
 
-    public func IdlePeriod(): Int64 {
+    public func idlePeriod(): Int64 {
         return Indicator.idlePeriod() + Signal.idlePeriod()
     }
 }
 
-public func NewTsiStrategyWith(firstSmoothing: Int64, secondSmoothing: Int64, signalPeriod: Int64): TsiStrategy {
+public func newTsiStrategyWith(firstSmoothing: Int64, secondSmoothing: Int64, signalPeriod: Int64): TsiStrategy {
     return TsiStrategy(firstSmoothing, secondSmoothing, signalPeriod)
 }
 

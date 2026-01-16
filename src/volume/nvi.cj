@@ -26,8 +26,8 @@ private class NviIterator <: Iterator<Float64> {
     private var _previous: Float64
 
     public init(closings: Iterator<Float64>, volumes: Iterator<Float64>, initial: Float64) {
-        this._closingRatios = ChangeRatio(closings, 1)
-        this._volumeChanges = Change(volumes, 1)
+        this._closingRatios = changeRatio(closings, 1)
+        this._volumeChanges = change(volumes, 1)
         this._previous = initial
     }
 

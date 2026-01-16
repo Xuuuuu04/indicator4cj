@@ -10,7 +10,7 @@ public class Bop {
 
     // compute 计算动能平衡指标。
     public func compute(opening: Iterator<Float64>, high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): Iterator<Float64> {
-        return Divide(Subtract(closing, opening), Subtract(high, low))
+        return divide(subtract(closing, opening), subtract(high, low))
     }
 }
 

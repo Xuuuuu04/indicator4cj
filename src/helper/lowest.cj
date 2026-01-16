@@ -2,9 +2,9 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// Lowest：窗口内最小值。
-public func Lowest(iter: Iterator<Float64>, w: Int64): Iterator<Float64> {
-    return Window(iter, w, { buf, _ => minInList(buf) })
+// lowest：窗口内最小值。
+public func lowest(iter: Iterator<Float64>, w: Int64): Iterator<Float64> {
+    return window(iter, w, { buf, _ => minInList(buf) })
 }
 
 private func minInList(buf: ArrayList<Float64>): Float64 {

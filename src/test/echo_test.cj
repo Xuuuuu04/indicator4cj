@@ -9,11 +9,11 @@ import indicator4cj.helper.*
 class EchoTest {
     @TestCase
     public func echo_last_two() {
-        let input = SliceToChan(ArrayList<Int64>([2, 4, 6, 8]))
-        let expected = SliceToChan(ArrayList<Int64>([2, 4, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8]))
+        let input = sliceToChan(ArrayList<Int64>([2, 4, 6, 8]))
+        let expected = sliceToChan(ArrayList<Int64>([2, 4, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8]))
 
-        let actual = Echo(input, 2, 4)
-        match (CheckEquals(actual, expected)) {
+        let actual = echo(input, 2, 4)
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

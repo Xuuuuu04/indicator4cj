@@ -22,12 +22,12 @@ public class StochasticOscillator {
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closes: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
         let hh = MovingMax(period).compute(highs)
         let ll = MovingMin(period).compute(lows)
-        let closeAdj = Skip(closes, period - 1)
+        let closeAdj = skip(closes, period - 1)
 
-        let k = MultiplyBy(
-            Divide(
-                Subtract(closeAdj, ll),
-                Subtract(hh, ll)
+        let k = multiplyBy(
+            divide(
+                subtract(closeAdj, ll),
+                subtract(hh, ll)
             ),
             100.0
         )

@@ -40,7 +40,7 @@ private class SmmaIterator <: Iterator<Float64> {
 
     public func next(): Option<Float64> {
         if (!_initialized) {
-            let head = Head(_source, _period)
+            let head = head(_source, _period)
             var sum: Float64 = 0.0
             var count: Int64 = 0
             while (true) {

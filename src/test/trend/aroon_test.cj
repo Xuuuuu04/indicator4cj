@@ -25,23 +25,23 @@ class AroonData {
 @Test
 public func test_aroon_basic() {
     let input = Csv<AroonData>().readFromFile("src/test/testdata/trend/aroon.csv")
-    let inputs = Duplicate(input, 4)
-    let high = h.Map(inputs[0], { row: AroonData => row.high })
-    let low = h.Map(inputs[1], { row: AroonData => row.low })
-    let expectedUp = h.Map(inputs[2], { row: AroonData => row.Up })
-    let expectedDown = h.Map(inputs[3], { row: AroonData => row.Down })
+    let inputs = duplicate(input, 4)
+    let high = h.map(inputs[0], { row: AroonData => row.high })
+    let low = h.map(inputs[1], { row: AroonData => row.low })
+    let expectedUp = h.map(inputs[2], { row: AroonData => row.Up })
+    let expectedDown = h.map(inputs[3], { row: AroonData => row.Down })
 
     let aroon = Aroon()
-    let expectedUpSkipped = h.Skip(expectedUp, aroon.period - 1)
-    let expectedDownSkipped = h.Skip(expectedDown, aroon.period - 1)
+    let expectedUpSkipped = h.skip(expectedUp, aroon.period - 1)
+    let expectedDownSkipped = h.skip(expectedDown, aroon.period - 1)
 
     let (actualUp, actualDown) = aroon.compute(high, low)
 
-    match (h.CheckFloatEquals(actualUp, expectedUpSkipped)) {
+    match (h.checkFloatEquals(actualUp, expectedUpSkipped)) {
         case Some(err) => fail("Up mismatch: " + err.toString())
         case None => ()
     }
-    match (h.CheckFloatEquals(actualDown, expectedDownSkipped)) {
+    match (h.checkFloatEquals(actualDown, expectedDownSkipped)) {
         case Some(err) => fail("Down mismatch: " + err.toString())
         case None => ()
     }
@@ -66,23 +66,23 @@ public func test_aroon_compare_rust() {
     testData.add(AroonData(High: 88.00, Low: 87.17, Up: 40.00, Down: 100.00))
     testData.add(AroonData(High: 87.87, Low: 87.01, Up: 20.00, Down: 80.00))
 
-    let inputs = Duplicate(testData.iterator(), 4)
-    let high = h.Map(inputs[0], { row: AroonData => row.high })
-    let low = h.Map(inputs[1], { row: AroonData => row.low })
-    let expectedUp = h.Map(inputs[2], { row: AroonData => row.Up })
-    let expectedDown = h.Map(inputs[3], { row: AroonData => row.Down })
+    let inputs = duplicate(testData.iterator(), 4)
+    let high = h.map(inputs[0], { row: AroonData => row.high })
+    let low = h.map(inputs[1], { row: AroonData => row.low })
+    let expectedUp = h.map(inputs[2], { row: AroonData => row.Up })
+    let expectedDown = h.map(inputs[3], { row: AroonData => row.Down })
 
     let aroon = Aroon()
-    let expectedUpSkipped = h.Skip(expectedUp, aroon.period - 1)
-    let expectedDownSkipped = h.Skip(expectedDown, aroon.period - 1)
+    let expectedUpSkipped = h.skip(expectedUp, aroon.period - 1)
+    let expectedDownSkipped = h.skip(expectedDown, aroon.period - 1)
 
     let (actualUp, actualDown) = aroon.compute(high, low)
 
-    match (h.CheckFloatEquals(actualUp, expectedUpSkipped)) {
+    match (h.checkFloatEquals(actualUp, expectedUpSkipped)) {
         case Some(err) => fail("Up mismatch (Rust): " + err.toString())
         case None => ()
     }
-    match (h.CheckFloatEquals(actualDown, expectedDownSkipped)) {
+    match (h.checkFloatEquals(actualDown, expectedDownSkipped)) {
         case Some(err) => fail("Down mismatch (Rust): " + err.toString())
         case None => ()
     }

@@ -24,16 +24,16 @@ public class Dpo {
 // compute 计算指标。
     public func compute(closing: Iterator<Float64>): Iterator<Float64> {
         let k = period / 2 + 1
-        let dup = Duplicate(closing, 2)
+        let dup = duplicate(closing, 2)
 
         let sma = Sma()
         sma.period = period
         let smaOut = sma.compute(dup[0])
 
-        let skippedClosing = Skip(dup[1], idlePeriod())
-        let smaDelayed = SkipLast(smaOut, k)
+        let skippedClosing = skip(dup[1], idlePeriod())
+        let smaDelayed = skipLast(smaOut, k)
 
-        return Operate(skippedClosing, smaDelayed, { price: Float64, shifted: Float64 =>
+        return operate(skippedClosing, smaDelayed, { price: Float64, shifted: Float64 =>
             return price - shifted
         })
     }

@@ -19,34 +19,34 @@ class KdjData {
 @Test
 public func test_kdj_basic() {
     let input = Csv<KdjData>().readFromFile("src/test/testdata/trend/kdj.csv")
-    let inputs = Duplicate(input, 6)
-    let high = h.Map(inputs[0], { row: KdjData => row.high })
-    let low = h.Map(inputs[1], { row: KdjData => row.low })
-    let closing = h.Map(inputs[2], { row: KdjData => row.close })
-    let expectedK = h.Map(inputs[3], { row: KdjData => row.K })
-    let expectedD = h.Map(inputs[4], { row: KdjData => row.D })
-    let expectedJ = h.Map(inputs[5], { row: KdjData => row.J })
+    let inputs = duplicate(input, 6)
+    let high = h.map(inputs[0], { row: KdjData => row.high })
+    let low = h.map(inputs[1], { row: KdjData => row.low })
+    let closing = h.map(inputs[2], { row: KdjData => row.close })
+    let expectedK = h.map(inputs[3], { row: KdjData => row.K })
+    let expectedD = h.map(inputs[4], { row: KdjData => row.D })
+    let expectedJ = h.map(inputs[5], { row: KdjData => row.J })
 
     let kdj = Kdj()
     let (actualKRaw, actualDRaw, actualJRaw) = kdj.compute(high, low, closing)
 
-    let actualK = h.RoundDigits(actualKRaw, 2)
-    let actualD = h.RoundDigits(actualDRaw, 2)
-    let actualJ = h.RoundDigits(actualJRaw, 2)
+    let actualK = h.roundDigits(actualKRaw, 2)
+    let actualD = h.roundDigits(actualDRaw, 2)
+    let actualJ = h.roundDigits(actualJRaw, 2)
 
-    let actualKShifted = h.Shift(actualK, kdj.idlePeriod(), 0.0)
-    let actualDShifted = h.Shift(actualD, kdj.idlePeriod(), 0.0)
-    let actualJShifted = h.Shift(actualJ, kdj.idlePeriod(), 0.0)
+    let actualKShifted = h.shift(actualK, kdj.idlePeriod(), 0.0)
+    let actualDShifted = h.shift(actualD, kdj.idlePeriod(), 0.0)
+    let actualJShifted = h.shift(actualJ, kdj.idlePeriod(), 0.0)
 
-    match (h.CheckFloatEquals(actualKShifted, expectedK)) {
+    match (h.checkFloatEquals(actualKShifted, expectedK)) {
         case Some(err) => fail("K: " + err.toString())
         case None => ()
     }
-    match (h.CheckFloatEquals(actualDShifted, expectedD)) {
+    match (h.checkFloatEquals(actualDShifted, expectedD)) {
         case Some(err) => fail("D: " + err.toString())
         case None => ()
     }
-    match (h.CheckFloatEquals(actualJShifted, expectedJ)) {
+    match (h.checkFloatEquals(actualJShifted, expectedJ)) {
         case Some(err) => fail("J: " + err.toString())
         case None => ()
     }

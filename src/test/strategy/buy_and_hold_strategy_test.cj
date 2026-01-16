@@ -15,8 +15,8 @@ public func buy_and_hold_executes_once() {
     snaps.add(Snapshot(DateTime.now(), 3.0, 3.0, 3.0, 3.0, 3.0, 0.0))
     let s = BuyAndHoldStrategy()
     let actionsIter = s.compute(snaps.iterator())
-    let expected = SliceToChan(ArrayList<Action>([Action.Buy, Action.Hold, Action.Hold]))
-    match (CheckEquals<Action>(actionsIter, expected)) {
+    let expected = sliceToChan(ArrayList<Action>([Action.Buy, Action.Hold, Action.Hold]))
+    match (checkEquals<Action>(actionsIter, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

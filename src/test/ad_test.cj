@@ -10,18 +10,18 @@ class AdTest {
     @TestCase
     public func ad_basic() {
         let input = Csv<AdRow>().readFromFile("src/test/testdata/volume/ad.csv")
-        let inputs = Duplicate(input, 5)
-        let highs = Map(inputs[0], { m => m.high })
-        let lows = Map(inputs[1], { m => m.low })
-        let closes = Map(inputs[2], { m => m.close })
-        let volumes = Map(inputs[3], { m => Float64(m.volume) })
-        var expected = Map(inputs[4], { m => m.Ad })
+        let inputs = duplicate(input, 5)
+        let highs = map(inputs[0], { m => m.high })
+        let lows = map(inputs[1], { m => m.low })
+        let closes = map(inputs[2], { m => m.close })
+        let volumes = map(inputs[3], { m => Float64(m.volume) })
+        var expected = map(inputs[4], { m => m.Ad })
 
         let ad = Ad()
-        let actual = RoundDigits(ad.compute(highs, lows, closes, volumes), 2)
-        expected = Skip(expected, ad.idlePeriod())
+        let actual = roundDigits(ad.compute(highs, lows, closes, volumes), 2)
+        expected = skip(expected, ad.idlePeriod())
 
-        match (CheckEquals(actual, expected)) {
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

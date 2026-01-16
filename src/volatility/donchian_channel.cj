@@ -22,13 +22,13 @@ public class DonchianChannel {
 
     // compute 计算唐奇安通道指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
-        let closings = Duplicate(c, 2)
+        let closings = duplicate(c, 2)
 
-        let uppers = Duplicate(_max.compute(closings[0]), 2)
-        let lowers = Duplicate(_min.compute(closings[1]), 2)
+        let uppers = duplicate(_max.compute(closings[0]), 2)
+        let lowers = duplicate(_min.compute(closings[1]), 2)
 
-        let middle = DivideBy(
-            Add(uppers[0], lowers[0]),
+        let middle = divideBy(
+            add(uppers[0], lowers[0]),
             2.0
         )
 

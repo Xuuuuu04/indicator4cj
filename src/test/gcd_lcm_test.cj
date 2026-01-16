@@ -9,13 +9,13 @@ class GcdLcmTest {
     @TestCase
     public func gcd_basic() {
         let v = [24, 16, 8]
-        @Expect(Gcd(v), 8)
+        @Expect(gcd(v), 8)
     }
 
     @TestCase
     public func lcm_basic() {
         let v = [4, 6, 3]
-        @Expect(Lcm(v), 12)
+        @Expect(lcm(v), 12)
     }
 }
 

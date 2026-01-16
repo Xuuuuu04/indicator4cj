@@ -27,12 +27,12 @@ private class TripleRsiStrategyRow {
 public func test_triple_rsi_strategy_basic() {
     let snaps = loadBrkSnapsTriple()
     let expectedRows = Csv<TripleRsiStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/triple_rsi_strategy.csv")
-    let expected = h.Map(expectedRows, { r: TripleRsiStrategyRow => ActionFromInt(r.action) })
+    let expected = h.map(expectedRows, { r: TripleRsiStrategyRow => actionFromInt(r.action) })
     
     let s = TripleRsiStrategy()
     let actual = s.compute(snaps)
     
-    match (CheckEquals<Action>(actual, expected)) {
+    match (checkEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

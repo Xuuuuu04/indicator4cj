@@ -26,7 +26,7 @@ public class MajorityStrategy <: Strategy {
         let result = ArrayList<Action>()
         let sources = actionSources(strategies, snapshots)
         while (true) {
-            let (buy, hold, sell, ok) = CountActions(sources)
+            let (buy, hold, sell, ok) = countActions(sources)
             if (!ok) { break }
             if ((sell > buy) && (sell > hold)) {
                 result.add(Action.Sell)
@@ -40,12 +40,12 @@ public class MajorityStrategy <: Strategy {
     }
 
     public func report(snapshots: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(snapshots, 3)
+        let snaps = duplicate(snapshots, 3)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -56,10 +56,10 @@ public class MajorityStrategy <: Strategy {
     }
 }
 
-public func NewMajorityStrategy(name: String): MajorityStrategy {
+public func newMajorityStrategy(name: String): MajorityStrategy {
     return MajorityStrategy(name)
 }
 
-public func NewMajorityStrategyWith(name: String, strategies: ArrayList<Strategy>): MajorityStrategy {
+public func newMajorityStrategyWith(name: String, strategies: ArrayList<Strategy>): MajorityStrategy {
     return MajorityStrategy(name, strategies)
 }

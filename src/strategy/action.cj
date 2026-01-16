@@ -42,8 +42,8 @@ public func Annotation(a: Action): String {
 }
 
 // 将 Action 迭代器转注解迭代器（一次性消费）。
-public func ActionsToAnnotations(ac: Iterator<Action>): Iterator<String> {
-    let norm = NormalizeActions(ac)
+public func actionsToAnnotations(ac: Iterator<Action>): Iterator<String> {
+    let norm = normalizeActions(ac)
     let res = ArrayList<String>()
     while (true) {
         match (norm.next()) {
@@ -55,7 +55,7 @@ public func ActionsToAnnotations(ac: Iterator<Action>): Iterator<String> {
 }
 
 // 归一化：消除连续重复的非 Hold，保持 Hold/Buy/Hold/Sell 顺序。
-public func NormalizeActions(ac: Iterator<Action>): Iterator<Action> {
+public func normalizeActions(ac: Iterator<Action>): Iterator<Action> {
     var last = Action.Sell
     let res = ArrayList<Action>()
     while (true) {
@@ -74,7 +74,7 @@ public func NormalizeActions(ac: Iterator<Action>): Iterator<Action> {
 }
 
 // 反归一化：填充 Hold 为上一个非 Hold。
-public func DenormalizeActions(ac: Iterator<Action>): Iterator<Action> {
+public func denormalizeActions(ac: Iterator<Action>): Iterator<Action> {
     var last = Action.Hold
     let res = ArrayList<Action>()
     while (true) {
@@ -90,14 +90,14 @@ public func DenormalizeActions(ac: Iterator<Action>): Iterator<Action> {
     return res.iterator()
 }
 
-public func ActionFromInt(v: Int64): Action {
+public func actionFromInt(v: Int64): Action {
     if (v == 1) { return Action.Buy }
     if (v == -1) { return Action.Sell }
     return Action.Hold
 }
 
 // 统计多个 Action 迭代器当前值，返回 (buy, hold, sell, ok)
-public func CountActions(acs: ArrayList<Iterator<Action>>): (Int64, Int64, Int64, Bool) {
+public func countActions(acs: ArrayList<Iterator<Action>>): (Int64, Int64, Int64, Bool) {
     var buy: Int64 = 0
     var hold: Int64 = 0
     var sell: Int64 = 0
@@ -116,7 +116,7 @@ public func CountActions(acs: ArrayList<Iterator<Action>>): (Int64, Int64, Int64
 }
 
 // 统计交易次数（非 Hold）。
-public func CountTransactions(ac: Iterator<Action>): Iterator<Int64> {
+public func countTransactions(ac: Iterator<Action>): Iterator<Int64> {
     var tx: Int64 = 0
     let res = ArrayList<Int64>()
     while (true) {

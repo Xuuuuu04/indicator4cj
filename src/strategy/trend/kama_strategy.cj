@@ -24,34 +24,34 @@ public class KamaStrategy <: Strategy {
     public func name(): String { return Indicator.toString() }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(snapshotsAsClosings(c), 2)
-        closings[1] = Skip(closings[1], Indicator.idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(c), 2)
+        closings[1] = skip(closings[1], Indicator.idlePeriod())
 
         let kamas = Indicator.compute(closings[0])
 
-        let actions = Operate(kamas, closings[1], { kama: Float64, closing: Float64 =>
+        let actions = operate(kamas, closings[1], { kama: Float64, closing: Float64 =>
             if (closing > kama) { return Action.Buy }
             if (closing < kama) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
-        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let snaps = duplicate(c, 3)
+        let dates = skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
 
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
-        closings[1] = Skip(closings[1], Indicator.idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
+        closings[1] = skip(closings[1], Indicator.idlePeriod())
 
         let kamas = Indicator.compute(closings[0])
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        actions = Skip(actions, Indicator.idlePeriod())
-        outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        actions = skip(actions, Indicator.idlePeriod())
+        outcomesRaw = skip(outcomesRaw, Indicator.idlePeriod())
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -64,7 +64,7 @@ public class KamaStrategy <: Strategy {
     }
 }
 
-public func NewKamaStrategyWith(erPeriod: Int64, fastScPeriod: Int64, slowScPeriod: Int64): KamaStrategy {
+public func newKamaStrategyWith(erPeriod: Int64, fastScPeriod: Int64, slowScPeriod: Int64): KamaStrategy {
     return KamaStrategy(erPeriod, fastScPeriod, slowScPeriod)
 }
 

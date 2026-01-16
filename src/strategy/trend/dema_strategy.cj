@@ -31,37 +31,37 @@ public class DemaStrategy <: Strategy {
     public func name(): String { return "DEMA Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(snapshotsAsClosings(c), 2)
+        let closings = duplicate(snapshotsAsClosings(c), 2)
 
         var demas1 = Dema1.compute(closings[0])
-        demas1 = Shift(demas1, Dema1.idlePeriod(), 0.0)
+        demas1 = shift(demas1, Dema1.idlePeriod(), 0.0)
 
         var demas2 = Dema2.compute(closings[1])
-        demas2 = Shift(demas2, Dema2.idlePeriod(), 0.0)
+        demas2 = shift(demas2, Dema2.idlePeriod(), 0.0)
 
-        let actions = Operate(demas1, demas2, { d1: Float64, d2: Float64 =>
+        let actions = operate(demas1, demas2, { d1: Float64, d2: Float64 =>
             if (d1 > d2) { return Action.Buy }
             if (d2 > d1) { return Action.Sell }
             return Action.Hold
         })
 
         let idle = Dema2.idlePeriod()
-        return Shift(Skip(actions, idle), idle, Action.Hold)
+        return shift(skip(actions, idle), idle, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 3)
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var demas1 = Dema1.compute(closings[0])
-        demas1 = Shift(demas1, Dema1.idlePeriod(), 0.0)
+        demas1 = shift(demas1, Dema1.idlePeriod(), 0.0)
         var demas2 = Dema2.compute(closings[1])
-        demas2 = Shift(demas2, Dema2.idlePeriod(), 0.0)
+        demas2 = shift(demas2, Dema2.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

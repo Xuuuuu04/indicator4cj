@@ -2,9 +2,9 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// MinSince：返回每个元素自最近最小值起经过的步数（含自身），窗口大小 w。
-public func MinSince(iter: Iterator<Float64>, w: Int64): Iterator<Float64> {
-    return Window<Float64>(iter, w, { buf, _ =>
+// minSince：返回每个元素自最近最小值起经过的步数（含自身），窗口大小 w。
+public func minSince(iter: Iterator<Float64>, w: Int64): Iterator<Float64> {
+    return window<Float64>(iter, w, { buf, _ =>
         if (buf.isEmpty()) {
             return Float64(0)
         }

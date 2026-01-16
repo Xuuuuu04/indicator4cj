@@ -1,7 +1,7 @@
 package indicator4cj.helper
 
-// Skip：跳过前 count 个元素。
-public func Skip<T>(iter: Iterator<T>, count: Int64): Iterator<T> {
+// skip：跳过前 count 个元素。
+public func skip<T>(iter: Iterator<T>, count: Int64): Iterator<T> {
     var remaining = count
     while (remaining > 0) {
         match (iter.next()) {

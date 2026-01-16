@@ -31,25 +31,25 @@ public class GoldenCrossStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let (fastEmas, slowEmas) = calculateEmas(c)
-        let actions = Operate(fastEmas, slowEmas, { f: Float64, s: Float64 =>
+        let actions = operate(fastEmas, slowEmas, { f: Float64, s: Float64 =>
             if (f > s) { return Action.Buy }
             if (f < s) { return Action.Sell }
             return Action.Hold
         })
-        return Shift(actions, SlowEma.idlePeriod(), Action.Hold)
+        return shift(actions, SlowEma.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 4)
-        let dates = Skip(snapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
-        closings[0] = Skip(closings[0], SlowEma.idlePeriod())
+        let snaps = duplicate(c, 4)
+        let dates = skip(snapshotsAsDates(snaps[0]), SlowEma.idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
+        closings[0] = skip(closings[0], SlowEma.idlePeriod())
 
         let (fastEmas, slowEmas) = calculateEmas(snaps[2])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
-        let annotations = Skip(ActionsToAnnotations(actions), SlowEma.idlePeriod())
-        let outcomes = MultiplyBy(Skip(outcomesRaw, SlowEma.idlePeriod()), 100.0)
+        let annotations = skip(actionsToAnnotations(actions), SlowEma.idlePeriod())
+        let outcomes = multiplyBy(skip(outcomesRaw, SlowEma.idlePeriod()), 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -64,14 +64,14 @@ public class GoldenCrossStrategy <: Strategy {
     }
 
     private func calculateEmas(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>) {
-        let closings = Duplicate(snapshotsAsClosings(c), 2)
-        let fastEmas = Skip(FastEma.compute(closings[0]), SlowEma.idlePeriod() - FastEma.idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(c), 2)
+        let fastEmas = skip(FastEma.compute(closings[0]), SlowEma.idlePeriod() - FastEma.idlePeriod())
         let slowEmas = SlowEma.compute(closings[1])
         return (fastEmas, slowEmas)
     }
 }
 
-public func NewGoldenCrossStrategyWith(fastPeriod: Int64, slowPeriod: Int64): GoldenCrossStrategy {
+public func newGoldenCrossStrategyWith(fastPeriod: Int64, slowPeriod: Int64): GoldenCrossStrategy {
     return GoldenCrossStrategy(fastPeriod, slowPeriod)
 }
 

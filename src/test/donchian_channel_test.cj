@@ -20,25 +20,25 @@ public class DonchianRow {
 @Test
 public func donchian_channel_basic() {
     let input = Csv<DonchianRow>().readFromFile("src/test/testdata/volatility/donchian_channel.csv")
-    let inputs = Duplicate(input, 4)
-    let closings = Map(inputs[0], { d: DonchianRow => d.close })
-    let expUpper = Map(inputs[1], { d: DonchianRow => d.upper })
-    let expMiddle = Map(inputs[2], { d: DonchianRow => d.middle })
-    let expLower = Map(inputs[3], { d: DonchianRow => d.lower })
+    let inputs = duplicate(input, 4)
+    let closings = map(inputs[0], { d: DonchianRow => d.close })
+    let expUpper = map(inputs[1], { d: DonchianRow => d.upper })
+    let expMiddle = map(inputs[2], { d: DonchianRow => d.middle })
+    let expLower = map(inputs[3], { d: DonchianRow => d.lower })
 
     let dc = DonchianChannel()
     var (actUpper, actMiddle, actLower) = dc.compute(closings)
-    actUpper = RoundDigits(actUpper, 2)
-    actMiddle = RoundDigits(actMiddle, 2)
-    actLower = RoundDigits(actLower, 2)
+    actUpper = roundDigits(actUpper, 2)
+    actMiddle = roundDigits(actMiddle, 2)
+    actLower = roundDigits(actLower, 2)
 
-    let skip = dc.idlePeriod()
-    let eUpper = Skip(expUpper, skip)
-    let eMiddle = Skip(expMiddle, skip)
-    let eLower = Skip(expLower, skip)
+    let skipCount = dc.idlePeriod()
+    let eUpper = skip(expUpper, skipCount)
+    let eMiddle = skip(expMiddle, skipCount)
+    let eLower = skip(expLower, skipCount)
 
-    match (CheckEquals(actUpper, eUpper)) { case Some(err) => fail("upper " + err) case None => () }
-    match (CheckEquals(actMiddle, eMiddle)) { case Some(err) => fail("middle " + err) case None => () }
-    match (CheckEquals(actLower, eLower)) { case Some(err) => fail("lower " + err) case None => () }
+    match (checkEquals(actUpper, eUpper)) { case Some(err) => fail("upper " + err) case None => () }
+    match (checkEquals(actMiddle, eMiddle)) { case Some(err) => fail("middle " + err) case None => () }
+    match (checkEquals(actLower, eLower)) { case Some(err) => fail("lower " + err) case None => () }
 }
 

@@ -33,42 +33,42 @@ public class SmmaStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closingsDup = Duplicate(snapshotsAsClosings(snapshots), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snapshots), 2)
         var shortSmmas = ShortSmma.compute(closingsDup[0])
         var longSmmas = LongSmma.compute(closingsDup[1])
 
-        let common = CommonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
-        shortSmmas = SyncPeriod(common, ShortSmma.period, shortSmmas)
-        longSmmas = SyncPeriod(common, LongSmma.period, longSmmas)
+        let common = commonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
+        shortSmmas = syncPeriod(common, ShortSmma.period, shortSmmas)
+        longSmmas = syncPeriod(common, LongSmma.period, longSmmas)
 
-        let actions = Operate(shortSmmas, longSmmas, { s: Float64, l: Float64 =>
+        let actions = operate(shortSmmas, longSmmas, { s: Float64, l: Float64 =>
             if (s > l) { return Action.Buy }
             if (l > s) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, common, Action.Hold)
+        return shift(actions, common, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         var dates = snapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 3)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var shortSmmas = ShortSmma.compute(closingsDup[1])
         var longSmmas = LongSmma.compute(closingsDup[2])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        var annotations = ActionsToAnnotations(actions)
-        var outcomes = MultiplyBy(outcomesRaw, 100.0)
+        var annotations = actionsToAnnotations(actions)
+        var outcomes = multiplyBy(outcomesRaw, 100.0)
 
-        let common = CommonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
-        dates = SyncPeriod(common, 0, dates)
-        closingsDup[0] = Skip(closingsDup[0], common)
-        shortSmmas = SyncPeriod(common, ShortSmma.period, shortSmmas)
-        longSmmas = SyncPeriod(common, LongSmma.period, longSmmas)
-        annotations = Skip(annotations, common)
-        outcomes = Skip(outcomes, common)
+        let common = commonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
+        dates = syncPeriod(common, 0, dates)
+        closingsDup[0] = skip(closingsDup[0], common)
+        shortSmmas = syncPeriod(common, ShortSmma.period, shortSmmas)
+        longSmmas = syncPeriod(common, LongSmma.period, longSmmas)
+        annotations = skip(annotations, common)
+        outcomes = skip(outcomes, common)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -83,7 +83,7 @@ public class SmmaStrategy <: Strategy {
     }
 }
 
-public func NewSmmaStrategyWith(shortPeriod: Int64, longPeriod: Int64): SmmaStrategy {
+public func newSmmaStrategyWith(shortPeriod: Int64, longPeriod: Int64): SmmaStrategy {
     return SmmaStrategy(shortPeriod, longPeriod)
 }
 

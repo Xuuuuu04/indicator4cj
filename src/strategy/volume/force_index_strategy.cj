@@ -26,33 +26,33 @@ public class ForceIndexStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 2)
+        let snaps = duplicate(c, 2)
         let closings = snapshotsAsClosings(snaps[0])
         let volumes = snapshotsAsVolumes(snaps[1])
 
         let fis = Indicator.compute(closings, volumes)
-        let actions = h.Map(fis, { v: Float64 =>
+        let actions = h.map(fis, { v: Float64 =>
             if (v > 0.0) { return Action.Buy }
             if (v < 0.0) { return Action.Sell }
             return Action.Hold
         })
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 4)
-        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let snaps = duplicate(c, 4)
+        let dates = skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 2)
         let volumes = snapshotsAsVolumes(snaps[2])
 
         let fis = Indicator.compute(closingsDup[0], volumes)
-        closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())
+        closingsDup[1] = skip(closingsDup[1], Indicator.idlePeriod())
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
-        actions = Skip(actions, Indicator.idlePeriod())
-        outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        actions = skip(actions, Indicator.idlePeriod())
+        outcomesRaw = skip(outcomesRaw, Indicator.idlePeriod())
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -65,7 +65,7 @@ public class ForceIndexStrategy <: Strategy {
     }
 }
 
-public func NewForceIndexStrategyWith(period: Int64): ForceIndexStrategy {
+public func newForceIndexStrategyWith(period: Int64): ForceIndexStrategy {
     return ForceIndexStrategy(period)
 }
 

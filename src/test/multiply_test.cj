@@ -15,11 +15,11 @@ class MultiplyTest {
 
     @TestCase
     public func multiply_basic() {
-        let ac = SliceToChan(make([1,4,2,4,2]))
-        let bc = SliceToChan(make([2,1,3,2,5]))
-        let expected = SliceToChan(make([2,4,6,8,10]))
-        let actual = Multiply(ac, bc)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let ac = sliceToChan(make([1,4,2,4,2]))
+        let bc = sliceToChan(make([2,1,3,2,5]))
+        let expected = sliceToChan(make([2,4,6,8,10]))
+        let actual = multiply(ac, bc)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

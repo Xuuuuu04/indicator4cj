@@ -16,16 +16,16 @@ public class PvoRow {
 @Test
 public func pvo_basic() {
     let input = Csv<PvoRow>().readFromFile("src/test/testdata/momentum/pvo.csv")
-    let inputs = Duplicate(input, 2)
-    let volumes = Map(inputs[0], { d: PvoRow => d.volume })
-    var expected = Map(inputs[1], { d: PvoRow => d.Pvo })
+    let inputs = duplicate(input, 2)
+    let volumes = map(inputs[0], { d: PvoRow => d.volume })
+    var expected = map(inputs[1], { d: PvoRow => d.Pvo })
 
     let pvo = Pvo()
     var actual = pvo.compute(volumes)
-    actual = RoundDigits(actual, 2)
-    expected = Skip(expected, pvo.idlePeriod())
+    actual = roundDigits(actual, 2)
+    expected = skip(expected, pvo.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

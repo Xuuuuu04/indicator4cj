@@ -16,16 +16,16 @@ class VwmaData {
 @Test
 public func test_vwma_basic() {
     let input = Csv<VwmaData>().readFromFile("src/test/testdata/trend/vwma.csv")
-    let inputs = Duplicate(input, 3)
-    let closing = h.Map(inputs[0], { d: VwmaData => d.close })
-    let volume = h.Map(inputs[1], { d: VwmaData => Float64(d.volume) })
-    let expected = h.Map(inputs[2], { d: VwmaData => d.Vwma })
+    let inputs = duplicate(input, 3)
+    let closing = h.map(inputs[0], { d: VwmaData => d.close })
+    let volume = h.map(inputs[1], { d: VwmaData => Float64(d.volume) })
+    let expected = h.map(inputs[2], { d: VwmaData => d.Vwma })
 
     let vwma = Vwma()
-    let actual = h.RoundDigits(vwma.compute(closing, volume), 2)
-    let expectedSkipped = h.Skip(expected, vwma.idlePeriod())
+    let actual = h.roundDigits(vwma.compute(closing, volume), 2)
+    let expectedSkipped = h.skip(expected, vwma.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)
         case None => ()
     }

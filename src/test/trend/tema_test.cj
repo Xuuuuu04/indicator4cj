@@ -15,15 +15,15 @@ class TemaData {
 @Test
 public func test_tema_basic() {
     let input = Csv<TemaData>().readFromFile("src/test/testdata/trend/tema.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TemaData => d.close })
-    let expected = h.Map(inputs[1], { d: TemaData => d.Tema })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { d: TemaData => d.close })
+    let expected = h.map(inputs[1], { d: TemaData => d.Tema })
 
     let tema = Tema()
-    let actual = h.RoundDigits(tema.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, tema.idlePeriod())
+    let actual = h.roundDigits(tema.compute(closing), 2)
+    let expectedSkipped = h.skip(expected, tema.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)
         case None => ()
     }

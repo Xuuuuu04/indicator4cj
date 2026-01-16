@@ -49,13 +49,13 @@ public func inverse_strategy_basic() {
     }
     let snapshots = snapList.iterator()
     let results = h.Csv<DecoratorStrategyResultRow>().readFromFile("${_basePath}/decorator/inverse_strategy.csv")
-    let expected = h.Map(results, { r: DecoratorStrategyResultRow => ActionFromInt(r.action) })
+    let expected = h.map(results, { r: DecoratorStrategyResultRow => actionFromInt(r.action) })
 
     let inner = MacdStrategy()
-    let s = NewInverseStrategy(inner)
+    let s = newInverseStrategy(inner)
 
     let actual = s.compute(snapshots)
-    match (h.CheckEquals<Action>(actual, expected)) {
+    match (h.checkEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

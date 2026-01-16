@@ -11,13 +11,13 @@ class HighestTest {
     public func highest_window() {
         let series = ArrayList<Float64>()
         series.add(1.0); series.add(3.0); series.add(2.0); series.add(5.0)
-        let actual = Highest(SliceToChan(series), 2)
+        let actual = highest(sliceToChan(series), 2)
         let expected = ArrayList<Float64>()
         expected.add(1.0)
         expected.add(3.0)
         expected.add(3.0)
         expected.add(5.0)
-        @Expect(CheckEquals(actual, SliceToChan(expected)) == None, true)
+        @Expect(checkEquals(actual, sliceToChan(expected)) == None, true)
     }
 }
 

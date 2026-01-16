@@ -26,7 +26,7 @@ public class OrStrategy <: Strategy {
         let result = ArrayList<Action>()
         let sources = actionSources(strategies, snapshots)
         while (true) {
-            let (buy, _, sell, ok) = CountActions(sources)
+            let (buy, _, sell, ok) = countActions(sources)
             if (!ok) { break }
             if ((sell > 0) && (buy == 0)) {
                 result.add(Action.Sell)
@@ -40,12 +40,12 @@ public class OrStrategy <: Strategy {
     }
 
     public func report(snapshots: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(snapshots, 3)
+        let snaps = duplicate(snapshots, 3)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -56,6 +56,6 @@ public class OrStrategy <: Strategy {
     }
 }
 
-public func NewOrStrategy(name: String): OrStrategy {
+public func newOrStrategy(name: String): OrStrategy {
     return OrStrategy(name)
 }

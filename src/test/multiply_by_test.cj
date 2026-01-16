@@ -9,8 +9,8 @@ import indicator4cj.helper.*
 public func test_multiply_by_basic() {
     let input = ArrayList<Float64>([1.0, 2.0, 3.0, 4.0])
     let expected = ArrayList<Float64>([2.0, 4.0, 6.0, 8.0])
-    let actual = MultiplyBy(input.iterator(), 2.0)
-    match (CheckEquals(actual, expected.iterator())) {
+    let actual = multiplyBy(input.iterator(), 2.0)
+    match (checkEquals(actual, expected.iterator())) {
         case Some(err) => fail(err)
         case None => ()
     }

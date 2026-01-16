@@ -26,33 +26,33 @@ public class EnvelopeStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(snapshotsAsClosings(c), 2)
-        closings[1] = Skip(closings[1], Indicator.idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(c), 2)
+        closings[1] = skip(closings[1], Indicator.idlePeriod())
 
         let (uppers, _, lowers) = Indicator.compute(closings[0])
-        let actions = Operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
+        let actions = operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
             if (close < low) { return Action.Buy }
             if (close > up) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
-        let dates = Skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let snaps = duplicate(c, 3)
+        let dates = skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
 
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
-        closings[0] = Skip(closings[0], Indicator.idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
+        closings[0] = skip(closings[0], Indicator.idlePeriod())
 
         let (uppers, middles, lowers) = Indicator.compute(closings[1])
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        actions = Skip(actions, Indicator.idlePeriod())
-        outcomesRaw = Skip(outcomesRaw, Indicator.idlePeriod())
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        actions = skip(actions, Indicator.idlePeriod())
+        outcomesRaw = skip(outcomesRaw, Indicator.idlePeriod())
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -66,7 +66,7 @@ public class EnvelopeStrategy <: Strategy {
     }
 }
 
-public func NewEnvelopeStrategyWith(envelope: Envelope): EnvelopeStrategy {
+public func newEnvelopeStrategyWith(envelope: Envelope): EnvelopeStrategy {
     return EnvelopeStrategy(envelope)
 }
 

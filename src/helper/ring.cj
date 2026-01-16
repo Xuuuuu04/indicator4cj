@@ -1,6 +1,6 @@
 package indicator4cj.helper
 
-// Ring：固定容量环形缓冲。
+// ring：固定容量环形缓冲。
 public class Ring<TElement> {
     private let _buffer: Array<Option<TElement>>
     private let _capacity: Int64
@@ -13,10 +13,10 @@ public class Ring<TElement> {
         this._buffer = Array<Option<TElement>>(size, { _ => None<TElement> })
     }
 
-    // Put 插入并返回被覆盖的旧值（若无旧值则返回 None）。
-    public func Put(value: TElement): Option<TElement> {
+    // put 插入并返回被覆盖的旧值（若无旧值则返回 None）。
+    public func put(value: TElement): Option<TElement> {
         let old = _buffer[_end]
-        if (IsFull()) {
+        if (isFull()) {
             _begin = nextIndex(_begin)
         }
         _buffer[_end] = Some(value)
@@ -25,8 +25,8 @@ public class Ring<TElement> {
         return old
     }
 
-    // Get 获取当前最早元素；空返回 None。
-    public func Get(): Option<TElement> {
+    // get 获取当前最早元素；空返回 None。
+    public func get(): Option<TElement> {
         if (_empty) {
             return None<TElement>
         }
@@ -39,15 +39,15 @@ public class Ring<TElement> {
         return v
     }
 
-    public func At(index: Int64): TElement {
+    public func at(index: Int64): TElement {
         return _buffer[(_begin + index) % _capacity].getOrThrow()
     }
 
-    public func IsEmpty(): Bool {
+    public func isEmpty(): Bool {
         return _empty
     }
 
-    public func IsFull(): Bool {
+    public func isFull(): Bool {
         return (!_empty) && (_end == _begin)
     }
 

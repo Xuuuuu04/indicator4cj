@@ -23,27 +23,27 @@ public class ApoStrategy <: Strategy {
         let closings = snapshotsAsClosings(snapshots)
         let apoRaw = indicator.compute(closings)
         // 需要前后值比较，复制两份
-        let inputs = Duplicate(apoRaw, 2)
-        inputs[1] = Skip(inputs[1], 1)
+        let inputs = duplicate(apoRaw, 2)
+        inputs[1] = skip(inputs[1], 1)
 
-        let actions = Operate(inputs[0], inputs[1], { prev: Float64, curr: Float64 =>
+        let actions = operate(inputs[0], inputs[1], { prev: Float64, curr: Float64 =>
             if ((curr >= 0.0) && (prev < 0.0)) { return Action.Buy }
             if ((curr <= 0.0) && (prev > 0.0)) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, indicator.slowPeriod, Action.Hold)
+        return shift(actions, indicator.slowPeriod, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[2]), 2)
-        let apo = Shift(indicator.compute(closingsDup[1]), indicator.slowPeriod, 0.0)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[2]), 2)
+        let apo = shift(indicator.compute(closingsDup[1]), indicator.slowPeriod, 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

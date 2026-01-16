@@ -2,8 +2,8 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// Window：滑动窗口聚合，窗口不足时也输出当前聚合。
-public func Window<T>(iter: Iterator<T>, w: Int64, f: (ArrayList<T>, Int64) -> T): Iterator<T> {
+// window：滑动窗口聚合，窗口不足时也输出当前聚合。
+public func window<T>(iter: Iterator<T>, w: Int64, f: (ArrayList<T>, Int64) -> T): Iterator<T> {
     return WindowIterator<T>(iter, w, f)
 }
 

@@ -15,9 +15,9 @@ class BufferedTest {
         data.add(3)
         data.add(4)
 
-        let iter = SliceToChan(data)
-        let buffered = Buffered(iter, 4)
-        Drain(buffered)
+        let iter = sliceToChan(data)
+        let buffered = buffered(iter, 4)
+        drain(buffered)
         @Expect(true, true) // 只验证不抛异常、可顺利消费。
     }
 }

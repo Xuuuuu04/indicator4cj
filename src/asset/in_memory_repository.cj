@@ -33,7 +33,7 @@ public class InMemoryRepository <: Repository {
     // 如果资产不存在，抛出 Exception
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
         let snapshots = get(name)
-        return Filter(snapshots, { s: Snapshot => (s.date == date) || (s.date > date) })
+        return filter(snapshots, { s: Snapshot => (s.date == date) || (s.date > date) })
     }
 
     // lastDate 返回指定资产的最新日期

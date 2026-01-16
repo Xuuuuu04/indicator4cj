@@ -25,8 +25,8 @@ public class Ppo {
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let fastEma = Ema(fastPeriod).compute(values)
         let slowEma = Ema(slowPeriod).compute(values)
-        let diff = Subtract(fastEma, slowEma)
-        return MultiplyBy(Divide(diff, slowEma), 100.0)
+        let diff = subtract(fastEma, slowEma)
+        return multiplyBy(divide(diff, slowEma), 100.0)
     }
 
     // idlePeriod 返回空闲周期数。

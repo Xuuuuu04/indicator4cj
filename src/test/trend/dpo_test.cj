@@ -15,13 +15,13 @@ class DpoData {
 @Test
 public func test_dpo_basic() {
     let input = Csv<DpoData>().readFromFile("src/test/testdata/trend/dpo.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { row: DpoData => row.close })
-    let expected = h.Map(inputs[1], { row: DpoData => row.Dpo })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { row: DpoData => row.close })
+    let expected = h.map(inputs[1], { row: DpoData => row.Dpo })
 
     let dpo = Dpo()
-    let actual = h.RoundDigits(dpo.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, dpo.idlePeriod())
+    let actual = h.roundDigits(dpo.compute(closing), 2)
+    let expectedSkipped = h.skip(expected, dpo.idlePeriod())
 
     let actIter = actual
     let expIter = expectedSkipped

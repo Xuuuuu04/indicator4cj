@@ -10,9 +10,9 @@ import indicator4cj.helper.*
 class ChanToJsonTest {
     @TestCase
     public func write_json_array() {
-        let input = SliceToChan(ArrayList<Int64>([2, 4, 6, 8]))
+        let input = sliceToChan(ArrayList<Int64>([2, 4, 6, 8]))
         let buf = MemoryOutputStream()
-        ChanToJSON(input, buf)
+        chanToJSON(input, buf)
         @Expect(buf.toStringValue(), "[2,4,6,8]")
     }
 }

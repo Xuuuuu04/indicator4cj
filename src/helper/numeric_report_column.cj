@@ -2,7 +2,7 @@ package indicator4cj.helper
 
 import std.core.*
 
-// NumericReportColumn 数值报告列，将浮点数迭代器包装为报告列
+// numericReportColumn 数值报告列，将浮点数迭代器包装为报告列
 public class NumericReportColumn <: ReportColumn {
     private let _columnName: String
     private let _values: Iterator<Float64>
@@ -25,7 +25,7 @@ public class NumericReportColumn <: ReportColumn {
 }
 
 // 创建NumericReportColumn 创建数值报告列（公共 API，保持向后兼容）
-public func NewNumericReportColumn(name: String, values: Iterator<Float64>): ReportColumn {
+public func newNumericReportColumn(name: String, values: Iterator<Float64>): ReportColumn {
     return NumericReportColumn(name, values)
 }
 

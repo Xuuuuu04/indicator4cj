@@ -27,36 +27,36 @@ public class Po {
 
     // compute 计算投影振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
-        let hs = Duplicate(highs, 2)
-        let ls = Duplicate(lows, 2)
-        let cs = Duplicate(closings, 2)
+        let hs = duplicate(highs, 2)
+        let ls = duplicate(lows, 2)
+        let cs = duplicate(closings, 2)
 
-        let x = Map(Count(1, cs[0]), { i: Int64 => Float64(i) })
-        let xSplice = Duplicate(x, 2)
+        let x = map(count(1, cs[0]), { i: Int64 => Float64(i) })
+        let xSplice = duplicate(x, 2)
 
         // PL = Min(周期, (最高价 + MLS(周期, x, 最高价)))
         let (plM, plB) = _mls.compute(xSplice[0], hs[0])
-        Drain(plB)
-        hs[1] = Skip(hs[1], _mls.idlePeriod())
-        let plSplice = Duplicate(
+        drain(plB)
+        hs[1] = skip(hs[1], _mls.idlePeriod())
+        let plSplice = duplicate(
             _min.compute(
-                Add(hs[1], plM)
+                add(hs[1], plM)
             ),
             2
         )
 
         // PH = Max(周期, (最低价 + MLS(周期, x, 最低价)))
         let (phM, phB) = _mls.compute(xSplice[1], ls[0])
-        Drain(phB)
-        ls[1] = Skip(ls[1], _mls.idlePeriod())
-        let ph = _max.compute(Add(ls[1], phM))
+        drain(phB)
+        ls[1] = skip(ls[1], _mls.idlePeriod())
+        let ph = _max.compute(add(ls[1], phM))
 
         // PO = 100 * (收盘价 - PL) / (PH - PL)
-        cs[1] = Skip(cs[1], _mls.idlePeriod() + _min.idlePeriod())
-        let po = MultiplyBy(
-            Divide(
-                Subtract(cs[1], plSplice[0]),
-                Subtract(ph, plSplice[1])
+        cs[1] = skip(cs[1], _mls.idlePeriod() + _min.idlePeriod())
+        let po = multiplyBy(
+            divide(
+                subtract(cs[1], plSplice[0]),
+                subtract(ph, plSplice[1])
             ),
             100.0
         )

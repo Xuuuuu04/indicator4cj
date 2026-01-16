@@ -18,17 +18,17 @@ public class QstickRow {
 @Test
 public func qstick_basic() {
     let input = Csv<QstickRow>().readFromFile("src/test/testdata/momentum/qstick.csv")
-    let inputs = Duplicate(input, 3)
-    let opens = Map(inputs[0], { d: QstickRow => d.open })
-    let closes = Map(inputs[1], { d: QstickRow => d.close })
-    var expected = Map(inputs[2], { d: QstickRow => d.Qstick })
+    let inputs = duplicate(input, 3)
+    let opens = map(inputs[0], { d: QstickRow => d.open })
+    let closes = map(inputs[1], { d: QstickRow => d.close })
+    var expected = map(inputs[2], { d: QstickRow => d.Qstick })
 
     let qs = Qstick(10)
     var actual = qs.compute(opens, closes)
-    actual = RoundDigits(actual, 2)
-    expected = Skip(expected, qs.idlePeriod())
+    actual = roundDigits(actual, 2)
+    expected = skip(expected, qs.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

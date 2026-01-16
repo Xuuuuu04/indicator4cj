@@ -29,7 +29,7 @@ public func test_in_memory_repository_basic() {
 
         let actual = repo.get(name)
 
-        match (CheckEquals<Snapshot>(actual, snapshots.iterator())) {
+        match (checkEquals<Snapshot>(actual, snapshots.iterator())) {
             case Some(err) => fail(err)
             case None => ()
         }

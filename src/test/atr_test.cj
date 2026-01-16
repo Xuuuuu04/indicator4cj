@@ -20,17 +20,17 @@ public class AtrRow {
 @Test
 public func atr_basic() {
     let input = Csv<AtrRow>().readFromFile("src/test/testdata/volatility/atr.csv")
-    let inputs = Duplicate(input, 4)
-    let highs = Map(inputs[0], { d: AtrRow => d.high })
-    let lows = Map(inputs[1], { d: AtrRow => d.low })
-    let closings = Map(inputs[2], { d: AtrRow => d.close })
-    var expected = Map(inputs[3], { d: AtrRow => d.Atr })
+    let inputs = duplicate(input, 4)
+    let highs = map(inputs[0], { d: AtrRow => d.high })
+    let lows = map(inputs[1], { d: AtrRow => d.low })
+    let closings = map(inputs[2], { d: AtrRow => d.close })
+    var expected = map(inputs[3], { d: AtrRow => d.Atr })
 
     let atr = Atr(50)
-    var actual = RoundDigits(atr.compute(highs, lows, closings), 2)
-    expected = Skip(expected, atr.idlePeriod())
+    var actual = roundDigits(atr.compute(highs, lows, closings), 2)
+    expected = skip(expected, atr.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

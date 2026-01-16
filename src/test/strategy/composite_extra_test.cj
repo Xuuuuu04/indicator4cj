@@ -31,19 +31,19 @@ public func test_composite_strategies_branches() {
     let holdS = MockActionStrategy(Action.Hold)
     
     // 1. OrStrategy 组合
-    let or1 = NewOrStrategy("Or1")
+    let or1 = newOrStrategy("Or1")
     or1.strategies.add(buyS)
     or1.strategies.add(holdS)
     let res1 = or1.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     if (res1 != Action.Buy) { fail("OrStrategy Buy|Hold failed") }
     
-    let or2 = NewOrStrategy("Or2")
+    let or2 = newOrStrategy("Or2")
     or2.strategies.add(sellS)
     or2.strategies.add(holdS)
     let res2 = or2.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     if (res2 != Action.Sell) { fail("OrStrategy Sell|Hold failed") }
     
-    let or3 = NewOrStrategy("Or3")
+    let or3 = newOrStrategy("Or3")
     or3.strategies.add(buyS)
     or3.strategies.add(sellS)
     let res3 = or3.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()

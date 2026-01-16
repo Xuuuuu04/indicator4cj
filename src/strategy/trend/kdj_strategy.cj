@@ -20,41 +20,41 @@ public class KdjStrategy <: Strategy {
     public func name(): String { return "KDJ Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
         let closings = snapshotsAsClosings(snaps[2])
 
         let (k, d, j) = Indicator.compute(highs, lows, closings)
-        let js = Duplicate(j, 2)
+        let js = duplicate(j, 2)
 
-        let jk = Subtract(js[0], k)
-        let jd = Subtract(js[1], d)
+        let jk = subtract(js[0], k)
+        let jd = subtract(js[1], d)
 
-        let actions = Operate(jk, jd, { a: Float64, b: Float64 =>
+        let actions = operate(jk, jd, { a: Float64, b: Float64 =>
             if ((a > 0.0) && (b > 0.0)) { return Action.Buy }
             if ((a < 0.0) && (b < 0.0)) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 5)
+        let snaps = duplicate(c, 5)
         let dates = snapshotsAsDates(snaps[0])
         let highs = snapshotsAsHighs(snaps[1])
         let lows = snapshotsAsLows(snaps[2])
-        let closings = Duplicate(snapshotsAsClosings(snaps[3]), 2)
+        let closings = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
         var (k, d, j) = Indicator.compute(highs, lows, closings[1])
-        k = Shift(k, Indicator.idlePeriod(), 0.0)
-        d = Shift(d, Indicator.idlePeriod(), 0.0)
-        j = Shift(j, Indicator.idlePeriod(), 0.0)
+        k = shift(k, Indicator.idlePeriod(), 0.0)
+        d = shift(d, Indicator.idlePeriod(), 0.0)
+        j = shift(j, Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

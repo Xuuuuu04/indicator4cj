@@ -55,7 +55,7 @@ private func loadSnapshots(): Iterator<Snapshot> {
 
 private func loadExpected(path: String): Iterator<Action> {
     let rows = Csv<ActionRow>().readFromFile(path)
-    return h.Map(rows, { r: ActionRow => ActionFromInt(r.action) })
+    return h.map(rows, { r: ActionRow => actionFromInt(r.action) })
 }
 
 @Test
@@ -64,7 +64,7 @@ public func bollinger_bands_strategy_basic() {
     let expected = loadExpected("${_basePath}/volatility/bollinger_bands_strategy.csv")
     let s = BollingerBandsStrategy()
     let actual = s.compute(snaps)
-    match (CheckEquals<Action>(actual, expected)) {
+    match (checkEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

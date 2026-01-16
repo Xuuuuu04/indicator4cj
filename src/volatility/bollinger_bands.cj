@@ -18,24 +18,24 @@ public class BollingerBands {
 
     // compute 计算布林带指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
-        let cs = Duplicate(c, 2)
+        let cs = duplicate(c, 2)
         let sma = Sma()
         sma.period = period
         let std = MovingStd()
         std.period = period
 
-        let middleBands = Duplicate(
+        let middleBands = duplicate(
             sma.compute(cs[0]),
             3
         )
 
-        let std2s = Duplicate(
-            MultiplyBy(std.compute(cs[1]), 2.0),
+        let std2s = duplicate(
+            multiplyBy(std.compute(cs[1]), 2.0),
             2
         )
 
-        let upperBand = Add(middleBands[0], std2s[0])
-        let lowerBand = Subtract(middleBands[1], std2s[1])
+        let upperBand = add(middleBands[0], std2s[0])
+        let lowerBand = subtract(middleBands[1], std2s[1])
 
         return (upperBand, middleBands[2], lowerBand)
     }

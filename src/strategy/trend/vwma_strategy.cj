@@ -28,26 +28,26 @@ public class VwmaStrategy <: Strategy {
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let (smas, vwmas) = calculateSmaAndVwma(c)
-        let actions = Operate(smas, vwmas, { sma: Float64, vwma: Float64 =>
+        let actions = operate(smas, vwmas, { sma: Float64, vwma: Float64 =>
             if (vwma > sma) { return Action.Buy }
             if (sma > vwma) { return Action.Sell }
             return Action.Hold
         })
-        return Shift(actions, VwmaIndicator.period - 1, Action.Hold)
+        return shift(actions, VwmaIndicator.period - 1, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 4)
+        let snaps = duplicate(c, 4)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
 
         var (smas, vwmas) = calculateSmaAndVwma(snaps[2])
-        smas = Shift(smas, VwmaIndicator.period - 1, 0.0)
-        vwmas = Shift(vwmas, VwmaIndicator.period - 1, 0.0)
+        smas = shift(smas, VwmaIndicator.period - 1, 0.0)
+        vwmas = shift(vwmas, VwmaIndicator.period - 1, 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -61,8 +61,8 @@ public class VwmaStrategy <: Strategy {
     }
 
     private func calculateSmaAndVwma(c: Iterator<Snapshot>): (Iterator<Float64>, Iterator<Float64>) {
-        let snaps = Duplicate(c, 2)
-        let closings = Duplicate(snapshotsAsClosings(snaps[0]), 2)
+        let snaps = duplicate(c, 2)
+        let closings = duplicate(snapshotsAsClosings(snaps[0]), 2)
         let volumes = snapshotsAsVolumes(snaps[1])
         let smas = SmaIndicator.compute(closings[0])
         let vwmas = VwmaIndicator.compute(closings[1], volumes)

@@ -13,8 +13,8 @@ public class BollingerBandWidth {
     // compute 计算布林带宽度指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
         let (upper, middle, lower) = _bands.compute(c)
-        return Divide(
-            Subtract(upper, lower),
+        return divide(
+            subtract(upper, lower),
             middle
         )
     }

@@ -13,7 +13,7 @@ public func test_remove_file_v2() {
     
     if (!exists(Path(path))) { fail("File should exist") }
     
-    Remove(path)
+    remove(path)
     if (exists(Path(path))) { fail("File should be removed") }
 }
 

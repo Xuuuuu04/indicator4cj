@@ -9,13 +9,13 @@ import indicator4cj.trend.*
 
 @Test
 public func test_moving_min_basic() {
-    let input: Iterator<Float64> = SliceToChan(ArrayList<Float64>([-10.0, 20.0, -4.0, -5.0, 1.0, 5.0, 8.0, 10.0, -20.0, 4.0]))
-    let expected: Iterator<Float64> = SliceToChan(ArrayList<Float64>([-10.0, -5.0, -5.0, -5.0, 1.0, -20.0, -20.0]))
+    let input: Iterator<Float64> = sliceToChan(ArrayList<Float64>([-10.0, 20.0, -4.0, -5.0, 1.0, 5.0, 8.0, 10.0, -20.0, 4.0]))
+    let expected: Iterator<Float64> = sliceToChan(ArrayList<Float64>([-10.0, -5.0, -5.0, -5.0, 1.0, -20.0, -20.0]))
     
     let movingMin = MovingMin(4)
     let actual = movingMin.compute(input)
 
-    match (h.CheckFloatEquals(actual, expected)) {
+    match (h.checkFloatEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

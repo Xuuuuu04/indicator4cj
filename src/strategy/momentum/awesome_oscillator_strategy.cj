@@ -21,31 +21,31 @@ public class AwesomeOscillatorStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 2)
+        let snaps = duplicate(c, 2)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
 
         let ao = Indicator.compute(highs, lows)
-        let actions = h.Map(ao, { v: Float64 =>
+        let actions = h.map(ao, { v: Float64 =>
             if (v < 0.0) { return Action.Sell }
             if (v > 0.0) { return Action.Buy }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 5)
+        let snaps = duplicate(c, 5)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[2])
         let highs = snapshotsAsHighs(snaps[3])
         let lows = snapshotsAsLows(snaps[4])
 
-        let ao = Shift(Indicator.compute(highs, lows), Indicator.idlePeriod(), 0.0)
+        let ao = shift(Indicator.compute(highs, lows), Indicator.idlePeriod(), 0.0)
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -58,7 +58,7 @@ public class AwesomeOscillatorStrategy <: Strategy {
     }
 }
 
-public func NewAwesomeOscillatorStrategy(): AwesomeOscillatorStrategy {
+public func newAwesomeOscillatorStrategy(): AwesomeOscillatorStrategy {
     return AwesomeOscillatorStrategy()
 }
 

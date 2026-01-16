@@ -16,16 +16,16 @@ class MassIndexData {
 @Test
 public func test_mass_index_basic() {
     let input = Csv<MassIndexData>().readFromFile("src/test/testdata/trend/mass_index.csv")
-    let inputs = Duplicate(input, 3)
-    let highs = h.Map(inputs[0], { row: MassIndexData => row.open })
-    let lows = h.Map(inputs[1], { row: MassIndexData => row.close })
-    let expected = h.Map(inputs[2], { row: MassIndexData => row.MassIndex })
+    let inputs = duplicate(input, 3)
+    let highs = h.map(inputs[0], { row: MassIndexData => row.open })
+    let lows = h.map(inputs[1], { row: MassIndexData => row.close })
+    let expected = h.map(inputs[2], { row: MassIndexData => row.MassIndex })
 
     let mi = MassIndex()
-    let actual = h.RoundDigits(mi.compute(highs, lows), 2)
-    let actualShifted = h.Shift(actual, mi.idlePeriod(), 0.0)
+    let actual = h.roundDigits(mi.compute(highs, lows), 2)
+    let actualShifted = h.shift(actual, mi.idlePeriod(), 0.0)
 
-    match (h.CheckFloatEquals(actualShifted, expected)) {
+    match (h.checkFloatEquals(actualShifted, expected)) {
         case Some(err) => fail(err.toString())
         case None => ()
     }

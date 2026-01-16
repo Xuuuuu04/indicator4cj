@@ -19,19 +19,19 @@ public class Tema {
     }
 
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        let ema1 = Duplicate(this.ema1.compute(c), 2)
-        let ema2 = Duplicate(this.ema2.compute(ema1[0]), 2)
+        let ema1 = duplicate(this.ema1.compute(c), 2)
+        let ema2 = duplicate(this.ema2.compute(ema1[0]), 2)
 
-        ema1[1] = Skip(ema1[1], this.ema2.period - 1)
+        ema1[1] = skip(ema1[1], this.ema2.period - 1)
 
         let ema3 = this.ema3.compute(ema2[0])
-        ema1[1] = Skip(ema1[1], this.ema3.period - 1)
-        ema2[1] = Skip(ema2[1], this.ema3.period - 1)
+        ema1[1] = skip(ema1[1], this.ema3.period - 1)
+        ema2[1] = skip(ema2[1], this.ema3.period - 1)
 
-        let tema = Add(
-            Subtract(
-                MultiplyBy(ema1[1], 3.0),
-                MultiplyBy(ema2[1], 3.0)
+        let tema = add(
+            subtract(
+                multiplyBy(ema1[1], 3.0),
+                multiplyBy(ema2[1], 3.0)
             ),
             ema3
         )

@@ -25,9 +25,9 @@ class SinceTest {
         expected.add(2)
         expected.add(0)
 
-        let actual = Since(SliceToChan(inputArr))
+        let actual = Since(sliceToChan(inputArr))
         let expectedIter = expected.iterator()
-        @Expect(CheckEquals(actual, expectedIter) == None, true)
+        @Expect(checkEquals(actual, expectedIter) == None, true)
     }
 }
 

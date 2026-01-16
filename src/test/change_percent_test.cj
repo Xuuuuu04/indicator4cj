@@ -26,8 +26,8 @@ class ChangePercentTest {
         expected.add(200.0)
         expected.add(300.0)
 
-        let actual = ChangePercent(SliceToChan(input), 2)
-        @Expect(CheckEquals(actual, SliceToChan(expected)) == None, true)
+        let actual = changePercent(sliceToChan(input), 2)
+        @Expect(checkEquals(actual, sliceToChan(expected)) == None, true)
     }
 }
 

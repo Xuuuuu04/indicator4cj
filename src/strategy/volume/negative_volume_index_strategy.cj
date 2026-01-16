@@ -33,42 +33,42 @@ public class NegativeVolumeIndexStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 2)
+        let snaps = duplicate(c, 2)
         let closings = snapshotsAsClosings(snaps[0])
         let volumes = snapshotsAsVolumes(snaps[1])
 
-        let nvis = Duplicate(Indicator.compute(closings, volumes), 2)
-        nvis[0] = Skip(nvis[0], EmaIndicator.idlePeriod())
+        let nvis = duplicate(Indicator.compute(closings, volumes), 2)
+        nvis[0] = skip(nvis[0], EmaIndicator.idlePeriod())
         let ema = EmaIndicator.compute(nvis[1])
 
-        let actions = Operate(nvis[0], ema, { nvi: Float64, nviEma: Float64 =>
+        let actions = operate(nvis[0], ema, { nvi: Float64, nviEma: Float64 =>
             if (nvi < nviEma) { return Action.Buy }
             if (nvi > nviEma) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod() + EmaIndicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod() + EmaIndicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 4)
+        let snaps = duplicate(c, 4)
         let period = Indicator.idlePeriod() + EmaIndicator.idlePeriod()
-        let dates = Skip(snapshotsAsDates(snaps[0]), period)
+        let dates = skip(snapshotsAsDates(snaps[0]), period)
 
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 2)
         let volumes = snapshotsAsVolumes(snaps[2])
 
-        let nvis = Duplicate(Indicator.compute(closingsDup[0], volumes), 2)
-        nvis[0] = Skip(nvis[0], EmaIndicator.idlePeriod())
+        let nvis = duplicate(Indicator.compute(closingsDup[0], volumes), 2)
+        nvis[0] = skip(nvis[0], EmaIndicator.idlePeriod())
         let ema = EmaIndicator.compute(nvis[1])
 
-        closingsDup[1] = Skip(closingsDup[1], period)
+        closingsDup[1] = skip(closingsDup[1], period)
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
-        actions = Skip(actions, period)
-        outcomesRaw = Skip(outcomesRaw, period)
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        actions = skip(actions, period)
+        outcomesRaw = skip(outcomesRaw, period)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -82,7 +82,7 @@ public class NegativeVolumeIndexStrategy <: Strategy {
     }
 }
 
-public func NewNegativeVolumeIndexStrategyWith(emaPeriod: Int64): NegativeVolumeIndexStrategy {
+public func newNegativeVolumeIndexStrategyWith(emaPeriod: Int64): NegativeVolumeIndexStrategy {
     return NegativeVolumeIndexStrategy(emaPeriod)
 }
 

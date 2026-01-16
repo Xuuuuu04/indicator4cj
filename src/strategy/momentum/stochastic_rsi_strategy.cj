@@ -39,31 +39,31 @@ public class StochasticRsiStrategy <: Strategy {
         let closings = snapshotsAsClosings(c)
         let stochasticRsi = Indicator.compute(closings)
 
-        let actions = h.Map(stochasticRsi, { v: Float64 =>
+        let actions = h.map(stochasticRsi, { v: Float64 =>
             if (v <= BuyAt) { return Action.Buy }
             if (v >= SellAt) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         var dates = snapshotsAsDates(snaps[0])
 
-        let closings = Duplicate(snapshotsAsClosings(snaps[2]), 2)
-        closings[0] = Skip(closings[0], Indicator.idlePeriod())
+        let closings = duplicate(snapshotsAsClosings(snaps[2]), 2)
+        closings[0] = skip(closings[0], Indicator.idlePeriod())
 
         let stochasticRsi = Indicator.compute(closings[1])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
-        var annotations = ActionsToAnnotations(actions)
-        var outcomes = MultiplyBy(outcomesRaw, 100.0)
+        var annotations = actionsToAnnotations(actions)
+        var outcomes = multiplyBy(outcomesRaw, 100.0)
 
-        dates = Skip(dates, Indicator.idlePeriod())
-        annotations = Skip(annotations, Indicator.idlePeriod())
-        outcomes = Skip(outcomes, Indicator.idlePeriod())
+        dates = skip(dates, Indicator.idlePeriod())
+        annotations = skip(annotations, Indicator.idlePeriod())
+        outcomes = skip(outcomes, Indicator.idlePeriod())
 
         let report = Report(name(), dates)
         report.addChart()
@@ -76,11 +76,11 @@ public class StochasticRsiStrategy <: Strategy {
     }
 }
 
-public func NewStochasticRsiStrategy(): StochasticRsiStrategy {
+public func newStochasticRsiStrategy(): StochasticRsiStrategy {
     return StochasticRsiStrategy()
 }
 
-public func NewStochasticRsiStrategyWith(buyAt: Float64, sellAt: Float64): StochasticRsiStrategy {
+public func newStochasticRsiStrategyWith(buyAt: Float64, sellAt: Float64): StochasticRsiStrategy {
     return StochasticRsiStrategy(buyAt, sellAt)
 }
 

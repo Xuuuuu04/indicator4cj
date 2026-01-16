@@ -1,7 +1,7 @@
 package indicator4cj.helper
 
-// Seq：生成等差序列，左闭右开。
-public func Seq(from: Float64, to: Float64, increment: Float64): Iterator<Float64> {
+// seq：生成等差序列，左闭右开。
+public func seq(from: Float64, to: Float64, increment: Float64): Iterator<Float64> {
     return SeqIterator(from, to, increment)
 }
 

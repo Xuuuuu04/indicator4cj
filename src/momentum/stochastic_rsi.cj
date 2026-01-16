@@ -32,17 +32,17 @@ public class StochasticRsi {
     // (RSI - Min(RSI)) / (Max(RSI) - Min(RSI))
     // compute 计算随机相对强弱指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        let rsisSplice = Duplicate(RsiIndicator.compute(values), 3)
+        let rsisSplice = duplicate(RsiIndicator.compute(values), 3)
 
         // Max/Min 需要满窗，先跳过对应 IdlePeriod。
-        rsisSplice[0] = Skip(rsisSplice[0], MaxIndicator.idlePeriod())
+        rsisSplice[0] = skip(rsisSplice[0], MaxIndicator.idlePeriod())
 
-        let minRsisSplice = Duplicate(MinIndicator.compute(rsisSplice[1]), 2)
+        let minRsisSplice = duplicate(MinIndicator.compute(rsisSplice[1]), 2)
         let maxRsis = MaxIndicator.compute(rsisSplice[2])
 
-        let result = Divide(
-            Subtract(rsisSplice[0], minRsisSplice[0]),
-            Subtract(maxRsis, minRsisSplice[1])
+        let result = divide(
+            subtract(rsisSplice[0], minRsisSplice[0]),
+            subtract(maxRsis, minRsisSplice[1])
         )
 
         return result

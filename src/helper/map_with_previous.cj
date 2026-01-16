@@ -1,7 +1,7 @@
 package indicator4cj.helper
 
-// MapWithPrevious：带前一结果的累积映射，f(prev, curr) -> next。
-public func MapWithPrevious<F, T>(iter: Iterator<F>, f: (T, F) -> T, previous: T): Iterator<T> {
+// mapWithPrevious：带前一结果的累积映射，f(prev, curr) -> next。
+public func mapWithPrevious<F, T>(iter: Iterator<F>, f: (T, F) -> T, previous: T): Iterator<T> {
     return MapWithPreviousIterator<F, T>(iter, f, previous)
 }
 

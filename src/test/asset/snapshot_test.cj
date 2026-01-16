@@ -13,7 +13,7 @@ public func test_snapshots_as() {
     let now = DateTime.now()
     snaps.add(Snapshot(now, 1.0, 2.0, 0.5, 1.5, 1.5, 100.0))
     
-    let copies = Duplicate(snaps.iterator(), 7)
+    let copies = duplicate(snaps.iterator(), 7)
     
     let dates = snapshotsAsDates(copies[1])
     let openings = snapshotsAsOpenings(copies[2])

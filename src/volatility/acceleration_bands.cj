@@ -18,13 +18,13 @@ public class AccelerationBands {
 
     // compute 计算加速度带指标。
     public func compute(high: Iterator<Float64>, low: Iterator<Float64>, closing: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
-        let highs = Duplicate(high, 3)
-        let lows = Duplicate(low, 3)
+        let highs = duplicate(high, 3)
+        let lows = duplicate(low, 3)
 
-        let ks = Duplicate(
-            Divide(
-                Subtract(highs[0], lows[0]),
-                Add(highs[1], lows[1])
+        let ks = duplicate(
+            divide(
+                subtract(highs[0], lows[0]),
+                add(highs[1], lows[1])
             ),
             2
         )
@@ -33,10 +33,10 @@ public class AccelerationBands {
         sma.period = period
 
         let upper = sma.compute(
-            Multiply(
+            multiply(
                 highs[2],
-                IncrementBy(
-                    MultiplyBy(ks[0], 4.0),
+                incrementBy(
+                    multiplyBy(ks[0], 4.0),
                     1.0
                 )
             )
@@ -45,10 +45,10 @@ public class AccelerationBands {
         let middle = sma.compute(closing)
 
         let lower = sma.compute(
-            Multiply(
+            multiply(
                 lows[2],
-                IncrementBy(
-                    MultiplyBy(ks[1], -4.0),
+                incrementBy(
+                    multiplyBy(ks[1], -4.0),
                     1.0
                 )
             )

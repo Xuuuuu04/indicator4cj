@@ -23,13 +23,13 @@ public class Hma {
     }
 
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        let vals = Duplicate(values, 2)
+        let vals = duplicate(values, 2)
 
         let w1 = _wma1.compute(vals[0])
         let w2 = _wma2.compute(vals[1])
 
-        let combined = Subtract(
-            MultiplyBy(w1, 2.0),
+        let combined = subtract(
+            multiplyBy(w1, 2.0),
             w2
         )
 

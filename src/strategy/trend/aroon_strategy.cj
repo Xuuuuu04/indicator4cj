@@ -19,34 +19,34 @@ public class AroonStrategy <: Strategy {
     public func name(): String { return "Aroon Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 2)
+        let snaps = duplicate(c, 2)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
 
         let (ups, downs) = Indicator.compute(highs, lows)
-        let actions = Operate(ups, downs, { up: Float64, down: Float64 =>
+        let actions = operate(ups, downs, { up: Float64, down: Float64 =>
             if (up > down) { return Action.Buy }
             if (down > up) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.period - 1, Action.Hold)
+        return shift(actions, Indicator.period - 1, Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 5)
+        let snaps = duplicate(c, 5)
         let dates = snapshotsAsDates(snaps[0])
         let highs = snapshotsAsHighs(snaps[1])
         let lows = snapshotsAsLows(snaps[2])
         let closings = snapshotsAsClosings(snaps[3])
 
         var (ups, downs) = Indicator.compute(highs, lows)
-        ups = Shift(ups, Indicator.period - 1, 0.0)
-        downs = Shift(downs, Indicator.period - 1, 0.0)
+        ups = shift(ups, Indicator.period - 1, 0.0)
+        downs = shift(downs, Indicator.period - 1, 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

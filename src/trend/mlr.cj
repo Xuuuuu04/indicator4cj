@@ -15,13 +15,13 @@ public class Mlr {
 // compute 计算线性回归预测值。
     public func compute(x: Iterator<Float64>, y: Iterator<Float64>): Iterator<Float64> {
         // 需要两份 x：一份给 Mls 计算斜率截距，一份用于生成预测值
-        let xCopies = Duplicate(x, 2)
+        let xCopies = duplicate(x, 2)
         let (mIter, bIter) = MlsIndicator.compute(xCopies[0], y)
         
-        let xShifted = Skip(xCopies[1], MlsIndicator.idlePeriod())
+        let xShifted = skip(xCopies[1], MlsIndicator.idlePeriod())
         
-        let mx = Operate(mIter, xShifted, { a: Float64, b: Float64 => a * b })
-        return Add(mx, bIter)
+        let mx = operate(mIter, xShifted, { a: Float64, b: Float64 => a * b })
+        return add(mx, bIter)
     }
 
 // idlePeriod 返回空闲周期数。

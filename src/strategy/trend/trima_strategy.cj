@@ -31,36 +31,36 @@ public class TrimaStrategy <: Strategy {
     public func name(): String { return "TRIMA Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closings = Duplicate(snapshotsAsClosings(c), 2)
+        let closings = duplicate(snapshotsAsClosings(c), 2)
         var shorts = Short.compute(closings[0])
         let longs = Long.compute(closings[1])
 
-        shorts = Skip(shorts, Long.idlePeriod() - Short.idlePeriod())
+        shorts = skip(shorts, Long.idlePeriod() - Short.idlePeriod())
 
-        let actions = Operate(shorts, longs, { s: Float64, l: Float64 =>
+        let actions = operate(shorts, longs, { s: Float64, l: Float64 =>
             if (s > l) { return Action.Buy }
             if (l > s) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Long.idlePeriod(), Action.Hold)
+        return shift(actions, Long.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 3)
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
         var shorts = Short.compute(closings[0])
         var longs = Long.compute(closings[1])
 
-        shorts = Skip(shorts, Long.idlePeriod() - Short.idlePeriod())
-        shorts = Shift(shorts, Long.idlePeriod(), 0.0)
-        longs = Shift(longs, Long.idlePeriod(), 0.0)
+        shorts = skip(shorts, Long.idlePeriod() - Short.idlePeriod())
+        shorts = shift(shorts, Long.idlePeriod(), 0.0)
+        longs = shift(longs, Long.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -74,7 +74,7 @@ public class TrimaStrategy <: Strategy {
     }
 }
 
-public func NewTrimaStrategyWith(shortPeriod: Int64, longPeriod: Int64): TrimaStrategy {
+public func newTrimaStrategyWith(shortPeriod: Int64, longPeriod: Int64): TrimaStrategy {
     return TrimaStrategy(shortPeriod, longPeriod)
 }
 

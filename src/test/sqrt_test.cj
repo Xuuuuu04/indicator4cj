@@ -15,10 +15,10 @@ class SqrtTest {
 
     @TestCase
     public func sqrt_basic() {
-        let input = SliceToChan(make([9,81,16,100]))
-        let expected = SliceToChan(make([3,9,4,10]))
-        let actual = Sqrt(input)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([9,81,16,100]))
+        let expected = sliceToChan(make([3,9,4,10]))
+        let actual = sqrt(input)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

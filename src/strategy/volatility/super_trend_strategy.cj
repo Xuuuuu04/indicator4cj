@@ -25,36 +25,36 @@ public class SuperTrendStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(snapshots, 3)
+        let snaps = duplicate(snapshots, 3)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[2]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[2]), 2)
 
         let superTrends = Indicator.compute(highs, lows, closingsDup[0])
-        closingsDup[1] = Skip(closingsDup[1], Indicator.idlePeriod())
+        closingsDup[1] = skip(closingsDup[1], Indicator.idlePeriod())
 
-        let actions = Operate(superTrends, closingsDup[1], { st: Float64, close: Float64 =>
+        let actions = operate(superTrends, closingsDup[1], { st: Float64, close: Float64 =>
             if (st < close) { return Action.Buy }
             if (st > close) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 5)
+        let snaps = duplicate(c, 5)
         let dates = snapshotsAsDates(snaps[0])
         let highs = snapshotsAsHighs(snaps[1])
         let lows = snapshotsAsLows(snaps[2])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[3]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
         var superTrends = Indicator.compute(highs, lows, closingsDup[0])
-        superTrends = Shift(superTrends, Indicator.idlePeriod(), 0.0)
+        superTrends = shift(superTrends, Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -66,7 +66,7 @@ public class SuperTrendStrategy <: Strategy {
     }
 }
 
-public func NewSuperTrendStrategyWith(period: Int64, multiplier: Float64): SuperTrendStrategy {
+public func newSuperTrendStrategyWith(period: Int64, multiplier: Float64): SuperTrendStrategy {
     return SuperTrendStrategy(period, multiplier)
 }
 

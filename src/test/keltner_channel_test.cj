@@ -24,27 +24,27 @@ public class KeltnerRow {
 @Test
 public func keltner_channel_basic() {
     let input = Csv<KeltnerRow>().readFromFile("src/test/testdata/volatility/keltner_channel.csv")
-    let inputs = Duplicate(input, 6)
-    let highs = Map(inputs[0], { d: KeltnerRow => d.high })
-    let lows = Map(inputs[1], { d: KeltnerRow => d.low })
-    let closings = Map(inputs[2], { d: KeltnerRow => d.close })
-    let expUpper = Map(inputs[3], { d: KeltnerRow => d.upper })
-    let expMiddle = Map(inputs[4], { d: KeltnerRow => d.middle })
-    let expLower = Map(inputs[5], { d: KeltnerRow => d.lower })
+    let inputs = duplicate(input, 6)
+    let highs = map(inputs[0], { d: KeltnerRow => d.high })
+    let lows = map(inputs[1], { d: KeltnerRow => d.low })
+    let closings = map(inputs[2], { d: KeltnerRow => d.close })
+    let expUpper = map(inputs[3], { d: KeltnerRow => d.upper })
+    let expMiddle = map(inputs[4], { d: KeltnerRow => d.middle })
+    let expLower = map(inputs[5], { d: KeltnerRow => d.lower })
 
     let kc = KeltnerChannel()
     var (actUpper, actMiddle, actLower) = kc.compute(highs, lows, closings)
-    actUpper = RoundDigits(actUpper, 2)
-    actMiddle = RoundDigits(actMiddle, 2)
-    actLower = RoundDigits(actLower, 2)
+    actUpper = roundDigits(actUpper, 2)
+    actMiddle = roundDigits(actMiddle, 2)
+    actLower = roundDigits(actLower, 2)
 
-    let skip = kc.idlePeriod()
-    let eUpper = Skip(expUpper, skip)
-    let eMiddle = Skip(expMiddle, skip)
-    let eLower = Skip(expLower, skip)
+    let skipCount = kc.idlePeriod()
+    let eUpper = skip(expUpper, skipCount)
+    let eMiddle = skip(expMiddle, skipCount)
+    let eLower = skip(expLower, skipCount)
 
-    match (CheckEquals(actUpper, eUpper)) { case Some(err) => fail("upper " + err) case None => () }
-    match (CheckEquals(actMiddle, eMiddle)) { case Some(err) => fail("middle " + err) case None => () }
-    match (CheckEquals(actLower, eLower)) { case Some(err) => fail("lower " + err) case None => () }
+    match (checkEquals(actUpper, eUpper)) { case Some(err) => fail("upper " + err) case None => () }
+    match (checkEquals(actMiddle, eMiddle)) { case Some(err) => fail("middle " + err) case None => () }
+    match (checkEquals(actLower, eLower)) { case Some(err) => fail("lower " + err) case None => () }
 }
 

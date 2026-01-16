@@ -10,16 +10,16 @@ class FiTest {
     @TestCase
     public func fi_basic() {
         let input = Csv<FiRow>().readFromFile("src/test/testdata/volume/fi.csv")
-        let inputs = Duplicate(input, 3)
-        let closes = Map(inputs[0], { m => m.close })
-        let volumes = Map(inputs[1], { m => Float64(m.volume) })
-        var expected = Map(inputs[2], { m => m.Fi })
+        let inputs = duplicate(input, 3)
+        let closes = map(inputs[0], { m => m.close })
+        let volumes = map(inputs[1], { m => Float64(m.volume) })
+        var expected = map(inputs[2], { m => m.Fi })
 
         let fi = Fi()
-        let actual = RoundDigits(fi.compute(closes, volumes), 2)
-        expected = Skip(expected, fi.idlePeriod())
+        let actual = roundDigits(fi.compute(closes, volumes), 2)
+        expected = skip(expected, fi.idlePeriod())
 
-        match (CheckEquals(actual, expected)) {
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

@@ -4,11 +4,11 @@ import std.core.*
 import std.collection.*
 import std.math.*
 
-// CheckEquals：比较两个迭代器元素是否相等；长度不一致或元素不同返回错误描述。
-public func CheckEquals<T>(actual: Iterator<T>, expected: Iterator<T>): Option<String> where T <: ToString {
+// checkEquals：比较两个迭代器元素是否相等；长度不一致或元素不同返回错误描述。
+public func checkEquals<T>(actual: Iterator<T>, expected: Iterator<T>): Option<String> where T <: ToString {
     // 先物化，便于给出长度差异与精确定位。
-    let actualList = ChanToSlice(actual)
-    let expectedList = ChanToSlice(expected)
+    let actualList = chanToSlice(actual)
+    let expectedList = chanToSlice(expected)
 
     if (actualList.size != expectedList.size) {
         return Some("length actual ${actualList.size} expected ${expectedList.size}")
@@ -26,10 +26,10 @@ public func CheckEquals<T>(actual: Iterator<T>, expected: Iterator<T>): Option<S
     return None
 }
 
-// CheckFloatEquals: Float64 特化版本，使用 Epsilon 比较，解决 -0.0 vs 0.0 问题。
-public func CheckFloatEquals(actual: Iterator<Float64>, expected: Iterator<Float64>): Option<String> {
-    let actualList = ChanToSlice(actual)
-    let expectedList = ChanToSlice(expected)
+// checkFloatEquals: Float64 特化版本，使用 Epsilon 比较，解决 -0.0 vs 0.0 问题。
+public func checkFloatEquals(actual: Iterator<Float64>, expected: Iterator<Float64>): Option<String> {
+    let actualList = chanToSlice(actual)
+    let expectedList = chanToSlice(expected)
 
     if (actualList.size != expectedList.size) {
         return Some("length actual ${actualList.size} expected ${expectedList.size}")
@@ -50,6 +50,6 @@ public func CheckFloatEquals(actual: Iterator<Float64>, expected: Iterator<Float
 }
 
 // 仅一个参数时视为“非成对”错误（与 Go 版行为对齐）。
-public func CheckEquals<T>(_: Iterator<T>): Option<String> {
+public func checkEquals<T>(_: Iterator<T>): Option<String> {
     return Some("not pairs")
 }

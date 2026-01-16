@@ -13,7 +13,7 @@ class SlicesReverseTest {
         let expected = ArrayList<Int64>([4, 3, 2, 1])
         let actual = ArrayList<Int64>()
 
-        SlicesReverse(input, 0, { n =>
+        slicesReverse(input, 0, { n =>
             actual.add(n)
             return true
         })
@@ -30,7 +30,7 @@ class SlicesReverseTest {
         let expected = ArrayList<Int64>([2, 1, 4, 3])
         let actual = ArrayList<Int64>()
 
-        SlicesReverse(input, 2, { n =>
+        slicesReverse(input, 2, { n =>
             actual.add(n)
             return true
         })

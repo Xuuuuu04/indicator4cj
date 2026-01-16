@@ -12,7 +12,7 @@ public class Mfv {
 
     // compute 计算资金流量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
-        return Multiply(
+        return multiply(
             _mfm.compute(highs, lows, closings),
             volumes
         )

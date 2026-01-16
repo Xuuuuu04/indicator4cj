@@ -27,7 +27,7 @@ public class AndStrategy <: Strategy {
         let sources = actionSources(strategies, snapshots)
         let andCount = strategies.size
         while (true) {
-            let (buy, _, sell, ok) = CountActions(sources)
+            let (buy, _, sell, ok) = countActions(sources)
             if (!ok) { break }
             if (sell == andCount) {
                 result.add(Action.Sell)
@@ -41,12 +41,12 @@ public class AndStrategy <: Strategy {
     }
 
     public func report(snapshots: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(snapshots, 3)
+        let snaps = duplicate(snapshots, 3)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -57,11 +57,11 @@ public class AndStrategy <: Strategy {
     }
 }
 
-public func NewAndStrategy(name: String): AndStrategy {
+public func newAndStrategy(name: String): AndStrategy {
     return AndStrategy(name)
 }
 
-public func AllAndStrategies(strategies: ArrayList<Strategy>): ArrayList<Strategy> {
+public func allAndStrategies(strategies: ArrayList<Strategy>): ArrayList<Strategy> {
     let res = ArrayList<Strategy>()
     var i: Int64 = 0
     while (i < strategies.size) {

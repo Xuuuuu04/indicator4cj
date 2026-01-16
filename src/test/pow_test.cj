@@ -15,10 +15,10 @@ class PowTest {
 
     @TestCase
     public func pow_square() {
-        let input = SliceToChan(make([2,3,5,10]))
-        let expected = SliceToChan(make([4,9,25,100]))
-        let actual = Pow(input, 2.0)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([2,3,5,10]))
+        let expected = sliceToChan(make([4,9,25,100]))
+        let actual = pow(input, 2.0)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

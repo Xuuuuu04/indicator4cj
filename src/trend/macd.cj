@@ -30,13 +30,13 @@ public class Macd {
 
 // compute 计算MACD指标。
     public func compute(c: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>) {
-        let snaps = Duplicate(c, 2)
+        let snaps = duplicate(c, 2)
         var ema1 = this.ema1.compute(snaps[0])
-        ema1 = Skip(ema1, this.ema2.period - this.ema1.period)
+        ema1 = skip(ema1, this.ema2.period - this.ema1.period)
         let ema2 = this.ema2.compute(snaps[1])
 
-        let macds = Duplicate(Subtract(ema1, ema2), 2)
-        macds[0] = Skip(macds[0], this.ema3.period - 1)
+        let macds = duplicate(subtract(ema1, ema2), 2)
+        macds[0] = skip(macds[0], this.ema3.period - 1)
         let signal = this.ema3.compute(macds[1])
         return (macds[0], signal)
     }
@@ -47,10 +47,10 @@ public class Macd {
     }
 }
 
-public func NewMacd(): Macd {
+public func newMacd(): Macd {
     return Macd()
 }
 
-public func NewMacdWithPeriod(period1: Int64, period2: Int64, period3: Int64): Macd {
+public func newMacdWithPeriod(period1: Int64, period2: Int64, period3: Int64): Macd {
     return Macd(period1, period2, period3)
 }

@@ -9,29 +9,29 @@ import indicator4cj.helper.*
 class OperateTest {
     @TestCase
     public func operate_add() {
-        let ac = SliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
-        let bc = SliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
-        let expected = SliceToChan(makeList([2,4,6,8,10,12,14,16,18,20]))
-        let actual = Operate(ac, bc, { a, b => a + b })
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let ac = sliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
+        let bc = sliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
+        let expected = sliceToChan(makeList([2,4,6,8,10,12,14,16,18,20]))
+        let actual = operate(ac, bc, { a, b => a + b })
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 
     @TestCase
     public func operate_first_ends() {
-        let ac = SliceToChan(makeList([1,2,3,4,5,6,7,8]))
-        let bc = SliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
-        let expected = SliceToChan(makeList([2,4,6,8,10,12,14,16]))
-        let actual = Operate(ac, bc, { a, b => a + b })
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let ac = sliceToChan(makeList([1,2,3,4,5,6,7,8]))
+        let bc = sliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
+        let expected = sliceToChan(makeList([2,4,6,8,10,12,14,16]))
+        let actual = operate(ac, bc, { a, b => a + b })
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 
     @TestCase
     public func operate_second_ends() {
-        let ac = SliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
-        let bc = SliceToChan(makeList([1,2,3,4,5,6,7,8]))
-        let expected = SliceToChan(makeList([2,4,6,8,10,12,14,16]))
-        let actual = Operate(ac, bc, { a, b => a + b })
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let ac = sliceToChan(makeList([1,2,3,4,5,6,7,8,9,10]))
+        let bc = sliceToChan(makeList([1,2,3,4,5,6,7,8]))
+        let expected = sliceToChan(makeList([2,4,6,8,10,12,14,16]))
+        let actual = operate(ac, bc, { a, b => a + b })
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 
     private func makeList(arr: Array<Int64>): ArrayList<Int64> {

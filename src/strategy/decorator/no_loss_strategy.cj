@@ -21,20 +21,20 @@ public class NoLossStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(snapshots, 2)
+        let snaps = duplicate(snapshots, 2)
         let innerActions = InnerStrategy.compute(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
         return NoLossIterator(innerActions, closings)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -45,7 +45,7 @@ public class NoLossStrategy <: Strategy {
     }
 }
 
-public func NewNoLossStrategy(innerStrategy: Strategy): NoLossStrategy {
+public func newNoLossStrategy(innerStrategy: Strategy): NoLossStrategy {
     return NoLossStrategy(innerStrategy)
 }
 

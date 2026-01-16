@@ -13,8 +13,8 @@ class CountTest {
         other.add(1); other.add(1); other.add(1); other.add(1)
         let expected = ArrayList<Int64>()
         expected.add(1); expected.add(2); expected.add(3); expected.add(4)
-        let actual = Count(1, SliceToChan(other))
-        @Expect(CheckEquals(actual, SliceToChan(expected)) == None, true)
+        let actual = count(1, sliceToChan(other))
+        @Expect(checkEquals(actual, sliceToChan(expected)) == None, true)
     }
 }
 

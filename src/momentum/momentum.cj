@@ -18,7 +18,7 @@ public class Momentum {
 
     // compute 计算动量指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        return Change(values, period)
+        return change(values, period)
     }
 
     // idlePeriod 返回空闲周期数。

@@ -8,9 +8,9 @@ import indicator4cj.trend.*
 public class AwesomeOscillator {
     // compute 计算绝妙振荡器指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>): Iterator<Float64> {
-        let medianDup = Duplicate(
-            DivideBy(
-                Add(highs, lows),
+        let medianDup = duplicate(
+            divideBy(
+                add(highs, lows),
                 2.0
             ),
             2
@@ -22,8 +22,8 @@ public class AwesomeOscillator {
         var fast = s5.compute(medianDup[0])
         var slow = s34.compute(medianDup[1])
         // 对齐：跳过 fast 前 (34-5)=29 个值，使两条均从 index 33 开始。
-        fast = Skip(fast, 29)
-        return Subtract(fast, slow)
+        fast = skip(fast, 29)
+        return subtract(fast, slow)
     }
 
     // idlePeriod 返回空闲周期数。

@@ -20,34 +20,34 @@ public class CciStrategy <: Strategy {
     public func name(): String { return "CCI Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
         let closings = snapshotsAsClosings(snaps[2])
 
         let ccis = Indicator.compute(highs, lows, closings)
 
-        let actions = h.Map(ccis, { v: Float64 =>
+        let actions = h.map(ccis, { v: Float64 =>
             if (v >= 100.0) { return Action.Buy }
             if (v <= -100.0) { return Action.Sell }
             return Action.Hold
         })
 
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 5)
+        let snaps = duplicate(c, 5)
         let dates = snapshotsAsDates(snaps[0])
         let highs = snapshotsAsHighs(snaps[1])
         let lows = snapshotsAsLows(snaps[2])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[3]), 2)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
-        let ccis = Shift(Indicator.compute(highs, lows, closingsDup[1]), Indicator.idlePeriod(), 0.0)
+        let ccis = shift(Indicator.compute(highs, lows, closingsDup[1]), Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

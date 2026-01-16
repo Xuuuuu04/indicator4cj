@@ -20,17 +20,17 @@ public class SuperTrendRow {
 @Test
 public func super_trend_basic() {
     let input = Csv<SuperTrendRow>().readFromFile("src/test/testdata/volatility/super_trend.csv")
-    let inputs = Duplicate(input, 4)
-    let highs = Map(inputs[0], { d: SuperTrendRow => d.high })
-    let lows = Map(inputs[1], { d: SuperTrendRow => d.low })
-    let closings = Map(inputs[2], { d: SuperTrendRow => d.close })
-    var expected = Map(inputs[3], { d: SuperTrendRow => d.SuperTrend })
+    let inputs = duplicate(input, 4)
+    let highs = map(inputs[0], { d: SuperTrendRow => d.high })
+    let lows = map(inputs[1], { d: SuperTrendRow => d.low })
+    let closings = map(inputs[2], { d: SuperTrendRow => d.close })
+    var expected = map(inputs[3], { d: SuperTrendRow => d.SuperTrend })
 
     let st = SuperTrend()
-    var actual = RoundDigits(st.compute(highs, lows, closings), 2)
-    expected = Skip(expected, st.idlePeriod())
+    var actual = roundDigits(st.compute(highs, lows, closings), 2)
+    expected = skip(expected, st.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

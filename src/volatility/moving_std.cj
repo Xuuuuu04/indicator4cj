@@ -42,18 +42,18 @@ private class MovingStdIterator <: Iterator<Float64> {
     public func next(): Option<Float64> {
         match (_source.next()) {
             case Some(v) =>
-                let dropped = _ring.Put(v)
+                let dropped = _ring.put(v)
                 match (dropped) {
                     case Some(old) => _sum = _sum - old + v
                     case None => _sum = _sum + v
                 }
 
-                if (_ring.IsFull()) {
+                if (_ring.isFull()) {
                     let sma = _sum / Float64(_period)
                     var sum2 = 0.0
                     var i: Int64 = 0
                     while (i < _period) {
-                        let diff = _ring.At(i) - sma
+                        let diff = _ring.at(i) - sma
                         sum2 += pow(diff, 2.0)
                         i = i + 1
                     }

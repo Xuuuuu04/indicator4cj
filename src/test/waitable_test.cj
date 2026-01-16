@@ -10,13 +10,13 @@ class WaitableTest {
     @TestCase
     public func waitable_completes() {
         let wg = WaitGroup()
-        let input = SliceToChan(ArrayList<Int64>([1, 2, 3]))
+        let input = sliceToChan(ArrayList<Int64>([1, 2, 3]))
 
-        let actual = Waitable(wg, input)
+        let actual = waitable(wg, input)
         wg.wait()
 
-        let expected = SliceToChan(ArrayList<Int64>([1, 2, 3]))
-        match (CheckEquals(actual, expected)) {
+        let expected = sliceToChan(ArrayList<Int64>([1, 2, 3]))
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

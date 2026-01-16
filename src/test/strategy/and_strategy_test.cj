@@ -11,14 +11,14 @@ import indicator4cj.strategy.*
 public func and_strategy_basic() {
     let snapshots = Csv<Snapshot>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let results = Csv<Result>().readFromFile("src/test/testdata/strategy/and.csv")
-    let expected = h.Map(results, { r: Result => ActionFromInt(r.action) })
+    let expected = h.map(results, { r: Result => actionFromInt(r.action) })
 
-    let s = NewAndStrategy("And Strategy")
+    let s = newAndStrategy("And Strategy")
     s.strategies.add(BuyAndHoldStrategy())
     s.strategies.add(BuyAndHoldStrategy())
 
     let actual = s.compute(snapshots)
-    match (CheckEquals<Action>(actual, expected)) {
+    match (checkEquals<Action>(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }
@@ -28,9 +28,9 @@ public func and_strategy_basic() {
 public func all_and_strategies_cartesian() {
     let strategies = ArrayList<Strategy>([
         BuyAndHoldStrategy(),
-        NewMajorityStrategyWith("", ArrayList<Strategy>([BuyAndHoldStrategy()]))
+        newMajorityStrategyWith("", ArrayList<Strategy>([BuyAndHoldStrategy()]))
     ])
-    let all = AllAndStrategies(strategies)
+    let all = allAndStrategies(strategies)
     @Expect(all.size, strategies.size * strategies.size - strategies.size)
 }
 

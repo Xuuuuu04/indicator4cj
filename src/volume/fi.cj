@@ -19,8 +19,8 @@ public class Fi {
     // compute 计算力量指数指标。
     public func compute(closings: Iterator<Float64>, volumes: Iterator<Float64>): Iterator<Float64> {
         return _ema.compute(
-            Multiply(
-                Change(closings, 1),
+            multiply(
+                change(closings, 1),
                 volumes
             )
         )

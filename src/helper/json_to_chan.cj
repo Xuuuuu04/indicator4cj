@@ -4,12 +4,12 @@ import std.collection.*
 import std.io.*
 import std.core.*
 import std.convert.*
-// JSONToChan：从 Reader 读取 JSON 数组，解析为 Int64。
-public func JSONToChan(reader: InputStream): Iterator<Int64> {
-    return JSONToChanWithLogger(reader, None)
+// jSONToChan：从 Reader 读取 JSON 数组，解析为 Int64。
+public func jsonToChan(reader: InputStream): Iterator<Int64> {
+    return jsonToChanWithLogger(reader, None)
 }
 
-public func JSONToChanWithLogger(reader: InputStream, _: Option<String>): Iterator<Int64> {
+public func jsonToChanWithLogger(reader: InputStream, _: Option<String>): Iterator<Int64> {
     return JSONIterator(reader)
 }
 

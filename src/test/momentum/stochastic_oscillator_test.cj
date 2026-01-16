@@ -22,23 +22,23 @@ public class StochRow {
 @Test
 public func stochastic_oscillator_basic() {
     let input = Csv<StochRow>().readFromFile("src/test/testdata/momentum/stochastic_oscillator.csv")
-    let inputs = Duplicate(input, 5)
-    let highs = Map(inputs[0], { d: StochRow => d.high })
-    let lows = Map(inputs[1], { d: StochRow => d.low })
-    let closes = Map(inputs[2], { d: StochRow => d.close })
-    var expK = Map(inputs[3], { d: StochRow => d.K })
-    var expD = Map(inputs[4], { d: StochRow => d.D })
+    let inputs = duplicate(input, 5)
+    let highs = map(inputs[0], { d: StochRow => d.high })
+    let lows = map(inputs[1], { d: StochRow => d.low })
+    let closes = map(inputs[2], { d: StochRow => d.close })
+    var expK = map(inputs[3], { d: StochRow => d.K })
+    var expD = map(inputs[4], { d: StochRow => d.D })
 
     let so = StochasticOscillator()
     var (actK, actD) = so.compute(highs, lows, closes)
-    actK = RoundDigits(actK, 2)
-    actD = RoundDigits(actD, 2)
+    actK = roundDigits(actK, 2)
+    actD = roundDigits(actD, 2)
 
-    let skip = so.idlePeriod()
-    expK = Skip(expK, skip)
-    expD = Skip(expD, skip)
+    let skipCount = so.idlePeriod()
+    expK = skip(expK, skipCount)
+    expD = skip(expD, skipCount)
 
-    match (CheckEquals(actK, expK)) { case Some(err) => fail("K " + err) case None => () }
-    match (CheckEquals(actD, expD)) { case Some(err) => fail("D " + err) case None => () }
+    match (checkEquals(actK, expK)) { case Some(err) => fail("K " + err) case None => () }
+    match (checkEquals(actD, expD)) { case Some(err) => fail("D " + err) case None => () }
 }
 

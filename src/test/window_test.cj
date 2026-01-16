@@ -11,7 +11,7 @@ class WindowTest {
     public func window_sum() {
         let series = ArrayList<Float64>()
         series.add(1.0); series.add(3.0); series.add(2.0); series.add(5.0)
-        let actual = Window(SliceToChan(series), 2, { buf, _ =>
+        let actual = window(sliceToChan(series), 2, { buf, _ =>
             var s = 0.0
             for (v in buf) { s += v }
             return s
@@ -21,7 +21,7 @@ class WindowTest {
         expected.add(4.0) // 1+3
         expected.add(5.0) // 3+2
         expected.add(7.0) // 2+5
-        @Expect(CheckEquals(actual, SliceToChan(expected)) == None, true)
+        @Expect(checkEquals(actual, sliceToChan(expected)) == None, true)
     }
 }
 

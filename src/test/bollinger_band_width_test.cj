@@ -16,17 +16,17 @@ public class BollingerBandWidthRow {
 @Test
 public func bollinger_band_width_basic() {
     let input = Csv<BollingerBandWidthRow>().readFromFile("src/test/testdata/volatility/bollinger_band_width.csv")
-    let inputs = Duplicate(input, 2)
-    let closings = Map(inputs[0], { d: BollingerBandWidthRow => d.close })
-    let expected = Map(inputs[1], { d: BollingerBandWidthRow => d.Width })
+    let inputs = duplicate(input, 2)
+    let closings = map(inputs[0], { d: BollingerBandWidthRow => d.close })
+    let expected = map(inputs[1], { d: BollingerBandWidthRow => d.Width })
 
     let bbw = BollingerBandWidth()
     var actual = bbw.compute(closings)
-    actual = RoundDigits(actual, 2)
+    actual = roundDigits(actual, 2)
 
-    let exp = Skip(expected, bbw.idlePeriod())
+    let exp = skip(expected, bbw.idlePeriod())
 
-    match (CheckEquals(actual, exp)) {
+    match (checkEquals(actual, exp)) {
         case Some(err) => fail(err)
         case None => ()
     }

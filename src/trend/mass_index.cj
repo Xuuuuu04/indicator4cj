@@ -24,17 +24,17 @@ public class MassIndex {
 
     // compute 计算质量指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>): Iterator<Float64> {
-        let ema1 = Duplicate(
+        let ema1 = duplicate(
             this.ema1.compute(
-                Subtract(highs, lows)
+                subtract(highs, lows)
             ),
             2
         )
 
         let ema2 = this.ema2.compute(ema1[0])
-        ema1[1] = Skip(ema1[1], this.ema2.period - 1)
+        ema1[1] = skip(ema1[1], this.ema2.period - 1)
 
-        let ratio = Divide(ema1[1], ema2)
+        let ratio = divide(ema1[1], ema2)
         let mi = this.movingSumInd.compute(ratio)
         return mi
     }

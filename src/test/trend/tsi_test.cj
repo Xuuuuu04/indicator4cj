@@ -15,15 +15,15 @@ class TsiData {
 @Test
 public func test_tsi_basic() {
     let input = Csv<TsiData>().readFromFile("src/test/testdata/trend/tsi.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: TsiData => d.close })
-    let expected = h.Map(inputs[1], { d: TsiData => d.Tsi })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { d: TsiData => d.close })
+    let expected = h.map(inputs[1], { d: TsiData => d.Tsi })
 
     let tsi = Tsi()
-    let actual = h.RoundDigits(tsi.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, tsi.idlePeriod())
+    let actual = h.roundDigits(tsi.compute(closing), 2)
+    let expectedSkipped = h.skip(expected, tsi.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)
         case None => ()
     }

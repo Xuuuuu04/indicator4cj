@@ -25,10 +25,10 @@ public class Envelope {
 
 // compute 计算指标。
     public func compute(closings: Iterator<Float64>): (Iterator<Float64>, Iterator<Float64>, Iterator<Float64>) {
-        let middleSplice = Duplicate(maIndicator.compute(closings), 3)
+        let middleSplice = duplicate(maIndicator.compute(closings), 3)
 
-        let upper = MultiplyBy(middleSplice[0], 1.0 + (percentage / 100.0))
-        let lower = MultiplyBy(middleSplice[2], 1.0 - (percentage / 100.0))
+        let upper = multiplyBy(middleSplice[0], 1.0 + (percentage / 100.0))
+        let lower = multiplyBy(middleSplice[2], 1.0 - (percentage / 100.0))
 
         return (upper, middleSplice[1], lower)
     }

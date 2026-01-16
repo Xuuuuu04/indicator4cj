@@ -77,7 +77,7 @@ public struct TiingoEndOfDay {
         Split = 0.0
     }
 
-    public func ToSnapshot(): Snapshot {
+    public func toSnapshot(): Snapshot {
         // 与 Go 版一致：使用调整后的价格与成交量。
         let s = Snapshot()
         s.date = Date

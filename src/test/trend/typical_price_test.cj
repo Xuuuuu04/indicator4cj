@@ -17,16 +17,16 @@ class TypicalPriceData {
 @Test
 public func test_typical_price_basic() {
     let input = Csv<TypicalPriceData>().readFromFile("src/test/testdata/trend/typical_price.csv")
-    let inputs = Duplicate(input, 4)
-    let high = h.Map(inputs[0], { d: TypicalPriceData => d.high })
-    let low = h.Map(inputs[1], { d: TypicalPriceData => d.low })
-    let closing = h.Map(inputs[2], { d: TypicalPriceData => d.close })
-    let expected = h.Map(inputs[3], { d: TypicalPriceData => d.TypicalPrice })
+    let inputs = duplicate(input, 4)
+    let high = h.map(inputs[0], { d: TypicalPriceData => d.high })
+    let low = h.map(inputs[1], { d: TypicalPriceData => d.low })
+    let closing = h.map(inputs[2], { d: TypicalPriceData => d.close })
+    let expected = h.map(inputs[3], { d: TypicalPriceData => d.TypicalPrice })
 
     let typicalPrice = TypicalPrice()
-    let actual = h.RoundDigits(typicalPrice.compute(high, low, closing), 2)
+    let actual = h.roundDigits(typicalPrice.compute(high, low, closing), 2)
 
-    match (h.CheckFloatEquals(actual, expected)) {
+    match (h.checkFloatEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

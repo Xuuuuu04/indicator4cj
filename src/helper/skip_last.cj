@@ -2,8 +2,8 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// SkipLast：丢弃末尾 count 个元素。
-public func SkipLast<T>(iter: Iterator<T>, count: Int64): Iterator<T> {
+// skipLast：丢弃末尾 count 个元素。
+public func skipLast<T>(iter: Iterator<T>, count: Int64): Iterator<T> {
     return SkipLastIterator<T>(iter, count)
 }
 

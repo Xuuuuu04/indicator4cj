@@ -16,11 +16,11 @@ class ReportTest {
         let annos = ArrayList<String>([""]).iterator()
 
         // 使用工厂函数避免与 std.unittest.Report 冲突
-        let report = NewReport("Test Report", dates)
+        let report = newReport("Test Report", dates)
         report.addChart()
-        report.addColumn(NewNumericReportColumn("High", highs))
-        report.addColumn(NewNumericReportColumn("Low", lows))
-        report.addColumn(NewAnnotationReportColumn(annos), ArrayList<Int64>([0, 1]))
+        report.addColumn(newNumericReportColumn("High", highs))
+        report.addColumn(newNumericReportColumn("Low", lows))
+        report.addColumn(newAnnotationReportColumn(annos), ArrayList<Int64>([0, 1]))
 
         let path = "report.html"
         try {
@@ -28,13 +28,13 @@ class ReportTest {
         } catch (e: Exception) {
             @Fail(e.message)
         }
-        Remove(path)
+        remove(path)
     }
 
     @TestCase
     public func write_report_fail() {
         let dates = ArrayList<DateTime>([DateTime.now()]).iterator()
-        let report = NewReport("Test", dates)
+        let report = newReport("Test", dates)
         try {
             report.writeToFile("")
             @Fail("expected error")

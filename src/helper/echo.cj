@@ -2,9 +2,9 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// Echo：输出原序列后，重复末尾 last 个元素共 count 轮。
+// echo：输出原序列后，重复末尾 last 个元素共 count 轮。
 // 若 last<=0 或 count<=0，则直接返回原迭代器。
-public func Echo<T>(iter: Iterator<T>, last: Int64, count: Int64): Iterator<T> {
+public func echo<T>(iter: Iterator<T>, last: Int64, count: Int64): Iterator<T> {
     if (last <= 0 || count <= 0) {
         return iter
     }

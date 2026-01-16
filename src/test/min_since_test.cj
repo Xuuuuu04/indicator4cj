@@ -9,10 +9,10 @@ import indicator4cj.helper.*
 class MinSinceTest {
     @TestCase
     public func min_since_basic() {
-        let input = SliceToChan(ArrayList<Float64>([48.0, 50.0, 50.0, 50.0, 49.0, 49.0, 51.0]))
-        let expected = SliceToChan(ArrayList<Float64>([0.0, 1.0, 2.0, 2.0, 0.0, 1.0, 2.0]))
-        let actual = MinSince(input, 3)
-        match (CheckEquals(actual, expected)) {
+        let input = sliceToChan(ArrayList<Float64>([48.0, 50.0, 50.0, 50.0, 49.0, 49.0, 51.0]))
+        let expected = sliceToChan(ArrayList<Float64>([0.0, 1.0, 2.0, 2.0, 0.0, 1.0, 2.0]))
+        let actual = minSince(input, 3)
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }
@@ -20,10 +20,10 @@ class MinSinceTest {
 
     @TestCase
     public func min_since_at_end() {
-        let input = SliceToChan(ArrayList<Float64>([48.0, 50.0, 50.0, 50.0, 49.0, 49.0, 49.0]))
-        let expected = SliceToChan(ArrayList<Float64>([0.0, 1.0, 2.0, 2.0, 0.0, 1.0, 2.0]))
-        let actual = MinSince(input, 3)
-        match (CheckEquals(actual, expected)) {
+        let input = sliceToChan(ArrayList<Float64>([48.0, 50.0, 50.0, 50.0, 49.0, 49.0, 49.0]))
+        let expected = sliceToChan(ArrayList<Float64>([0.0, 1.0, 2.0, 2.0, 0.0, 1.0, 2.0]))
+        let actual = minSince(input, 3)
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }
@@ -31,10 +31,10 @@ class MinSinceTest {
 
     @TestCase
     public func min_since_from_start() {
-        let input = SliceToChan(ArrayList<Float64>([1.0, 1.0, 3.0]))
-        let expected = SliceToChan(ArrayList<Float64>([0.0, 1.0, 2.0]))
-        let actual = MinSince(input, 3)
-        match (CheckEquals(actual, expected)) {
+        let input = sliceToChan(ArrayList<Float64>([1.0, 1.0, 3.0]))
+        let expected = sliceToChan(ArrayList<Float64>([0.0, 1.0, 2.0]))
+        let actual = minSince(input, 3)
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

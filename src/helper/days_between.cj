@@ -1,6 +1,6 @@
 package indicator4cj.helper
 
-// SimpleDate：简化日期，仅年/月/日，用于 DaysBetween 计算。
+// simpleDate：简化日期，仅年/月/日，用于 DaysBetween 计算。
 public struct SimpleDate {
     // year
     public let year: Int64
@@ -16,8 +16,8 @@ public struct SimpleDate {
     }
 }
 
-// DaysBetween：计算两个日期之间的整天差（to - from）。
-public func DaysBetween(from: SimpleDate, to: SimpleDate): Int64 {
+// daysBetween：计算两个日期之间的整天差（to - from）。
+public func daysBetween(from: SimpleDate, to: SimpleDate): Int64 {
     return daysFromCivil(to) - daysFromCivil(from)
 }
 

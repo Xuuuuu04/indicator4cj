@@ -24,25 +24,25 @@ public class Cci {
         let sma1 = Sma(period)
         let sma2 = Sma(period)
 
-        let tps = Duplicate(tp.compute(highs, lows, closings), 3)
+        let tps = duplicate(tp.compute(highs, lows, closings), 3)
 
-        let mas = Duplicate(sma1.compute(tps[0]), 2)
+        let mas = duplicate(sma1.compute(tps[0]), 2)
 
-        tps[1] = Skip(tps[1], sma1.period - 1)
-        tps[2] = Skip(tps[2], sma1.period - 1)
+        tps[1] = skip(tps[1], sma1.period - 1)
+        tps[2] = skip(tps[2], sma1.period - 1)
 
         let md = sma2.compute(
-            Abs(
-                Subtract(tps[1], mas[0])
+            abs(
+                subtract(tps[1], mas[0])
             )
         )
 
-        mas[1] = Skip(mas[1], sma2.period - 1)
-        tps[2] = Skip(tps[2], sma2.period - 1)
+        mas[1] = skip(mas[1], sma2.period - 1)
+        tps[2] = skip(tps[2], sma2.period - 1)
 
-        let cci = Divide(
-            Subtract(tps[2], mas[1]),
-            MultiplyBy(md, 0.015)
+        let cci = divide(
+            subtract(tps[2], mas[1]),
+            multiplyBy(md, 0.015)
         )
 
         return cci

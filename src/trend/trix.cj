@@ -25,7 +25,7 @@ public class Trix {
         let ema3 = Ema(period)
 
         let emas = ema3.compute(ema2.compute(ema1.compute(c)))
-        let trix = ChangeRatio(emas, 1)
+        let trix = changeRatio(emas, 1)
         return trix
     }
 

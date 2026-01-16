@@ -1,7 +1,7 @@
 package indicator4cj.helper
 
-// Operate3：三元操作，任一耗尽即结束。
-public func Operate3<A, B, C, R>(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>, op: (A, B, C) -> R): Iterator<R> {
+// operate3：三元操作，任一耗尽即结束。
+public func operate3<A, B, C, R>(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>, op: (A, B, C) -> R): Iterator<R> {
     return Operate3Iterator<A, B, C, R>(a, b, c, op)
 }
 

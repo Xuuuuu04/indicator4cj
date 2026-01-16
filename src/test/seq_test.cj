@@ -15,7 +15,7 @@ class SeqTest {
         expectedArr.add(3.0)
         expectedArr.add(4.0)
         expectedArr.add(5.0)
-        @Expect(CheckEquals(actual, SliceToChan(expectedArr)) == None, true)
+        @Expect(checkEquals(actual, sliceToChan(expectedArr)) == None, true)
     }
 }
 

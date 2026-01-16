@@ -2,8 +2,8 @@ package indicator4cj.helper
 
 import std.collection.*
 
-// Change：当前值减去 before 步之前的值（长度为 n-before），与 Go 语义一致。
-public func Change(iter: Iterator<Float64>, before: Int64): Iterator<Float64> {
+// change：当前值减去 before 步之前的值（长度为 n-before），与 Go 语义一致。
+public func change(iter: Iterator<Float64>, before: Int64): Iterator<Float64> {
     return ChangeIterator(iter, before, { curr, prev => curr - prev })
 }
 

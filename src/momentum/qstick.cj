@@ -19,7 +19,7 @@ public class Qstick {
 
     // compute 计算QStick指标。
     public func compute(opens: Iterator<Float64>, closes: Iterator<Float64>): Iterator<Float64> {
-        let diff = Subtract(closes, opens)
+        let diff = subtract(closes, opens)
         let sma = Sma()
         sma.period = period
         return sma.compute(diff)

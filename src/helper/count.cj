@@ -1,7 +1,7 @@
 package indicator4cj.helper
 
-// Count：从 from 开始递增 1，直到 other 耗尽。
-public func Count<T>(from: Int64, other: Iterator<T>): Iterator<Int64> {
+// count：从 from 开始递增 1，直到 other 耗尽。
+public func count<T>(from: Int64, other: Iterator<T>): Iterator<Int64> {
     return CountIterator<T>(from, other)
 }
 

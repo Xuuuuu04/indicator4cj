@@ -18,17 +18,17 @@ public class AwesomeRow {
 @Test
 public func awesome_basic() {
     let input = Csv<AwesomeRow>().readFromFile("src/test/testdata/momentum/awesome_oscillator.csv")
-    let inputs = Duplicate(input, 3)
-    let highs = Map(inputs[0], { d: AwesomeRow => d.high })
-    let lows = Map(inputs[1], { d: AwesomeRow => d.low })
-    var expected = Map(inputs[2], { d: AwesomeRow => d.Awesome })
+    let inputs = duplicate(input, 3)
+    let highs = map(inputs[0], { d: AwesomeRow => d.high })
+    let lows = map(inputs[1], { d: AwesomeRow => d.low })
+    var expected = map(inputs[2], { d: AwesomeRow => d.Awesome })
 
     let ao = AwesomeOscillator()
     var actual = ao.compute(highs, lows)
-    actual = RoundDigits(actual, 2)
-    expected = Skip(expected, ao.idlePeriod())
+    actual = roundDigits(actual, 2)
+    expected = skip(expected, ao.idlePeriod())
 
-    match (CheckEquals(actual, expected)) {
+    match (checkEquals(actual, expected)) {
         case Some(err) => fail(err)
         case None => ()
     }

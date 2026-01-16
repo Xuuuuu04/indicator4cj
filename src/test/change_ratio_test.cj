@@ -26,8 +26,8 @@ class ChangeRatioTest {
         expected.add(2.0)
         expected.add(3.0)
 
-        let actual = ChangeRatio(SliceToChan(input), 2)
-        @Expect(CheckEquals(actual, SliceToChan(expected)) == None, true)
+        let actual = changeRatio(sliceToChan(input), 2)
+        @Expect(checkEquals(actual, sliceToChan(expected)) == None, true)
     }
 }
 

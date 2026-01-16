@@ -42,12 +42,12 @@ public class DataReport <: Report {
 
     public func write(assetName: String, currentStrategy: Strategy, snapshots: Iterator<Snapshot>, actions: Iterator<Action>, outcomes: Iterator<Float64>): Unit {
         // 耗尽 snapshots，避免资源泄漏。
-        Drain(snapshots)
+        drain(snapshots)
 
-        let actionsDup = Duplicate(actions, 2)
-        let lastOutcomeIter = Last(outcomes, 1)
-        let lastActionIter = Last(actionsDup[0], 1)
-        let transactionsList = ChanToSlice(actionsDup[1])
+        let actionsDup = duplicate(actions, 2)
+        let lastOutcomeIter = last(outcomes, 1)
+        let lastActionIter = last(actionsDup[0], 1)
+        let transactionsList = chanToSlice(actionsDup[1])
 
         match (lastOutcomeIter.next()) {
             case Some(outcome) =>

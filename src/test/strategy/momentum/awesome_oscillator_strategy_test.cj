@@ -52,7 +52,7 @@ public func awesome_oscillator_strategy_basic() {
 
     let expectedRows = Csv<AoStrategyRow>().readFromFile("src/test/testdata/strategy/momentum/awesome_oscillator.csv")
     let expectedList = ArrayList<Action>()
-    let expectedIter = h.Map(expectedRows, { r: AoStrategyRow => ActionFromInt(r.action) })
+    let expectedIter = h.map(expectedRows, { r: AoStrategyRow => actionFromInt(r.action) })
     while (true) {
         match (expectedIter.next()) {
             case Some(a) => expectedList.add(a)
@@ -74,7 +74,7 @@ public func awesome_oscillator_strategy_basic() {
         fail("size mismatch actual ${actualList.size} expected ${expectedList.size}")
     }
 
-    match (CheckEquals<Action>(actualList.iterator(), expectedList.iterator())) {
+    match (checkEquals<Action>(actualList.iterator(), expectedList.iterator())) {
         case Some(err) => fail(err)
         case None => ()
     }

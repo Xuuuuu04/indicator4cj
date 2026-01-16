@@ -13,9 +13,9 @@ class HeadTest {
         let expectedArr = ArrayList<Int64>()
         expectedArr.add(2)
         expectedArr.add(4)
-        let actual = Head(SliceToChan(toArrayList(input)), 2)
-        let expected = SliceToChan(expectedArr)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let actual = head(sliceToChan(toArrayList(input)), 2)
+        let expected = sliceToChan(expectedArr)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 
     private func toArrayList(arr: Array<Int64>): ArrayList<Int64> {

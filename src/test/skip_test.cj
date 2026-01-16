@@ -19,10 +19,10 @@ class SkipTest {
         expectedArr.add(6)
         expectedArr.add(8)
 
-        let actual = Skip(SliceToChan(inputArr), 2)
-        let expected = SliceToChan(expectedArr)
+        let actual = skip(sliceToChan(inputArr), 2)
+        let expected = sliceToChan(expectedArr)
 
-        @Expect(CheckEquals(actual, expected) == None, true)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

@@ -15,10 +15,10 @@ class RoundDigitsTest {
 
     @TestCase
     public func round_digits_basic() {
-        let input = SliceToChan(make([10.1234, 5.678, 6.78, 8.91011]))
-        let expected = SliceToChan(make([10.12, 5.68, 6.78, 8.91]))
-        let actual = RoundDigits(input, 2)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([10.1234, 5.678, 6.78, 8.91011]))
+        let expected = sliceToChan(make([10.12, 5.68, 6.78, 8.91]))
+        let actual = roundDigits(input, 2)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

@@ -22,25 +22,25 @@ public class TrixStrategy <: Strategy {
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = snapshotsAsClosings(snapshots)
         let trixs = Indicator.compute(closings)
-        let actions = h.Map(trixs, { v: Float64 =>
+        let actions = h.map(trixs, { v: Float64 =>
             if (v > 0.0) { return Action.Buy }
             if (v < 0.0) { return Action.Sell }
             return Action.Hold
         })
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closings = Duplicate(snapshotsAsClosings(snaps[1]), 2)
+        let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
 
         var trixs = Indicator.compute(closings[0])
-        trixs = Shift(trixs, Indicator.idlePeriod(), 0.0)
+        trixs = shift(trixs, Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()

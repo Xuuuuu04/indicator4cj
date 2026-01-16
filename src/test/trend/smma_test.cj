@@ -15,15 +15,15 @@ class SmmaData {
 @Test
 public func test_smma_basic() {
     let input = Csv<SmmaData>().readFromFile("src/test/testdata/trend/smma.csv")
-    let inputs = Duplicate(input, 2)
-    let closing = h.Map(inputs[0], { d: SmmaData => d.close })
-    let expected = h.Map(inputs[1], { d: SmmaData => d.Smma })
+    let inputs = duplicate(input, 2)
+    let closing = h.map(inputs[0], { d: SmmaData => d.close })
+    let expected = h.map(inputs[1], { d: SmmaData => d.Smma })
 
     let smma = Smma()
-    let actual = h.RoundDigits(smma.compute(closing), 2)
-    let expectedSkipped = h.Skip(expected, smma.idlePeriod())
+    let actual = h.roundDigits(smma.compute(closing), 2)
+    let expectedSkipped = h.skip(expected, smma.idlePeriod())
 
-    match (h.CheckFloatEquals(actual, expectedSkipped)) {
+    match (h.checkFloatEquals(actual, expectedSkipped)) {
         case Some(err) => fail(err)
         case None => ()
     }

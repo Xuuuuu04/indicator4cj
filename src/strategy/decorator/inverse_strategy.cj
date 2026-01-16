@@ -21,7 +21,7 @@ public class InverseStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        return h.Map(InnerStrategy.compute(snapshots), { a: Action =>
+        return h.map(InnerStrategy.compute(snapshots), { a: Action =>
             match (a) {
                 case Action.Buy => return Action.Sell
                 case Action.Sell => return Action.Buy
@@ -31,13 +31,13 @@ public class InverseStrategy <: Strategy {
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -48,7 +48,7 @@ public class InverseStrategy <: Strategy {
     }
 }
 
-public func NewInverseStrategy(innerStrategy: Strategy): InverseStrategy {
+public func newInverseStrategy(innerStrategy: Strategy): InverseStrategy {
     return InverseStrategy(innerStrategy)
 }
 

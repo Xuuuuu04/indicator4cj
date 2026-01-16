@@ -15,10 +15,10 @@ class AbsTest {
 
     @TestCase
     public func abs_basic() {
-        let input = SliceToChan(make([-10,20,-4,-5]))
-        let expected = SliceToChan(make([10,20,4,5]))
-        let actual = Abs(input)
-        @Expect(CheckEquals(actual, expected) == None, true)
+        let input = sliceToChan(make([-10,20,-4,-5]))
+        let expected = sliceToChan(make([10,20,4,5]))
+        let actual = abs(input)
+        @Expect(checkEquals(actual, expected) == None, true)
     }
 }
 

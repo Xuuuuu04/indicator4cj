@@ -17,26 +17,26 @@ class MlsData {
 @Test
 public func test_mls_basic() {
     let input = Csv<MlsData>().readFromFile("src/test/testdata/trend/mls.csv")
-    let inputs = Duplicate(input, 4)
-    let x = h.Map(inputs[0], { d: MlsData => d.X })
-    let y = h.Map(inputs[1], { d: MlsData => d.Y })
-    let expectedM = h.Map(inputs[2], { d: MlsData => d.M })
-    let expectedB = h.Map(inputs[3], { d: MlsData => d.B })
+    let inputs = duplicate(input, 4)
+    let x = h.map(inputs[0], { d: MlsData => d.X })
+    let y = h.map(inputs[1], { d: MlsData => d.Y })
+    let expectedM = h.map(inputs[2], { d: MlsData => d.M })
+    let expectedB = h.map(inputs[3], { d: MlsData => d.B })
 
     let mls = Mls(5)
     let (actualMraw, actualBRaw) = mls.compute(x, y)
     
-    let actualM = h.RoundDigits(actualMraw, 2)
-    let actualB = h.RoundDigits(actualBRaw, 2)
+    let actualM = h.roundDigits(actualMraw, 2)
+    let actualB = h.roundDigits(actualBRaw, 2)
 
-    let expMSkipped = h.Skip(expectedM, mls.idlePeriod())
-    let expBSkipped = h.Skip(expectedB, mls.idlePeriod())
+    let expMSkipped = h.skip(expectedM, mls.idlePeriod())
+    let expBSkipped = h.skip(expectedB, mls.idlePeriod())
 
-    match (h.CheckFloatEquals(actualM, expMSkipped)) {
+    match (h.checkFloatEquals(actualM, expMSkipped)) {
         case Some(err) => fail("M: " + err)
         case None => ()
     }
-    match (h.CheckFloatEquals(actualB, expBSkipped)) {
+    match (h.checkFloatEquals(actualB, expBSkipped)) {
         case Some(err) => fail("B: " + err)
         case None => ()
     }

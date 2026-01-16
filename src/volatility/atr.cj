@@ -24,10 +24,10 @@ public class Atr {
     // compute 计算平均真实范围指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         // 对齐最高价/最低价以使用前收盘价
-        let hs = Skip(highs, 1)
-        let ls = Skip(lows, 1)
+        let hs = skip(highs, 1)
+        let ls = skip(lows, 1)
 
-        let tr = Operate3(hs, ls, closings, { h: Float64, l: Float64, c: Float64 =>
+        let tr = operate3(hs, ls, closings, { h: Float64, l: Float64, c: Float64 =>
             let a = h - l
             let b = h - c
             let d = c - l

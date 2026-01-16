@@ -18,18 +18,18 @@ public class MovingMax {
 
 // compute 计算指标。
     public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        let cs = Duplicate(c, 2)
-        cs[1] = Shift(cs[1], period, 0.0)
+        let cs = duplicate(c, 2)
+        cs[1] = shift(cs[1], period, 0.0)
 
         let bst = Bst()
 
-        let maxs = Operate(cs[0], cs[1], { v: Float64, b: Float64 =>
+        let maxs = operate(cs[0], cs[1], { v: Float64, b: Float64 =>
             bst.insert(v)
             bst.remove(b)
             return bst.max()
         })
 
-        return Skip(maxs, period - 1)
+        return skip(maxs, period - 1)
     }
 
 // idlePeriod 返回空闲周期数。

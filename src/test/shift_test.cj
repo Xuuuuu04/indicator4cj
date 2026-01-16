@@ -9,11 +9,11 @@ import indicator4cj.helper.*
 class ShiftTest {
     @TestCase
     public func shift_basic() {
-        let input = SliceToChan(ArrayList<Int64>([2, 4, 6, 8]))
-        let expected = SliceToChan(ArrayList<Int64>([0, 0, 0, 0, 2, 4, 6, 8]))
+        let input = sliceToChan(ArrayList<Int64>([2, 4, 6, 8]))
+        let expected = sliceToChan(ArrayList<Int64>([0, 0, 0, 0, 2, 4, 6, 8]))
 
-        let actual = Shift(input, 4, Int64(0))
-        match (CheckEquals(actual, expected)) {
+        let actual = shift(input, 4, Int64(0))
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }

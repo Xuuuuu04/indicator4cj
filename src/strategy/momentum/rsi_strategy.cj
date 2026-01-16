@@ -36,25 +36,25 @@ public class RsiStrategy <: Strategy {
         let closings = snapshotsAsClosings(c)
         let rsiVals = Indicator.compute(closings)
 
-        let actions = h.Map(rsiVals, { v: Float64 =>
+        let actions = h.map(rsiVals, { v: Float64 =>
             if (v <= BuyAt) { return Action.Buy }
             if (v >= SellAt) { return Action.Sell }
             return Action.Hold
         })
 
         // 与 Go 对齐：移位 IdlePeriod 个位置填充 Hold。
-        return Shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.Hold)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(c, 3)
+        let snaps = duplicate(c, 3)
         let dates = snapshotsAsDates(snaps[0])
-        let closingsDup = Duplicate(snapshotsAsClosings(snaps[2]), 2)
-        let rsiShifted = Shift(Indicator.compute(closingsDup[1]), Indicator.idlePeriod(), 0.0)
+        let closingsDup = duplicate(snapshotsAsClosings(snaps[2]), 2)
+        let rsiShifted = shift(Indicator.compute(closingsDup[1]), Indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -67,6 +67,6 @@ public class RsiStrategy <: Strategy {
     }
 }
 
-public func NewRsiStrategyWith(buyAt: Float64, sellAt: Float64): RsiStrategy {
+public func newRsiStrategyWith(buyAt: Float64, sellAt: Float64): RsiStrategy {
     return RsiStrategy(buyAt, sellAt)
 }

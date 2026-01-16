@@ -4,9 +4,9 @@ import std.core.*
 import std.collection.*
 import std.reflect.*
 
-// Field：从 class 迭代器提取指定字段，返回新的迭代器。
+// field：从 class 迭代器提取指定字段，返回新的迭代器。
 // 仅支持 public 变量；若字段不存在则返回空迭代器。
-public func Field<T, S>(iter: Iterator<S>, name: String): Iterator<T> {
+public func field<T, S>(iter: Iterator<S>, name: String): Iterator<T> {
     let typeInfo = ClassTypeInfo.of<S>()
     let varInfoOpt = findVar(typeInfo, name)
     match (varInfoOpt) {

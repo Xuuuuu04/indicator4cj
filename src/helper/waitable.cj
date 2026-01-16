@@ -20,8 +20,8 @@ public class WaitGroup {
     }
 }
 
-// Waitable：消费迭代器并在结束时标记 WaitGroup 完成，返回已收集的迭代器。
-public func Waitable<T>(wg: WaitGroup, iter: Iterator<T>): Iterator<T> {
+// waitable：消费迭代器并在结束时标记 WaitGroup 完成，返回已收集的迭代器。
+public func waitable<T>(wg: WaitGroup, iter: Iterator<T>): Iterator<T> {
     wg.add(1)
     let collected = ArrayList<T>()
     while (true) {

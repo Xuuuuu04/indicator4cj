@@ -21,7 +21,7 @@ public class SplitStrategy <: Strategy {
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = Duplicate(snapshots, 2)
+        let snaps = duplicate(snapshots, 2)
         let buyActions = BuyStrategy.compute(snaps[0])
         let sellActions = SellStrategy.compute(snaps[1])
         let result = ArrayList<Action>()
@@ -46,12 +46,12 @@ public class SplitStrategy <: Strategy {
     }
 
     public func report(snapshots: Iterator<Snapshot>): Report {
-        let snaps = Duplicate(snapshots, 3)
+        let snaps = duplicate(snapshots, 3)
         let dates = snapshotsAsDates(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        let annotations = ActionsToAnnotations(actions)
-        let outcomes = MultiplyBy(outcomesRaw, 100.0)
+        let annotations = actionsToAnnotations(actions)
+        let outcomes = multiplyBy(outcomesRaw, 100.0)
 
         let report = Report(name(), dates)
         report.addChart()
@@ -62,18 +62,18 @@ public class SplitStrategy <: Strategy {
     }
 }
 
-public func NewSplitStrategy(buyStrategy: Strategy, sellStrategy: Strategy): SplitStrategy {
+public func newSplitStrategy(buyStrategy: Strategy, sellStrategy: Strategy): SplitStrategy {
     return SplitStrategy(buyStrategy, sellStrategy)
 }
 
-public func AllSplitStrategies(strategies: ArrayList<Strategy>): ArrayList<Strategy> {
+public func allSplitStrategies(strategies: ArrayList<Strategy>): ArrayList<Strategy> {
     let res = ArrayList<Strategy>()
     var i: Int64 = 0
     while (i < strategies.size) {
         var j: Int64 = 0
         while (j < strategies.size) {
             if (i != j) {
-                res.add(NewSplitStrategy(strategies[i], strategies[j]))
+                res.add(newSplitStrategy(strategies[i], strategies[j]))
             }
             j += 1
         }

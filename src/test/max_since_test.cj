@@ -9,10 +9,10 @@ import indicator4cj.helper.*
 class MaxSinceTest {
     @TestCase
     public func max_since_basic() {
-        let input = SliceToChan(ArrayList<Float64>([48.0, 49.0, 47.0, 52.0, 52.0, 52.0, 53.0, 50.0, 55.0]))
-        let expected = SliceToChan(ArrayList<Float64>([0.0, 0.0, 1.0, 0.0, 1.0, 2.0, 0.0, 1.0, 0.0]))
-        let actual = MaxSince(input, 3)
-        match (CheckEquals(actual, expected)) {
+        let input = sliceToChan(ArrayList<Float64>([48.0, 49.0, 47.0, 52.0, 52.0, 52.0, 53.0, 50.0, 55.0]))
+        let expected = sliceToChan(ArrayList<Float64>([0.0, 0.0, 1.0, 0.0, 1.0, 2.0, 0.0, 1.0, 0.0]))
+        let actual = maxSince(input, 3)
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }
@@ -20,10 +20,10 @@ class MaxSinceTest {
 
     @TestCase
     public func max_since_at_end() {
-        let input = SliceToChan(ArrayList<Float64>([48.0, 49.0, 47.0, 52.0, 52.0, 52.0, 52.0]))
-        let expected = SliceToChan(ArrayList<Float64>([0.0, 0.0, 1.0, 0.0, 1.0, 2.0, 2.0]))
-        let actual = MaxSince(input, 3)
-        match (CheckEquals(actual, expected)) {
+        let input = sliceToChan(ArrayList<Float64>([48.0, 49.0, 47.0, 52.0, 52.0, 52.0, 52.0]))
+        let expected = sliceToChan(ArrayList<Float64>([0.0, 0.0, 1.0, 0.0, 1.0, 2.0, 2.0]))
+        let actual = maxSince(input, 3)
+        match (checkEquals(actual, expected)) {
             case Some(err) => @Fail(err)
             case None => ()
         }
