@@ -7,9 +7,9 @@ import indicator4cj.asset.*
 
 private class MockRepository <: Repository {
     private var _assetsFunc: () -> ArrayList<String>
-    private var _getFunc: (String) -> Iterator<Snapshot>
+    private var _getFunc: (String) -> Option<Iterator<Snapshot>>
     private var _getSinceFunc: (String, DateTime) -> Iterator<Snapshot>
-    private var _lastDateFunc: (String) -> DateTime
+    private var _lastDateFunc: (String) -> Option<DateTime>
     private var _appendFunc: (String, Iterator<Snapshot>) -> Unit
     public var shouldFailAssets: Bool = false
     public var shouldFailGet: Bool = false
@@ -18,9 +18,9 @@ private class MockRepository <: Repository {
 
     public init(
         assetsFunc: () -> ArrayList<String>,
-        getFunc: (String) -> Iterator<Snapshot>,
+        getFunc: (String) -> Option<Iterator<Snapshot>>,
         getSinceFunc: (String, DateTime) -> Iterator<Snapshot>,
-        lastDateFunc: (String) -> DateTime,
+        lastDateFunc: (String) -> Option<DateTime>,
         appendFunc: (String, Iterator<Snapshot>) -> Unit
     ) {
         this._assetsFunc = assetsFunc
@@ -35,7 +35,7 @@ private class MockRepository <: Repository {
         return _assetsFunc()
     }
 
-    public func get(name: String): Iterator<Snapshot> {
+    public func get(name: String): Option<Iterator<Snapshot>> {
         if (shouldFailGet) { throw Exception("get error") }
         return _getFunc(name)
     }
@@ -44,7 +44,7 @@ private class MockRepository <: Repository {
         return _getSinceFunc(name, date)
     }
 
-    public func lastDate(name: String): DateTime {
+    public func lastDate(name: String): Option<DateTime> {
         if (shouldFailLastDate) { throw Exception("lastDate error") }
         return _lastDateFunc(name)
     }
@@ -82,23 +82,27 @@ public func sync_success() {
         }
 
         try {
-            let actualIter = target.get(name)
-            let actualList = ArrayList<Snapshot>()
-            while (true) {
-                match (actualIter.next()) {
-                    case Some(s) => actualList.add(s)
-                    case None => break
-                }
-            }
-            if (actualList.size != snapshots.size) {
-                fail("size mismatch actual ${actualList.size} expected ${snapshots.size}")
-            }
-            var idx: Int64 = 0
-            while (idx < snapshots.size) {
-                if (actualList[idx].date != snapshots[idx].date) {
-                    fail("date mismatch at ${idx}")
-                }
-                idx += 1
+            let actualIterOpt = target.get(name)
+            match (actualIterOpt) {
+                case Some(actualIter) =>
+                    let actualList = ArrayList<Snapshot>()
+                    while (true) {
+                        match (actualIter.next()) {
+                            case Some(s) => actualList.add(s)
+                            case None => break
+                        }
+                    }
+                    if (actualList.size != snapshots.size) {
+                        fail("size mismatch actual ${actualList.size} expected ${snapshots.size}")
+                    }
+                    var idx: Int64 = 0
+                    while (idx < snapshots.size) {
+                        if (actualList[idx].date != snapshots[idx].date) {
+                            fail("date mismatch at ${idx}")
+                        }
+                        idx += 1
+                    }
+                case None => fail("target.get returned None")
             }
         } catch (e: Exception) {
             fail(e.toString())
@@ -134,9 +138,9 @@ public func sync_failing_target_assets() {
     let source = InMemoryRepository()
     let target = MockRepository(
         { => ArrayList<String>() },
-        { _ => ArrayList<Snapshot>().iterator() },
+        { _ => Some(ArrayList<Snapshot>().iterator()) },
         { _, _ => ArrayList<Snapshot>().iterator() },
-        { _ => DateTime.parse("2000-01-01", "yyyy-MM-dd") },
+        { _ => Some(DateTime.parse("2000-01-01", "yyyy-MM-dd")) },
         { _, _ => () }
     )
     target.shouldFailAssets = true
@@ -156,17 +160,17 @@ public func sync_failing_target_assets() {
 public func sync_failing_target_append() {
     let source = MockRepository(
         { => ArrayList<String>() },
-        { _ => ArrayList<Snapshot>().iterator() },
+        { _ => Some(ArrayList<Snapshot>().iterator()) },
         { _, _ => ArrayList<Snapshot>().iterator() },
-        { _ => DateTime.parse("2000-01-01", "yyyy-MM-dd") },
+        { _ => Some(DateTime.parse("2000-01-01", "yyyy-MM-dd")) },
         { _, _ => () }
     )
 
     let target = MockRepository(
         { => ArrayList<String>(["A"]) },
-        { _ => ArrayList<Snapshot>().iterator() },
+        { _ => Some(ArrayList<Snapshot>().iterator()) },
         { _, _ => ArrayList<Snapshot>().iterator() },
-        { _ => DateTime.parse("2000-01-01", "yyyy-MM-dd") },
+        { _ => Some(DateTime.parse("2000-01-01", "yyyy-MM-dd")) },
         { _, _ => () }
     )
     target.shouldFailAppend = true

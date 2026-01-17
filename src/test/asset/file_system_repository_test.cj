@@ -30,16 +30,19 @@ public func test_file_system_repository_assets() {
 public func test_file_system_repository_get() {
     let repo = FileSystemRepository(_repositoryBase)
     try {
-        let snaps = repo.get("brk-b")
-
-        var count = 0
-        while (count < 10) {
-            match (snaps.next()) {
-                case Some(_) => count += 1
-                case None => break
-            }
+        let snapsOpt = repo.get("brk-b")
+        match (snapsOpt) {
+            case Some(snaps) =>
+                var count = 0
+                while (count < 10) {
+                    match (snaps.next()) {
+                        case Some(_) => count += 1
+                        case None => break
+                    }
+                }
+                if (count != 10) { fail("count ${count}") }
+            case None => fail("asset 'brk-b' not found")
         }
-        if (count != 10) { fail("count ${count}") }
     } catch (e: Exception) {
         fail(e.toString())
     }
@@ -49,10 +52,14 @@ public func test_file_system_repository_get() {
 public func test_file_system_repository_last_date() {
     let repo = FileSystemRepository(_repositoryBase)
     try {
-        let lastDate = repo.lastDate("brk-b")
-        let expected = DateTime.parse("2023-11-29", "yyyy-MM-dd")
-        if (lastDate.toString() != expected.toString()) {
-            fail("actual ${lastDate} expected ${expected}")
+        let lastDateOpt = repo.lastDate("brk-b")
+        match (lastDateOpt) {
+            case Some(lastDate) =>
+                let expected = DateTime.parse("2023-11-29", "yyyy-MM-dd")
+                if (lastDate.toString() != expected.toString()) {
+                    fail("actual ${lastDate} expected ${expected}")
+                }
+            case None => fail("lastDate returned None for 'brk-b'")
         }
     } catch (e: Exception) {
         fail(e.toString())

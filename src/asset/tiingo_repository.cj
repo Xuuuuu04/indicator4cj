@@ -7,19 +7,40 @@ import std.io.*
 import stdx.net.http.*
 import stdx.encoding.json.*
 
-// Tiingo 元数据，与 Go 版字段保持一致。
+/**
+ * TiingoMeta Tiingo 元数据
+ *
+ * 与 Go 版本字段保持一致。
+ */
 public struct TiingoMeta {
-    // 代码
+    /**
+     * Ticker 股票代码
+     */
     public let Ticker: String
-    // 名称
+
+    /**
+     * Name 股票名称
+     */
     public let Name: String
-    // 变化
+
+    /**
+     * ExchangeCode 交易所代码
+     */
     public let ExchangeCode: String
-    // 描述
+
+    /**
+     * Description 描述信息
+     */
     public let Description: String
-    // 日期
+
+    /**
+     * StartDate 起始日期
+     */
     public let StartDate: DateTime
-    // 日期
+
+    /**
+     * EndDate 结束日期
+     */
     public let EndDate: DateTime
 
     public init() {
@@ -32,33 +53,75 @@ public struct TiingoMeta {
     }
 }
 
-// Tiingo EOD 数据，与 Go 版字段保持一致。
+/**
+ * TiingoEndOfDay Tiingo 日终数据
+ *
+ * 与 Go 版本字段保持一致。
+ */
 public struct TiingoEndOfDay {
-    // 日期
+    /**
+     * Date 日期
+     */
     public let Date: DateTime
-    // 开盘价
+
+    /**
+     * Open 开盘价
+     */
     public let Open: Float64
-    // 最高价
+
+    /**
+     * High 最高价
+     */
     public let High: Float64
-    // 最低价
+
+    /**
+     * Low 最低价
+     */
     public let Low: Float64
-    // 收盘价
+
+    /**
+     * Close 收盘价
+     */
     public let Close: Float64
-    // 成交量
+
+    /**
+     * Volume 成交量
+     */
     public let Volume: Int64
-    // 开盘价
+
+    /**
+     * AdjOpen 调整后开盘价
+     */
     public let AdjOpen: Float64
-    // 最高价
+
+    /**
+     * AdjHigh 调整后最高价
+     */
     public let AdjHigh: Float64
-    // 最低价
+
+    /**
+     * AdjLow 调整后最低价
+     */
     public let AdjLow: Float64
-    // 收盘价
+
+    /**
+     * AdjClose 调整后收盘价
+     */
     public let AdjClose: Float64
-    // 成交量
+
+    /**
+     * AdjVolume 调整后成交量
+     */
     public let AdjVolume: Int64
-    // 标识
+
+    /**
+     * Dividend 分红
+     */
     public let Dividend: Float64
-    // 拆分
+
+    /**
+     * Split 拆分
+     */
     public let Split: Float64
 
     public init() {
@@ -110,9 +173,9 @@ public class TiingoRepository <: Repository {
     }
 
     // get 获取指定资产的全部快照数据
-    public func get(name: String): Iterator<Snapshot> {
+    public func get(name: String): Option<Iterator<Snapshot>> {
         // 默认从 2000-01-01 起拉取
-        return getSince(name, DateTime.parse("2000-01-01", "yyyy-MM-dd"))
+        return Some(getSince(name, DateTime.parse("2000-01-01", "yyyy-MM-dd")))
     }
 
     // getSince 获取指定资产从指定日期开始的快照数据
@@ -147,7 +210,7 @@ public class TiingoRepository <: Repository {
     }
 
     // lastDate 返回指定资产的最新日期
-    public func lastDate(name: String): DateTime {
+    public func lastDate(name: String): Option<DateTime> {
         let url = _baseUrl + "/tiingo/daily/" + name + "?token=" + _apiKey
         let client = ClientBuilder().build()
         try {
@@ -164,7 +227,7 @@ public class TiingoRepository <: Repository {
                     match (obj.get("endDate")) {
                         case Some(v) =>
                             match (v as JsonString) {
-                                case Some(js) => return parseDate(js.getValue())
+                                case Some(js) => return Some(parseDate(js.getValue()))
                                 case None => throw Exception("tiingo: endDate is not a string")
                             }
                         case None => throw Exception("tiingo: endDate missing in response")

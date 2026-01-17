@@ -13,6 +13,7 @@ import indicator4cj.helper.*
  * 如果其他策略无法跑赢买入并持有策略，说明该策略没有实际价值。
  */
 public class BuyAndHoldStrategy <: Strategy {
+    // 是否为首次执行（首次执行时产生买入信号）
     private var _first: Bool = true
 
     public func name(): String { return "BuyAndHold" }

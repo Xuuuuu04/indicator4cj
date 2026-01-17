@@ -31,6 +31,19 @@ public func stochastic_rsi_basic() {
     act = skip(act, skipCount)
 
     match (checkEquals(act, expK)) { case Some(err) => fail("K " + err) case None => () }
-    // FIXME: Go 版仅返回单序列，原 CSV 含 D 列暂不比对。
+
+    // FIXME: D列暂不比对
+    //
+    // 问题描述：测试数据CSV包含D列（信号线），但当前仓颉版本的StochasticRsi.compute()只返回单序列
+    // 原始Go版本可能返回(K, D)元组，但当前实现只返回K序列
+    //
+    // 临时方案：跳过D列的验证（仅验证K序列）
+    // 长期方案：
+    //   1. 修改StochasticRsi.compute()返回元组 (K, D)
+    //   2. 添加D序列的计算逻辑（SMA平滑K序列）
+    //   3. 添加对D列的断言验证
+    //
+    // 相关文件：src/momentum/stochastic_rsi.cj
+    // 测试数据：src/test/testdata/momentum/stochastic_rsi.csv
 }
 

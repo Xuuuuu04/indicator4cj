@@ -4,7 +4,15 @@ import std.core.*
 import std.collection.*
 import std.math.*
 
-// checkEquals：比较两个迭代器元素是否相等；长度不一致或元素不同返回错误描述。
+/**
+ * checkEquals 比较两个迭代器元素是否相等
+ *
+ * 将两个迭代器物化为列表后逐一比较元素。
+ *
+ * @param actual 实际值迭代器
+ * @param expected 期望值迭代器
+ * @return 如果长度不同或元素不同返回错误描述，否则返回None
+ */
 public func checkEquals<T>(actual: Iterator<T>, expected: Iterator<T>): Option<String> where T <: ToString {
     // 先物化，便于给出长度差异与精确定位。
     let actualList = chanToSlice(actual)
@@ -26,7 +34,16 @@ public func checkEquals<T>(actual: Iterator<T>, expected: Iterator<T>): Option<S
     return None
 }
 
-// checkFloatEquals: Float64 特化版本，使用 Epsilon 比较，解决 -0.0 vs 0.0 问题。
+/**
+ * checkFloatEquals Float64特化版本的比较函数
+ *
+ * 使用Epsilon比较浮点数，解决-0.0 vs 0.0等精度问题。
+ * 容忍度为1e-5，处理浮点运算的精度误差。
+ *
+ * @param actual 实际浮点数迭代器
+ * @param expected 期望浮点数迭代器
+ * @return 如果长度不同或元素差异超过容忍度返回错误描述，否则返回None
+ */
 public func checkFloatEquals(actual: Iterator<Float64>, expected: Iterator<Float64>): Option<String> {
     let actualList = chanToSlice(actual)
     let expectedList = chanToSlice(expected)
@@ -49,7 +66,15 @@ public func checkFloatEquals(actual: Iterator<Float64>, expected: Iterator<Float
     return None
 }
 
-// 仅一个参数时视为“非成对”错误（与 Go 版行为对齐）。
-public func checkEquals<T>(_: Iterator<T>): Option<String> {
+/**
+ * checkEquals 单参数版本重载
+ *
+ * 当只传入一个参数时，视为"非成对"错误（与Go版本行为对齐）。
+ * 用于检测函数调用时参数数量错误。
+ *
+ * @param single 单个迭代器（参数未使用，仅用于重载解析）
+ * @return 返回"not pairs"错误描述
+ */
+public func checkEquals<T>(single: Iterator<T>): Option<String> {
     return Some("not pairs")
 }

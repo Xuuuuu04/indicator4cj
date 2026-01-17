@@ -7,16 +7,16 @@ import std.io.*
 import std.reflect.*
 
 private struct CsvColumn {
-    let name: String
-    let varInfo: InstanceVariableInfo
-    let format: String
-    let columnIndex: Int64
+    let _name: String
+    let _varInfo: InstanceVariableInfo
+    let _format: String
+    let _columnIndex: Int64
 
     public init(name: String, varInfo: InstanceVariableInfo, format: String, columnIndex: Int64) {
-        this.name = name
-        this.varInfo = varInfo
-        this.format = format
-        this.columnIndex = columnIndex
+        this._name = name
+        this._varInfo = varInfo
+        this._format = format
+        this._columnIndex = columnIndex
     }
 }
 
@@ -71,8 +71,8 @@ public class Csv<TData> {
             match (constructInstance<TData>()) {
                 case Some(instance) =>
                     for (col in columns) {
-                        if (col.columnIndex >= record.size) { continue }
-                        setReflectValue(col.varInfo, instance, record[col.columnIndex], col.format)
+                        if (col._columnIndex >= record.size) { continue }
+                        setReflectValue(col._varInfo, instance, record[col._columnIndex], col._format)
                     }
                     out.add(instance)
                 case None => ()

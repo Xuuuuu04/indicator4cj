@@ -21,17 +21,20 @@ public func test_data_report_basic() {
         report.begin(assets, strategies)
         report.assetBegin("brk-b", strategies)
 
-        let snapsIter = repo.get("brk-b")
+        let snapsIterOpt = repo.get("brk-b")
+        match (snapsIterOpt) {
+            case Some(snapsIter) =>
+                let splice = duplicate(snapsIter, 3)
+                let actionsSplice = duplicate(strategies[0].compute(splice[1]), 2)
+                let outcomes = outcome(snapshotsAsClosings(splice[2]), actionsSplice[1])
 
-        let splice = duplicate(snapsIter, 3)
-        let actionsSplice = duplicate(strategies[0].compute(splice[1]), 2)
-        let outcomes = outcome(snapshotsAsClosings(splice[2]), actionsSplice[1])
+                report.write("brk-b", strategies[0], splice[0], actionsSplice[0], outcomes)
+                report.assetEnd("brk-b")
+                report.end()
 
-        report.write("brk-b", strategies[0], splice[0], actionsSplice[0], outcomes)
-        report.assetEnd("brk-b")
-        report.end()
-
-        if (report.results.size != 1) { fail("results size ${report.results.size}") }
+                if (report.results.size != 1) { fail("results size ${report.results.size}") }
+            case None => fail("asset 'brk-b' not found")
+        }
     } catch (e: Exception) {
         fail(e.toString())
     }

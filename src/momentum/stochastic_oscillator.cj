@@ -8,10 +8,10 @@ import indicator4cj.trend.*
 // %D = SMA(%K, 周期)
 public class StochasticOscillator {
     // 周期
-    public var period: Int64 = 14
+    public var period: Int64 = STOCHASTIC_DEFAULT_PERIOD
 
     public StochasticOscillator() {
-        // 使用默认值 14
+        // 使用默认值
     }
 
     public init(period: Int64) {

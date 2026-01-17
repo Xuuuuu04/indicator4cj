@@ -116,3 +116,39 @@ public const DONCHIAN_CHANNEL_DEFAULT_PERIOD: Int64 = 20
  * 常用值为14周期
  */
 public const ATR_DEFAULT_PERIOD: Int64 = 14
+
+// ========== RMA 相关常量 ==========
+/**
+ * RMA默认周期
+ * 常用值为15或20周期
+ */
+public const RMA_DEFAULT_PERIOD: Int64 = 20
+
+/**
+ * RMA默认平滑因子
+ */
+public const RMA_DEFAULT_SMOOTHING: Float64 = 1.0
+
+// ========== Stochastic 相关常量 ==========
+/**
+ * Stochastic默认周期
+ */
+public const STOCHASTIC_DEFAULT_PERIOD: Int64 = 14
+
+/**
+ * Stochastic默认平滑周期
+ */
+public const STOCHASTIC_DEFAULT_SMOOTH: Int64 = 3
+
+// ========== SMA 相关常量 ==========
+/**
+ * SMA默认周期
+ * 常用值为20周期
+ */
+public const SMA_DEFAULT_PERIOD: Int64 = 20
+
+// ========== Change 相关常量 ==========
+/**
+ * 默认变动率周期
+ */
+public const CHANGE_DEFAULT_PERIOD: Int64 = 1

@@ -49,12 +49,10 @@ public func test_sql_repository_extended() {
         }
         if (count != 2) { fail("Expected 2 snapshots (now and future), got ${count}") }
 
-        // 3. 测试 lastDate 的错误分支
-        try {
-            let _ = repo.lastDate("NON_EXISTENT")
-            fail("Expected error for non-existent asset")
-        } catch (_: Exception) {
-            // Expected error
+        // 3. 测试 lastDate 返回 None
+        match (repo.lastDate("NON_EXISTENT")) {
+            case Some(_) => fail("Expected None for non-existent asset")
+            case None => () // Expected
         }
 
         // 4. 测试 drop

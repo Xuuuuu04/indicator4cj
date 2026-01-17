@@ -4,12 +4,27 @@ import std.collection.*
 import std.io.*
 import std.core.*
 import std.convert.*
-// jSONToChan：从 Reader 读取 JSON 数组，解析为 Int64。
+/**
+ * jsonToChan 从输入流读取JSON数组并解析为Int64序列
+ *
+ * @param reader 输入流
+ * @return Int64迭代器
+ */
 public func jsonToChan(reader: InputStream): Iterator<Int64> {
     return jsonToChanWithLogger(reader, None)
 }
 
-public func jsonToChanWithLogger(reader: InputStream, _: Option<String>): Iterator<Int64> {
+/**
+ * jsonToChanWithLogger 带日志的JSON解析函数
+ *
+ * 从输入流读取JSON数组并解析为Int64序列。
+ * 日志参数当前未使用，保留以兼容签名。
+ *
+ * @param reader 输入流
+ * @param logger 日志信息（当前未使用）
+ * @return Int64迭代器
+ */
+public func jsonToChanWithLogger(reader: InputStream, logger: Option<String>): Iterator<Int64> {
     return JSONIterator(reader)
 }
 

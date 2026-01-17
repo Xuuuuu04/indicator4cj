@@ -27,11 +27,14 @@ public func test_in_memory_repository_basic() {
         if (assets2.size != 1) { fail("size ${assets2.size}") }
         if (assets2[0] != name) { fail("name ${assets2[0]}") }
 
-        let actual = repo.get(name)
-
-        match (checkEquals<Snapshot>(actual, snapshots.iterator())) {
-            case Some(err) => fail(err)
-            case None => ()
+        let actualOpt = repo.get(name)
+        match (actualOpt) {
+            case Some(actual) =>
+                match (checkEquals<Snapshot>(actual, snapshots.iterator())) {
+                    case Some(err) => fail(err)
+                    case None => ()
+                }
+            case None => fail("get returned None for '${name}'")
         }
     } catch (e: Exception) {
         fail(e.toString())

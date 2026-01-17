@@ -8,7 +8,12 @@ import indicator4cj.helper.*
 import indicator4cj.asset.*
 
 @Test
-public func test_snapshots_as() {
+/**
+ * testSnapshotsAs 测试快照数据提取功能
+ *
+ * 验证从 Snapshot 对象中提取各种属性（日期、开盘价、最高价、最低价、收盘价、成交量）的正确性
+ */
+public func testSnapshotsAs() {
     let snaps = ArrayList<Snapshot>()
     let now = DateTime.now()
     snaps.add(Snapshot(now, 1.0, 2.0, 0.5, 1.5, 1.5, 100.0))

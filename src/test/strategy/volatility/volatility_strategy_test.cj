@@ -73,12 +73,34 @@ public func bollinger_bands_strategy_basic() {
 @Test
 public func super_trend_strategy_basic() {
     let snaps = loadSnapshots()
-    // FIXME: Length mismatch (244 vs 251) and value mismatch due to HMA alignment diffs.
-    // Go's HMA implementation likely behaves differently regarding stream termination.
-    // For now, we consume actual to ensure no runtime crashes but skip exact comparison.
+
+    // FIXME: HMA对齐问题导致测试失败
+    //
+    // 问题描述：
+    //   - 长度不匹配：期望251个数据点，实际只有244个
+    //   - 数值不匹配：HMA（Hull移动平均线）的计算结果与Go版本存在差异
+    //
+    // 根本原因：
+    //   Go版本的HMA实现在流终止行为上可能与仓颉版本不同
+    //   导致idlePeriod计算或序列对齐出现偏差
+    //
+    // 临时方案：
+    //   - 消费整个迭代器以确保没有运行时崩溃
+    //   - 跳过精确的数值比较
+    //
+    // 长期方案：
+    //   1. 对比Go版本的HMA实现与仓颉版本的src/trend/hma.cj
+    //   2. 检查WMA加权逻辑是否一致
+    //   3. 验证idlePeriod的计算
+    //   4. 添加单元测试对比HMA中间值
+    //
+    // 相关文件：
+    //   - src/trend/hma.cj (HMA实现)
+    //   - src/strategy/volatility/super_trend_strategy.cj (SuperTrend策略)
+    //   - 测试数据：src/test/testdata/strategy/volatility/*.csv
     let s = SuperTrendStrategy()
     let actual = s.compute(snaps)
-    
+
     while (true) {
         match (actual.next()) { case Some(_) => () case None => break }
     }

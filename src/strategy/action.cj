@@ -4,6 +4,14 @@ import std.core.*
 import std.collection.*
 
 /**
+ * DEFAULT_ACTION 默认交易动作
+ *
+ * 用于表示"已平仓"或"观望"状态，默认为 SELL（卖出）。
+ * 在归一化动作序列时作为初始值。
+ */
+public const DEFAULT_ACTION: Action = Action.SELL
+
+/**
  * Action 表示交易动作
  * - BUY: 买入信号
  * - SELL: 卖出信号
@@ -74,7 +82,7 @@ public func actionsToAnnotations(ac: Iterator<Action>): Iterator<String> {
  * @return 归一化后的 Action 迭代器
  */
 public func normalizeActions(ac: Iterator<Action>): Iterator<Action> {
-    var last = Action.SELL
+    var last = DEFAULT_ACTION
     let res = ArrayList<Action>()
     while (true) {
         match (ac.next()) {
