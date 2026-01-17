@@ -10,7 +10,7 @@ class FieldTest {
     @TestCase
     public func extract_field() {
         let rows = ArrayList<FieldRow>([FieldRow(1.0, 2.0)]).iterator()
-        let closes = Field<Float64, FieldRow>(rows, "close")
+        let closes = field<Float64, FieldRow>(rows, "close")
         match (closes.next()) {
             case Some(v) => @Expect(v, 2.0)
             case None => @Fail("no value")
@@ -20,7 +20,7 @@ class FieldTest {
     @TestCase
     public func missing_field_returns_empty() {
         let rows = ArrayList<FieldRow>([FieldRow(1.0, 2.0)]).iterator()
-        let res = Field<Float64, FieldRow>(rows, "High")
+        let res = field<Float64, FieldRow>(rows, "High")
         match (res.next()) {
             case Some(_) => @Fail("should be empty")
             case None => ()

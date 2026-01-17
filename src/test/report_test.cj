@@ -16,7 +16,7 @@ class ReportTest {
         let annos = ArrayList<String>([""]).iterator()
 
         // 使用工厂函数避免与 std.unittest.Report 冲突
-        let report = newReport("Test Report", dates)
+        let report = newreport("Test Report", dates)
         report.addChart()
         report.addColumn(newNumericReportColumn("High", highs))
         report.addColumn(newNumericReportColumn("Low", lows))
@@ -34,7 +34,7 @@ class ReportTest {
     @TestCase
     public func write_report_fail() {
         let dates = ArrayList<DateTime>([DateTime.now()]).iterator()
-        let report = newReport("Test", dates)
+        let report = newreport("Test", dates)
         try {
             report.writeToFile("")
             @Fail("expected error")

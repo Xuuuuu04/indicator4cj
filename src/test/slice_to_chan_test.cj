@@ -8,7 +8,7 @@ import indicator4cj.helper.*
 @Test
 public func test_slice_to_chan_basic() {
     let input = ArrayList<Int64>([2, 4, 6, 8])
-    let actual = SliceToChan<Int64>(input)
+    let actual = sliceToChan<Int64>(input)
     let back = ArrayList<Int64>()
     while (true) {
         match (actual.next()) {

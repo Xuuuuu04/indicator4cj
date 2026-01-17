@@ -9,7 +9,7 @@ import indicator4cj.helper.*
 class SeqTest {
     @TestCase
     public func seq_basic() {
-        let actual = Seq(2.0, 6.0, 1.0)
+        let actual = seq(2.0, 6.0, 1.0)
         let expectedArr = ArrayList<Float64>()
         expectedArr.add(2.0)
         expectedArr.add(3.0)

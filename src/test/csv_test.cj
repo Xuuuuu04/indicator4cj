@@ -13,7 +13,7 @@ class CsvTest {
     public func read_with_header() {
         let reader = MemoryInputStream(ascii("Date,Asset,Open,Close\n\"2023-11-26 00:00:00\",\"SP500\",10.2,30.4\n"))
         let opts = ArrayList<CsvOption<CsvRow>>()
-        opts.add(WithCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
+        opts.add(withCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
         let csv = Csv<CsvRow>(opts)
         let iter = csv.readFromReader(reader)
         match (iter.next()) {
@@ -28,7 +28,7 @@ class CsvTest {
     public func read_without_header() {
         let reader = MemoryInputStream(ascii("10.2,30.4\n"))
         let opts = ArrayList<CsvOption<CsvRow>>()
-        opts.add(WithoutCsvHeader<CsvRow>())
+        opts.add(withoutCsvHeader<CsvRow>())
         let csv = Csv<CsvRow>(opts)
         let iter = csv.readFromReader(reader)
         match (iter.next()) {
@@ -40,7 +40,7 @@ class CsvTest {
     @TestCase
     public func read_from_file() {
         let opts = ArrayList<CsvOption<CsvRow>>()
-        opts.add(WithCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
+        opts.add(withCsvDefaultDateTimeFormat<CsvRow>("yyyy-MM-dd HH:mm:ss"))
         let csv = Csv<CsvRow>(opts)
         let iter = csv.readFromFile("src/test/testdata/with_header.csv")
         match (iter.next()) {

@@ -9,8 +9,8 @@ class CloserTest {
     @TestCase
     public func close_twice_no_throw() {
         let c = DummyCloser()
-        CloseAndLogError(c, "first")
-        CloseAndLogError(c, "second")
+        closeAndLogError(c, "first")
+        closeAndLogError(c, "second")
         @Expect(c.closedCount, 2)
     }
 }

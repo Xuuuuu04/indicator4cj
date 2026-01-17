@@ -15,7 +15,7 @@ class NpvTest {
         let input = Csv<NpvRow>().readFromFile("src/test/testdata/valuation/npv.csv")
         for (row in input) {
             let cashFlows = parseFlows(row.CashFlows)
-            let actual = roundDigit(npv(row.Rate, cashFlows), 2)
+            let actual = rounddigit(npv(row.Rate, cashFlows), 2)
             @Expect(actual, row.NPV)
         }
     }

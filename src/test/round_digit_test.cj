@@ -8,7 +8,7 @@ import indicator4cj.helper.*
 class RoundDigitTest {
     @TestCase
     public func round_digit_basic() {
-        @Expect(roundDigit(10.1234, 2), 10.12)
+        @Expect(rounddigit(10.1234, 2), 10.12)
     }
 }
 

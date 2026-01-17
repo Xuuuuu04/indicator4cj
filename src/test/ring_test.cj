@@ -22,10 +22,10 @@ class RingTest {
         let input = [1,2,3,4,5,6,7,8,9,10]
         let size: Int64 = 4
         let ring = Ring<Int64>(size)
-        @Expect(ring.IsEmpty(), true)
+        @Expect(ring.isEmpty(), true)
         for (i in 0..Int64(input.size)) {
             ring.put(Int64(input[Int64(i)]))
-            @Expect(ring.IsEmpty(), false)
+            @Expect(ring.isEmpty(), false)
             var j = Int64(i)
             if (j >= size) {
                 j = size - 1
@@ -41,7 +41,7 @@ class RingTest {
             }
             k += 1
         }
-        @Expect(ring.IsEmpty(), true)
+        @Expect(ring.isEmpty(), true)
         match (ring.get()) {
             case Some(_) => @Expect(true, false)
             case None => @Expect(true, true)
