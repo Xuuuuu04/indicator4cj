@@ -33,7 +33,7 @@ public enum Action <: ToString & Equatable<Action> {
 }
 
 // 返回 "B"/"S"/"" 注解。
-public func Annotation(a: Action): String {
+public func annotation(a: Action): String {
     match (a) {
         case Action.Buy => return "B"
         case Action.Sell => return "S"
@@ -47,7 +47,7 @@ public func actionsToAnnotations(ac: Iterator<Action>): Iterator<String> {
     let res = ArrayList<String>()
     while (true) {
         match (norm.next()) {
-            case Some(a) => res.add(Annotation(a))
+            case Some(a) => res.add(annotation(a))
             case None => break
         }
     }

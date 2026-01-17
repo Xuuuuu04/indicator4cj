@@ -26,7 +26,7 @@ public func computeWithOutcome(s: Strategy, snapshots: Iterator<Snapshot>): (Ite
     let snaps = duplicate(snapshots, 2)
     let actions = duplicate(s.compute(snaps[0]), 2)
     let closings = snapshotsAsClosings(snaps[1])
-    let outcomes = Outcome(closings, actions[1])
+    let outcomes = outcome(closings, actions[1])
     return (actions[0], outcomes)
 }
 

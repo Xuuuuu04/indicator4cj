@@ -2,7 +2,7 @@ package indicator4cj.strategy
 
 import std.core.*
 // Outcome：初始资金 1，Buy 全仓买入，Sell 全仓卖出，输出相对收益-1..N。
-public func Outcome(values: Iterator<Float64>, actions: Iterator<Action>): Iterator<Float64> {
+public func outcome(values: Iterator<Float64>, actions: Iterator<Action>): Iterator<Float64> {
     return OutcomeIterator(values, actions)
 }
 

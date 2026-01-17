@@ -25,7 +25,7 @@ public func test_data_report_basic() {
 
         let splice = duplicate(snapsIter, 3)
         let actionsSplice = duplicate(strategies[0].compute(splice[1]), 2)
-        let outcomes = Outcome(snapshotsAsClosings(splice[2]), actionsSplice[1])
+        let outcomes = outcome(snapshotsAsClosings(splice[2]), actionsSplice[1])
 
         report.write("brk-b", strategies[0], splice[0], actionsSplice[0], outcomes)
         report.assetEnd("brk-b")

@@ -7,9 +7,9 @@ import indicator4cj.strategy.*
 
 @Test
 public func annotation_basic() {
-    @Expect(Annotation(Action.Hold), "")
-    @Expect(Annotation(Action.Buy), "B")
-    @Expect(Annotation(Action.Sell), "S")
+    @Expect(annotation(Action.Hold), "")
+    @Expect(annotation(Action.Buy), "B")
+    @Expect(annotation(Action.Sell), "S")
 }
 
 @Test

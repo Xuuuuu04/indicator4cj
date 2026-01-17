@@ -9,7 +9,7 @@ import indicator4cj.strategy.*
 public func outcome_basic() {
     let prices = sliceToChan(ArrayList<Float64>([10.0, 20.0, 30.0, 40.0]))
     let acts = sliceToChan(ArrayList<Action>([Action.Buy, Action.Hold, Action.Sell, Action.Hold]))
-    let res = Outcome(prices, acts)
+    let res = outcome(prices, acts)
     match (res.next()) { case Some(v) => @Expect(v, 0.0) case None => @Fail("no1") }
     match (res.next()) { case Some(v) => @Expect(v, 1.0) case None => @Fail("no2") }
     match (res.next()) { case Some(v) => @Expect(v, 2.0) case None => @Fail("no3") }
