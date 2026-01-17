@@ -12,7 +12,7 @@ class ReflectTest {
     public func set_and_get_basic() {
         let obj = Sample()
         let ty = ClassTypeInfo.of<Sample>()
-        let field = ty.getInstanceVariable("Value")
+        let field = ty.getInstanceVariable("value")
         setReflectValue(field, obj, "10", "")
         let s = getReflectValue(field, obj, "")
         @Expect(s, "10")
@@ -32,7 +32,7 @@ class ReflectTest {
     public func invalid_parse() {
         let obj = Sample()
         let ty = ClassTypeInfo.of<Sample>()
-        let field = ty.getInstanceVariable("Value")
+        let field = ty.getInstanceVariable("value")
         try {
             setReflectValue(field, obj, "abc", "")
             @Fail("should fail")
@@ -43,7 +43,7 @@ class ReflectTest {
 }
 
 public class Sample {
-    public var Value: Int64 = 0
+    public var value: Int64 = 0
     public var date: DateTime = DateTime.now()
 }
 

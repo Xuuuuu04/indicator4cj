@@ -1,18 +1,21 @@
 package indicator4cj.trend
 
 import std.core.*
-// no collection import needed
+import indicator4cj.helper.*
 
-// 指数移动平均线（Float64）。
+/**
+ * Ema 指数移动平均线指标
+ *
+ * 计算指数移动平均线(EMA)，给予近期数据更高权重。
+ */
 public class Ema {
-    // 周期
-    public var period: Int64 = 20
-    // 平滑系数
-    public var smoothing: Float64 = 2.0
+    /** 周期 */
+    public var period: Int64 = EMA_DEFAULT_PERIOD
+    /** 平滑系数 */
+    public var smoothing: Float64 = EMA_DEFAULT_SMOOTHING
 
-    public Ema() {
-        this.period = period
-        this.smoothing = smoothing
+    public init() {
+        // 使用默认值
     }
 
     public init(period: Int64) {
@@ -20,9 +23,16 @@ public class Ema {
         this.smoothing = smoothing
     }
 
-    // compute 计算指数移动平均线。
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return EmaIterator(c, period, smoothing)
+/**
+ * compute 计算指数移动平均线
+ *
+ * 计算指数移动平均线(EMA)，给予近期数据更高权重。
+ *
+ * @param values 价格数据迭代器
+ * @return EMA值迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        return EmaIterator(values, period, smoothing)
     }
 
     // idlePeriod 返回空闲周期数。

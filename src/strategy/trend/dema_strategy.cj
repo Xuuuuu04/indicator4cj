@@ -40,13 +40,13 @@ public class DemaStrategy <: Strategy {
         demas2 = shift(demas2, Dema2.idlePeriod(), 0.0)
 
         let actions = operate(demas1, demas2, { d1: Float64, d2: Float64 =>
-            if (d1 > d2) { return Action.Buy }
-            if (d2 > d1) { return Action.Sell }
-            return Action.Hold
+            if (d1 > d2) { return Action.BUY }
+            if (d2 > d1) { return Action.SELL }
+            return Action.HOLD
         })
 
         let idle = Dema2.idlePeriod()
-        return shift(skip(actions, idle), idle, Action.Hold)
+        return shift(skip(actions, idle), idle, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

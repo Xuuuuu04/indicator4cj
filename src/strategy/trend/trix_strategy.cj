@@ -23,11 +23,11 @@ public class TrixStrategy <: Strategy {
         let closings = snapshotsAsClosings(snapshots)
         let trixs = Indicator.compute(closings)
         let actions = h.map(trixs, { v: Float64 =>
-            if (v > 0.0) { return Action.Buy }
-            if (v < 0.0) { return Action.Sell }
-            return Action.Hold
+            if (v > 0.0) { return Action.BUY }
+            if (v < 0.0) { return Action.SELL }
+            return Action.HOLD
         })
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

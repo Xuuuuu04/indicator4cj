@@ -15,7 +15,7 @@ class AdTest {
         let lows = map(inputs[1], { m => m.low })
         let closes = map(inputs[2], { m => m.close })
         let volumes = map(inputs[3], { m => Float64(m.volume) })
-        var expected = map(inputs[4], { m => m.Ad })
+        var expected = map(inputs[4], { m => m.ad })
 
         let ad = Ad()
         let actual = roundDigits(ad.compute(highs, lows, closes, volumes), 2)
@@ -33,7 +33,7 @@ public class AdRow {
     public var low: Float64 = 0.0
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Ad: Float64 = 0.0
+    public var ad: Float64 = 0.0
     public init() {}
 }
 

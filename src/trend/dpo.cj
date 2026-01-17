@@ -11,8 +11,9 @@ public class Dpo {
     public var period: Int64 = DefaultDpoPeriod
 
     public Dpo() {
-        this.period = period
+        // 使用默认值
     }
+
     public init(period: Int64) {
         if (period <= 1) {
             this.period = DefaultDpoPeriod

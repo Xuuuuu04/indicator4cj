@@ -8,19 +8,19 @@ import indicator4cj.helper.*
 // 修改为 class 以支持反射填充 (CSV)。
 public class Snapshot <: ToString {
     // 日期
-    public var date: DateTime
+    public var date: DateTime = DateTime.now()
     // 开盘价
-    public var open: Float64
+    public var open: Float64 = 0.0
     // 最高价
-    public var high: Float64
+    public var high: Float64 = 0.0
     // 最低价
-    public var low: Float64
+    public var low: Float64 = 0.0
     // 收盘价
-    public var close: Float64
+    public var close: Float64 = 0.0
     // 收盘价
-    public var adjClose: Float64
+    public var adjClose: Float64 = 0.0
     // 成交量
-    public var volume: Float64
+    public var volume: Float64 = 0.0
 
     public func toString(): String {
         return "Snapshot(${date}, ${close})"
@@ -28,23 +28,17 @@ public class Snapshot <: ToString {
 
     // 无参构造用于 CSV 反射填充。
     public Snapshot() {
-        this.date = DateTime.now()
-        this.open = 0.0
-        this.high = 0.0
-        this.low = 0.0
-        this.close = 0.0
-        this.adjClose = 0.0
-        this.volume = 0.0
+        // 所有字段使用默认值
     }
 
-    public init(Date: DateTime, Open: Float64, High: Float64, Low: Float64, Close: Float64, AdjClose: Float64, Volume: Float64) {
-        this.date = Date
-        this.open = Open
-        this.high = High
-        this.low = Low
-        this.close = Close
-        this.adjClose = AdjClose
-        this.volume = Volume
+    public init(date: DateTime, open: Float64, high: Float64, low: Float64, close: Float64, adjClose: Float64, volume: Float64) {
+        this.date = date
+        this.open = open
+        this.high = high
+        this.low = low
+        this.close = close
+        this.adjClose = adjClose
+        this.volume = volume
     }
 }
 

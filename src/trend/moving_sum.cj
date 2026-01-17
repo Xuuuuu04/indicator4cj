@@ -9,16 +9,23 @@ public class MovingSum {
     public var period: Int64 = 1
 
     public MovingSum() {
-        this.period = period
+        // 使用默认值 1
     }
 
     public init(period: Int64) {
         this.period = period
     }
 
-// compute 计算指标。
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return MovingSumIterator(c, period)
+/**
+ * compute 计算移动求和
+ *
+ * 计算指定周期内的移动总和。
+ *
+ * @param values 价格数据迭代器
+ * @return 移动和迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        return MovingSumIterator(values, period)
     }
 
 // idlePeriod 返回空闲周期数。

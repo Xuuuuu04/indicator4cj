@@ -10,18 +10,26 @@ public class Trima {
     public var period: Int64 = DefaultTrimaPeriod
 
     public Trima() {
-        this.period = period
+        // 使用默认值
     }
 
     public init(period: Int64) {
         this.period = period
     }
 
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
+/**
+ * compute 计算三角移动平均线
+ *
+ * 计算TRIMA，对SMA再次进行平均，权重呈三角形分布。
+ *
+ * @param values 价格数据迭代器
+ * @return TRIMA值迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let (p1, p2) = calculatePeriods()
         let sma1 = Sma(p1)
         let sma2 = Sma(p2)
-        return sma1.compute(sma2.compute(c))
+        return sma1.compute(sma2.compute(values))
     }
 
     public func idlePeriod(): Int64 {

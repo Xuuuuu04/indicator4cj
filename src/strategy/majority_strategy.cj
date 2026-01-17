@@ -29,11 +29,11 @@ public class MajorityStrategy <: Strategy {
             let (buy, hold, sell, ok) = countActions(sources)
             if (!ok) { break }
             if ((sell > buy) && (sell > hold)) {
-                result.add(Action.Sell)
+                result.add(Action.SELL)
             } else if ((buy > sell) && (buy > hold)) {
-                result.add(Action.Buy)
+                result.add(Action.BUY)
             } else {
-                result.add(Action.Hold)
+                result.add(Action.HOLD)
             }
         }
         return result.iterator()

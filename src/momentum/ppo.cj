@@ -12,8 +12,7 @@ public class Ppo {
     public var slowPeriod: Int64 = 26
 
     public Ppo() {
-        this.fastPeriod = fastPeriod
-        this.slowPeriod = slowPeriod
+        // 使用成员变量默认值
     }
 
     public init(fast: Int64, slow: Int64) {

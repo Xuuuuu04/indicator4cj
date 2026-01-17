@@ -11,15 +11,23 @@ public class Smma {
     public var period: Int64 = DefaultSmmaPeriod
 
     public Smma() {
-        this.period = period
+        // 使用默认值
     }
 
     public init(period: Int64) {
         this.period = period
     }
 
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return SmmaIterator(c, period)
+/**
+ * compute 计算平滑移动平均线
+ *
+ * 计算SMMA，基于Wilder平滑方法，等于RMA。
+ *
+ * @param values 价格数据迭代器
+ * @return SMMA值迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        return SmmaIterator(values, period)
     }
 
     public func idlePeriod(): Int64 { return period - 1 }

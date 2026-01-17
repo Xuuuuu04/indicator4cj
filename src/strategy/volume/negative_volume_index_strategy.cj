@@ -42,12 +42,12 @@ public class NegativeVolumeIndexStrategy <: Strategy {
         let ema = EmaIndicator.compute(nvis[1])
 
         let actions = operate(nvis[0], ema, { nvi: Float64, nviEma: Float64 =>
-            if (nvi < nviEma) { return Action.Buy }
-            if (nvi > nviEma) { return Action.Sell }
-            return Action.Hold
+            if (nvi < nviEma) { return Action.BUY }
+            if (nvi > nviEma) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod() + EmaIndicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod() + EmaIndicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

@@ -41,12 +41,12 @@ public class TsiStrategy <: Strategy {
         let signals = Signal.compute(tsis[1])
 
         let actions = operate(tsis[0], signals, { tsi: Float64, sig: Float64 =>
-            if ((tsi > 0.0) && (tsi > sig)) { return Action.Buy }
-            if ((tsi < 0.0) && (tsi < sig)) { return Action.Sell }
-            return Action.Hold
+            if ((tsi > 0.0) && (tsi > sig)) { return Action.BUY }
+            if ((tsi < 0.0) && (tsi < sig)) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, idlePeriod(), Action.Hold)
+        return shift(actions, idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

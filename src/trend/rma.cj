@@ -9,15 +9,24 @@ public class Rma {
     public var period: Int64 = 20
 
     public Rma() {
-        this.period = period
+        // 使用默认值 20
     }
 
     public init(period: Int64) {
         this.period = period
     }
 
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return RmaIterator(c, period)
+/**
+ * compute 计算滚动移动平均线
+ *
+ * 计算RMA（Rolling Moving Average），使用Wilder平滑方法。
+ * 与EMA类似但平滑公式不同。
+ *
+ * @param values 价格数据迭代器
+ * @return RMA值迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        return RmaIterator(values, period)
     }
 
     public func idlePeriod(): Int64 { return period - 1 }

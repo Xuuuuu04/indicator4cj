@@ -12,16 +12,28 @@ public class Mlr {
         this.MlsIndicator = Mls(period)
     }
 
-// compute 计算线性回归预测值。
-    public func compute(x: Iterator<Float64>, y: Iterator<Float64>): Iterator<Float64> {
+/**
+ * compute 计算线性回归预测值
+ *
+ * 基于最小二乘法进行线性回归预测。
+ * 公式：y_hat = m*x + b
+ *
+ * @param xValues 自变量X迭代器
+ * @param yValues 因变量Y迭代器
+ * @return 预测值迭代器
+ */
+    public func compute(
+        xValues: Iterator<Float64>,
+        yValues: Iterator<Float64>
+    ): Iterator<Float64> {
         // 需要两份 x：一份给 Mls 计算斜率截距，一份用于生成预测值
-        let xCopies = duplicate(x, 2)
-        let (mIter, bIter) = MlsIndicator.compute(xCopies[0], y)
-        
-        let xShifted = skip(xCopies[1], MlsIndicator.idlePeriod())
-        
-        let mx = operate(mIter, xShifted, { a: Float64, b: Float64 => a * b })
-        return add(mx, bIter)
+        let xDuplicates = duplicate(xValues, 2)
+        let (slopeIter, interceptIter) = MlsIndicator.compute(xDuplicates[0], yValues)
+
+        let xShifted = skip(xDuplicates[1], MlsIndicator.idlePeriod())
+
+        let predictedX = operate(slopeIter, xShifted, { a: Float64, b: Float64 => a * b })
+        return add(predictedX, interceptIter)
     }
 
 // idlePeriod 返回空闲周期数。

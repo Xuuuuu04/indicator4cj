@@ -15,7 +15,7 @@ class CmfTest {
         let lows = map(inputs[1], { m => m.low })
         let closes = map(inputs[2], { m => m.close })
         let volumes = map(inputs[3], { m => Float64(m.volume) })
-        var expected = map(inputs[4], { m => m.Cmf })
+        var expected = map(inputs[4], { m => m.cmf })
 
         let cmf = Cmf()
         let actual = roundDigits(cmf.compute(highs, lows, closes, volumes), 2)
@@ -33,7 +33,7 @@ public class CmfRow {
     public var low: Float64 = 0.0
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Cmf: Float64 = 0.0
+    public var cmf: Float64 = 0.0
     public init() {}
 }
 

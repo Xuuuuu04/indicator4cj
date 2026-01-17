@@ -11,7 +11,7 @@ public class StochasticOscillator {
     public var period: Int64 = 14
 
     public StochasticOscillator() {
-        this.period = period
+        // 使用默认值 14
     }
 
     public init(period: Int64) {

@@ -64,13 +64,13 @@ public class PercentBandMFIStrategy <: Strategy {
         let pb = PercentBInd.compute(closings[1])
 
         let actions = operate(pb, mfis, { b: Float64, mfi: Float64 =>
-            if ((b < SellPercentBAt) && (mfi < SellMfiAt)) { return Action.Buy }
-            if ((b > BuyPercentBAt) && (mfi > BuyMfiAt)) { return Action.Sell }
-            return Action.Hold
+            if ((b < SellPercentBAt) && (mfi < SellMfiAt)) { return Action.BUY }
+            if ((b > BuyPercentBAt) && (mfi > BuyMfiAt)) { return Action.SELL }
+            return Action.HOLD
         })
 
         // 前置填充 Idle，与 Go 版一致。
-        return shift(actions, PercentBInd.idlePeriod(), Action.Hold)
+        return shift(actions, PercentBInd.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

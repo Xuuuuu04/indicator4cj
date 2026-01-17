@@ -13,7 +13,7 @@ class ObvTest {
         let inputs = duplicate(input, 3)
         let closings = map(inputs[0], { m => m.close })
         let volumes = map(inputs[1], { m => Float64(m.volume) })
-        var expected = map(inputs[2], { m => m.Obv })
+        var expected = map(inputs[2], { m => m.obv })
 
         let obv = Obv()
         let actual = roundDigits(obv.compute(closings, volumes), 2)
@@ -29,7 +29,7 @@ class ObvTest {
 public class ObvData {
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Obv: Float64 = 0.0
+    public var obv: Float64 = 0.0
     public init() {}
 }
 

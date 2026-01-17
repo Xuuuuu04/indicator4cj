@@ -42,11 +42,11 @@ public class WeightedCloseStrategy <: Strategy {
         wcDup[0] = skip(wcDup[0], Ma.idlePeriod())
 
         let actions = operate(wcDup[0], mas, { wc: Float64, ma: Float64 =>
-            if (wc > ma) { return Action.Buy }
-            return Action.Sell
+            if (wc > ma) { return Action.BUY }
+            return Action.SELL
         })
 
-        return shift(actions, Ma.idlePeriod(), Action.Hold)
+        return shift(actions, Ma.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

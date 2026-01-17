@@ -4,29 +4,29 @@ import std.collection.*
 
 // echo：输出原序列后，重复末尾 last 个元素共 count 轮。
 // 若 last<=0 或 count<=0，则直接返回原迭代器。
-public func echo<T>(iter: Iterator<T>, last: Int64, count: Int64): Iterator<T> {
+public func echo<TElement>(iter: Iterator<TElement>, last: Int64, count: Int64): Iterator<TElement> {
     if (last <= 0 || count <= 0) {
         return iter
     }
-    return EchoIterator<T>(iter, last, count)
+    return EchoIterator<TElement>(iter, last, count)
 }
 
-public class EchoIterator<T> <: Iterator<T> {
-    private let _source: Iterator<T>
+public class EchoIterator<TElement> <: Iterator<TElement> {
+    private let _source: Iterator<TElement>
     private let _window: Int64
     private var _remainingRounds: Int64
-    private let _buf: ArrayList<T>
+    private let _buf: ArrayList<TElement>
     private var _reading: Bool = true
     private var _replayIndex: Int64 = 0
 
-    public init(source: Iterator<T>, last: Int64, count: Int64) {
+    public init(source: Iterator<TElement>, last: Int64, count: Int64) {
         this._source = source
         this._window = last
         this._remainingRounds = count
-        this._buf = ArrayList<T>()
+        this._buf = ArrayList<TElement>()
     }
 
-    public func next(): Option<T> {
+    public func next(): Option<TElement> {
         if (_reading) {
             match (_source.next()) {
                 case Some(v) =>

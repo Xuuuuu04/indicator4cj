@@ -41,7 +41,7 @@ public class MacdRsiStrategy <: Strategy {
 
         let actions = operate(macdActions, rsiActions, { ma: Action, ra: Action =>
             if (ma == ra) { return ma }
-            return Action.Hold
+            return Action.HOLD
         })
 
         return actions
@@ -52,9 +52,9 @@ public class MacdRsiStrategy <: Strategy {
         let dates = snapshotsAsDates(snaps[0])
         let closings = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
-        var (macds, signals) = MacdStrategyInst.Macd.compute(closings[0])
-        macds = shift(macds, MacdStrategyInst.Macd.idlePeriod(), 0.0)
-        signals = shift(signals, MacdStrategyInst.Macd.idlePeriod(), 0.0)
+        var (macds, signals) = MacdStrategyInst.macd.compute(closings[0])
+        macds = shift(macds, MacdStrategyInst.macd.idlePeriod(), 0.0)
+        signals = shift(signals, MacdStrategyInst.macd.idlePeriod(), 0.0)
 
         var rsiVals = RsiStrategyInst.Indicator.compute(closings[2])
         rsiVals = shift(rsiVals, RsiStrategyInst.Indicator.idlePeriod(), 0.0)

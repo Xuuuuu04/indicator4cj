@@ -27,12 +27,12 @@ public class ApoStrategy <: Strategy {
         inputs[1] = skip(inputs[1], 1)
 
         let actions = operate(inputs[0], inputs[1], { prev: Float64, curr: Float64 =>
-            if ((curr >= 0.0) && (prev < 0.0)) { return Action.Buy }
-            if ((curr <= 0.0) && (prev > 0.0)) { return Action.Sell }
-            return Action.Hold
+            if ((curr >= 0.0) && (prev < 0.0)) { return Action.BUY }
+            if ((curr <= 0.0) && (prev > 0.0)) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, indicator.slowPeriod, Action.Hold)
+        return shift(actions, indicator.slowPeriod, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

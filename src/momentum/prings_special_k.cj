@@ -8,18 +8,18 @@ import indicator4cj.trend.*
 public class PringsSpecialK {
     // compute 计算普林特殊K指标。
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
-        let roc10 = multiplyBy(Roc(values, 10), 1.0)
-        let roc15 = multiplyBy(Roc(values, 15), 2.0)
-        let roc20 = multiplyBy(Roc(values, 20), 3.0)
-        let roc30 = multiplyBy(Roc(values, 30), 4.0)
-        let roc40 = multiplyBy(Roc(values, 40), 1.0)
-        let roc65 = multiplyBy(Roc(values, 65), 2.0)
-        let roc75 = multiplyBy(Roc(values, 75), 3.0)
-        let roc100 = multiplyBy(Roc(values, 100), 4.0)
-        let roc195 = multiplyBy(Roc(values, 195), 1.0)
-        let roc265 = multiplyBy(Roc(values, 265), 2.0)
-        let roc390 = multiplyBy(Roc(values, 390), 3.0)
-        let roc530 = multiplyBy(Roc(values, 530), 4.0)
+        let roc10 = multiplyBy(roc(values, 10), 1.0)
+        let roc15 = multiplyBy(roc(values, 15), 2.0)
+        let roc20 = multiplyBy(roc(values, 20), 3.0)
+        let roc30 = multiplyBy(roc(values, 30), 4.0)
+        let roc40 = multiplyBy(roc(values, 40), 1.0)
+        let roc65 = multiplyBy(roc(values, 65), 2.0)
+        let roc75 = multiplyBy(roc(values, 75), 3.0)
+        let roc100 = multiplyBy(roc(values, 100), 4.0)
+        let roc195 = multiplyBy(roc(values, 195), 1.0)
+        let roc265 = multiplyBy(roc(values, 265), 2.0)
+        let roc390 = multiplyBy(roc(values, 390), 3.0)
+        let roc530 = multiplyBy(roc(values, 530), 4.0)
 
         let s1 = add(roc10, roc15)
         let s2 = add(roc20, roc30)
@@ -38,7 +38,7 @@ public class PringsSpecialK {
 }
 
 // 变化率辅助函数：(curr - prev_n) / prev_n * 100
-private func Roc(values: Iterator<Float64>, period: Int64): Iterator<Float64> {
+private func roc(values: Iterator<Float64>, period: Int64): Iterator<Float64> {
     return multiplyBy(changeRatio(values, period), 100.0)
 }
 

@@ -11,7 +11,7 @@ public class Cci {
     public var period: Int64 = DefaultCciPeriod
 
     public Cci() {
-        this.period = period
+        // 使用默认值
     }
 
     public init(period: Int64) {

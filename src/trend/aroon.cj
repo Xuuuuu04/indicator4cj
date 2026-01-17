@@ -11,7 +11,7 @@ public class Aroon {
     public var period: Int64 = DefaultAroonPeriod
 
     public Aroon() {
-        this.period = period
+        // 使用默认值
     }
 
     public init(period: Int64) {

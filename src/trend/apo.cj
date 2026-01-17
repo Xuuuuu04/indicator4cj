@@ -26,21 +26,29 @@ public class Apo {
         this.slowSmoothing = DefaultApoSlowSmoothing
     }
 
-    // compute 计算绝对价格震荡指标。
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
+/**
+ * compute 计算绝对价格震荡指标
+ *
+ * 计算APO，衡量两个EMA之间的差异。
+ * 公式：APO = EMA(快速) - EMA(慢速)
+ *
+ * @param values 价格数据迭代器
+ * @return APO值迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
         // Buffered 为保持与 Go 签名一致（当前直通）
-        let buffered = buffered(c, slowPeriod)
-        let cs = duplicate(buffered, 2)
+        let buffered = buffered(values, slowPeriod)
+        let duplicatedValues = duplicate(buffered, 2)
 
         let fastEma = Ema(fastPeriod)
         fastEma.smoothing = fastSmoothing
         let slowEma = Ema(slowPeriod)
         slowEma.smoothing = slowSmoothing
 
-        cs[0] = fastEma.compute(cs[0])
-        cs[1] = slowEma.compute(cs[1])
+        duplicatedValues[0] = fastEma.compute(duplicatedValues[0])
+        duplicatedValues[1] = slowEma.compute(duplicatedValues[1])
 
-        return subtract(cs[0], cs[1])
+        return subtract(duplicatedValues[0], duplicatedValues[1])
     }
 
     // idlePeriod 返回空闲周期数。

@@ -14,9 +14,9 @@ class NpvTest {
     public func npv_basic() {
         let input = Csv<NpvRow>().readFromFile("src/test/testdata/valuation/npv.csv")
         for (row in input) {
-            let cashFlows = parseFlows(row.CashFlows)
-            let actual = rounddigit(npv(row.Rate, cashFlows), 2)
-            @Expect(actual, row.NPV)
+            let cashFlows = parseFlows(row.cashFlows)
+            let actual = rounddigit(npv(row.rate, cashFlows), 2)
+            @Expect(actual, row.npv)
         }
     }
 
@@ -29,9 +29,9 @@ class NpvTest {
 }
 
 public class NpvRow {
-    public var Rate: Float64 = 0.0
-    public var CashFlows: String = ""
-    public var NPV: Float64 = 0.0
+    public var rate: Float64 = 0.0
+    public var cashFlows: String = ""
+    public var npv: Float64 = 0.0
     public init() {}
 }
 

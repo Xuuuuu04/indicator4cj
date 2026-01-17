@@ -13,7 +13,7 @@ class NviTest {
         let inputs = duplicate(input, 3)
         let closings = map(inputs[0], { m => m.close })
         let volumes = map(inputs[1], { m => Float64(m.volume) })
-        var expected = map(inputs[2], { m => m.Nvi })
+        var expected = map(inputs[2], { m => m.nvi })
 
         let nvi = Nvi()
         let actual = roundDigits(nvi.compute(closings, volumes), 2)
@@ -29,7 +29,7 @@ class NviTest {
 public class NviData {
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Nvi: Float64 = 0.0
+    public var nvi: Float64 = 0.0
     public init() {}
 }
 

@@ -15,7 +15,7 @@ class MfiTest {
         let lows = map(inputs[1], { m => m.low })
         let closings = map(inputs[2], { m => m.close })
         let volumes = map(inputs[3], { m => Float64(m.volume) })
-        var expected = map(inputs[4], { m => m.Mfi })
+        var expected = map(inputs[4], { m => m.mfi })
 
         let mfi = Mfi()
         let actual = roundDigits(mfi.compute(highs, lows, closings, volumes), 2)
@@ -33,7 +33,7 @@ public class MfiData {
     public var low: Float64 = 0.0
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Mfi: Float64 = 0.0
+    public var mfi: Float64 = 0.0
     public init() {}
 }
 

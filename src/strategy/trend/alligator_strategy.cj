@@ -49,12 +49,12 @@ public class AlligatorStrategy <: Strategy {
         lips = syncPeriod(common, Lip.period, lips)
 
         let actions = operate3(jaws, teeths, lips, { jaw: Float64, teeth: Float64, lip: Float64 =>
-            if ((lip > teeth) && (lip > jaw)) { return Action.Buy }
-            if ((lip < teeth) && (lip < jaw)) { return Action.Sell }
-            return Action.Hold
+            if ((lip > teeth) && (lip > jaw)) { return Action.BUY }
+            if ((lip < teeth) && (lip < jaw)) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, common, Action.Hold)
+        return shift(actions, common, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

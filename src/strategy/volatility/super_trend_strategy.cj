@@ -34,12 +34,12 @@ public class SuperTrendStrategy <: Strategy {
         closingsDup[1] = skip(closingsDup[1], Indicator.idlePeriod())
 
         let actions = operate(superTrends, closingsDup[1], { st: Float64, close: Float64 =>
-            if (st < close) { return Action.Buy }
-            if (st > close) { return Action.Sell }
-            return Action.Hold
+            if (st < close) { return Action.BUY }
+            if (st > close) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

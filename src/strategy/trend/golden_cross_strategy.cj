@@ -32,11 +32,11 @@ public class GoldenCrossStrategy <: Strategy {
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let (fastEmas, slowEmas) = calculateEmas(c)
         let actions = operate(fastEmas, slowEmas, { f: Float64, s: Float64 =>
-            if (f > s) { return Action.Buy }
-            if (f < s) { return Action.Sell }
-            return Action.Hold
+            if (f > s) { return Action.BUY }
+            if (f < s) { return Action.SELL }
+            return Action.HOLD
         })
-        return shift(actions, SlowEma.idlePeriod(), Action.Hold)
+        return shift(actions, SlowEma.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

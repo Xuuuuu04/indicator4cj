@@ -13,7 +13,7 @@ class VptTest {
         let inputs = duplicate(input, 3)
         let closings = map(inputs[0], { m => m.close })
         let volumes = map(inputs[1], { m => Float64(m.volume) })
-        var expected = map(inputs[2], { m => m.Vpt })
+        var expected = map(inputs[2], { m => m.vpt })
 
         let vpt = Vpt()
         let actual = roundDigits(vpt.compute(closings, volumes), 2)
@@ -29,7 +29,7 @@ class VptTest {
 public class VptData {
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Vpt: Float64 = 0.0
+    public var vpt: Float64 = 0.0
     public init() {}
 }
 

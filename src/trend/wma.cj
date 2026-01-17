@@ -9,7 +9,7 @@ public class Wma {
     public var period: Int64 = 20
 
     public init(period: Int64) {
-        if (period <= 0) { throw Exception("period must be > 0") }
+        if (period <= 0) { throw Exception("[WMA] period must be positive, got ${period}") }
         this.period = period
     }
 

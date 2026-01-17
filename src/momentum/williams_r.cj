@@ -10,7 +10,7 @@ public class WilliamsR {
     public var period: Int64 = 14
 
     public WilliamsR() {
-        this.period = period
+        // 使用默认值 14
     }
 
     public init(period: Int64) {

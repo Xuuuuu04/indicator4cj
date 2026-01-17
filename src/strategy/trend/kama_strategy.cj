@@ -30,12 +30,12 @@ public class KamaStrategy <: Strategy {
         let kamas = Indicator.compute(closings[0])
 
         let actions = operate(kamas, closings[1], { kama: Float64, closing: Float64 =>
-            if (closing > kama) { return Action.Buy }
-            if (closing < kama) { return Action.Sell }
-            return Action.Hold
+            if (closing > kama) { return Action.BUY }
+            if (closing < kama) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

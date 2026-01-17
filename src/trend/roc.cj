@@ -11,8 +11,9 @@ public class Roc {
     public var period: Int64 = DefaultRocPeriod
 
     public Roc() {
-        this.period = period
+        // 使用默认值
     }
+
     public init(period: Int64) {
         if (period <= 0) {
             this.period = DefaultRocPeriod

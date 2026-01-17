@@ -14,7 +14,7 @@ class MfmTest {
         let highs = map(inputs[0], { m => m.high })
         let lows = map(inputs[1], { m => m.low })
         let closes = map(inputs[2], { m => m.close })
-        var expected = map(inputs[3], { m => m.Mfm })
+        var expected = map(inputs[3], { m => m.mfm })
 
         let mfm = Mfm()
         let actual = roundDigits(mfm.compute(highs, lows, closes), 2)
@@ -31,7 +31,7 @@ public class MfmRow {
     public var high: Float64 = 0.0
     public var low: Float64 = 0.0
     public var close: Float64 = 0.0
-    public var Mfm: Float64 = 0.0
+    public var mfm: Float64 = 0.0
     public init() {}
 }
 

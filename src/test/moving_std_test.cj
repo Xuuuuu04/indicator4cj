@@ -9,7 +9,7 @@ import indicator4cj.volatility.*
 
 class MovingStdData {
     public var close: Float64 = 0.0
-    public var Std: Float64 = 0.0
+    public var std: Float64 = 0.0
 }
 
 @Test
@@ -17,7 +17,7 @@ public func test_moving_std_basic() {
     let input = Csv<MovingStdData>().readFromFile("src/test/testdata/volatility/moving_std.csv")
     let inputs = duplicate(input, 2)
     let closings = h.map(inputs[0], { d: MovingStdData => d.close })
-    let expected = h.map(inputs[1], { d: MovingStdData => d.Std })
+    let expected = h.map(inputs[1], { d: MovingStdData => d.std })
 
     let std = MovingStd(20)
     let actual = h.roundDigits(std.compute(closings), 2)

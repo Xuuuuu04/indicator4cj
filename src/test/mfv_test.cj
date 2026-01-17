@@ -15,7 +15,7 @@ class MfvTest {
         let lows = map(inputs[1], { m => m.low })
         let closes = map(inputs[2], { m => m.close })
         let volumes = map(inputs[3], { m => Float64(m.volume) })
-        var expected = map(inputs[4], { m => m.Mfv })
+        var expected = map(inputs[4], { m => m.mfv })
 
         let mfv = Mfv()
         let actual = roundDigits(mfv.compute(highs, lows, closes, volumes), 2)
@@ -33,7 +33,7 @@ public class MfvRow {
     public var low: Float64 = 0.0
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Mfv: Float64 = 0.0
+    public var mfv: Float64 = 0.0
     public init() {}
 }
 

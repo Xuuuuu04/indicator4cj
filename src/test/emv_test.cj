@@ -14,7 +14,7 @@ class EmvTest {
         let highs = map(inputs[0], { m => m.high })
         let lows = map(inputs[1], { m => m.low })
         let volumes = map(inputs[2], { m => Float64(m.volume) })
-        var expected = map(inputs[3], { m => m.Emv })
+        var expected = map(inputs[3], { m => m.emv })
 
         let emv = Emv()
         let actual = roundDigits(emv.compute(highs, lows, volumes), 2)
@@ -31,7 +31,7 @@ public class EmvRow {
     public var high: Float64 = 0.0
     public var low: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Emv: Float64 = 0.0
+    public var emv: Float64 = 0.0
     public init() {}
 }
 

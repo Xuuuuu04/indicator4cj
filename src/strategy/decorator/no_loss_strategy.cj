@@ -64,15 +64,15 @@ private class NoLossIterator <: Iterator<Action> {
             case Some(a) =>
                 match (_closings.next()) {
                     case Some(price) =>
-                        if ((a == Action.Buy) && (_boughtAt == 0.0)) {
+                        if ((a == Action.BUY) && (_boughtAt == 0.0)) {
                             _boughtAt = price
-                            return Some(Action.Buy)
+                            return Some(Action.BUY)
                         }
-                        if ((a == Action.Sell) && (_boughtAt != 0.0) && (_boughtAt < price)) {
+                        if ((a == Action.SELL) && (_boughtAt != 0.0) && (_boughtAt < price)) {
                             _boughtAt = 0.0
-                            return Some(Action.Sell)
+                            return Some(Action.SELL)
                         }
-                        return Some(Action.Hold)
+                        return Some(Action.HOLD)
                     case None => return None
                 }
             case None => return None

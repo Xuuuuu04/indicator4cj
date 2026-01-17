@@ -9,7 +9,7 @@ public class Momentum {
     public var period: Int64 = 10
 
     public Momentum() {
-        this.period = period
+        // 使用默认值 10
     }
 
     public init(period: Int64) {

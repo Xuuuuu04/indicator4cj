@@ -31,12 +31,12 @@ public class EnvelopeStrategy <: Strategy {
 
         let (uppers, _, lowers) = Indicator.compute(closings[0])
         let actions = operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
-            if (close < low) { return Action.Buy }
-            if (close > up) { return Action.Sell }
-            return Action.Hold
+            if (close < low) { return Action.BUY }
+            if (close > up) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

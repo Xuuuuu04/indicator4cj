@@ -24,7 +24,7 @@ public class SQLRepository <: Repository {
     // get 获取指定资产的全部快照数据
     public func get(name: String): Iterator<Snapshot> {
         if (!_storage.contains(name)) {
-            throw Exception("sql repository: asset '${name}' not found")
+            throw Exception("[SQLRepository] asset '${name}' not found")
         }
         return _storage[name].iterator()
     }
@@ -50,7 +50,7 @@ public class SQLRepository <: Repository {
         }
         return match (last) {
             case Some(dt) => dt
-            case None => throw Exception("sql repository: asset '${name}' is empty")
+            case None => throw Exception("[SQLRepository] asset '${name}' is empty")
         }
     }
 

@@ -3,27 +3,33 @@ package indicator4cj.strategy
 import std.core.*
 import std.collection.*
 
+/**
+ * Action 表示交易动作
+ * - BUY: 买入信号
+ * - SELL: 卖出信号
+ * - HOLD: 持有/观望信号
+ */
 public enum Action <: ToString & Equatable<Action> {
-    | Buy
-    | Sell
-    | Hold
+    | BUY
+    | SELL
+    | HOLD
 
     public func toString(): String {
         match (this) {
-            case Action.Buy => return "Buy"
-            case Action.Sell => return "Sell"
-            case Action.Hold => return "Hold"
+            case Action.BUY => return "BUY"
+            case Action.SELL => return "SELL"
+            case Action.HOLD => return "HOLD"
         }
     }
 
     public operator func ==(right: Action): Bool {
         match (this) {
-            case Action.Buy =>
-                match (right) { case Action.Buy => return true case _ => return false }
-            case Action.Sell =>
-                match (right) { case Action.Sell => return true case _ => return false }
-            case Action.Hold =>
-                match (right) { case Action.Hold => return true case _ => return false }
+            case Action.BUY =>
+                match (right) { case Action.BUY => return true case _ => return false }
+            case Action.SELL =>
+                match (right) { case Action.SELL => return true case _ => return false }
+            case Action.HOLD =>
+                match (right) { case Action.HOLD => return true case _ => return false }
         }
     }
 
@@ -32,16 +38,24 @@ public enum Action <: ToString & Equatable<Action> {
     }
 }
 
-// 返回 "B"/"S"/"" 注解。
+/**
+ * annotation 将 Action 转换为注解字符串
+ * @param a 交易动作
+ * @return "B"(买入)/"S"(卖出)/""(持有)
+ */
 public func annotation(a: Action): String {
     match (a) {
-        case Action.Buy => return "B"
-        case Action.Sell => return "S"
-        case Action.Hold => return ""
+        case Action.BUY => return "B"
+        case Action.SELL => return "S"
+        case Action.HOLD => return ""
     }
 }
 
-// 将 Action 迭代器转注解迭代器（一次性消费）。
+/**
+ * actionsToAnnotations 将 Action 迭代器转换为注解迭代器（一次性消费）
+ * @param ac Action 迭代器
+ * @return 注解字符串迭代器
+ */
 public func actionsToAnnotations(ac: Iterator<Action>): Iterator<String> {
     let norm = normalizeActions(ac)
     let res = ArrayList<String>()
@@ -54,18 +68,22 @@ public func actionsToAnnotations(ac: Iterator<Action>): Iterator<String> {
     return res.iterator()
 }
 
-// 归一化：消除连续重复的非 Hold，保持 Hold/Buy/Hold/Sell 顺序。
+/**
+ * normalizeActions 归一化动作序列：消除连续重复的非 HOLD，保持 HOLD/BUY/HOLD/SELL 顺序
+ * @param ac Action 迭代器
+ * @return 归一化后的 Action 迭代器
+ */
 public func normalizeActions(ac: Iterator<Action>): Iterator<Action> {
-    var last = Action.Sell
+    var last = Action.SELL
     let res = ArrayList<Action>()
     while (true) {
         match (ac.next()) {
             case Some(a) =>
-                if (a != Action.Hold && a != last) {
+                if (a != Action.HOLD && a != last) {
                     last = a
                     res.add(a)
                 } else {
-                    res.add(Action.Hold)
+                    res.add(Action.HOLD)
                 }
             case None => break
         }
@@ -73,14 +91,18 @@ public func normalizeActions(ac: Iterator<Action>): Iterator<Action> {
     return res.iterator()
 }
 
-// 反归一化：填充 Hold 为上一个非 Hold。
+/**
+ * denormalizeActions 反归一化：填充 HOLD 为上一个非 HOLD 动作
+ * @param ac Action 迭代器
+ * @return 反归一化后的 Action 迭代器
+ */
 public func denormalizeActions(ac: Iterator<Action>): Iterator<Action> {
-    var last = Action.Hold
+    var last = Action.HOLD
     let res = ArrayList<Action>()
     while (true) {
         match (ac.next()) {
             case Some(a) =>
-                if (a != Action.Hold && a != last) {
+                if (a != Action.HOLD && a != last) {
                     last = a
                 }
                 res.add(last)
@@ -90,13 +112,22 @@ public func denormalizeActions(ac: Iterator<Action>): Iterator<Action> {
     return res.iterator()
 }
 
+/**
+ * actionFromInt 将整数转换为 Action
+ * @param v 整数值（1=BUY, -1=SELL, 其他=HOLD）
+ * @return 对应的 Action
+ */
 public func actionFromInt(v: Int64): Action {
-    if (v == 1) { return Action.Buy }
-    if (v == -1) { return Action.Sell }
-    return Action.Hold
+    if (v == 1) { return Action.BUY }
+    if (v == -1) { return Action.SELL }
+    return Action.HOLD
 }
 
-// 统计多个 Action 迭代器当前值，返回 (buy, hold, sell, ok)
+/**
+ * countActions 统计多个 Action 迭代器当前值
+ * @param acs Action 迭代器列表
+ * @return (买入数量, 持有数量, 卖出数量, 是否全部有效)
+ */
 public func countActions(acs: ArrayList<Iterator<Action>>): (Int64, Int64, Int64, Bool) {
     var buy: Int64 = 0
     var hold: Int64 = 0
@@ -105,9 +136,9 @@ public func countActions(acs: ArrayList<Iterator<Action>>): (Int64, Int64, Int64
         match (ac.next()) {
             case Some(a) =>
                 match (a) {
-                    case Action.Buy => buy += 1
-                    case Action.Sell => sell += 1
-                    case Action.Hold => hold += 1
+                    case Action.BUY => buy += 1
+                    case Action.SELL => sell += 1
+                    case Action.HOLD => hold += 1
                 }
             case None => return (0, 0, 0, false)
         }
@@ -115,14 +146,18 @@ public func countActions(acs: ArrayList<Iterator<Action>>): (Int64, Int64, Int64
     return (buy, hold, sell, true)
 }
 
-// 统计交易次数（非 Hold）。
+/**
+ * countTransactions 统计交易次数（非 HOLD）
+ * @param ac Action 迭代器
+ * @return 累计交易次数迭代器
+ */
 public func countTransactions(ac: Iterator<Action>): Iterator<Int64> {
     var tx: Int64 = 0
     let res = ArrayList<Int64>()
     while (true) {
         match (ac.next()) {
             case Some(a) =>
-                if (a != Action.Hold) { tx += 1 }
+                if (a != Action.HOLD) { tx += 1 }
                 res.add(tx)
             case None => break
         }

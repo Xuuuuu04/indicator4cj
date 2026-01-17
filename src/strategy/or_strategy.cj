@@ -29,11 +29,11 @@ public class OrStrategy <: Strategy {
             let (buy, _, sell, ok) = countActions(sources)
             if (!ok) { break }
             if ((sell > 0) && (buy == 0)) {
-                result.add(Action.Sell)
+                result.add(Action.SELL)
             } else if ((buy > 0) && (sell == 0)) {
-                result.add(Action.Buy)
+                result.add(Action.BUY)
             } else {
-                result.add(Action.Hold)
+                result.add(Action.HOLD)
             }
         }
         return result.iterator()

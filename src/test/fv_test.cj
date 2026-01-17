@@ -11,17 +11,17 @@ class FvTest {
     public func fv_basic() {
         let input = Csv<FvRow>().readFromFile("src/test/testdata/valuation/fv.csv")
         for (row in input) {
-            let actual = rounddigit(fv(row.PV, row.Rate, row.Years), 2)
-            @Expect(actual, row.FV)
+            let actual = rounddigit(fv(row.pv, row.rate, row.years), 2)
+            @Expect(actual, row.fv)
         }
     }
 }
 
 public class FvRow {
-    public var PV: Float64 = 0.0
-    public var Rate: Float64 = 0.0
-    public var Years: Int64 = 0
-    public var FV: Float64 = 0.0
+    public var pv: Float64 = 0.0
+    public var rate: Float64 = 0.0
+    public var years: Int64 = 0
+    public var fv: Float64 = 0.0
     public init() {}
 }
 

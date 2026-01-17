@@ -33,9 +33,9 @@ class BuyAndHoldIterator <: Iterator<Action> {
             case Some(_) =>
                 if (_isFirst) {
                     _isFirst = false
-                    return Some(Action.Buy)
+                    return Some(Action.BUY)
                 }
-                return Some(Action.Hold)
+                return Some(Action.HOLD)
             case None => return None
         }
     }

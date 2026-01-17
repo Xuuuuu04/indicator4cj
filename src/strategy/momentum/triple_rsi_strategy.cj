@@ -73,37 +73,37 @@ public class TripleRsiStrategy <: Strategy {
             memory.put(rsi)
 
             if (!memory.isFull()) {
-                return Action.Hold
+                return Action.HOLD
             }
 
             if (rsi > SellAt) {
-                return Action.Sell
+                return Action.SELL
             }
 
             if (rsi >= BuyAt) {
-                return Action.Hold
+                return Action.HOLD
             }
 
             var i: Int64 = 1
             while (i < DownDays) {
                 if (memory.at(i - 1) > memory.at(i)) {
-                    return Action.Hold
+                    return Action.HOLD
                 }
                 i += 1
             }
 
             if (memory.at(0) >= BuySignalAt) {
-                return Action.Hold
+                return Action.HOLD
             }
 
             if (closing <= sma) {
-                return Action.Hold
+                return Action.HOLD
             }
 
-            return Action.Buy
+            return Action.BUY
         })
 
-        return shift(actions, SmaIndicator.idlePeriod(), Action.Hold)
+        return shift(actions, SmaIndicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

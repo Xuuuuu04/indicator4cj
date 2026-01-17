@@ -13,7 +13,7 @@ class FiTest {
         let inputs = duplicate(input, 3)
         let closes = map(inputs[0], { m => m.close })
         let volumes = map(inputs[1], { m => Float64(m.volume) })
-        var expected = map(inputs[2], { m => m.Fi })
+        var expected = map(inputs[2], { m => m.fi })
 
         let fi = Fi()
         let actual = roundDigits(fi.compute(closes, volumes), 2)
@@ -29,7 +29,7 @@ class FiTest {
 public class FiRow {
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Fi: Float64 = 0.0
+    public var fi: Float64 = 0.0
     public init() {}
 }
 

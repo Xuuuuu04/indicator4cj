@@ -9,37 +9,42 @@ import indicator4cj.strategy.*
 
 public class MacdStrategy <: Strategy {
     // MACD
-    public let Macd: Macd
+    public let macd: Macd
+    private let _macd: Macd
 
     public init() {
-        this.Macd = newMacd()
+        let m = newMacd()
+        this._macd = m
+        this.macd = m
     }
 
     public init(period1: Int64, period2: Int64, period3: Int64) {
-        this.Macd = newMacdWithPeriod(period1, period2, period3)
+        let m = newMacdWithPeriod(period1, period2, period3)
+        this._macd = m
+        this.macd = m
     }
 
     public func name(): String {
-        return "MACD Strategy (${Macd.ema1.period},${Macd.ema2.period},${Macd.ema3.period})"
+        return "MACD Strategy (${macd.ema1.period},${macd.ema2.period},${macd.ema3.period})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = snapshotsAsClosings(snapshots)
-        let (macdsRaw, signalsRaw) = Macd.compute(closings)
+        let (macdsRaw, signalsRaw) = macd.compute(closings)
         let macds = duplicate(macdsRaw, 2)
         let signals = duplicate(signalsRaw, 2)
 
         let actions = operate(macds[0], signals[0], { macd: Float64, signal: Float64 =>
             if ((macd > signal) && (macd < 0.0)) {
-                return Action.Buy
+                return Action.BUY
             }
             if ((signal > macd) && (macd > 0.0)) {
-                return Action.Sell
+                return Action.SELL
             }
-            return Action.Hold
+            return Action.HOLD
         })
 
-        return shift(actions, Macd.idlePeriod(), Action.Hold)
+        return shift(actions, macd.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -47,9 +52,9 @@ public class MacdStrategy <: Strategy {
         let dates = snapshotsAsDates(snaps[0])
         let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 2)
 
-        var (macds, signals) = Macd.compute(closingsDup[0])
-        macds = shift(macds, Macd.idlePeriod(), 0.0)
-        signals = shift(signals, Macd.idlePeriod(), 0.0)
+        var (macds, signals) = macd.compute(closingsDup[0])
+        macds = shift(macds, macd.idlePeriod(), 0.0)
+        signals = shift(signals, macd.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = actionsToAnnotations(actions)

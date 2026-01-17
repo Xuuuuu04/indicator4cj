@@ -10,12 +10,20 @@ public class BollingerBandWidth {
     public BollingerBandWidth() {
     }
 
-    // compute 计算布林带宽度指标。
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        let (upper, middle, lower) = _bands.compute(c)
+/**
+ * compute 计算布林带宽度
+ *
+ * 计算布林带宽度 = (上轨 - 下轨) / 中轨。
+ * 用于衡量市场波动性。
+ *
+ * @param values 价格数据迭代器
+ * @return 布林带宽度迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        let (upperBand, middleBand, lowerBand) = _bands.compute(values)
         return divide(
-            subtract(upper, lower),
-            middle
+            subtract(upperBand, lowerBand),
+            middleBand
         )
     }
 

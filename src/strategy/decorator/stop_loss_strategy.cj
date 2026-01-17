@@ -69,15 +69,15 @@ private class StopLossIterator <: Iterator<Action> {
             case Some(a) =>
                 match (_closings.next()) {
                     case Some(price) =>
-                        if ((a == Action.Buy) && (_stopLossAt == 0.0)) {
+                        if ((a == Action.BUY) && (_stopLossAt == 0.0)) {
                             _stopLossAt = price * (1.0 - _percentage)
-                            return Some(Action.Buy)
+                            return Some(Action.BUY)
                         }
-                        if ((_stopLossAt != 0.0) && ((a == Action.Sell) || (price <= _stopLossAt))) {
+                        if ((_stopLossAt != 0.0) && ((a == Action.SELL) || (price <= _stopLossAt))) {
                             _stopLossAt = 0.0
-                            return Some(Action.Sell)
+                            return Some(Action.SELL)
                         }
-                        return Some(Action.Hold)
+                        return Some(Action.HOLD)
                     case None => return None
                 }
             case None => return None

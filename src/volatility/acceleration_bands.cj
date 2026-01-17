@@ -9,7 +9,7 @@ public class AccelerationBands {
     public var period: Int64 = 20
 
     public AccelerationBands() {
-        this.period = period
+        // 使用默认值 20
     }
 
     public init(period: Int64) {

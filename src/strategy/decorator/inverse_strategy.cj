@@ -23,9 +23,9 @@ public class InverseStrategy <: Strategy {
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         return h.map(InnerStrategy.compute(snapshots), { a: Action =>
             match (a) {
-                case Action.Buy => return Action.Sell
-                case Action.Sell => return Action.Buy
-                case _ => return Action.Hold
+                case Action.BUY => return Action.SELL
+                case Action.SELL => return Action.BUY
+                case _ => return Action.HOLD
             }
         })
     }

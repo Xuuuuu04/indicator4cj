@@ -62,7 +62,7 @@ public class HtmlReport <: Report {
         let actionsDup = duplicate(actions, 2)
         let actionsList = chanToSlice(actionsDup[1])
 
-        var lastAction = Action.Hold
+        var lastAction = Action.HOLD
         var since: Int64 = 0
         var tx: Int64 = 0
         for (a in actionsList) {
@@ -72,7 +72,7 @@ public class HtmlReport <: Report {
             } else {
                 since += 1
             }
-            if (a != Action.Hold) { tx += 1 }
+            if (a != Action.HOLD) { tx += 1 }
         }
 
         let outcomesList = chanToSlice(outcomes)
@@ -94,7 +94,7 @@ public class HtmlReport <: Report {
 
     public func assetEnd(name: String): Unit {
         if (!_assetResults.contains(name)) {
-            throw Exception("asset not begun: " + name)
+            throw Exception("[HtmlReport] asset not begun: ${name}")
         }
         let results = _assetResults[name]
         if (results.isEmpty()) {

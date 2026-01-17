@@ -9,27 +9,34 @@ public class MovingMax {
     public var period: Int64 = 1
 
     public MovingMax() {
-        this.period = period
+        // 使用默认值 1
     }
 
     public init(period: Int64) {
         this.period = period
     }
 
-// compute 计算指标。
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        let cs = duplicate(c, 2)
-        cs[1] = shift(cs[1], period, 0.0)
+/**
+ * compute 计算移动最大值
+ *
+ * 计算指定周期内的最大值。
+ *
+ * @param values 价格数据迭代器
+ * @return 移动最大值迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        let duplicatedValues = duplicate(values, 2)
+        duplicatedValues[1] = shift(duplicatedValues[1], period, 0.0)
 
         let bst = Bst()
 
-        let maxs = operate(cs[0], cs[1], { v: Float64, b: Float64 =>
-            bst.insert(v)
-            bst.remove(b)
+        let maxValues = operate(duplicatedValues[0], duplicatedValues[1], { value: Float64, boundary: Float64 =>
+            bst.insert(value)
+            bst.remove(boundary)
             return bst.max()
         })
 
-        return skip(maxs, period - 1)
+        return skip(maxValues, period - 1)
     }
 
 // idlePeriod 返回空闲周期数。

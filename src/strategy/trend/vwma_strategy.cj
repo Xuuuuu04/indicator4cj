@@ -29,11 +29,11 @@ public class VwmaStrategy <: Strategy {
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let (smas, vwmas) = calculateSmaAndVwma(c)
         let actions = operate(smas, vwmas, { sma: Float64, vwma: Float64 =>
-            if (vwma > sma) { return Action.Buy }
-            if (sma > vwma) { return Action.Sell }
-            return Action.Hold
+            if (vwma > sma) { return Action.BUY }
+            if (sma > vwma) { return Action.SELL }
+            return Action.HOLD
         })
-        return shift(actions, VwmaIndicator.period - 1, Action.Hold)
+        return shift(actions, VwmaIndicator.period - 1, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

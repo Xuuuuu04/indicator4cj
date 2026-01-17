@@ -15,7 +15,7 @@ public class Envelope {
 
     public Envelope() {
         this.maIndicator = Sma(DefaultEnvelopePeriod)
-        this.percentage = percentage
+        // percentage使用成员变量默认值
     }
 
     public init(ma: Ma, percentage: Float64) {

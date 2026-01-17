@@ -5,6 +5,8 @@ import std.collection.*
 import indicator4cj.helper.*
 import indicator4cj.asset.*
 
+// AndStrategy：与策略，只有当所有子策略都给出相同信号时才执行相应操作。
+// 例如：当所有策略都建议买入时才买入，所有策略都建议卖出时才卖出。
 public class AndStrategy <: Strategy {
     // 策略集合
     public var strategies: ArrayList<Strategy>
@@ -30,11 +32,11 @@ public class AndStrategy <: Strategy {
             let (buy, _, sell, ok) = countActions(sources)
             if (!ok) { break }
             if (sell == andCount) {
-                result.add(Action.Sell)
+                result.add(Action.SELL)
             } else if (buy == andCount) {
-                result.add(Action.Buy)
+                result.add(Action.BUY)
             } else {
-                result.add(Action.Hold)
+                result.add(Action.HOLD)
             }
         }
         return result.iterator()
@@ -57,10 +59,12 @@ public class AndStrategy <: Strategy {
     }
 }
 
+// newAndStrategy 创建一个空的新与策略。
 public func newAndStrategy(name: String): AndStrategy {
     return AndStrategy(name)
 }
 
+// allAndStrategies 生成所有可能的策略对组合（与策略）。
 public func allAndStrategies(strategies: ArrayList<Strategy>): ArrayList<Strategy> {
     let res = ArrayList<Strategy>()
     var i: Int64 = 0

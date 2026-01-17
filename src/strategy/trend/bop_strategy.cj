@@ -28,9 +28,9 @@ public class BopStrategy <: Strategy {
 
         let bops = Indicator.compute(openings, highs, lows, closings)
         return h.map(bops, { v: Float64 =>
-            if (v > 0.0) { return Action.Buy }
-            if (v < 0.0) { return Action.Sell }
-            return Action.Hold
+            if (v > 0.0) { return Action.BUY }
+            if (v < 0.0) { return Action.SELL }
+            return Action.HOLD
         })
     }
 

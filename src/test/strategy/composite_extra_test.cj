@@ -26,29 +26,29 @@ public class MockActionStrategy <: Strategy {
 
 @Test
 public func test_composite_strategies_branches() {
-    let buyS = MockActionStrategy(Action.Buy)
-    let sellS = MockActionStrategy(Action.Sell)
-    let holdS = MockActionStrategy(Action.Hold)
+    let buyS = MockActionStrategy(Action.BUY)
+    let sellS = MockActionStrategy(Action.SELL)
+    let holdS = MockActionStrategy(Action.HOLD)
     
     // 1. OrStrategy 组合
     let or1 = newOrStrategy("Or1")
     or1.strategies.add(buyS)
     or1.strategies.add(holdS)
     let res1 = or1.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
-    if (res1 != Action.Buy) { fail("OrStrategy Buy|Hold failed") }
+    if (res1 != Action.BUY) { fail("OrStrategy Buy|Hold failed") }
     
     let or2 = newOrStrategy("Or2")
     or2.strategies.add(sellS)
     or2.strategies.add(holdS)
     let res2 = or2.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
-    if (res2 != Action.Sell) { fail("OrStrategy Sell|Hold failed") }
+    if (res2 != Action.SELL) { fail("OrStrategy Sell|Hold failed") }
     
     let or3 = newOrStrategy("Or3")
     or3.strategies.add(buyS)
     or3.strategies.add(sellS)
     let res3 = or3.compute(ArrayList<Snapshot>().iterator()).next().getOrThrow()
     // 根据 CountActions 逻辑，(buy > 0 && sell > 0) 会返回 Hold
-    if (res3 != Action.Hold) { fail("OrStrategy Buy|Sell failed") }
+    if (res3 != Action.HOLD) { fail("OrStrategy Buy|Sell failed") }
 
     // 2. SplitStrategy 逻辑
     let split = SplitStrategy(buyS, sellS)

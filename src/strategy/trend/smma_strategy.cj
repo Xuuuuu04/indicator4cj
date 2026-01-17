@@ -42,12 +42,12 @@ public class SmmaStrategy <: Strategy {
         longSmmas = syncPeriod(common, LongSmma.period, longSmmas)
 
         let actions = operate(shortSmmas, longSmmas, { s: Float64, l: Float64 =>
-            if (s > l) { return Action.Buy }
-            if (l > s) { return Action.Sell }
-            return Action.Hold
+            if (s > l) { return Action.BUY }
+            if (l > s) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, common, Action.Hold)
+        return shift(actions, common, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

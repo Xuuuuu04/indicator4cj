@@ -11,8 +11,7 @@ public class ChandelierExit {
     public var multiplier: Float64 = 3.0
 
     public ChandelierExit() {
-        this.period = period
-        this.multiplier = multiplier
+        // 使用默认值
     }
 
     public init(period: Int64, multiplier: Float64) {

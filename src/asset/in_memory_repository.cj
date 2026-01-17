@@ -24,7 +24,7 @@ public class InMemoryRepository <: Repository {
     // 如果资产不存在，抛出 Exception
     public func get(name: String): Iterator<Snapshot> {
         if (!_storage.contains(name)) {
-            throw Exception("repository: asset '${name}' not found")
+            throw Exception("[InMemoryRepository] asset '${name}' not found")
         }
         return _storage[name].iterator()
     }
@@ -46,7 +46,7 @@ public class InMemoryRepository <: Repository {
         }
         return match (last) {
             case Some(dt) => dt
-            case None => throw Exception("repository: asset '${name}' is empty")
+            case None => throw Exception("[InMemoryRepository] asset '${name}' is empty")
         }
     }
 

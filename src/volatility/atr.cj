@@ -4,13 +4,17 @@ import std.core.*
 import indicator4cj.helper.*
 import indicator4cj.trend.*
 
-// 平均真实波幅（ATR），支持可插拔的移动平均线（Ma）。
+/**
+ * 平均真实波幅（ATR）
+ *
+ * 计算平均真实波幅，支持可插拔的移动平均线（Ma）。
+ */
 public class Atr {
     // 移动平均指标
-    public var ma: Ma = Sma(14)
+    public var ma: Ma = Sma(ATR_DEFAULT_PERIOD)
 
     public Atr() {
-        this.ma = ma
+        // 使用默认值 ma = Sma(ATR_DEFAULT_PERIOD)
     }
 
     public init(period: Int64) {

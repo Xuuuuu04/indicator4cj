@@ -8,7 +8,7 @@ public class Nvi {
     public var Initial: Float64 = 1000.0
 
     public Nvi() {
-        this.Initial = Initial
+        // 使用默认值 1000.0
     }
 
     // compute 计算负量指标。

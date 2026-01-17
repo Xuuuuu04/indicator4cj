@@ -9,7 +9,7 @@ public class UlcerIndex {
     public var period: Int64 = 14
 
     public init() {
-        this.period = period
+        // 使用默认值 14
     }
 
     public init(period: Int64) {

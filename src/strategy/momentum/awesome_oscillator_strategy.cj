@@ -27,12 +27,12 @@ public class AwesomeOscillatorStrategy <: Strategy {
 
         let ao = Indicator.compute(highs, lows)
         let actions = h.map(ao, { v: Float64 =>
-            if (v < 0.0) { return Action.Sell }
-            if (v > 0.0) { return Action.Buy }
-            return Action.Hold
+            if (v < 0.0) { return Action.SELL }
+            if (v > 0.0) { return Action.BUY }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

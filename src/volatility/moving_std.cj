@@ -10,16 +10,23 @@ public class MovingStd {
     public var period: Int64 = 1
 
     public init() {
-        this.period = period
+        // 使用默认值 1
     }
 
     public init(period: Int64) {
         this.period = period
     }
 
-    // compute 计算移动标准差指标。
-    public func compute(c: Iterator<Float64>): Iterator<Float64> {
-        return MovingStdIterator(c, period)
+/**
+ * compute 计算移动标准差
+ *
+ * 计算指定周期内的标准差，衡量波动性。
+ *
+ * @param values 价格数据迭代器
+ * @return 移动标准差迭代器
+ */
+    public func compute(values: Iterator<Float64>): Iterator<Float64> {
+        return MovingStdIterator(values, period)
     }
 
     // idlePeriod 返回空闲周期数。

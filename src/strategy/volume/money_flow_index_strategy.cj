@@ -45,11 +45,11 @@ public class MoneyFlowIndexStrategy <: Strategy {
 
         let mfis = Indicator.compute(highs, lows, closings, volumes)
         let actions = h.map(mfis, { v: Float64 =>
-            if (v >= SellAt) { return Action.Sell }
-            if (v <= BuyAt) { return Action.Buy }
-            return Action.Hold
+            if (v >= SellAt) { return Action.SELL }
+            if (v <= BuyAt) { return Action.BUY }
+            return Action.HOLD
         })
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

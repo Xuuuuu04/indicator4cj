@@ -38,12 +38,12 @@ public class TrimaStrategy <: Strategy {
         shorts = skip(shorts, Long.idlePeriod() - Short.idlePeriod())
 
         let actions = operate(shorts, longs, { s: Float64, l: Float64 =>
-            if (s > l) { return Action.Buy }
-            if (l > s) { return Action.Sell }
-            return Action.Hold
+            if (s > l) { return Action.BUY }
+            if (l > s) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Long.idlePeriod(), Action.Hold)
+        return shift(actions, Long.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

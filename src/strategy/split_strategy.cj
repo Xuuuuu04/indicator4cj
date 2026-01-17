@@ -30,12 +30,12 @@ public class SplitStrategy <: Strategy {
                 case Some(buyAction) =>
                     match (sellActions.next()) {
                         case Some(sellAction) =>
-                            if ((buyAction == Action.Buy) && (sellAction != Action.Sell)) {
-                                result.add(Action.Buy)
-                            } else if ((sellAction == Action.Sell) && (buyAction != Action.Buy)) {
-                                result.add(Action.Sell)
+                            if ((buyAction == Action.BUY) && (sellAction != Action.SELL)) {
+                                result.add(Action.BUY)
+                            } else if ((sellAction == Action.SELL) && (buyAction != Action.BUY)) {
+                                result.add(Action.SELL)
                             } else {
-                                result.add(Action.Hold)
+                                result.add(Action.HOLD)
                             }
                         case None => break
                     }

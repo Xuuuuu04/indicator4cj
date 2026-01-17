@@ -32,12 +32,12 @@ public class KdjStrategy <: Strategy {
         let jd = subtract(js[1], d)
 
         let actions = operate(jk, jd, { a: Float64, b: Float64 =>
-            if ((a > 0.0) && (b > 0.0)) { return Action.Buy }
-            if ((a < 0.0) && (b < 0.0)) { return Action.Sell }
-            return Action.Hold
+            if ((a > 0.0) && (b > 0.0)) { return Action.BUY }
+            if ((a < 0.0) && (b < 0.0)) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

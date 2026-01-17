@@ -25,12 +25,12 @@ public class AroonStrategy <: Strategy {
 
         let (ups, downs) = Indicator.compute(highs, lows)
         let actions = operate(ups, downs, { up: Float64, down: Float64 =>
-            if (up > down) { return Action.Buy }
-            if (down > up) { return Action.Sell }
-            return Action.Hold
+            if (up > down) { return Action.BUY }
+            if (down > up) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.period - 1, Action.Hold)
+        return shift(actions, Indicator.period - 1, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

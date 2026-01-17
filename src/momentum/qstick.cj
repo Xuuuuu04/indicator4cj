@@ -10,7 +10,7 @@ public class Qstick {
     public var period: Int64 = 20
 
     public Qstick() {
-        this.period = period
+        // 使用默认值 20
     }
 
     public init(period: Int64) {

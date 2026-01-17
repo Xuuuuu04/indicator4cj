@@ -25,12 +25,12 @@ public class BollingerBandsStrategy <: Strategy {
         closings[1] = skip(closings[1], Indicator.idlePeriod())
 
         let actions = operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
-            if (close > up) { return Action.Sell }
-            if (low > close) { return Action.Buy }
-            return Action.Hold
+            if (close > up) { return Action.SELL }
+            if (low > close) { return Action.BUY }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

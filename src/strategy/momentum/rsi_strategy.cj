@@ -37,13 +37,13 @@ public class RsiStrategy <: Strategy {
         let rsiVals = Indicator.compute(closings)
 
         let actions = h.map(rsiVals, { v: Float64 =>
-            if (v <= BuyAt) { return Action.Buy }
-            if (v >= SellAt) { return Action.Sell }
-            return Action.Hold
+            if (v <= BuyAt) { return Action.BUY }
+            if (v >= SellAt) { return Action.SELL }
+            return Action.HOLD
         })
 
         // 与 Go 对齐：移位 IdlePeriod 个位置填充 Hold。
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

@@ -17,9 +17,7 @@ public class Kama {
     public var slowScPeriod: Int64 = DefaultKamaSlowScPeriod
 
     public Kama() {
-        this.erPeriod = erPeriod
-        this.fastScPeriod = fastScPeriod
-        this.slowScPeriod = slowScPeriod
+        // 使用成员变量默认值
     }
 
     public init(erPeriod: Int64, fastScPeriod: Int64, slowScPeriod: Int64) {

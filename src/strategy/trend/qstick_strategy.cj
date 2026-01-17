@@ -30,13 +30,13 @@ public class QstickStrategy <: Strategy {
         qsticks[1] = skip(qsticks[1], 1)
 
         let actions = operate(qsticks[0], qsticks[1], { b: Float64, c: Float64 =>
-            if ((c >= 0.0) && (b < 0.0)) { return Action.Buy }
-            if ((c <= 0.0) && (b > 0.0)) { return Action.Sell }
-            return Action.Hold
+            if ((c >= 0.0) && (b < 0.0)) { return Action.BUY }
+            if ((c <= 0.0) && (b > 0.0)) { return Action.SELL }
+            return Action.HOLD
         })
 
         // 移位 period 个位置填充 Hold（与 Go 版一致）。
-        return shift(actions, Indicator.period, Action.Hold)
+        return shift(actions, Indicator.period, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

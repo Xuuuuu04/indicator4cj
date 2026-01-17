@@ -13,7 +13,7 @@ class VwapTest {
         let inputs = duplicate(input, 3)
         let closings = map(inputs[0], { m => m.close })
         let volumes = map(inputs[1], { m => Float64(m.volume) })
-        var expected = map(inputs[2], { m => m.Vwap })
+        var expected = map(inputs[2], { m => m.vwap })
 
         let vwap = Vwap()
         let actual = roundDigits(vwap.compute(closings, volumes), 2)
@@ -29,7 +29,7 @@ class VwapTest {
 public class VwapData {
     public var close: Float64 = 0.0
     public var volume: Int64 = 0
-    public var Vwap: Float64 = 0.0
+    public var vwap: Float64 = 0.0
     public init() {}
 }
 

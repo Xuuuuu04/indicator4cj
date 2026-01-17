@@ -40,12 +40,12 @@ public class StochasticRsiStrategy <: Strategy {
         let stochasticRsi = Indicator.compute(closings)
 
         let actions = h.map(stochasticRsi, { v: Float64 =>
-            if (v <= BuyAt) { return Action.Buy }
-            if (v >= SellAt) { return Action.Sell }
-            return Action.Hold
+            if (v <= BuyAt) { return Action.BUY }
+            if (v >= SellAt) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

@@ -34,12 +34,12 @@ public class WeightedAveragePriceStrategy <: Strategy {
         closingsDup[0] = skip(closingsDup[0], Indicator.idlePeriod())
 
         let actions = operate(closingsDup[0], vwaps, { close: Float64, vwap: Float64 =>
-            if (vwap > close) { return Action.Buy }
-            if (vwap < close) { return Action.Sell }
-            return Action.Hold
+            if (vwap > close) { return Action.BUY }
+            if (vwap < close) { return Action.SELL }
+            return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.Hold)
+        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

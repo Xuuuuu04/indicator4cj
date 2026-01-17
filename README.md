@@ -59,18 +59,18 @@
  * 计算给定周期内的算术平均值
  */
 public class Sma {
-    public var Period: Int64 // 计算周期
+    public var period: Int64 // 计算周期
 
     /** 计算函数
      * @param c 输入数值流 (迭代器)
      * @return SMA 结果流
      */
-    public func Compute(c: Iterator<Float64>): Iterator<Float64>
-    
+    public func compute(c: Iterator<Float64>): Iterator<Float64>
+
     /** 获取预热期
-     * @return 返回 Period - 1
+     * @return 返回 period - 1
      */
-    public func IdlePeriod(): Int64
+    public func idlePeriod(): Int64
 }
 ```
 
@@ -82,9 +82,9 @@ public class Sma {
  * 定义了策略的执行行为与报表生成
  */
 public interface Strategy {
-    func Name(): String                                     // 策略名称
-    func Compute(snapshots: Iterator<Snapshot>): Iterator<Action> // 生成买卖动作流
-    func Report(snapshots: Iterator<Snapshot>): Report      // 生成策略详细报表
+    func name(): String                                     // 策略名称
+    func compute(snapshots: Iterator<Snapshot>): Iterator<Action> // 生成买卖动作流
+    func report(snapshots: Iterator<Snapshot>): Report      // 生成策略详细报表
 }
 ```
 
@@ -96,9 +96,9 @@ public interface Strategy {
  * 用于统一管理不同来源的历史行情数据
  */
 public interface Repository {
-    func Assets(): (ArrayList<String>, Option<Exception>)   // 获取资产列表
-    func Get(name: String): (Iterator<Snapshot>, Option<Exception>) // 获取资产全部快照
-    func LastDate(name: String): (Option<DateTime>, Option<Exception>) // 获取最后更新日期
+    func assets(): (ArrayList<String>, Option<Exception>)   // 获取资产列表
+    func get(name: String): (Iterator<Snapshot>, Option<Exception>) // 获取资产全部快照
+    func lastDate(name: String): (Option<DateTime>, Option<Exception>) // 获取最后更新日期
 }
 ```
 
@@ -139,7 +139,7 @@ import std.collection.*
 main() {
     let data = ArrayList<Float64>([10.0, 12.0, 14.0, 16.0, 18.0]).iterator()
     let sma = Sma(period: 3)
-    let result = sma.Compute(data)
+    let result = sma.compute(data)
     
     println("SMA (Period 3) 结果:")
     while (true) {
@@ -171,7 +171,7 @@ main() {
     let bt = Backtest(repo, strategies, ReportFactory("html"))
     
     // 3. 运行回测
-    match (bt.Run()) {
+    match (bt.run()) {
         case Some(e) => println("回测失败: ${e.message}")
         case None => println("回测完成，报告已生成至 html_output 目录")
     }

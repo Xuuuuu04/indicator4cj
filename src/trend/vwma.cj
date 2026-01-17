@@ -11,7 +11,7 @@ public class Vwma {
     public var period: Int64 = DefaultVwmaPeriod
 
     public Vwma() {
-        this.period = period
+        // 使用默认值
     }
 
     public init(period: Int64) {

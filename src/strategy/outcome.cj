@@ -22,10 +22,10 @@ class OutcomeIterator <: Iterator<Float64> {
             case Some(v) =>
                 match (_actions.next()) {
                     case Some(a) =>
-                        if (_balance > 0.0 && a == Action.Buy) {
+                        if (_balance > 0.0 && a == Action.BUY) {
                             _shares = _balance / v
                             _balance = 0.0
-                        } else if (_shares > 0.0 && a == Action.Sell) {
+                        } else if (_shares > 0.0 && a == Action.SELL) {
                             _balance = _shares * v
                             _shares = 0.0
                         }
