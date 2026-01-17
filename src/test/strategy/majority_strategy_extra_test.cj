@@ -1,7 +1,6 @@
 package indicator4cj.test.strategy
 
 import std.collection.*
-import std.time.*
 import indicator4cj.asset.*
 import indicator4cj.strategy.*
 
