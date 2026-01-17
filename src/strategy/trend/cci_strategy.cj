@@ -8,13 +8,23 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.trend.*
 
-// CCI 上穿 +100 买入，下穿 -100 卖出。
+/**
+ * CciStrategy 商品通道指标策略
+ *
+ * 基于CCI（Commodity Channel Index）指标生成交易信号：
+ * - 当CCI上穿+100时，产生买入信号（强势进入）
+ * - 当CCI下穿-100时，产生卖出信号（弱势进入）
+ * - 其他情况产生持有信号
+ *
+ * CCI是一个衡量价格偏离统计平均值的指标。
+ * CCI > 100表示超买，CCI < -100表示超卖。
+ */
 public class CciStrategy <: Strategy {
-    // 指标
-    public let Indicator: Cci
+    /// CCI指标实例
+    public let indicator: Cci
 
     public init() {
-        this.Indicator = Cci()
+        this.indicator = Cci()
     }
 
     public func name(): String { return "CCI Strategy" }
@@ -25,7 +35,7 @@ public class CciStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[1])
         let closings = snapshotsAsClosings(snaps[2])
 
-        let ccis = Indicator.compute(highs, lows, closings)
+        let ccis = indicator.compute(highs, lows, closings)
 
         let actions = h.map(ccis, { v: Float64 =>
             if (v >= 100.0) { return Action.BUY }
@@ -33,7 +43,7 @@ public class CciStrategy <: Strategy {
             return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
+        return shift(actions, indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -43,7 +53,7 @@ public class CciStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[2])
         let closingsDup = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
-        let ccis = shift(Indicator.compute(highs, lows, closingsDup[1]), Indicator.idlePeriod(), 0.0)
+        let ccis = shift(indicator.compute(highs, lows, closingsDup[1]), indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
         let annotations = actionsToAnnotations(actions)

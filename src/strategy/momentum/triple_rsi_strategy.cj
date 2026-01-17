@@ -11,63 +11,79 @@ import indicator4cj.trend.*
 
 public const DefaultTripleRsiStrategyPeriod: Int64 = 5
 public const DefaultTripleRsiStrategyMovingAveragePeriod: Int64 = 200
-public const DefaultTripleRsiStrategyDownDays: Int64 = 3
-public const DefaultTripleRsiStrategyBuySignalAt: Float64 = 60.0
-public const DefaultTripleRsiStrategyBuyAt: Float64 = 30.0
-public const DefaultTripleRsiStrategySellAt: Float64 = 50.0
+public const DefaultTripleRsiStrategydownDays: Int64 = 3
+public const DefaultTripleRsiStrategybuySignalAt: Float64 = 60.0
+public const DefaultTripleRsiStrategybuyAt: Float64 = 30.0
+public const DefaultTripleRsiStrategysellAt: Float64 = 50.0
 
+/**
+ * TripleRsiStrategy 三重RSI策略
+ *
+ * 结合RSI和SMA的多条件确认策略，旨在减少假信号：
+ *
+ * 买入条件（需同时满足）：
+ * - 连续downDays天收盘价下跌
+ * - RSI >= buySignalAt（开始回升）
+ * - RSI <= buyAt（仍处于超卖区域）
+ * - 收盘价低于SMA（长期趋势下方）
+ *
+ * 卖出条件：
+ * - RSI >= sellAt
+ *
+ * 这是一个相对保守的策略，需要多个条件同时满足才买入。
+ */
 public class TripleRsiStrategy <: Strategy {
-    // RSI
-    public let RsiIndicator: Rsi
-    // SMA
-    public let SmaIndicator: Sma
-    // 下跌天数
-    public let DownDays: Int64
-    // 买入
-    public let BuySignalAt: Float64
-    // 买入
-    public let BuyAt: Float64
-    // 卖出
-    public let SellAt: Float64
+    /// RSI指标实例
+    public let rsiIndicator: Rsi
+    /// SMA指标实例
+    public let smaIndicator: Sma
+    /// 连续下跌天数阈值
+    public let downDays: Int64
+    /// 买入信号RSI阈值（开始回升）
+    public let buySignalAt: Float64
+    /// 买入RSI阈值（超卖区域）
+    public let buyAt: Float64
+    /// 卖出RSI阈值
+    public let sellAt: Float64
 
     public init() {
-        this.RsiIndicator = Rsi(DefaultTripleRsiStrategyPeriod)
-        this.SmaIndicator = Sma(DefaultTripleRsiStrategyMovingAveragePeriod)
-        this.DownDays = DefaultTripleRsiStrategyDownDays
-        this.BuySignalAt = DefaultTripleRsiStrategyBuySignalAt
-        this.BuyAt = DefaultTripleRsiStrategyBuyAt
-        this.SellAt = DefaultTripleRsiStrategySellAt
+        this.rsiIndicator = Rsi(DefaultTripleRsiStrategyPeriod)
+        this.smaIndicator = Sma(DefaultTripleRsiStrategyMovingAveragePeriod)
+        this.downDays = DefaultTripleRsiStrategydownDays
+        this.buySignalAt = DefaultTripleRsiStrategybuySignalAt
+        this.buyAt = DefaultTripleRsiStrategybuyAt
+        this.sellAt = DefaultTripleRsiStrategysellAt
     }
 
     public init(period: Int64, smaPeriod: Int64, downDays: Int64, buySignalAt: Float64, buyAt: Float64, sellAt: Float64) {
-        this.RsiIndicator = Rsi(period)
-        this.SmaIndicator = Sma(smaPeriod)
-        this.DownDays = downDays
-        this.BuySignalAt = buySignalAt
-        this.BuyAt = buyAt
-        this.SellAt = sellAt
+        this.rsiIndicator = Rsi(period)
+        this.smaIndicator = Sma(smaPeriod)
+        this.downDays = downDays
+        this.buySignalAt = buySignalAt
+        this.buyAt = buyAt
+        this.sellAt = sellAt
     }
 
     public func name(): String {
-        return "Triple RSI Strategy (${RsiIndicator.period},${SmaIndicator.period},${DownDays},${BuySignalAt},${BuyAt},${SellAt})"
+        return "Triple RSI Strategy (${rsiIndicator.period},${smaIndicator.period},${downDays},${buySignalAt},${buyAt},${sellAt})"
     }
 
     public func idlePeriod(): Int64 {
-        return SmaIndicator.idlePeriod()
+        return smaIndicator.idlePeriod()
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closingsSplice = duplicate(snapshotsAsClosings(c), 3)
 
-        var rsis = RsiIndicator.compute(closingsSplice[0])
-        let smas = SmaIndicator.compute(closingsSplice[1])
-        let memory = Ring<Float64>(DownDays)
+        var rsis = rsiIndicator.compute(closingsSplice[0])
+        let smas = smaIndicator.compute(closingsSplice[1])
+        let memory = Ring<Float64>(downDays)
 
         // Skip RSI 输出直至 SMA 就绪
-        rsis = skip(rsis, SmaIndicator.idlePeriod() - RsiIndicator.idlePeriod())
+        rsis = skip(rsis, smaIndicator.idlePeriod() - rsiIndicator.idlePeriod())
 
         // Skip 收盘价直至 SMA 就绪
-        closingsSplice[2] = skip(closingsSplice[2], SmaIndicator.idlePeriod())
+        closingsSplice[2] = skip(closingsSplice[2], smaIndicator.idlePeriod())
 
         let actions = operate3(rsis, smas, closingsSplice[2], { rsi: Float64, sma: Float64, closing: Float64 =>
             memory.put(rsi)
@@ -76,23 +92,23 @@ public class TripleRsiStrategy <: Strategy {
                 return Action.HOLD
             }
 
-            if (rsi > SellAt) {
+            if (rsi > sellAt) {
                 return Action.SELL
             }
 
-            if (rsi >= BuyAt) {
+            if (rsi >= buyAt) {
                 return Action.HOLD
             }
 
             var i: Int64 = 1
-            while (i < DownDays) {
+            while (i < downDays) {
                 if (memory.at(i - 1) > memory.at(i)) {
                     return Action.HOLD
                 }
                 i += 1
             }
 
-            if (memory.at(0) >= BuySignalAt) {
+            if (memory.at(0) >= buySignalAt) {
                 return Action.HOLD
             }
 
@@ -103,7 +119,7 @@ public class TripleRsiStrategy <: Strategy {
             return Action.BUY
         })
 
-        return shift(actions, SmaIndicator.idlePeriod(), Action.HOLD)
+        return shift(actions, smaIndicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -111,8 +127,8 @@ public class TripleRsiStrategy <: Strategy {
         var dates = snapshotsAsDates(snaps[0])
         let closings = duplicate(snapshotsAsClosings(snaps[2]), 3)
 
-        var rsis = RsiIndicator.compute(closings[1])
-        let smas = SmaIndicator.compute(closings[2])
+        var rsis = rsiIndicator.compute(closings[1])
+        let smas = smaIndicator.compute(closings[2])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[1])
         var annotations = actionsToAnnotations(actions)
@@ -120,7 +136,7 @@ public class TripleRsiStrategy <: Strategy {
 
         dates = skip(dates, idlePeriod())
         closings[0] = skip(closings[0], idlePeriod())
-        rsis = skip(rsis, idlePeriod() - RsiIndicator.idlePeriod())
+        rsis = skip(rsis, idlePeriod() - rsiIndicator.idlePeriod())
         annotations = skip(annotations, idlePeriod())
         outcomes = skip(outcomes, idlePeriod())
 
@@ -129,8 +145,8 @@ public class TripleRsiStrategy <: Strategy {
         report.addChart()
 
         report.addColumn(NumericReportColumn("Close", closings[0]))
-        report.addColumn(NumericReportColumn("RSI(${RsiIndicator.period})", rsis), ArrayList<Int64>([1]))
-        report.addColumn(NumericReportColumn("SMA(${SmaIndicator.period})", smas))
+        report.addColumn(NumericReportColumn("RSI(${rsiIndicator.period})", rsis), ArrayList<Int64>([1]))
+        report.addColumn(NumericReportColumn("SMA(${smaIndicator.period})", smas))
         report.addColumn(AnnotationReportColumn(annotations), ArrayList<Int64>([0, 1]))
         report.addColumn(NumericReportColumn("Outcome", outcomes), ArrayList<Int64>([2]))
 

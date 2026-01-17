@@ -5,8 +5,18 @@ import std.collection.*
 import indicator4cj.helper.*
 import indicator4cj.asset.*
 
+/**
+ * MajorityStrategy 多数策略（MAJORITY逻辑组合）
+ *
+ * 采用多数投票原则，当超过半数的子策略给出相同信号时才执行：
+ * - 当建议买入的策略数量 > 建议卖出和持有的策略数量时，产生买入信号
+ * - 当建议卖出的策略数量 > 建议买入和持有的策略数量时，产生卖出信号
+ * - 其他情况产生持有信号
+ *
+ * 这是一个平衡的策略组合方式，介于AndStrategy和OrStrategy之间。
+ */
 public class MajorityStrategy <: Strategy {
-    // 策略集合
+    /// 子策略集合
     public var strategies: ArrayList<Strategy>
     private let _strategyName: String
 

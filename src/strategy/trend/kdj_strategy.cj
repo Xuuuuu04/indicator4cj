@@ -8,13 +8,25 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.trend.*
 
-// KDJ：J 同时高于 K/D 买入，低于 K/D 卖出。
+/**
+ * KdjStrategy KDJ策略
+ *
+ * 基于KDJ指标（随机指标的一种改进）生成交易信号。
+ * KDJ指标通过计算最高价、最低价和收盘价之间的关系来判断超买超卖。
+ *
+ * 交易规则：
+ * - J线同时高于K线和D线 → 买入
+ * - J线同时低于K线和D线 → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Kdj
+ */
 public class KdjStrategy <: Strategy {
     // 指标
-    public let Indicator: Kdj
+    public let indicator: Kdj
 
     public init() {
-        this.Indicator = Kdj()
+        this.indicator = Kdj()
     }
 
     public func name(): String { return "KDJ Strategy" }
@@ -25,7 +37,7 @@ public class KdjStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[1])
         let closings = snapshotsAsClosings(snaps[2])
 
-        let (k, d, j) = Indicator.compute(highs, lows, closings)
+        let (k, d, j) = indicator.compute(highs, lows, closings)
         let js = duplicate(j, 2)
 
         let jk = subtract(js[0], k)
@@ -37,7 +49,7 @@ public class KdjStrategy <: Strategy {
             return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
+        return shift(actions, indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -47,10 +59,10 @@ public class KdjStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[2])
         let closings = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
-        var (k, d, j) = Indicator.compute(highs, lows, closings[1])
-        k = shift(k, Indicator.idlePeriod(), 0.0)
-        d = shift(d, Indicator.idlePeriod(), 0.0)
-        j = shift(j, Indicator.idlePeriod(), 0.0)
+        var (k, d, j) = indicator.compute(highs, lows, closings[1])
+        k = shift(k, indicator.idlePeriod(), 0.0)
+        d = shift(d, indicator.idlePeriod(), 0.0)
+        j = shift(j, indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
         let annotations = actionsToAnnotations(actions)

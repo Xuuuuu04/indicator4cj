@@ -10,35 +10,47 @@ import indicator4cj.trend.*
 
 public const DefaultTsiStrategySignalPeriod: Int64 = 12
 
-// 当 TSI>0 且高于信号线买入，TSI<0 且低于信号线卖出。
+/**
+ * TsiStrategy 真实强度指数策略
+ *
+ * 基于真实强度指数（True Strength Index, TSI）生成交易信号。
+ * TSI是动量振荡器，通过双重平滑价格变化来识别超买超卖和趋势方向。
+ *
+ * 交易规则：
+ * - TSI > 0 且高于信号线 → 买入
+ * - TSI < 0 且低于信号线 → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Tsi
+ */
 public class TsiStrategy <: Strategy {
     // 指标
-    public let Indicator: Tsi
+    public let indicator: Tsi
     // 信号
-    public let Signal: Ma
+    public let signal: Ma
     private let _signalPeriod: Int64
 
     public init() {
-        this.Indicator = Tsi()
-        this.Signal = Ema(DefaultTsiStrategySignalPeriod)
+        this.indicator = Tsi()
+        this.signal = Ema(DefaultTsiStrategySignalPeriod)
         this._signalPeriod = DefaultTsiStrategySignalPeriod
     }
 
     public init(firstSmoothing: Int64, secondSmoothing: Int64, signalPeriod: Int64) {
-        this.Indicator = Tsi(firstSmoothing, secondSmoothing)
-        this.Signal = Ema(signalPeriod)
+        this.indicator = Tsi(firstSmoothing, secondSmoothing)
+        this.signal = Ema(signalPeriod)
         this._signalPeriod = signalPeriod
     }
 
     public func name(): String {
-        return "Tsi Strategy (${Indicator.toString()},EMA(${_signalPeriod}))"
+        return "Tsi Strategy (${indicator.toString()},EMA(${_signalPeriod}))"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = snapshotsAsClosings(snapshots)
-        let tsis = duplicate(Indicator.compute(closings), 2)
-        tsis[0] = skip(tsis[0], Signal.idlePeriod())
-        let signals = Signal.compute(tsis[1])
+        let tsis = duplicate(indicator.compute(closings), 2)
+        tsis[0] = skip(tsis[0], signal.idlePeriod())
+        let signals = signal.compute(tsis[1])
 
         let actions = operate(tsis[0], signals, { tsi: Float64, sig: Float64 =>
             if ((tsi > 0.0) && (tsi > sig)) { return Action.BUY }
@@ -55,9 +67,9 @@ public class TsiStrategy <: Strategy {
         let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
         closings[1] = skip(closings[1], idlePeriod())
 
-        let tsis = duplicate(Indicator.compute(closings[0]), 2)
-        tsis[0] = skip(tsis[0], Signal.idlePeriod())
-        let signals = Signal.compute(tsis[1])
+        let tsis = duplicate(indicator.compute(closings[0]), 2)
+        tsis[0] = skip(tsis[0], signal.idlePeriod())
+        let signals = signal.compute(tsis[1])
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         actions = skip(actions, idlePeriod())
@@ -77,7 +89,7 @@ public class TsiStrategy <: Strategy {
     }
 
     public func idlePeriod(): Int64 {
-        return Indicator.idlePeriod() + Signal.idlePeriod()
+        return indicator.idlePeriod() + signal.idlePeriod()
     }
 }
 

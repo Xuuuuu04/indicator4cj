@@ -11,35 +11,47 @@ import indicator4cj.trend.*
 public const DefaultSmmaStrategyShortPeriod: Int64 = 20
 public const DefaultSmmaStrategyLongPeriod: Int64 = 50
 
-// 短期 SMMA 上穿长期看多，下穿看空。
+/**
+ * SmmaStrategy 平滑移动平均策略
+ *
+ * 基于平滑移动平均线（Smoothed Moving Average, SMMA）的交叉信号生成交易信号。
+ * SMMA是类似EMA的平滑均线，给予近期价格更高的权重，但计算方式略有不同。
+ *
+ * 交易规则：
+ * - 短期SMMA上穿长期SMMA（金叉） → 买入
+ * - 短期SMMA下穿长期SMMA（死叉） → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Smma
+ */
 public class SmmaStrategy <: Strategy {
     // SMMA
-    public let ShortSmma: Smma
+    public let shortSmma: Smma
     // SMMA
-    public let LongSmma: Smma
+    public let longSmma: Smma
 
     public init() {
-        this.ShortSmma = Smma(DefaultSmmaStrategyShortPeriod)
-        this.LongSmma = Smma(DefaultSmmaStrategyLongPeriod)
+        this.shortSmma = Smma(DefaultSmmaStrategyShortPeriod)
+        this.longSmma = Smma(DefaultSmmaStrategyLongPeriod)
     }
 
     public init(shortPeriod: Int64, longPeriod: Int64) {
-        this.ShortSmma = Smma(shortPeriod)
-        this.LongSmma = Smma(longPeriod)
+        this.shortSmma = Smma(shortPeriod)
+        this.longSmma = Smma(longPeriod)
     }
 
     public func name(): String {
-        return "SMMA Strategy (${ShortSmma.period},${LongSmma.period})"
+        return "SMMA Strategy (${shortSmma.period},${longSmma.period})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closingsDup = duplicate(snapshotsAsClosings(snapshots), 2)
-        var shortSmmas = ShortSmma.compute(closingsDup[0])
-        var longSmmas = LongSmma.compute(closingsDup[1])
+        var shortSmmas = shortSmma.compute(closingsDup[0])
+        var longSmmas = longSmma.compute(closingsDup[1])
 
-        let common = commonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
-        shortSmmas = syncPeriod(common, ShortSmma.period, shortSmmas)
-        longSmmas = syncPeriod(common, LongSmma.period, longSmmas)
+        let common = commonPeriod(ArrayList<Int64>([shortSmma.period, longSmma.period]))
+        shortSmmas = syncPeriod(common, shortSmma.period, shortSmmas)
+        longSmmas = syncPeriod(common, longSmma.period, longSmmas)
 
         let actions = operate(shortSmmas, longSmmas, { s: Float64, l: Float64 =>
             if (s > l) { return Action.BUY }
@@ -55,18 +67,18 @@ public class SmmaStrategy <: Strategy {
         var dates = snapshotsAsDates(snaps[0])
         let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
-        var shortSmmas = ShortSmma.compute(closingsDup[1])
-        var longSmmas = LongSmma.compute(closingsDup[2])
+        var shortSmmas = shortSmma.compute(closingsDup[1])
+        var longSmmas = longSmma.compute(closingsDup[2])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         var annotations = actionsToAnnotations(actions)
         var outcomes = multiplyBy(outcomesRaw, 100.0)
 
-        let common = commonPeriod(ArrayList<Int64>([ShortSmma.period, LongSmma.period]))
+        let common = commonPeriod(ArrayList<Int64>([shortSmma.period, longSmma.period]))
         dates = syncPeriod(common, 0, dates)
         closingsDup[0] = skip(closingsDup[0], common)
-        shortSmmas = syncPeriod(common, ShortSmma.period, shortSmmas)
-        longSmmas = syncPeriod(common, LongSmma.period, longSmmas)
+        shortSmmas = syncPeriod(common, shortSmma.period, shortSmmas)
+        longSmmas = syncPeriod(common, longSmma.period, longSmmas)
         annotations = skip(annotations, common)
         outcomes = skip(outcomes, common)
 

@@ -8,49 +8,61 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.trend.*
 
-// Envelope：低于下轨买，高于上轨卖。
+/**
+ * EnvelopeStrategy 包络线策略
+ *
+ * 基于包络线指标（Envelope）生成交易信号。
+ * 包络线在移动平均线上下各形成一个固定百分比的轨道，用于识别超买超卖。
+ *
+ * 交易规则：
+ * - 价格低于下轨 → 买入（超卖）
+ * - 价格高于上轨 → 卖出（超买）
+ * - 价格在轨道之间 → 持有
+ *
+ * @see Envelope
+ */
 public class EnvelopeStrategy <: Strategy {
     // 指标
-    public let Indicator: Envelope
+    public let indicator: Envelope
 
     public init() {
-        this.Indicator = Envelope()
+        this.indicator = Envelope()
     }
 
     public init(envelope: Envelope) {
-        this.Indicator = envelope
+        this.indicator = envelope
     }
 
     public func name(): String {
-        return "Envelope Strategy (${Indicator.toString()})"
+        return "Envelope Strategy (${indicator.toString()})"
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closings = duplicate(snapshotsAsClosings(c), 2)
-        closings[1] = skip(closings[1], Indicator.idlePeriod())
+        closings[1] = skip(closings[1], indicator.idlePeriod())
 
-        let (uppers, _, lowers) = Indicator.compute(closings[0])
+        let (uppers, _, lowers) = indicator.compute(closings[0])
         let actions = operate3(uppers, lowers, closings[1], { up: Float64, low: Float64, close: Float64 =>
             if (close < low) { return Action.BUY }
             if (close > up) { return Action.SELL }
             return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
+        return shift(actions, indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = duplicate(c, 3)
-        let dates = skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let dates = skip(snapshotsAsDates(snaps[0]), indicator.idlePeriod())
 
         let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
-        closings[0] = skip(closings[0], Indicator.idlePeriod())
+        closings[0] = skip(closings[0], indicator.idlePeriod())
 
-        let (uppers, middles, lowers) = Indicator.compute(closings[1])
+        let (uppers, middles, lowers) = indicator.compute(closings[1])
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        actions = skip(actions, Indicator.idlePeriod())
-        outcomesRaw = skip(outcomesRaw, Indicator.idlePeriod())
+        actions = skip(actions, indicator.idlePeriod())
+        outcomesRaw = skip(outcomesRaw, indicator.idlePeriod())
         let annotations = actionsToAnnotations(actions)
         let outcomes = multiplyBy(outcomesRaw, 100.0)
 

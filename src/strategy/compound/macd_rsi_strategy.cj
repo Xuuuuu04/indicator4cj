@@ -12,32 +12,45 @@ import indicator4cj.strategy.momentum.*
 public const DefaultMacdRsiStrategyBuyAt: Float64 = 30.0
 public const DefaultMacdRsiStrategySellAt: Float64 = 70.0
 
-// MACD 与 RSI 一致时给出同向信号，否则 Hold。
+/**
+ * MacdRsiStrategy MACD与RSI组合策略
+ *
+ * 结合MACD（趋势指标）和RSI（动量指标）生成交易信号。
+ * 只有当两个指标信号一致时才发出交易信号，提高准确性并减少假信号。
+ *
+ * 交易规则：
+ * - MACD信号为买入 且 RSI < 买入阈值 → 买入
+ * - MACD信号为卖出 且 RSI > 卖出阈值 → 卖出
+ * - MACD和RSI信号不一致 → 持有
+ *
+ * @see MacdStrategy
+ * @see RsiStrategy
+ */
 public class MacdRsiStrategy <: Strategy {
     // 策略
-    public let MacdStrategyInst: MacdStrategy
+    public let macdStrategyInst: MacdStrategy
     // 策略
-    public let RsiStrategyInst: RsiStrategy
+    public let rsiStrategyInst: RsiStrategy
 
     public init() {
-        this.MacdStrategyInst = MacdStrategy()
-        this.RsiStrategyInst = RsiStrategy(DefaultMacdRsiStrategyBuyAt, DefaultMacdRsiStrategySellAt)
+        this.macdStrategyInst = MacdStrategy()
+        this.rsiStrategyInst = RsiStrategy(DefaultMacdRsiStrategyBuyAt, DefaultMacdRsiStrategySellAt)
     }
 
     public init(buyAt: Float64, sellAt: Float64) {
-        this.MacdStrategyInst = MacdStrategy()
-        this.RsiStrategyInst = RsiStrategy(buyAt, sellAt)
+        this.macdStrategyInst = MacdStrategy()
+        this.rsiStrategyInst = RsiStrategy(buyAt, sellAt)
     }
 
     public func name(): String {
-        return "MACD-RSI Strategy (${RsiStrategyInst.BuyAt}, ${RsiStrategyInst.SellAt})"
+        return "MACD-RSI Strategy (${rsiStrategyInst.buyAt}, ${rsiStrategyInst.sellAt})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let snaps = duplicate(snapshots, 2)
 
-        let macdActions = denormalizeActions(MacdStrategyInst.compute(snaps[0]))
-        let rsiActions = denormalizeActions(RsiStrategyInst.compute(snaps[1]))
+        let macdActions = denormalizeActions(macdStrategyInst.compute(snaps[0]))
+        let rsiActions = denormalizeActions(rsiStrategyInst.compute(snaps[1]))
 
         let actions = operate(macdActions, rsiActions, { ma: Action, ra: Action =>
             if (ma == ra) { return ma }
@@ -52,12 +65,12 @@ public class MacdRsiStrategy <: Strategy {
         let dates = snapshotsAsDates(snaps[0])
         let closings = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
-        var (macds, signals) = MacdStrategyInst.macd.compute(closings[0])
-        macds = shift(macds, MacdStrategyInst.macd.idlePeriod(), 0.0)
-        signals = shift(signals, MacdStrategyInst.macd.idlePeriod(), 0.0)
+        var (macds, signals) = macdStrategyInst.macd.compute(closings[0])
+        macds = shift(macds, macdStrategyInst.macd.idlePeriod(), 0.0)
+        signals = shift(signals, macdStrategyInst.macd.idlePeriod(), 0.0)
 
-        var rsiVals = RsiStrategyInst.Indicator.compute(closings[2])
-        rsiVals = shift(rsiVals, RsiStrategyInst.Indicator.idlePeriod(), 0.0)
+        var rsiVals = rsiStrategyInst.indicator.compute(closings[2])
+        rsiVals = shift(rsiVals, rsiStrategyInst.indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = actionsToAnnotations(actions)

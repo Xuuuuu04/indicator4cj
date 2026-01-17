@@ -14,7 +14,20 @@ public const DefaultPercentBandMFIStrategyPercentBSellAt: Float64 = 0.2
 public const DefaultPercentBandMFIStrategyMfiBuyAt: Float64 = 80.0
 public const DefaultPercentBandMFIStrategyMfiSellAt: Float64 = 20.0
 
-// %B 与 MFI 组合：%B>buy且MFI>buy 买，%B<sell且MFI<sell 卖。
+/**
+ * PercentBandMFIStrategy 百分比波段与资金流量指数组合策略
+ *
+ * 结合%B指标（Percent B）和资金流量指数（MFI）生成交易信号。
+ * %B显示价格在布林带中的位置，MFI识别超买超卖，两个指标相互确认提高准确性。
+ *
+ * 交易规则：
+ * - %B > 买入阈值 且 MFI > 买入阈值 → 买入
+ * - %B < 卖出阈值 且 MFI < 卖出阈值 → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see PercentB
+ * @see Mfi
+ */
 public class PercentBandMFIStrategy <: Strategy {
     // 指标
     public let MoneyFlowIndex: Mfi

@@ -7,22 +7,34 @@ import indicator4cj.helper as h
 import indicator4cj.asset.*
 import indicator4cj.strategy.*
 
-// NoLoss：只在不亏的情况下卖出。
+/**
+ * NoLossStrategy 只盈利不亏损策略装饰器
+ *
+ * 确保每笔交易都是盈利的，只有在盈利时才执行卖出操作。
+ *
+ * 工作原理：
+ * - 当内部策略产生买入信号时，记录买入价格
+ * - 当内部策略产生卖出信号时，检查当前价格是否高于买入价
+ * - 只有当前价格 > 买入价时才执行卖出
+ * - 如果当前价格 <= 买入价，则忽略卖出信号，继续持有
+ *
+ * 这个装饰器可以避免亏损交易，但可能会错过反弹机会。
+ */
 public class NoLossStrategy <: Strategy {
-    // 策略
-    public let InnerStrategy: Strategy
+    /// 被装饰的内部策略
+    public let innerStrategy: Strategy
 
     public init(innerStrategy: Strategy) {
-        this.InnerStrategy = innerStrategy
+        this.innerStrategy = innerStrategy
     }
 
     public func name(): String {
-        return "No Loss Strategy (${InnerStrategy.name()})"
+        return "No Loss Strategy (${innerStrategy.name()})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let snaps = duplicate(snapshots, 2)
-        let innerActions = InnerStrategy.compute(snaps[0])
+        let innerActions = innerStrategy.compute(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
         return NoLossIterator(innerActions, closings)
     }

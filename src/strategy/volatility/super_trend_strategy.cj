@@ -8,16 +8,25 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.volatility.*
 
-// SuperTrend：收盘高于 superTrend 买，低于卖。
+/**
+ * SuperTrendStrategy 超级趋势策略
+ *
+ * 基于SuperTrend指标生成交易信号：
+ * - 当收盘价高于SuperTrend线时，产生买入信号（上升趋势）
+ * - 当收盘价低于SuperTrend线时，产生卖出信号（下降趋势）
+ *
+ * SuperTrend是一个趋势跟踪指标，能够动态调整支撑和阻力位。
+ * 适用于强趋势行情，能较好地捕捉单边行情。
+ */
 public class SuperTrendStrategy <: Strategy {
-    // 指标
-    public let Indicator: SuperTrend
+    /// SuperTrend指标实例
+    public let indicator: SuperTrend
 
     public init() {
-        this.Indicator = SuperTrend()
+        this.indicator = SuperTrend()
     }
     public init(period: Int64, multiplier: Float64) {
-        this.Indicator = SuperTrend(period, multiplier)
+        this.indicator = SuperTrend(period, multiplier)
     }
 
     public func name(): String {
@@ -30,8 +39,8 @@ public class SuperTrendStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[1])
         let closingsDup = duplicate(snapshotsAsClosings(snaps[2]), 2)
 
-        let superTrends = Indicator.compute(highs, lows, closingsDup[0])
-        closingsDup[1] = skip(closingsDup[1], Indicator.idlePeriod())
+        let superTrends = indicator.compute(highs, lows, closingsDup[0])
+        closingsDup[1] = skip(closingsDup[1], indicator.idlePeriod())
 
         let actions = operate(superTrends, closingsDup[1], { st: Float64, close: Float64 =>
             if (st < close) { return Action.BUY }
@@ -39,7 +48,7 @@ public class SuperTrendStrategy <: Strategy {
             return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
+        return shift(actions, indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -49,8 +58,8 @@ public class SuperTrendStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[2])
         let closingsDup = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
-        var superTrends = Indicator.compute(highs, lows, closingsDup[0])
-        superTrends = shift(superTrends, Indicator.idlePeriod(), 0.0)
+        var superTrends = indicator.compute(highs, lows, closingsDup[0])
+        superTrends = shift(superTrends, indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
         let annotations = actionsToAnnotations(actions)

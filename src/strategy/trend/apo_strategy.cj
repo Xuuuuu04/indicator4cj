@@ -8,7 +8,19 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.trend.*
 
-// APO 过零点判多空，使用快/慢 EMA 差值。
+/**
+ * ApoStrategy 绝对价格振荡器策略
+ *
+ * 基于绝对价格振荡器（Absolute Price Oscillator, APO）生成交易信号。
+ * APO计算快慢EMA的差值，通过差值过零点来判断多空趋势。
+ *
+ * 交易规则：
+ * - APO从负值变为非负值（上穿0轴） → 买入
+ * - APO从正值变为非正值（下穿0轴） → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Apo
+ */
 public class ApoStrategy <: Strategy {
     // 指标
     public let indicator: Apo

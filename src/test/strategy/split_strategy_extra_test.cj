@@ -14,8 +14,8 @@ public func split_strategy_factory() {
     let s = newSplitStrategy(buy, sell)
 
     // 验证策略被正确存储
-    @Expect(s.BuyStrategy.name(), "BuyAndHold")
-    @Expect(s.SellStrategy.name(), "BuyAndHold")
+    @Expect(s.buyStrategy.name(), "BuyAndHold")
+    @Expect(s.sellStrategy.name(), "BuyAndHold")
 }
 
 @Test

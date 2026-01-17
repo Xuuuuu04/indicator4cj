@@ -11,31 +11,43 @@ import indicator4cj.trend.*
 public const DefaultTrimaStrategyShortPeriod: Int64 = 20
 public const DefaultTrimaStrategyLongPeriod: Int64 = 50
 
-// TRIMA 短长均线交叉。
+/**
+ * TrimaStrategy 三角移动平均策略
+ *
+ * 基于三角移动平均线（Triangular Moving Average, TRIMA）的交叉信号生成交易信号。
+ * TRIMA是对简单移动平均线的再次平滑，能够更好地过滤价格噪音。
+ *
+ * 交易规则：
+ * - 短期TRIMA上穿长期TRIMA（金叉） → 买入
+ * - 短期TRIMA下穿长期TRIMA（死叉） → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Trima
+ */
 public class TrimaStrategy <: Strategy {
     // 短周期
-    public let Short: Trima
+    public let short: Trima
     // 长周期
-    public let Long: Trima
+    public let long: Trima
 
     public init() {
-        this.Short = Trima(DefaultTrimaStrategyShortPeriod)
-        this.Long = Trima(DefaultTrimaStrategyLongPeriod)
+        this.short = Trima(DefaultTrimaStrategyShortPeriod)
+        this.long = Trima(DefaultTrimaStrategyLongPeriod)
     }
 
     public init(shortPeriod: Int64, longPeriod: Int64) {
-        this.Short = Trima(shortPeriod)
-        this.Long = Trima(longPeriod)
+        this.short = Trima(shortPeriod)
+        this.long = Trima(longPeriod)
     }
 
     public func name(): String { return "TRIMA Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closings = duplicate(snapshotsAsClosings(c), 2)
-        var shorts = Short.compute(closings[0])
-        let longs = Long.compute(closings[1])
+        var shorts = short.compute(closings[0])
+        let longs = long.compute(closings[1])
 
-        shorts = skip(shorts, Long.idlePeriod() - Short.idlePeriod())
+        shorts = skip(shorts, long.idlePeriod() - short.idlePeriod())
 
         let actions = operate(shorts, longs, { s: Float64, l: Float64 =>
             if (s > l) { return Action.BUY }
@@ -43,7 +55,7 @@ public class TrimaStrategy <: Strategy {
             return Action.HOLD
         })
 
-        return shift(actions, Long.idlePeriod(), Action.HOLD)
+        return shift(actions, long.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -51,12 +63,12 @@ public class TrimaStrategy <: Strategy {
         let dates = snapshotsAsDates(snaps[0])
         let closings = duplicate(snapshotsAsClosings(snaps[1]), 3)
 
-        var shorts = Short.compute(closings[0])
-        var longs = Long.compute(closings[1])
+        var shorts = short.compute(closings[0])
+        var longs = long.compute(closings[1])
 
-        shorts = skip(shorts, Long.idlePeriod() - Short.idlePeriod())
-        shorts = shift(shorts, Long.idlePeriod(), 0.0)
-        longs = shift(longs, Long.idlePeriod(), 0.0)
+        shorts = skip(shorts, long.idlePeriod() - short.idlePeriod())
+        shorts = shift(shorts, long.idlePeriod(), 0.0)
+        longs = shift(longs, long.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = actionsToAnnotations(actions)

@@ -11,25 +11,37 @@ import indicator4cj.trend.*
 
 public const DefaultNegativeVolumeIndexStrategyEmaPeriod: Int64 = 255
 
-// NVI 与其 EMA 对比：NVI 下穿 EMA 买，上穿卖。
+/**
+ * NegativeVolumeIndexStrategy 负量指标策略
+ *
+ * 基于负量指标（Negative Volume Index, NVI）及其EMA交叉生成交易信号。
+ * NVI追踪成交量减少日子的价格变化，用于识别聪明钱的动向。
+ *
+ * 交易规则：
+ * - NVI下穿EMA → 买入
+ * - NVI上穿EMA → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Nvi
+ */
 public class NegativeVolumeIndexStrategy <: Strategy {
     // 指标
-    public let Indicator: Nvi
+    public let indicator: Nvi
     // EMA
-    public let EmaIndicator: Ema
+    public let emaIndicator: Ema
 
     public init() {
-        this.Indicator = Nvi()
-        this.EmaIndicator = Ema(DefaultNegativeVolumeIndexStrategyEmaPeriod)
+        this.indicator = Nvi()
+        this.emaIndicator = Ema(DefaultNegativeVolumeIndexStrategyEmaPeriod)
     }
 
     public init(emaPeriod: Int64) {
-        this.Indicator = Nvi()
-        this.EmaIndicator = Ema(emaPeriod)
+        this.indicator = Nvi()
+        this.emaIndicator = Ema(emaPeriod)
     }
 
     public func name(): String {
-        return "Negative Volume Index Strategy (${EmaIndicator.period})"
+        return "Negative Volume Index Strategy (${emaIndicator.period})"
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
@@ -37,9 +49,9 @@ public class NegativeVolumeIndexStrategy <: Strategy {
         let closings = snapshotsAsClosings(snaps[0])
         let volumes = snapshotsAsVolumes(snaps[1])
 
-        let nvis = duplicate(Indicator.compute(closings, volumes), 2)
-        nvis[0] = skip(nvis[0], EmaIndicator.idlePeriod())
-        let ema = EmaIndicator.compute(nvis[1])
+        let nvis = duplicate(indicator.compute(closings, volumes), 2)
+        nvis[0] = skip(nvis[0], emaIndicator.idlePeriod())
+        let ema = emaIndicator.compute(nvis[1])
 
         let actions = operate(nvis[0], ema, { nvi: Float64, nviEma: Float64 =>
             if (nvi < nviEma) { return Action.BUY }
@@ -47,20 +59,20 @@ public class NegativeVolumeIndexStrategy <: Strategy {
             return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod() + EmaIndicator.idlePeriod(), Action.HOLD)
+        return shift(actions, indicator.idlePeriod() + emaIndicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = duplicate(c, 4)
-        let period = Indicator.idlePeriod() + EmaIndicator.idlePeriod()
+        let period = indicator.idlePeriod() + emaIndicator.idlePeriod()
         let dates = skip(snapshotsAsDates(snaps[0]), period)
 
         let closingsDup = duplicate(snapshotsAsClosings(snaps[1]), 2)
         let volumes = snapshotsAsVolumes(snaps[2])
 
-        let nvis = duplicate(Indicator.compute(closingsDup[0], volumes), 2)
-        nvis[0] = skip(nvis[0], EmaIndicator.idlePeriod())
-        let ema = EmaIndicator.compute(nvis[1])
+        let nvis = duplicate(indicator.compute(closingsDup[0], volumes), 2)
+        nvis[0] = skip(nvis[0], emaIndicator.idlePeriod())
+        let ema = emaIndicator.compute(nvis[1])
 
         closingsDup[1] = skip(closingsDup[1], period)
 

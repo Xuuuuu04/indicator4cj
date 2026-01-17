@@ -10,25 +10,37 @@ import indicator4cj.trend.*
 
 public const DefaultWeightedCloseStrategyMaPeriod: Int64 = 20
 
-// Weighted Close crossing MA：上穿看多，下穿看空。
+/**
+ * WeightedCloseStrategy 加权收盘价策略
+ *
+ * 基于加权收盘价（Weighted Close Price）的均线交叉生成交易信号。
+ * 加权收盘价计算公式为(最高价+最低价+2*收盘价)/4，给予收盘价更高权重。
+ *
+ * 交易规则：
+ * - 加权收盘价上穿均线 → 买入
+ * - 加权收盘价下穿均线 → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see WeightedClose
+ */
 public class WeightedCloseStrategy <: Strategy {
     // 指标
-    public let Indicator: WeightedClose
+    public let indicator: WeightedClose
     // Ma
-    public let Ma: Ma
+    public let ma: Ma
 
     public init() {
-        this.Indicator = WeightedClose()
-        this.Ma = Sma(DefaultWeightedCloseStrategyMaPeriod)
+        this.indicator = WeightedClose()
+        this.ma = Sma(DefaultWeightedCloseStrategyMaPeriod)
     }
 
     public init(maPeriod: Int64) {
-        this.Indicator = WeightedClose()
-        this.Ma = Sma(maPeriod)
+        this.indicator = WeightedClose()
+        this.ma = Sma(maPeriod)
     }
 
     public func name(): String {
-        return "Weighted Close Strategy (${Ma.idlePeriod() + 1})"
+        return "Weighted Close Strategy (${ma.idlePeriod() + 1})"
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
@@ -37,16 +49,16 @@ public class WeightedCloseStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[1])
         let closings = snapshotsAsClosings(snaps[2])
 
-        let wcDup = duplicate(Indicator.compute(highs, lows, closings), 2)
-        let mas = Ma.compute(wcDup[1])
-        wcDup[0] = skip(wcDup[0], Ma.idlePeriod())
+        let wcDup = duplicate(indicator.compute(highs, lows, closings), 2)
+        let mas = ma.compute(wcDup[1])
+        wcDup[0] = skip(wcDup[0], ma.idlePeriod())
 
         let actions = operate(wcDup[0], mas, { wc: Float64, ma: Float64 =>
             if (wc > ma) { return Action.BUY }
             return Action.SELL
         })
 
-        return shift(actions, Ma.idlePeriod(), Action.HOLD)
+        return shift(actions, ma.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -56,18 +68,18 @@ public class WeightedCloseStrategy <: Strategy {
         let lows = snapshotsAsLows(snaps[2])
         let closingsDup = duplicate(snapshotsAsClosings(snaps[3]), 2)
 
-        let wcDup = duplicate(Indicator.compute(highs, lows, closingsDup[1]), 2)
-        let mas = Ma.compute(wcDup[1])
+        let wcDup = duplicate(indicator.compute(highs, lows, closingsDup[1]), 2)
+        let mas = ma.compute(wcDup[1])
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[4])
         var annotations = actionsToAnnotations(actions)
         var outcomes = multiplyBy(outcomesRaw, 100.0)
 
-        dates = skip(dates, Ma.idlePeriod())
-        closingsDup[0] = skip(closingsDup[0], Ma.idlePeriod())
-        wcDup[0] = skip(wcDup[0], Ma.idlePeriod())
-        annotations = skip(annotations, Ma.idlePeriod())
-        outcomes = skip(outcomes, Ma.idlePeriod())
+        dates = skip(dates, ma.idlePeriod())
+        closingsDup[0] = skip(closingsDup[0], ma.idlePeriod())
+        wcDup[0] = skip(wcDup[0], ma.idlePeriod())
+        annotations = skip(annotations, ma.idlePeriod())
+        outcomes = skip(outcomes, ma.idlePeriod())
 
         let report = Report(name(), dates)
         report.addChart()

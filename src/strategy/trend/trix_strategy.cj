@@ -8,26 +8,38 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.trend.*
 
-// TRIX 过零判多空。
+/**
+ * TrixStrategy TRIX策略
+ *
+ * 基于TRIX指标（Triple Exponential Average）生成交易信号。
+ * TRIX是EMA的三重平滑，用于识别趋势的变化和过滤短期噪音。
+ *
+ * 交易规则：
+ * - TRIX从负值变为非负值（上穿0轴） → 买入
+ * - TRIX从正值变为非正值（下穿0轴） → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Trix
+ */
 public class TrixStrategy <: Strategy {
     // 指标
-    public let Indicator: Trix
+    public let indicator: Trix
 
     public init() {
-        this.Indicator = Trix()
+        this.indicator = Trix()
     }
 
     public func name(): String { return "TRIX Strategy" }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let closings = snapshotsAsClosings(snapshots)
-        let trixs = Indicator.compute(closings)
+        let trixs = indicator.compute(closings)
         let actions = h.map(trixs, { v: Float64 =>
             if (v > 0.0) { return Action.BUY }
             if (v < 0.0) { return Action.SELL }
             return Action.HOLD
         })
-        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
+        return shift(actions, indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -35,8 +47,8 @@ public class TrixStrategy <: Strategy {
         let dates = snapshotsAsDates(snaps[0])
         let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
 
-        var trixs = Indicator.compute(closings[0])
-        trixs = shift(trixs, Indicator.idlePeriod(), 0.0)
+        var trixs = indicator.compute(closings[0])
+        trixs = shift(trixs, indicator.idlePeriod(), 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
         let annotations = actionsToAnnotations(actions)

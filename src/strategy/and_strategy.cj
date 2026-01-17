@@ -5,10 +5,18 @@ import std.collection.*
 import indicator4cj.helper.*
 import indicator4cj.asset.*
 
-// AndStrategy：与策略，只有当所有子策略都给出相同信号时才执行相应操作。
-// 例如：当所有策略都建议买入时才买入，所有策略都建议卖出时才卖出。
+/**
+ * AndStrategy 与策略（AND逻辑组合）
+ *
+ * 只有当所有子策略都给出相同信号时才执行相应操作：
+ * - 当所有策略都建议买入时才买入
+ * - 当所有策略都建议卖出时才卖出
+ * - 其他情况产生持有信号
+ *
+ * 这是一个严格的策略组合方式，可以降低假信号的风险。
+ */
 public class AndStrategy <: Strategy {
-    // 策略集合
+    /// 子策略集合
     public var strategies: ArrayList<Strategy>
     private let _strategyName: String
 

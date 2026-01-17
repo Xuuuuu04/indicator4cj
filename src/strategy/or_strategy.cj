@@ -5,8 +5,18 @@ import std.collection.*
 import indicator4cj.helper.*
 import indicator4cj.asset.*
 
+/**
+ * OrStrategy 或策略（OR逻辑组合）
+ *
+ * 当任意子策略给出买入或卖出信号时就执行相应操作：
+ * - 当有任意策略建议买入，且没有策略建议卖出时，产生买入信号
+ * - 当有任意策略建议卖出，且没有策略建议买入时，产生卖出信号
+ * - 其他情况（买入和卖出信号冲突）产生持有信号
+ *
+ * 这是一个宽松的策略组合方式，可以捕捉更多交易机会。
+ */
 public class OrStrategy <: Strategy {
-    // 策略集合
+    /// 子策略集合
     public var strategies: ArrayList<Strategy>
     private let _strategyName: String
 

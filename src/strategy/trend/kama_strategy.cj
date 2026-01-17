@@ -8,26 +8,38 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.trend.*
 
-// 收盘上穿 KAMA 买入，下穿卖出。
+/**
+ * KamaStrategy 考夫曼自适应移动平均策略
+ *
+ * 基于考夫曼自适应移动平均线（Kaufman's Adaptive Moving Average, KAMA）生成交易信号。
+ * KAMA根据市场波动性自动调整灵敏度，在趋势市场中跟随价格，在震荡市场中保持平稳。
+ *
+ * 交易规则：
+ * - 收盘价上穿KAMA → 买入
+ * - 收盘价下穿KAMA → 卖出
+ * - 其他情况 → 持有
+ *
+ * @see Kama
+ */
 public class KamaStrategy <: Strategy {
     // 指标
-    public let Indicator: Kama
+    public let indicator: Kama
 
     public init() {
-        this.Indicator = Kama()
+        this.indicator = Kama()
     }
 
     public init(erPeriod: Int64, fastScPeriod: Int64, slowScPeriod: Int64) {
-        this.Indicator = Kama(erPeriod, fastScPeriod, slowScPeriod)
+        this.indicator = Kama(erPeriod, fastScPeriod, slowScPeriod)
     }
 
-    public func name(): String { return Indicator.toString() }
+    public func name(): String { return indicator.toString() }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let closings = duplicate(snapshotsAsClosings(c), 2)
-        closings[1] = skip(closings[1], Indicator.idlePeriod())
+        closings[1] = skip(closings[1], indicator.idlePeriod())
 
-        let kamas = Indicator.compute(closings[0])
+        let kamas = indicator.compute(closings[0])
 
         let actions = operate(kamas, closings[1], { kama: Float64, closing: Float64 =>
             if (closing > kama) { return Action.BUY }
@@ -35,21 +47,21 @@ public class KamaStrategy <: Strategy {
             return Action.HOLD
         })
 
-        return shift(actions, Indicator.idlePeriod(), Action.HOLD)
+        return shift(actions, indicator.idlePeriod(), Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
         let snaps = duplicate(c, 3)
-        let dates = skip(snapshotsAsDates(snaps[0]), Indicator.idlePeriod())
+        let dates = skip(snapshotsAsDates(snaps[0]), indicator.idlePeriod())
 
         let closings = duplicate(snapshotsAsClosings(snaps[1]), 2)
-        closings[1] = skip(closings[1], Indicator.idlePeriod())
+        closings[1] = skip(closings[1], indicator.idlePeriod())
 
-        let kamas = Indicator.compute(closings[0])
+        let kamas = indicator.compute(closings[0])
 
         var (actions, outcomesRaw) = computeWithOutcome(this, snaps[2])
-        actions = skip(actions, Indicator.idlePeriod())
-        outcomesRaw = skip(outcomesRaw, Indicator.idlePeriod())
+        actions = skip(actions, indicator.idlePeriod())
+        outcomesRaw = skip(outcomesRaw, indicator.idlePeriod())
         let annotations = actionsToAnnotations(actions)
         let outcomes = multiplyBy(outcomesRaw, 100.0)
 

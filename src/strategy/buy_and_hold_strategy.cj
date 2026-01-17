@@ -4,7 +4,14 @@ import std.core.*
 import indicator4cj.asset.*
 import indicator4cj.helper.*
 
-// Buy on first tick, hold thereafter.
+/**
+ * BuyAndHoldStrategy 买入并持有策略
+ *
+ * 最简单的交易策略：在第一个tick时全仓买入，之后一直持有。
+ *
+ * 这是一个基准策略，用于评估其他策略的表现。
+ * 如果其他策略无法跑赢买入并持有策略，说明该策略没有实际价值。
+ */
 public class BuyAndHoldStrategy <: Strategy {
     private var _first: Bool = true
 

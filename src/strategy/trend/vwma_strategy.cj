@@ -10,18 +10,30 @@ import indicator4cj.trend.*
 
 public const DefaultVwmaStrategyPeriod: Int64 = 20
 
-// VWMA 高于 SMA 买入，低于卖出。
+/**
+ * VwmaStrategy 成交量加权移动平均策略
+ *
+ * 基于成交量加权移动平均线（Volume Weighted Moving Average, VWMA）生成交易信号。
+ * VWMA在计算平均价格时考虑了成交量因素，成交量大的价格对均线影响更大。
+ *
+ * 交易规则：
+ * - VWMA高于SMA → 买入（放量上涨）
+ * - VWMA低于SMA → 卖出（缩量下跌）
+ * - 其他情况 → 持有
+ *
+ * @see Vwma
+ */
 public class VwmaStrategy <: Strategy {
     // VWMA
-    public let VwmaIndicator: Vwma
+    public let vwmaIndicator: Vwma
     // SMA
-    public let SmaIndicator: Sma
+    public let smaIndicator: Sma
 
     public init() {
-        this.VwmaIndicator = Vwma()
-        this.SmaIndicator = Sma()
-        this.VwmaIndicator.period = DefaultVwmaStrategyPeriod
-        this.SmaIndicator.period = DefaultVwmaStrategyPeriod
+        this.vwmaIndicator = Vwma()
+        this.smaIndicator = Sma()
+        this.vwmaIndicator.period = DefaultVwmaStrategyPeriod
+        this.smaIndicator.period = DefaultVwmaStrategyPeriod
     }
 
     public func name(): String { return "VWMA Strategy" }
@@ -33,7 +45,7 @@ public class VwmaStrategy <: Strategy {
             if (sma > vwma) { return Action.SELL }
             return Action.HOLD
         })
-        return shift(actions, VwmaIndicator.period - 1, Action.HOLD)
+        return shift(actions, vwmaIndicator.period - 1, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -42,8 +54,8 @@ public class VwmaStrategy <: Strategy {
         let closings = snapshotsAsClosings(snaps[1])
 
         var (smas, vwmas) = calculateSmaAndVwma(snaps[2])
-        smas = shift(smas, VwmaIndicator.period - 1, 0.0)
-        vwmas = shift(vwmas, VwmaIndicator.period - 1, 0.0)
+        smas = shift(smas, vwmaIndicator.period - 1, 0.0)
+        vwmas = shift(vwmas, vwmaIndicator.period - 1, 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
         let annotations = actionsToAnnotations(actions)
@@ -64,8 +76,8 @@ public class VwmaStrategy <: Strategy {
         let snaps = duplicate(c, 2)
         let closings = duplicate(snapshotsAsClosings(snaps[0]), 2)
         let volumes = snapshotsAsVolumes(snaps[1])
-        let smas = SmaIndicator.compute(closings[0])
-        let vwmas = VwmaIndicator.compute(closings[1], volumes)
+        let smas = smaIndicator.compute(closings[0])
+        let vwmas = vwmaIndicator.compute(closings[1], volumes)
         return (smas, vwmas)
     }
 }

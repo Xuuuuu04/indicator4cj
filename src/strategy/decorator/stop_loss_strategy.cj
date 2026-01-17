@@ -7,27 +7,39 @@ import indicator4cj.helper as h
 import indicator4cj.asset.*
 import indicator4cj.strategy.*
 
-// StopLoss：买入后设置止损价，触发或主动卖出时清空。
+/**
+ * StopLossStrategy 止损策略装饰器
+ *
+ * 在买入后设置止损价格，当价格跌破止损位时自动卖出。
+ *
+ * 工作原理：
+ * - 当内部策略产生买入信号时，记录买入价格并设置止损价
+ * - 止损价 = 买入价 * (1 - 百分比)
+ * - 如果后续价格跌破止损价，立即卖出止损
+ * - 如果内部策略主动卖出，则清空止损状态
+ *
+ * 这个装饰器用于限制单笔交易的最大亏损。
+ */
 public class StopLossStrategy <: Strategy {
-    // 策略
-    public let InnerStrategy: Strategy
-    // 百分比
-    public let Percentage: Float64
+    /// 被装饰的内部策略
+    public let innerStrategy: Strategy
+    /// 止损百分比（例如0.05表示5%止损）
+    public let percentage: Float64
 
     public init(innerStrategy: Strategy, percentage: Float64) {
-        this.InnerStrategy = innerStrategy
-        this.Percentage = percentage
+        this.innerStrategy = innerStrategy
+        this.percentage = percentage
     }
 
     public func name(): String {
-        return "Stop Loss Strategy (${InnerStrategy.name()})"
+        return "Stop Loss Strategy (${innerStrategy.name()})"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
         let snaps = duplicate(snapshots, 2)
-        let innerActions = InnerStrategy.compute(snaps[0])
+        let innerActions = innerStrategy.compute(snaps[0])
         let closings = snapshotsAsClosings(snaps[1])
-        return StopLossIterator(innerActions, closings, Percentage)
+        return StopLossIterator(innerActions, closings, percentage)
     }
 
     public func report(c: Iterator<Snapshot>): Report {

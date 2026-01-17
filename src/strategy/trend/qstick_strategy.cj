@@ -7,12 +7,25 @@ import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.momentum.*
 
+/**
+ * QstickStrategy Qstick策略
+ *
+ * 基于Qstick指标（Quick Stick）生成交易信号。
+ * Qstick衡量一段时间内上涨日收盘价与开盘价差异的平均值，用于识别买卖力量。
+ *
+ * 交易规则：
+ * - Qstick > 0 → 买入（上涨力量占优）
+ * - Qstick < 0 → 卖出（下跌力量占优）
+ * - Qstick = 0 → 持有
+ *
+ * @see Qstick
+ */
 public class QstickStrategy <: Strategy {
     // 指标
-    public let Indicator: Qstick
+    public let indicator: Qstick
 
     public init() {
-        this.Indicator = Qstick()
+        this.indicator = Qstick()
     }
 
     public func name(): String { return "Qstick Strategy" }
@@ -23,7 +36,7 @@ public class QstickStrategy <: Strategy {
         let closings = snapshotsAsClosings(snaps[1])
 
         // 保持与 Go 实现一致：直接使用指标输出并做轻量缓冲。
-        var qstick = Indicator.compute(openings, closings)
+        var qstick = indicator.compute(openings, closings)
         qstick = buffered(qstick, 2)
 
         let qsticks = duplicate(qstick, 2)
@@ -36,7 +49,7 @@ public class QstickStrategy <: Strategy {
         })
 
         // 移位 period 个位置填充 Hold（与 Go 版一致）。
-        return shift(actions, Indicator.period, Action.HOLD)
+        return shift(actions, indicator.period, Action.HOLD)
     }
 
     public func report(c: Iterator<Snapshot>): Report {
@@ -45,8 +58,8 @@ public class QstickStrategy <: Strategy {
         let openingsDup = duplicate(snapshotsAsOpenings(snaps[1]), 2)
         let closingsDup = duplicate(snapshotsAsClosings(snaps[2]), 2)
 
-        var qstick = Indicator.compute(openingsDup[0], closingsDup[0])
-        qstick = shift(qstick, Indicator.period - 1, 0.0)
+        var qstick = indicator.compute(openingsDup[0], closingsDup[0])
+        qstick = shift(qstick, indicator.period - 1, 0.0)
 
         let (actions, outcomesRaw) = computeWithOutcome(this, snaps[3])
         let annotations = actionsToAnnotations(actions)
