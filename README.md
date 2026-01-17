@@ -126,6 +126,51 @@ cjpm update
 cjpm build
 ```
 
+### 运行测试
+
+项目提供了完整的单元测试套件（240个测试用例），覆盖所有核心功能。
+
+#### 使用测试脚本（推荐）
+
+```shell
+# Windows
+test.bat
+
+# Linux/Unix/macOS
+./test.sh
+```
+
+#### 直接运行测试
+
+如果需要直接运行 `cjpm test`，请先设置环境变量以避免终端宽度检测问题：
+
+```shell
+# Windows (CMD)
+set COLUMNS=120
+set TERM=xterm-256color
+cjpm test
+
+# Linux/Unix/macOS
+export COLUMNS=120
+export TERM=xterm-256color
+cjpm test
+```
+
+> **注意**：如果遇到 `IllegalArgumentException: negative totalWidth` 异常，请参考 [测试故障排除指南](./TEST_TROUBLESHOOTING.md) 获取详细解决方案。
+
+#### 测试覆盖范围
+
+- **测试套件**: 12个
+- **测试用例**: 240个
+- **测试通过率**: 100%
+- **测试模块**:
+  - 核心指标测试（趋势、动量、波动率、成交量）
+  - 策略测试（动量、趋势、复合、装饰器）
+  - 回测引擎测试
+  - 资产管理测试
+
+详细的测试覆盖率报告请参考 [TEST_COVERAGE_REPORT.md](./TEST_COVERAGE_REPORT.md)。
+
 ### 功能示例
 
 #### 技术指标计算示例
