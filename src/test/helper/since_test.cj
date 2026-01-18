@@ -1,0 +1,33 @@
+package indicator4cj.test.helper
+
+import std.collection.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import indicator4cj.helper.*
+
+@Test
+class SinceTest {
+    @TestCase
+    public func since_changes() {
+        let inputArr = ArrayList<Float64>()
+        inputArr.add(1.0)
+        inputArr.add(1.0)
+        inputArr.add(2.0)
+        inputArr.add(2.0)
+        inputArr.add(2.0)
+        inputArr.add(3.0)
+
+        let expected = ArrayList<Int64>()
+        expected.add(0)
+        expected.add(1)
+        expected.add(0)
+        expected.add(1)
+        expected.add(2)
+        expected.add(0)
+
+        let actual = since(sliceToChan(inputArr))
+        let expectedIter = expected.iterator()
+        @Expect(checkEquals(actual, expectedIter) == None, true)
+    }
+}
+

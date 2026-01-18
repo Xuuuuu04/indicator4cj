@@ -20,19 +20,61 @@ private struct CsvColumn {
     }
 }
 
+/**
+ * Csv CSV文件读取和解析工具
+ *
+ * 提供CSV文件的读取、解析和反序列化功能，支持自定义日期时间格式。
+ *
+ * ### 功能特性
+ * - 支持带表头和不带表头的CSV文件
+ * - 自动将字符串转换为指定类型
+ * - 支持自定义日期时间格式
+ * - 类型安全的反序列化
+ * - 支持写入和追加模式
+ *
+ * ### 类型参数
+ * - TData: 目标数据类型，必须符合CsvData接口
+ *
+ * ### 使用示例
+ * ```cangjie
+ * let csv = Csv<Snapshot>()
+ * csv.hasHeader = true
+ * let snapshots = csv.fromFile("data.csv")
+ * ```
+ */
 public class Csv<TData> {
-    // hasHeader
+    /**
+     * hasHeader CSV文件是否包含表头
+     *
+     * 如果为true，第一行将被视为字段名而非数据。
+     */
     public var hasHeader: Bool = true
-    // 日期
+
+    /**
+     * defaultDateTimeFormat 默认日期时间格式
+     *
+     * 用于解析日期时间字符串，默认格式为 "yyyy-MM-dd"。
+     */
     public var defaultDateTimeFormat: String = "yyyy-MM-dd"
 
     public Csv() {
 }
 
+    /**
+     * 带配置选项的构造函数
+     *
+     * @param options CSV配置选项列表
+     */
     public init(options: ArrayList<CsvOption<TData>>) {
         for (opt in options) { opt.apply(this) }
     }
 
+    /**
+     * readFromReader 从输入流读取CSV数据
+     *
+     * @param reader 输入流
+     * @return 解析后的数据迭代器
+     */
     public func readFromReader(reader: InputStream): Iterator<TData> {
         let content = readAll(reader)
         let rows = parseLines(content)
@@ -81,6 +123,13 @@ public class Csv<TData> {
         return out.iterator()
     }
 
+    /**
+     * readFromFile 从CSV文件读取并解析数据
+     *
+     * @param path CSV文件路径
+     * @return 解析后的数据迭代器
+     * @throws Exception 文件读取失败时抛出异常
+     */
     public func readFromFile(path: String): Iterator<TData> {
         try {
             let file = File(path, OpenMode.Read)
@@ -93,18 +142,41 @@ public class Csv<TData> {
         }
     }
 
+    /**
+     * writeToFile 将数据写入CSV文件
+     *
+     * @param path 文件路径
+     * @param rows 数据迭代器
+     * @throws Exception 文件写入失败时抛出异常
+     */
     public func writeToFile(path: String, rows: Iterator<TData>) {
         let f = File(path, OpenMode.Write)
         writeCommon(f, rows, true)
         f.close()
     }
 
+    /**
+     * appendToFile 将数据追加到CSV文件
+     *
+     * @param path 文件路径
+     * @param rows 数据迭代器
+     * @throws Exception 文件写入失败时抛出异常
+     */
     public func appendToFile(path: String, rows: Iterator<TData>) {
         let f = File(path, OpenMode.Append)
         writeCommon(f, rows, false)
         f.close()
     }
 
+    /**
+     * appendOrWriteToFile 智能写入或追加数据
+     *
+     * 如果文件存在且非空则追加，否则写入新文件。
+     *
+     * @param path 文件路径
+     * @param rows 数据迭代器
+     * @throws Exception 文件操作失败时抛出异常
+     */
     public func appendOrWriteToFile(path: String, rows: Iterator<TData>) {
         // 如果文件存在且非空则 append，否则写入新文件。
         try {
@@ -150,18 +222,46 @@ public class Csv<TData> {
     }
 }
 
+/**
+ * CsvOption CSV配置选项
+ *
+ * 用于配置CSV读取器的选项模式。
+ */
 public class CsvOption<TData> {
     private let _applyFn: (Csv<TData>) -> Unit
+
+    /**
+     * 构造函数
+     *
+     * @param apply 应用配置的函数
+     */
     public init(apply: (Csv<TData>) -> Unit) {
         this._applyFn = apply
     }
+
+    /**
+     * apply 应用配置到CSV实例
+     *
+     * @param c CSV实例
+     */
     public func apply(c: Csv<TData>): Unit { _applyFn(c) }
 }
 
+/**
+ * withoutCsvHeader 创建无表头配置选项
+ *
+ * @return 配置选项，设置CSV文件不包含表头
+ */
 public func withoutCsvHeader<TData>(): CsvOption<TData> {
     return CsvOption<TData>({ c => c.hasHeader = false })
 }
 
+/**
+ * withCsvDefaultDateTimeFormat 创建日期时间格式配置选项
+ *
+ * @param format 日期时间格式字符串
+ * @return 配置选项，设置自定义日期时间格式
+ */
 public func withCsvDefaultDateTimeFormat<TData>(format: String): CsvOption<TData> {
     return CsvOption<TData>({ c => c.defaultDateTimeFormat = format })
 }

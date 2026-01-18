@@ -19,7 +19,12 @@ import indicator4cj.helper.*
  * @param period 移动窗口周期
  */
 public class MovingMax {
-    // 周期
+    /**
+     * period 移动窗口周期
+     *
+     * 默认值：1
+     * 用途：确定计算最大值的时间窗口
+     */
     public var period: Int64 = 1
 
     /**
@@ -61,6 +66,10 @@ public class MovingMax {
         return skip(maxValues, period - 1)
     }
 
-// idlePeriod 返回空闲周期数。
+    /**
+     * idlePeriod 返回空闲周期数
+     *
+     * @return 需要预热的周期数（period-1）
+     */
     public func idlePeriod(): Int64 { return period - 1 }
 }
