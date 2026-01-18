@@ -171,23 +171,38 @@ public class Backtest {
      * @throws Exception 当数据加载失败或报告生成失败时抛出异常
      */
     public func run(): Unit {
-        // 资产列表
-        if (names.isEmpty()) {
-            names = _repository.assets()
-        }
         // 策略列表
         if (strategies.isEmpty()) {
             strategies.add(BuyAndHoldStrategy())
+        }
+
+        // 资产列表（在策略列表初始化后）
+        let userSpecifiedAssets = !names.isEmpty()
+        if (names.isEmpty()) {
+            names = _repository.assets()
         }
 
         _safeExec({ => _report.begin(names, strategies) },
                   "Failed to begin backtest report for ${names.size} assets and ${strategies.size} strategies")
 
         for (name in names) {
-            let snapsIter = match (_repository.get(name)) {
-                case Some(it) => it
-                case None => continue // 跳过不存在的资产
+            // 检查资产是否存在
+            let assetExists = match (_repository.get(name)) {
+                case Some(_) => true
+                case None => false
             }
+
+            // 如果用户明确指定了资产名称但资产不存在，则抛出异常
+            if (userSpecifiedAssets && !assetExists) {
+                throw Exception("asset '${name}' not found in repository")
+            }
+
+            // 如果资产不存在，跳过
+            if (!assetExists) {
+                continue
+            }
+
+            let snapsIter = _repository.get(name).getOrThrow()
             let snapsList = chanToSlice(snapsIter)
 
             _safeExec({ => _report.assetBegin(name, strategies) },

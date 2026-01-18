@@ -37,7 +37,15 @@ class OrderedSetTest {
         for (n in input) {
             set.insert(n)
         }
+        // 由于集合会去重，所以只删除第一个出现的每个值
+        // 创建去重后的输入列表
+        let uniqueInput = ArrayList<Float64>()
         for (n in input) {
+            if (!uniqueInput.contains(n)) {
+                uniqueInput.add(n)
+            }
+        }
+        for (n in uniqueInput) {
             @Expect(set.remove(n), true)
         }
     }

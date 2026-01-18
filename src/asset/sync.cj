@@ -120,6 +120,12 @@ public class Sync {
         }
 
         for (name in assetNames) {
+            // 检查源仓库是否有该资产
+            match (source.get(name)) {
+                case None => throw Exception("source repository missing asset '${name}'")
+                case Some(_) => ()
+            }
+
             var startDate = defaultStartDate
             // 尝试获取目标仓储的最新日期
             match (target.lastDate(name)) {
