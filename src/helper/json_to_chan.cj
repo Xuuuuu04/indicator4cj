@@ -21,10 +21,10 @@ public func jsonToChan(reader: InputStream): Iterator<Int64> {
  * 日志参数当前未使用，保留以兼容签名。
  *
  * @param reader 输入流
- * @param logger 日志信息（当前未使用）
+ * @param _logger 日志信息（当前未使用，保留参数以兼容签名）
  * @return Int64迭代器
  */
-public func jsonToChanWithLogger(reader: InputStream, logger: Option<String>): Iterator<Int64> {
+public func jsonToChanWithLogger(reader: InputStream, _logger: Option<String>): Iterator<Int64> {
     return JSONIterator(reader)
 }
 

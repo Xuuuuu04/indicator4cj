@@ -16,10 +16,10 @@ public interface Closeable {
  * closeAndLogError 尝试关闭资源并忽略异常
  *
  * @param closer 可关闭资源
- * @param message 错误消息（保留以兼容签名）
+ * @param _message 错误消息（当前未使用，保留参数以兼容签名）
  */
-public func closeAndLogError(closer: Closeable, message: String): Unit {
-    closeAndLogErrorWithLogger(closer, message, None)
+public func closeAndLogError(closer: Closeable, _message: String): Unit {
+    closeAndLogErrorWithLogger(closer, _message, None)
 }
 
 /**
@@ -29,10 +29,10 @@ public func closeAndLogError(closer: Closeable, message: String): Unit {
  * 用于资源清理，确保即使关闭失败也不影响程序流程。
  *
  * @param closer 可关闭资源
- * @param message 错误消息（当前未使用）
- * @param logger 日志信息（当前未使用）
+ * @param _message 错误消息（当前未使用，保留参数以兼容签名）
+ * @param _logger 日志信息（当前未使用，保留参数以兼容签名）
  */
-public func closeAndLogErrorWithLogger(closer: Closeable, message: String, logger: Option<String>): Unit {
+public func closeAndLogErrorWithLogger(closer: Closeable, _message: String, _logger: Option<String>): Unit {
     try {
         closer.close()
     } catch (_) {
