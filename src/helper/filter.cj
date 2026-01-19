@@ -42,6 +42,16 @@ public func filter<TElement>(iter: Iterator<TElement>, predicate: (TElement) -> 
  * FilterIterator 过滤迭代器实现
  *
  * 内部迭代器类，实现元素过滤的具体逻辑。
+ * 这是一个惰性求值的迭代器包装器，用于实现函数式编程中的filter操作。
+ *
+ * ### 惰性求值
+ * 只有在调用next()时才会检查谓词条件，不会提前处理所有元素。
+ * 这种设计使得链式操作更加高效，避免创建中间集合。
+ *
+ * ### 过滤逻辑
+ * - 跳过所有不满足谓词的元素
+ * - 只保留使谓词函数返回true的元素
+ * - 当源迭代器耗尽时返回None
  *
  * @param TElement 元素类型
  */

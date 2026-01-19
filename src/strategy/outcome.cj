@@ -35,11 +35,22 @@ public func outcome(values: Iterator<Float64>, actions: Iterator<Action>): Itera
 }
 
 /**
- * OutcomeIterator 收益计算迭代器
+ * OutcomeIterator 收益率迭代器实现
  *
- * 内部迭代器类，实现交易收益的具体计算逻辑
+ * 内部迭代器类，用于计算策略的实际收益率结果。
+ * 将交易动作序列转换为收益率序列，基于收盘价计算每笔交易的盈亏。
+ *
+ * ### 交易模型
+ * - 初始资金：1.0
+ * - 买入信号：将所有现金转换为股票（全仓买入）
+ * - 卖出信号：将所有股票转换为现金（全仓卖出）
+ * - 持有信号：保持当前状态
+ *
+ * ### 收益计算
+ * 返回相对收益 = 当前总价值 - 初始资金
+ * 当前总价值 = 现金 + 股票数量 × 当前价格
  */
-class OutcomeIterator <: Iterator<Float64> {
+private class OutcomeIterator <: Iterator<Float64> {
     /**
      * _values 价格序列
      */

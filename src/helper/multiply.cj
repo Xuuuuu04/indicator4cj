@@ -5,6 +5,14 @@ package indicator4cj.helper
  *
  * 对两个迭代器对应位置的元素进行乘法运算。
  *
+ * ### 示例
+ * ```cangjie
+ * let a = [1.0, 2.0, 3.0]
+ * let b = [10.0, 20.0, 30.0]
+ * let result = multiply(a.iterator(), b.iterator())
+ * // 结果: [10.0, 40.0, 90.0]
+ * ```
+ *
  * @param left 第一个乘数迭代器
  * @param right 第二个乘数迭代器
  * @return 乘法结果迭代器
