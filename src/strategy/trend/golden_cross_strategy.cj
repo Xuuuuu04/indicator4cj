@@ -40,7 +40,22 @@ public class GoldenCrossStrategy <: Strategy {
     public func name(): String { return "Golden Cross Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let (fastEmas, slowEmas) = calculateEmas(c)
+        // 空数据检查：先将迭代器转换为列表以检查是否为空
+        let snapsList = ArrayList<Snapshot>()
+        while (true) {
+            match (c.next()) {
+                case Some(s) => snapsList.add(s)
+                case None => break
+            }
+        }
+
+        // 如果没有数据，返回空迭代器
+        if (snapsList.isEmpty()) {
+            return ArrayList<Action>().iterator()
+        }
+
+        // 使用缓存的数据进行处理
+        let (fastEmas, slowEmas) = calculateEmas(snapsList.iterator())
         let actions = operate(fastEmas, slowEmas, { f: Float64, s: Float64 =>
             if (f > s) { return Action.BUY }
             if (f < s) { return Action.SELL }

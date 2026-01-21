@@ -65,7 +65,7 @@ public class TripleRsiStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "Triple RSI Strategy (${rsiIndicator.period},${smaIndicator.period},${downDays},${buySignalAt},${buyAt},${sellAt})"
+        return "Triple RSI Strategy"
     }
 
     public func idlePeriod(): Int64 {
@@ -73,7 +73,22 @@ public class TripleRsiStrategy <: Strategy {
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let closingsSplice = duplicate(snapshotsAsClosings(c), 3)
+        // 空数据检查：先将迭代器转换为列表以检查是否为空
+        let snapsList = ArrayList<Snapshot>()
+        while (true) {
+            match (c.next()) {
+                case Some(s) => snapsList.add(s)
+                case None => break
+            }
+        }
+
+        // 如果没有数据，返回空迭代器
+        if (snapsList.isEmpty()) {
+            return ArrayList<Action>().iterator()
+        }
+
+        // 使用缓存的数据进行处理
+        let closingsSplice = duplicate(snapshotsAsClosings(snapsList.iterator()), 3)
 
         var rsis = rsiIndicator.compute(closingsSplice[0])
         let smas = smaIndicator.compute(closingsSplice[1])

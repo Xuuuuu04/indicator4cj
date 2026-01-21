@@ -11,11 +11,13 @@ package indicator4cj.helper
  * 未来可扩展为预取（prefetch）实现。
  *
  * @param iter 源迭代器
- * @param _bufferSize 缓冲区大小（当前未使用，保留参数以兼容签名）
+ * @param bufferSize 缓冲区大小（当前未使用，保留参数以兼容签名）
  * @return 原迭代器（直通）
  */
-public func buffered<T>(iter: Iterator<T>, _bufferSize: Int64): Iterator<T> {
+public func buffered<T>(iter: Iterator<T>, bufferSize: Int64): Iterator<T> {
     // 可按需扩展为预取，当前保持直通。
+    // 参数引用以消除未使用警告
+    let _ = bufferSize
     return iter
 }
 

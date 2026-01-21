@@ -29,7 +29,7 @@ public class BopStrategy <: Strategy {
         this.indicator = Bop()
     }
 
-    public func name(): String { return "BoP Strategy" }
+    public func name(): String { return "BOP Strategy" }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
         let snaps = duplicate(c, 4)

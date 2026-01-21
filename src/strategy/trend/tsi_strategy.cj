@@ -43,11 +43,26 @@ public class TsiStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "Tsi Strategy (${indicator.toString()},EMA(${_signalPeriod}))"
+        return "TSI Strategy"
     }
 
     public func compute(snapshots: Iterator<Snapshot>): Iterator<Action> {
-        let closings = snapshotsAsClosings(snapshots)
+        // 空数据检查：先将迭代器转换为列表以检查是否为空
+        let snapsList = ArrayList<Snapshot>()
+        while (true) {
+            match (snapshots.next()) {
+                case Some(s) => snapsList.add(s)
+                case None => break
+            }
+        }
+
+        // 如果没有数据，返回空迭代器
+        if (snapsList.isEmpty()) {
+            return ArrayList<Action>().iterator()
+        }
+
+        // 使用缓存的数据进行处理
+        let closings = snapshotsAsClosings(snapsList.iterator())
         let tsis = duplicate(indicator.compute(closings), 2)
         tsis[0] = skip(tsis[0], signal.idlePeriod())
         let signals = signal.compute(tsis[1])

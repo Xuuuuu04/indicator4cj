@@ -10,9 +10,9 @@ class PvTest {
     @TestCase
     public func pv_basic() {
         let input = Csv<PvRow>().readFromFile("src/test/testdata/valuation/pv.csv")
-        for (row in input) {
+        for(row in input) {
             let actual = rounddigit(pv(row.fv, row.rate, row.years), 2)
-            @Expect(actual, row.pv)
+            expectEqual("actual", "row.pv", actual, row.pv)
         }
     }
 }
@@ -24,4 +24,3 @@ public class PvRow {
     public var pv: Float64 = 0.0
     public init() {}
 }
-

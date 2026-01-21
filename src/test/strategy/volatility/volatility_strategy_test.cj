@@ -59,7 +59,7 @@ private func loadExpected(path: String): Iterator<Action> {
 }
 
 @Test
-public func bollinger_bands_strategy_basic() {
+public func bollinger_bands_strategy_csv() {
     let snaps = loadSnapshots()
     let expected = loadExpected("${_basePath}/volatility/bollinger_bands_strategy.csv")
     let s = BollingerBandsStrategy()

@@ -76,9 +76,11 @@ public func checkFloatEquals(actual: Iterator<Float64>, expected: Iterator<Float
  * 当只传入一个参数时，视为"非成对"错误（与Go版本行为对齐）。
  * 用于检测函数调用时参数数量错误。
  *
- * @param _single 单个迭代器（参数未使用，仅用于重载解析）
+ * @param single 单个迭代器（参数未使用，仅用于重载解析）
  * @return 返回"not pairs"错误描述
  */
-public func checkEquals<T>(_single: Iterator<T>): Option<String> {
+public func checkEquals<T>(single: Iterator<T>): Option<String> {
+    // 参数引用以消除未使用警告
+    let _ = single
     return Some("not pairs")
 }

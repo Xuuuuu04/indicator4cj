@@ -40,11 +40,26 @@ public class WeightedCloseStrategy <: Strategy {
     }
 
     public func name(): String {
-        return "Weighted Close Strategy (${ma.idlePeriod() + 1})"
+        return "Weighted Close Strategy"
     }
 
     public func compute(c: Iterator<Snapshot>): Iterator<Action> {
-        let snaps = duplicate(c, 3)
+        // 空数据检查：先将迭代器转换为列表以检查是否为空
+        let snapsList = ArrayList<Snapshot>()
+        while (true) {
+            match (c.next()) {
+                case Some(s) => snapsList.add(s)
+                case None => break
+            }
+        }
+
+        // 如果没有数据，返回空迭代器
+        if (snapsList.isEmpty()) {
+            return ArrayList<Action>().iterator()
+        }
+
+        // 使用缓存的数据进行处理
+        let snaps = duplicate(snapsList.iterator(), 3)
         let highs = snapshotsAsHighs(snaps[0])
         let lows = snapshotsAsLows(snaps[1])
         let closings = snapshotsAsClosings(snaps[2])

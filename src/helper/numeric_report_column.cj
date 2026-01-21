@@ -18,9 +18,28 @@ public class NumericReportColumn <: ReportColumn {
 
     public func value(): String {
         match (_values.next()) {
-            case Some(v) => return "${v}"
+            case Some(v) => formatFloat(v)
             case None => return "null"
         }
+    }
+
+    private func formatFloat(v: Float64): String {
+        // 格式化为保留原始精度，去除尾部无效零
+        let s = "${v}"
+        // 如果包含小数点，去除尾部的零
+        if (s.contains(".")) {
+            var trimmed = s
+            // 从末尾删除零
+            while (trimmed.size > 0 && String.fromUtf8([trimmed[trimmed.size - 1]]) == "0") {
+                trimmed = trimmed[0..trimmed.size - 1]
+            }
+            // 如果最后一位是小数点，保留一个零
+            if (trimmed.size > 0 && String.fromUtf8([trimmed[trimmed.size - 1]]) == ".") {
+                trimmed = trimmed + "0"
+            }
+            return trimmed
+        }
+        return s
     }
 }
 
