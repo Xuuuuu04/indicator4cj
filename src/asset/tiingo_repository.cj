@@ -157,7 +157,7 @@ public struct TiingoEndOfDay {
 // TiingoRepository Tiingo API 仓储实现，从 Tiingo 金融数据 API 获取资产数据
 public class TiingoRepository <: Repository {
     private var _apiKey: String = ""
-    private var _baseUrl: String = "https://api.tiingo.com"
+    public var baseUrl: String = "https://api.tiingo.com"
 
     // 构造函数
     public TiingoRepository() {
@@ -180,10 +180,15 @@ public class TiingoRepository <: Repository {
 
     // getSince 获取指定资产从指定日期开始的快照数据
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
-        let url = _baseUrl + "/tiingo/daily/" + name + "/prices?startDate=" + formatDate(date) + "&token=" + _apiKey
+        let url = baseUrl + "/tiingo/daily/" + name + "/prices?startDate=" + formatDate(date) + "&token=" + _apiKey
         let client = ClientBuilder().build()
         try {
-            let resp = client.get(url)
+            let reqBuilder = HttpRequestBuilder().get().url(url)
+            match (hostHeaderValue()) {
+                case Some(h) => reqBuilder.header("Host", h)
+                case None => ()
+            }
+            let resp = client.send(reqBuilder.build())
             if (resp.status >= 400u16) {
                 client.close()
                 throw Exception("tiingo: http error ${resp.status.toString()}")
@@ -211,10 +216,15 @@ public class TiingoRepository <: Repository {
 
     // lastDate 返回指定资产的最新日期
     public func lastDate(name: String): Option<DateTime> {
-        let url = _baseUrl + "/tiingo/daily/" + name + "?token=" + _apiKey
+        let url = baseUrl + "/tiingo/daily/" + name + "?token=" + _apiKey
         let client = ClientBuilder().build()
         try {
-            let resp = client.get(url)
+            let reqBuilder = HttpRequestBuilder().get().url(url)
+            match (hostHeaderValue()) {
+                case Some(h) => reqBuilder.header("Host", h)
+                case None => ()
+            }
+            let resp = client.send(reqBuilder.build())
             if (resp.status >= 400u16) {
                 client.close()
                 throw Exception("tiingo: http error ${resp.status.toString()}")
@@ -259,6 +269,15 @@ public class TiingoRepository <: Repository {
             }
         }
         return String.fromUtf8(bytes.toArray())
+    }
+
+    private func hostHeaderValue(): Option<String> {
+        let parts = baseUrl.split("://")
+        if (parts.size < 2) { return None }
+        let rest = parts[1]
+        let hostParts = rest.split("/")
+        if (hostParts.size < 1) { return None }
+        return Some(hostParts[0])
     }
 
     private func jsonToSnapshot(obj: JsonObject): Snapshot {

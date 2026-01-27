@@ -154,7 +154,7 @@ public func williams_r_strategy_report() {
     }
 
     let strat = WilliamsRStrategy()
-    let report = strat.report(snaps.iterator())
+    let _ = strat.report(snaps.iterator())
 
     // 验证报告生成不抛异常
     println("Williams R Strategy report generated successfully")

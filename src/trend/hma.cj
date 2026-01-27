@@ -108,8 +108,13 @@ public class Hma {
     public func compute(values: Iterator<Float64>): Iterator<Float64> {
         let vals = duplicate(values, 2)
 
-        let w1 = _wma1.compute(vals[0])
+        var w1 = _wma1.compute(vals[0])
         let w2 = _wma2.compute(vals[1])
+
+        let idleDiff = _wma2.idlePeriod() - _wma1.idlePeriod()
+        if (idleDiff > 0) {
+            w1 = skip(w1, idleDiff)
+        }
 
         let combined = subtract(
             multiplyBy(w1, 2.0),
@@ -125,7 +130,7 @@ public class Hma {
      * @return 需要预热的周期数（wma1.idlePeriod + wma3.idlePeriod）
      */
     public func idlePeriod(): Int64 {
-        return _wma1.idlePeriod() + _wma3.idlePeriod()
+        return _wma2.idlePeriod() + _wma3.idlePeriod()
     }
 
     /**

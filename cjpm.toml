@@ -19,6 +19,10 @@ src-dir = "cmd/backtest"
 name = "indicator-sync"
 src-dir = "cmd/sync"
 
+[[executable]]
+name = "indicator-mcp"
+src-dir = "cmd/mcp"
+
 [target.x86_64-w64-mingw32]
   [target.x86_64-w64-mingw32.bin-dependencies]
     path-option = ["D:\\CangJie\\cangjie_stdx\\0141\\dynamic\\stdx"]

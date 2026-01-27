@@ -2,6 +2,7 @@ package indicator4cj.asset
 
 import std.core.*
 import std.collection.*
+import std.sync.*
 import std.time.*
 
 /**
@@ -114,27 +115,45 @@ public class Sync {
      * @param defaultStartDate 默认起始日期（用于新资产）
      */
     public func run(source: Repository, target: Repository, defaultStartDate: DateTime): Unit {
-        var assetNames = _assets
-        if (assetNames.isEmpty()) {
-            assetNames = target.assets()
+        let assetNames = if (_assets.isEmpty()) { target.assets() } else { _assets }
+
+        let w = if (workers <= 0) { 1 } else { workers }
+        let delay = delaySeconds
+        let nextIndex = AtomicInt64(0)
+        let hasErrors = AtomicBool(false)
+        let futures = ArrayList<Future<Unit>>()
+
+        for (_ in 0..w) {
+            futures.add(spawn { =>
+                while (true) {
+                    let idx = nextIndex.fetchAdd(1)
+                    if (idx >= assetNames.size) { break }
+                    let name = assetNames[idx]
+
+                    var startDate = defaultStartDate
+                    match (target.lastDate(name)) {
+                        case Some(dt) => startDate = dt.addDays(1)
+                        case None => ()
+                    }
+
+                    try {
+                        let snaps = source.getSince(name, startDate)
+                        target.append(name, snaps)
+                    } catch (_: Exception) {
+                        hasErrors.store(true)
+                    }
+
+                    if (delay > 0) {
+                        sleep(delay * Duration.second)
+                    }
+                }
+            })
         }
 
-        for (name in assetNames) {
-            // 检查源仓库是否有该资产
-            match (source.get(name)) {
-                case None => throw Exception("source repository missing asset '${name}'")
-                case Some(_) => ()
-            }
+        for (f in futures) { f.get() }
 
-            var startDate = defaultStartDate
-            // 尝试获取目标仓储的最新日期
-            match (target.lastDate(name)) {
-                case Some(dt) => startDate = dt // 可以按需 +1 天；当前保持同日含等于
-                case None => ()
-            }
-
-            let snaps = source.getSince(name, startDate)
-            target.append(name, snaps)
+        if (hasErrors.load()) {
+            throw Exception("has errors")
         }
     }
 }

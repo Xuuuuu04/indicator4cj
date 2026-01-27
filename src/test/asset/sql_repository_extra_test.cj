@@ -3,21 +3,23 @@ package indicator4cj.test.asset
 import std.core.*
 import std.collection.*
 import std.time.*
+import std.database.sql.*
 import indicator4cj.asset.*
 
 public class MockDialectExtra <: SQLRepositoryDialect {
-    public func createTable(): String { "" }
-    public func dropTable(): String { "" }
-    public func assets(): String { "" }
-    public func getSince(): String { "" }
-    public func lastDate(): String { "" }
-    public func append(): String { "" }
+    public func createTable(): String { MockSqlCreate }
+    public func dropTable(): String { MockSqlDrop }
+    public func assets(): String { MockSqlAssets }
+    public func getSince(): String { MockSqlGetSince }
+    public func lastDate(): String { MockSqlLastDate }
+    public func append(): String { MockSqlAppend }
 }
 
 @Test
 public func test_sql_repository_extended() {
     try {
-        let repo = SQLRepository(MockDialectExtra())
+        DriverManager.register(MockSqlDriverName, MockSqlDriver())
+        let repo = SQLRepository(MockSqlDriverName, "mock://extended", MockDialectExtra())
 
         // 1. 测试 append 和 assets
         let s1 = Snapshot(DateTime.now(), 100.0, 100.0, 100.0, 100.0, 100.0, 100.0)
@@ -59,6 +61,9 @@ public func test_sql_repository_extended() {
         repo.drop()
         let assetsEmpty = repo.assets()
         if (assetsEmpty.size != 0) { fail("Repository should be empty after drop") }
+
+        repo.close()
+        DriverManager.deregister(MockSqlDriverName)
     } catch (e: Exception) {
         fail(e.toString())
     }

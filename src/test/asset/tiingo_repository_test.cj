@@ -2,65 +2,59 @@ package indicator4cj.test.asset
 
 import std.core.*
 import std.collection.*
+import std.time.*
+import stdx.net.http.*
 import indicator4cj.asset.*
 
-// FIXME: Tiingo HTTP 交互未迁移
-//
-// 问题描述：当前依赖的HTTP客户端不可用，无法测试Tiingo数据源集成
-// 影响：TiingoRepository的assets()和get()方法无法正常测试
-// 依赖：等待 stdx.net.http 稳定后迁移HTTP客户端代码
-//
-// 临时方案：跳过Tiingo相关测试（使用//@Test注释掉）
-// 长期方案：
-//   1. 接入stdx.net.http库
-//   2. 迁移Tiingo API调用代码
-//   3. 恢复这两个测试用例
-//
-// 相关文件：src/asset/tiingo_repository.cj
-// Issue: #TODO (创建GitHub Issue追踪)
-//@Test
-public func tiingo_repository_assets() {
+@Test
+public func tiingo_repository_unsupported_methods() {
     let repo = TiingoRepository("dummy")
     try {
-        let names = repo.assets()
-        if (names.size != 0) {
-            fail("expected empty assets")
-        }
-    } catch (_: Exception) {
-        // Expected error
-    }
-}
-
-//@Test
-public func tiingo_repository_get() {
-    let repo = TiingoRepository("dummy")
-    try {
-        let _ = repo.get("AAPL")
+        let _ = repo.assets()
         fail("expected unsupported error, got none")
-    } catch (_: Exception) {
-        // Expected error
-    }
-}
+    } catch (_: Exception) { () }
 
-//@Test
-public func tiingo_repository_last_date() {
-    let repo = TiingoRepository("dummy")
-    try {
-        let _ = repo.lastDate("AAPL")
-        fail("expected unsupported error, got none")
-    } catch (_: Exception) {
-        // Expected error
-    }
-}
-
-//@Test
-public func tiingo_repository_append() {
-    let repo = TiingoRepository("dummy")
     try {
         repo.append("AAPL", ArrayList<Snapshot>().iterator())
         fail("expected unsupported error, got none")
-    } catch (_: Exception) {
-        // Expected error
+    } catch (_: Exception) { () }
+}
+
+@Test
+public func tiingo_repository_offline_endpoints() {
+    let server = ServerBuilder().addr("127.0.0.1").port(0).build()
+
+    server.distributor.register("/tiingo/daily/AAPL/prices", { ctx =>
+        ctx.responseBuilder.body("[{\"date\":\"2020-01-02\",\"adjOpen\":1.0,\"adjHigh\":2.0,\"adjLow\":0.5,\"adjClose\":1.5,\"adjVolume\":100}]")
+    })
+
+    server.distributor.register("/tiingo/daily/AAPL", { ctx =>
+        ctx.responseBuilder.body("{\"endDate\":\"2020-01-02\"}")
+    })
+
+    spawn { server.serve() }
+    sleep(Duration.second)
+
+    let repo = TiingoRepository("dummy")
+    repo.baseUrl = "http://127.0.0.1:${server.port.toString()}"
+
+    let snaps = repo.getSince("AAPL", DateTime.parse("2000-01-01", "yyyy-MM-dd"))
+    match (snaps.next()) {
+        case Some(s) =>
+            if (s.close != 1.5) { fail("expected close 1.5, got ${s.close}") }
+            if (s.volume != 100.0) { fail("expected volume 100.0, got ${s.volume}") }
+        case None => fail("expected snapshot, got none")
     }
+
+    match (repo.lastDate("AAPL")) {
+        case Some(dt) =>
+            let expected = DateTime.parse("2020-01-02", "yyyy-MM-dd")
+            if (dt.toString() != expected.toString()) {
+                fail("expected ${expected.toString()}, got ${dt.toString()}")
+            }
+        case None => fail("expected last date, got none")
+    }
+
+    server.close()
 }
 

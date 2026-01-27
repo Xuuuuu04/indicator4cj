@@ -2,6 +2,8 @@ package indicator4cj.backtest
 
 import std.core.*
 import std.collection.*
+import std.sync.*
+import std.time.*
 import indicator4cj.asset.*
 import indicator4cj.strategy.*
 import indicator4cj.helper.*
@@ -131,14 +133,14 @@ public class Backtest {
      *
      * 当前版本未使用，保留用于未来并发优化
      */
-    private var _workers: Int64 = DefaultBacktestWorkers
+    public var workers: Int64 = DefaultBacktestWorkers
 
     /**
      * _lastDays 回测数据天数
      *
      * 限制回测使用最近N天的数据
      */
-    private var _lastDays: Int64 = DefaultLastDays
+    public var lastDays: Int64 = DefaultLastDays
 
     /**
      * 构造函数
@@ -171,56 +173,71 @@ public class Backtest {
      * @throws Exception 当数据加载失败或报告生成失败时抛出异常
      */
     public func run(): Unit {
-        // 策略列表
         if (strategies.isEmpty()) {
             strategies.add(BuyAndHoldStrategy())
         }
 
-        // 资产列表（在策略列表初始化后）
-        let userSpecifiedAssets = !names.isEmpty()
         if (names.isEmpty()) {
             names = _repository.assets()
         }
 
-        _safeExec({ => _report.begin(names, strategies) },
-                  "Failed to begin backtest report for ${names.size} assets and ${strategies.size} strategies")
+        let assetNames = names
+        let strategiesList = strategies
 
-        for (name in names) {
-            // 检查资产是否存在
-            let assetExists = match (_repository.get(name)) {
-                case Some(_) => true
-                case None => false
-            }
-
-            // 如果用户明确指定了资产名称但资产不存在，则抛出异常
-            if (userSpecifiedAssets && !assetExists) {
-                throw Exception("asset '${name}' not found in repository")
-            }
-
-            // 如果资产不存在，跳过
-            if (!assetExists) {
-                continue
-            }
-
-            let snapsIter = _repository.get(name).getOrThrow()
-            let snapsList = chanToSlice(snapsIter)
-
-            _safeExec({ => _report.assetBegin(name, strategies) },
-                      "Failed to begin asset '${name}' backtest with ${strategies.size} strategies")
-
-            for (st in strategies) {
-                let dup = duplicate(snapsList.iterator(), 2)
-                let (actions, outcomes) = computeWithOutcome(st, dup[0])
-                _safeExec({ => _report.write(name, st, dup[1], actions, outcomes) },
-                          "Failed to write backtest results for asset '${name}' using strategy '${st.name()}'")
-            }
-
-            _safeExec({ => _report.assetEnd(name) },
-                      "Failed to end asset '${name}' backtest")
+        let reportMutex = Mutex()
+        synchronized(reportMutex) {
+            _safeExec({ => _report.begin(assetNames, strategiesList) },
+                      "Failed to begin backtest report for ${assetNames.size} assets and ${strategiesList.size} strategies")
         }
 
-        _safeExec({ => _report.end() },
-                  "Failed to end backtest report")
+        let since = if (lastDays > 0) {
+            DateTime.now().addDays(-lastDays)
+        } else {
+            DateTime.parse("2000-01-01", "yyyy-MM-dd")
+        }
+
+        let w = if (workers <= 0) { 1 } else { workers }
+        let nextIndex = AtomicInt64(0)
+        let futures = ArrayList<Future<Unit>>()
+
+        for (_ in 0..w) {
+            futures.add(spawn { =>
+                while (true) {
+                    let idx = nextIndex.fetchAdd(1)
+                    if (idx >= assetNames.size) { break }
+                    let name = assetNames[idx]
+                    try {
+                        let snapsIter = _repository.getSince(name, since)
+                        let snapsList = chanToSlice(snapsIter)
+
+                        try {
+                            synchronized(reportMutex) { _report.assetBegin(name, strategiesList) }
+                        } catch (_: Exception) { continue }
+
+                        for (st in strategiesList) {
+                            let dup = duplicate(snapsList.iterator(), 2)
+                            let (actions, outcomes) = computeWithOutcome(st, dup[0])
+                            try {
+                                synchronized(reportMutex) { _report.write(name, st, dup[1], actions, outcomes) }
+                            } catch (_: Exception) { () }
+                        }
+
+                        try {
+                            synchronized(reportMutex) { _report.assetEnd(name) }
+                        } catch (_: Exception) { () }
+                    } catch (_: Exception) {
+                        ()
+                    }
+                }
+            })
+        }
+
+        for (f in futures) { f.get() }
+
+        synchronized(reportMutex) {
+            _safeExec({ => _report.end() },
+                      "Failed to end backtest report")
+        }
     }
 
     /**

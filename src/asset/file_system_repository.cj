@@ -77,7 +77,7 @@ public class FileSystemRepository <: Repository {
     public func getSince(name: String, date: DateTime): Iterator<Snapshot> {
         let iter = match (get(name)) {
             case Some(it) => it
-            case None => return ArrayList<Snapshot>().iterator()
+            case None => throw Exception("asset not found: ${name}")
         }
         return filter<Snapshot>(iter, { s: Snapshot => (s.date == date) || (s.date > date) })
     }
