@@ -1,95 +1,19 @@
-package indicator4cj.cmd.mcp
+package indicator4cj.mcp
 
-import std.env.*
-import std.core.*
 import std.collection.*
-import std.io.*
+import std.convert.*
+import std.core.*
 import std.time.*
+import stdx.encoding.json.*
 import indicator4cj.asset.*
 import indicator4cj.strategy.*
-import stdx.encoding.json.*
-import indicator4cj.mcp.*
 
-private const MaxStdioMessageBytes: Int64 = 10000000
 private const MaxBacktestPoints: Int64 = 200000
-private var _debug: Bool = false
-private var _logLevel: LogLevel = LogLevel.Off
-
-private enum LogLevel {
-    | Off
-    | Error
-    | Warn
-    | Info
-    | Debug
-}
-
-private enum StdioReadResult {
-    | End
-    | Message(String)
-    | Error(String)
-}
-
-main(): Int64 {
-    let stdin = getStdIn()
-    let stdout = getStdOut()
-    let stderr = getStdErr()
-
-    match (getVariable("INDICATOR_MCP_LOG_LEVEL")) {
-        case Some(v) => _logLevel = parseLogLevel(v)
-        case None => ()
-    }
-    match (getVariable("INDICATOR_MCP_DEBUG")) {
-        case Some(v) => _debug = indicator4cj.mcp.isTrueEnv(v)
-        case None => ()
-    }
-    if (_debug) { _logLevel = LogLevel.Debug }
-    log(LogLevel.Info, stderr, "indicator4cj MCP (stdio)")
-
-    while (true) {
-        match (readStdioJsonMessage(stdin)) {
-            case StdioReadResult.End => break
-            case StdioReadResult.Error(errJson) =>
-                log(LogLevel.Warn, stderr, "stdio read error")
-                writeStdioJsonMessage(stdout, errJson)
-            case StdioReadResult.Message(msg) =>
-                try {
-                    match (indicator4cj.mcp.handleMcpJsonRpc(msg)) {
-                        case Some(resp) => writeStdioJsonMessage(stdout, resp)
-                        case None => ()
-                    }
-                } catch (e: Exception) {
-                    log(LogLevel.Error, stderr, "mcp handler error: ${e.message}")
-                }
-        }
-    }
-    return 0
-}
-
-private func log(level: LogLevel, stderr: OutputStream, message: String): Unit {
-    if (logLevelRank(level) > logLevelRank(_logLevel)) { return }
-    stderr.writeln(message)
-    stderr.flush()
-}
-
-private func logLevelRank(level: LogLevel): Int64 {
-    match (level) {
-        case LogLevel.Off => return 0
-        case LogLevel.Error => return 1
-        case LogLevel.Warn => return 2
-        case LogLevel.Info => return 3
-        case LogLevel.Debug => return 4
-    }
-}
-
-private func parseLogLevel(v: String): LogLevel {
-    let s = indicator4cj.mcp.normalizeKey(v)
-    if (s == "" || s == "off" || s == "0" || s == "false") { return LogLevel.Off }
-    if (s == "error" || s == "err") { return LogLevel.Error }
-    if (s == "warn" || s == "warning") { return LogLevel.Warn }
-    if (s == "info") { return LogLevel.Info }
-    if (s == "debug" || s == "1" || s == "true") { return LogLevel.Debug }
-    return LogLevel.Info
-}
+private const InvalidParamsPrefix: String = "invalid params: "
+private const MaxErrorStringBytes: Int64 = 800
+private const MaxRepositoryConfigBytes: Int64 = 4096
+private const MinEpochSecond: Int64 = 0
+private const MaxEpochSecond: Int64 = 4102444800
 
 public func handleMcpJsonRpc(json: String): Option<String> {
     let root = try {
@@ -124,7 +48,7 @@ public func handleMcpJsonRpc(json: String): Option<String> {
     }
 
     if (method == "initialize") {
-        let params = match (obj.get("params")) { case Some(v) => (v as JsonObject) case None => None }
+        let params: Option<JsonObject> = match (obj.get("params")) { case Some(v) => (v as JsonObject) case None => None }
         let protocolVersion = match (params) {
             case Some(p) => getStringOrEmpty(p, "protocolVersion")
             case None => ""
@@ -189,9 +113,7 @@ private func buildToolsListResponse(idVal: Option<JsonValue>): String {
     sb.append("},")
     sb.append("\"required\":[\"strategy\",\"data\"]")
     sb.append("}")
-    sb.append("}")
-    sb.append("},")
-    sb.append("{")
+    sb.append("},{")
     sb.append("\"name\":\"strategies\",")
     sb.append("\"description\":\"List available strategies\",")
     sb.append("\"inputSchema\":{")
@@ -223,14 +145,14 @@ private func buildToolsListResponse(idVal: Option<JsonValue>): String {
 
 private func buildToolsCallResponse(req: JsonObject, idVal: Option<JsonValue>): String {
     let idJson = idToJson(idVal)
-    let params = match (req.get("params")) { case Some(v) => (v as JsonObject) case None => None }
+    let params: Option<JsonObject> = match (req.get("params")) { case Some(v) => (v as JsonObject) case None => None }
     match (params) {
         case None => return buildErrorResponseRawId(idJson, -32602, "Invalid params", "params missing")
-        case Some(pobj) => {
+        case Some(pobj) =>
             let toolName = getStringOrEmpty(pobj, "name")
             if (toolName == "") { return buildErrorResponseRawId(idJson, -32602, "Invalid params", "name missing") }
             let argsVal = pobj.get("arguments")
-            let argsObj = match (argsVal) { case Some(v) => (v as JsonObject) case None => None }
+            let argsObj: Option<JsonObject> = match (argsVal) { case Some(v) => (v as JsonObject) case None => None }
             if (toolName == "strategies") {
                 let resultText = runStrategiesList()
                 return buildToolTextResult(idJson, resultText)
@@ -244,6 +166,9 @@ private func buildToolsCallResponse(req: JsonObject, idVal: Option<JsonValue>): 
                             let resultText = runBacktestFromArgs(aobj)
                             return buildToolTextResult(idJson, resultText)
                         } catch (e: Exception) {
+                            if (isInvalidParamsError(e.message)) {
+                                return buildErrorResponseRawId(idJson, -32602, "Invalid params", stripInvalidParamsPrefix(e.message))
+                            }
                             return buildErrorResponseRawId(idJson, -32000, "Backtest failed", e.message)
                         }
                 }
@@ -257,13 +182,15 @@ private func buildToolsCallResponse(req: JsonObject, idVal: Option<JsonValue>): 
                             let resultText = runBacktestRepositoryFromArgs(aobj)
                             return buildToolTextResult(idJson, resultText)
                         } catch (e: Exception) {
+                            if (isInvalidParamsError(e.message)) {
+                                return buildErrorResponseRawId(idJson, -32602, "Invalid params", stripInvalidParamsPrefix(e.message))
+                            }
                             return buildErrorResponseRawId(idJson, -32000, "Backtest failed", e.message)
                         }
                 }
             }
 
             return buildErrorResponseRawId(idJson, -32601, "Tool not found", toolName)
-        }
     }
 }
 
@@ -279,14 +206,107 @@ private func buildToolTextResult(idJson: String, resultText: String): String {
     return sb.toString()
 }
 
+private func getStringOrEmpty(obj: JsonObject, key: String): String {
+    match (obj.get(key)) {
+        case None => return ""
+        case Some(v) =>
+            match (v as JsonString) {
+                case Some(s) => return s.getValue()
+                case None => return ""
+            }
+    }
+}
+
+private func getRequiredArray(obj: JsonObject, key: String): JsonArray {
+    let v = obj.get(key).getOrThrow()
+    match (v as JsonArray) {
+        case Some(a) => return a
+        case None => throw Exception("field ${key} must be array")
+    }
+}
+
+private func hasPrefix(s: String, prefix: String): Bool {
+    if (s.size < prefix.size) { return false }
+    return s[0..prefix.size] == prefix
+}
+
+private func isInvalidParamsError(message: String): Bool {
+    return hasPrefix(message, InvalidParamsPrefix)
+}
+
+private func stripInvalidParamsPrefix(message: String): String {
+    if (!isInvalidParamsError(message)) { return message }
+    return message[InvalidParamsPrefix.size..]
+}
+
+private func throwInvalidParams(message: String): Unit {
+    throw Exception(InvalidParamsPrefix + message)
+}
+
+private func validateNonNegativeFinite(v: Float64, field: String, idx: Int64): Unit {
+    if (v != v) { throwInvalidParams("${field}[${idx}] is NaN") }
+    if (v > 1.0e308 || v < -1.0e308) { throwInvalidParams("${field}[${idx}] is not finite") }
+    if (v < 0.0) { throwInvalidParams("${field}[${idx}] must be >= 0") }
+}
+
+private func isKnownRepositoryName(name: String): Bool {
+    return name == InMemoryRepositoryBuilderName || name == FileSystemRepositoryBuilderName || name == TiingoRepositoryBuilderName
+}
+
+private func jsonToInt64(v: JsonValue): Int64 {
+    match (v as JsonInt) {
+        case Some(i) => return i.getValue()
+        case None => ()
+    }
+    match (v as JsonFloat) {
+        case Some(f) => return Int64(f.getValue())
+        case None => ()
+    }
+    match (v as JsonString) {
+        case Some(s) =>
+            match (Int64.tryParse(s.getValue())) { case Some(x) => return x case None => () }
+        case None => ()
+    }
+    throw Exception("expected integer")
+}
+
+private func jsonToFloat64(v: JsonValue): Float64 {
+    match (v as JsonFloat) {
+        case Some(f) => return f.getValue()
+        case None => ()
+    }
+    match (v as JsonInt) {
+        case Some(i) => return Float64(i.getValue())
+        case None => ()
+    }
+    match (v as JsonString) {
+        case Some(s) =>
+            match (Float64.tryParse(s.getValue())) { case Some(x) => return x case None => () }
+        case None => ()
+    }
+    throw Exception("expected number")
+}
+
+private func jsonArrayToInt64s(arr: JsonArray): ArrayList<Int64> {
+    let res = ArrayList<Int64>()
+    for (v in arr.getItems()) { res.add(jsonToInt64(v)) }
+    return res
+}
+
+private func jsonArrayToFloat64s(arr: JsonArray): ArrayList<Float64> {
+    let res = ArrayList<Float64>()
+    for (v in arr.getItems()) { res.add(jsonToFloat64(v)) }
+    return res
+}
+
 private func runBacktestFromArgs(args: JsonObject): String {
     let strategyKey = getStringOrEmpty(args, "strategy")
-    if (strategyKey == "") { throw Exception("strategy is required") }
+    if (strategyKey == "") { throwInvalidParams("strategy is required") }
     let dataVal = args.get("data")
-    let dataObj = match (dataVal) { case Some(v) => (v as JsonObject) case None => None }
-    let data = match (dataObj) { case Some(v) => v case None => throw Exception("data is required") }
+    let dataObj: Option<JsonObject> = match (dataVal) { case Some(v) => (v as JsonObject) case None => None }
+    let data = match (dataObj) { case Some(v) => v case None => throw Exception(InvalidParamsPrefix + "data is required") }
     let paramsVal = args.get("params")
-    let paramsObj = match (paramsVal) { case Some(v) => (v as JsonObject) case None => None }
+    let paramsObj: Option<JsonObject> = match (paramsVal) { case Some(v) => (v as JsonObject) case None => None }
 
     let dateArr = getRequiredArray(data, "date")
     let openArr = getRequiredArray(data, "opening")
@@ -303,23 +323,41 @@ private func runBacktestFromArgs(args: JsonObject): String {
     let vols = jsonArrayToFloat64s(volArr)
 
     let n = dates.size
-    if (n <= 0) { throw Exception("empty data") }
-    if (n > MaxBacktestPoints) { throw Exception("too many data points") }
+    if (n <= 0) { throwInvalidParams("empty data") }
+    if (n > MaxBacktestPoints) { throwInvalidParams("too many data points") }
     if (opens.size != n || closes.size != n || highs.size != n || lows.size != n || vols.size != n) {
-        throw Exception("array length mismatch")
+        throwInvalidParams("array length mismatch")
     }
 
     let snapshots = ArrayList<Snapshot>()
     var i: Int64 = 0
+    var prevDate: Int64 = -1
     while (i < n) {
+        let d = dates[i]
+        if (d < MinEpochSecond || d > MaxEpochSecond) { throwInvalidParams("date[${i}] out of range") }
+        if (prevDate >= 0 && d < prevDate) { throwInvalidParams("date must be nondecreasing") }
+        prevDate = d
+
+        let o = opens[i]
+        let h = highs[i]
+        let l = lows[i]
+        let c = closes[i]
+        let v = vols[i]
+        validateNonNegativeFinite(o, "opening", i)
+        validateNonNegativeFinite(h, "high", i)
+        validateNonNegativeFinite(l, "low", i)
+        validateNonNegativeFinite(c, "closing", i)
+        validateNonNegativeFinite(v, "volume", i)
+        if (h < l) { throwInvalidParams("high[${i}] < low[${i}]") }
+
         let s = Snapshot()
-        s.date = DateTime.ofEpoch(dates[i], 0)
-        s.open = opens[i]
-        s.high = highs[i]
-        s.low = lows[i]
-        s.close = closes[i]
-        s.adjClose = closes[i]
-        s.volume = vols[i]
+        s.date = DateTime.ofEpoch(second: d, nanosecond: 0)
+        s.open = o
+        s.high = h
+        s.low = l
+        s.close = c
+        s.adjClose = c
+        s.volume = v
         snapshots.add(s)
         i += 1
     }
@@ -344,10 +382,6 @@ private func runBacktestFromArgs(args: JsonObject): String {
     sb.append("${txCount}")
     sb.append("}")
     return sb.toString()
-}
-
-private func listStrategyKeys(): ArrayList<String> {
-    return strategyKeyOrder()
 }
 
 private func runStrategiesList(): String {
@@ -377,27 +411,33 @@ private func ensureRepositoryFactory(): Unit {
 
 private func runBacktestRepositoryFromArgs(args: JsonObject): String {
     ensureRepositoryFactory()
-    let repositoryName = getStringOrEmpty(args, "repositoryName")
+    var repositoryName = getStringOrEmpty(args, "repositoryName")
     let repositoryConfig = getStringOrEmpty(args, "repositoryConfig")
     let asset = getStringOrEmpty(args, "asset")
     let strategyKey = getStringOrEmpty(args, "strategy")
-    if (repositoryName == "" || asset == "" || strategyKey == "") { throw Exception("missing required fields") }
-    if (repositoryName == "filesystem" && repositoryConfig == "") { throw Exception("repositoryConfig is required for filesystem") }
+    if (repositoryName == "") { repositoryName = FileSystemRepositoryBuilderName }
+    if (!isKnownRepositoryName(repositoryName)) { throwInvalidParams("unknown repositoryName") }
+    if (repositoryConfig.size > MaxRepositoryConfigBytes) { throwInvalidParams("repositoryConfig too long") }
+    if (asset == "" || strategyKey == "") { throwInvalidParams("missing required fields") }
+    if (asset.size > 256) { throwInvalidParams("asset too long") }
+    if (strategyKey.size > 256) { throwInvalidParams("strategy too long") }
+    if (repositoryName == FileSystemRepositoryBuilderName && repositoryConfig == "") { throwInvalidParams("repositoryConfig is required for filesystem") }
     let paramsVal = args.get("params")
-    let paramsObj = match (paramsVal) { case Some(v) => (v as JsonObject) case None => None }
+    let paramsObj: Option<JsonObject> = match (paramsVal) { case Some(v) => (v as JsonObject) case None => None }
 
     var lastDays: Int64 = 0
     match (args.get("lastDays")) {
         case Some(v) => lastDays = jsonToInt64(v)
         case None => ()
     }
+    if (lastDays < 0 || lastDays > 100000) { throwInvalidParams("lastDays out of range") }
     let since = if (lastDays > 0) { DateTime.now().addDays(-lastDays) } else { DateTime.parse("2000-01-01", "yyyy-MM-dd") }
 
     let repo = newRepository(repositoryName, repositoryConfig)
     let snapsIter = repo.getSince(asset, since)
     let snaps = ArrayList<Snapshot>()
     for (s in snapsIter) { snaps.add(s) }
-    if (snaps.size > MaxBacktestPoints) { throw Exception("too many data points") }
+    if (snaps.size > MaxBacktestPoints) { throwInvalidParams("too many data points") }
 
     let strategy = resolveMcpStrategy(strategyKey, paramsObj)
     let (actionsIter, outcomesIter) = computeWithOutcome(strategy, snaps.iterator())
@@ -425,7 +465,11 @@ private func runBacktestRepositoryFromArgs(args: JsonObject): String {
 
 private func resolveMcpStrategy(keyOrName: String, params: Option<JsonObject>): Strategy {
     let thresholds = macdRsiThresholdsFromParams(params)
-    return indicator4cj.mcp.resolveStrategy(keyOrName, thresholds)
+    try {
+        return resolveStrategy(keyOrName, thresholds)
+    } catch (e: Exception) {
+        throw Exception(InvalidParamsPrefix + e.message)
+    }
 }
 
 private func macdRsiThresholdsFromParams(params: Option<JsonObject>): Option<(Float64, Float64)> {
@@ -438,6 +482,9 @@ private func macdRsiThresholdsFromParams(params: Option<JsonObject>): Option<(Fl
                         case Some(_) =>
                             let lower = jsonToFloat64(p.get("lower").getOrThrow())
                             let upper = jsonToFloat64(p.get("upper").getOrThrow())
+                            if (lower != lower || upper != upper) { throwInvalidParams("lower/upper is NaN") }
+                            if (lower < 0.0 || upper < 0.0 || lower > 100.0 || upper > 100.0) { throwInvalidParams("lower/upper out of range") }
+                            if (lower >= upper) { throwInvalidParams("lower must be < upper") }
                             return Some((lower, upper))
                         case None => return None
                     }
@@ -454,106 +501,38 @@ private func actionToInt(a: Action): Int64 {
     }
 }
 
-private func jsonArrayToInt64s(arr: JsonArray): ArrayList<Int64> {
-    let res = ArrayList<Int64>()
-    for (v in arr.getItems()) { res.add(jsonToInt64(v)) }
-    return res
-}
-
-private func jsonArrayToFloat64s(arr: JsonArray): ArrayList<Float64> {
-    let res = ArrayList<Float64>()
-    for (v in arr.getItems()) { res.add(jsonToFloat64(v)) }
-    return res
-}
-
-private func jsonToInt64(v: JsonValue): Int64 {
-    match (v as JsonInt) {
-        case Some(i) => return i.getValue()
-        case None => ()
-    }
-    match (v as JsonFloat) {
-        case Some(f) => return Int64(f.getValue())
-        case None => ()
-    }
-    match (v as JsonString) {
-        case Some(s) =>
-            match (Int64.parse(s.getValue())) { case Some(x) => return x case None => () }
-        case None => ()
-    }
-    throw Exception("expected integer")
-}
-
-private func jsonToFloat64(v: JsonValue): Float64 {
-    match (v as JsonFloat) {
-        case Some(f) => return f.getValue()
-        case None => ()
-    }
-    match (v as JsonInt) {
-        case Some(i) => return Float64(i.getValue())
-        case None => ()
-    }
-    match (v as JsonString) {
-        case Some(s) =>
-            match (Float64.parse(s.getValue())) { case Some(x) => return x case None => () }
-        case None => ()
-    }
-    throw Exception("expected number")
-}
-
-private func getRequiredArray(obj: JsonObject, key: String): JsonArray {
-    match (obj.get(key)) {
-        case Some(v) =>
-            match (v as JsonArray) {
-                case Some(a) => return a
-                case None => throw Exception("${key} is not array")
-            }
-        case None => throw Exception("${key} missing")
-    }
-}
-
-private func getStringOrEmpty(obj: JsonObject, key: String): String {
-    match (obj.get(key)) {
-        case Some(v) =>
-            match (v as JsonString) {
-                case Some(s) => return s.getValue()
-                case None => return ""
-            }
-        case None => return ""
-    }
-}
-
-private func jsonString(s: String): String {
-    let escaped = s
-        .replace("\\", "\\\\")
-        .replace("\"", "\\\"")
-        .replace("\r", "\\r")
-        .replace("\n", "\\n")
-        .replace("\t", "\\t")
-    return "\"" + escaped + "\""
-}
-
-private func jsonArrayOfStrings(items: ArrayList<String>): String {
-    let sb = StringBuilder()
-    sb.append("[")
-    var first = true
-    for (s in items) {
-        if (!first) { sb.append(",") } else { first = false }
-        sb.append(jsonString(s))
-    }
-    sb.append("]")
-    return sb.toString()
-}
-
 private func jsonArrayOfInts(items: ArrayList<Int64>): String {
     let sb = StringBuilder()
     sb.append("[")
     var first = true
     for (v in items) {
         if (!first) { sb.append(",") } else { first = false }
-        sb.append("${v}")
+        sb.append(v.toString())
     }
     sb.append("]")
     return sb.toString()
+}
+
+private func jsonArrayOfStrings(items: ArrayList<String>): String {
+    let sb = StringBuilder()
+    sb.append("[")
+    var first = true
+    for (v in items) {
+        if (!first) { sb.append(",") } else { first = false }
+        sb.append(jsonString(v))
+    }
+    sb.append("]")
+    return sb.toString()
+}
+
+private func jsonString(v: String): String {
+    let escaped = v.replace("\\", "\\\\").replace("\"", "\\\"")
+    return "\"" + escaped + "\""
+}
+
+private func truncateForErrorString(s: String): String {
+    if (s.size <= MaxErrorStringBytes) { return s }
+    return s[0..MaxErrorStringBytes]
 }
 
 private func idToJson(idVal: Option<JsonValue>): String {
@@ -564,90 +543,27 @@ private func idToJson(idVal: Option<JsonValue>): String {
 }
 
 private func jsonValueToJson(v: JsonValue): String {
-    match (v as JsonString) {
-        case Some(s) => return jsonString(s.getValue())
-        case None => ()
-    }
-    match (v as JsonInt) {
-        case Some(i) => return "${i.getValue()}"
-        case None => ()
-    }
-    match (v as JsonFloat) {
-        case Some(f) => return "${f.getValue()}"
-        case None => ()
-    }
-    match (v as JsonBool) {
-        case Some(b) => if (b.getValue()) { return "true" } else { return "false" }
-        case None => ()
-    }
+    match (v as JsonString) { case Some(s) => return jsonString(s.getValue()) case None => () }
+    match (v as JsonInt) { case Some(i) => return i.getValue().toString() case None => () }
+    match (v as JsonFloat) { case Some(f) => return f.getValue().toString() case None => () }
+    match (v as JsonBool) { case Some(b) => return if (b.getValue()) { "true" } else { "false" } case None => () }
+    match (v as JsonNull) { case Some(_) => return "null" case None => () }
     return "null"
 }
 
-private func buildErrorResponse(id: JsonValue, code: Int64, message: String, data: String): String {
-    return buildErrorResponseRawId(jsonValueToJson(id), code, message, data)
-}
-
-private func buildErrorResponseRawId(idJson: String, code: Int64, message: String, data: String): String {
+public func buildErrorResponseRawId(idJson: String, code: Int64, message: String, data: String): String {
+    let msg = truncateForErrorString(message)
+    let dat = truncateForErrorString(data)
     let sb = StringBuilder()
     sb.append("{\"jsonrpc\":\"2.0\",\"id\":")
     sb.append(idJson)
     sb.append(",\"error\":{")
     sb.append("\"code\":")
-    sb.append("${code}")
+    sb.append(code.toString())
     sb.append(",\"message\":")
-    sb.append(jsonString(message))
+    sb.append(jsonString(msg))
     sb.append(",\"data\":")
-    sb.append(jsonString(data))
+    sb.append(jsonString(dat))
     sb.append("}}")
     return sb.toString()
 }
-
-private func readStdioJsonMessage(stdin: ConsoleReader): StdioReadResult {
-    let headers = ArrayList<String>()
-    while (true) {
-        match (stdin.readln()) {
-            case None => return StdioReadResult.End
-            case Some(lineRaw) => {
-                let line = trimCR(lineRaw)
-                if (line.size == 0) { break }
-                headers.add(line)
-            }
-        }
-    }
-
-    let contentLength = match (parseContentLength(headers)) {
-        case Some(v) => v
-        case None => return StdioReadResult.Error(indicator4cj.mcp.buildErrorResponseRawId("null", -32600, "Invalid Request", "missing Content-Length"))
-    }
-    if (contentLength > MaxStdioMessageBytes) {
-        indicator4cj.mcp.discardExact(stdin, contentLength)
-        return StdioReadResult.Error(indicator4cj.mcp.buildErrorResponseRawId("null", -32000, "Message too large", "Content-Length too large"))
-    }
-    let bytes = indicator4cj.mcp.readExact(stdin, contentLength)
-    match (bytes) {
-        case None => return StdioReadResult.End
-        case Some(arr) => return StdioReadResult.Message(String.fromUtf8(arr))
-    }
-}
-
-private func writeStdioJsonMessage(stdout: OutputStream, json: String): Unit {
-    let body = utf8Bytes(json)
-    let header = "Content-Length: " + body.size.toString() + "\r\n\r\n"
-    stdout.write(utf8Bytes(header))
-    stdout.write(body)
-    stdout.flush()
-}
-
-private func utf8Bytes(s: String): Array<Byte> {
-    let bytes = ArrayList<Byte>()
-    for (b in s) { bytes.add(b) }
-    return bytes.toArray()
-}
-
-private func trimCR(s: String): String {
-    if (s.size > 0 && s.endsWith("\r")) {
-        return s[0..(s.size - 1)]
-    }
-    return s
-}
-

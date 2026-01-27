@@ -6,7 +6,7 @@
   output-type = "static"
   src-dir = ""
   target-dir = ""
-  compile-option = ""
+  compile-option = "-Woff deprecated"
 link-option = ""
 override-compile-option = ""
 package-configuration = {}

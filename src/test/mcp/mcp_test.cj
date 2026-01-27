@@ -15,10 +15,7 @@ public func test_trim_and_lower_ascii() {
 @Test
 public func test_parse_header_line() {
     match (parseHeaderLine("Content-Length:  123 ")) {
-        case Some((name, value)) => {
-            if (name != "content-length") { fail("bad header name: ${name}") }
-            if (value != "123") { fail("bad header value: ${value}") }
-        }
+        case Some((name, value)) => if (name != "content-length") { fail("bad header name: ${name}") } else if (value != "123") { fail("bad header value: ${value}") } else { () }
         case None => fail("expected header parse")
     }
 }

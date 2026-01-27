@@ -5,6 +5,7 @@ import std.core.*
 import std.collection.*
 import indicator4cj.asset.*
 import indicator4cj.backtest.*
+import indicator4cj.cli.*
 import indicator4cj.strategy.*
 import indicator4cj.strategy.compound.*
 import indicator4cj.strategy.momentum.*
@@ -22,13 +23,13 @@ main(): Int64 {
 
     let argv = getCommandLine()
     let args = if (argv.size > 1) { argv[1..] } else { Array<String>() }
-    let (flags, bools, positional) = parseArgs(args)
+    let (flags, bools, positional) = parseArgsWithBoolKeys(args, boolFlagSet())
 
     if (isTrueFlag("help", flags, bools) || isTrueFlag("h", flags, bools)) {
         printUsage()
         return 0
     }
-    if (!validateKnownFlags(flags, bools)) {
+    if (!validateKnownFlags(flags, bools, allowedFlagSet())) {
         stderr.writeln("flag provided but not defined")
         printUsage()
         return 1
@@ -42,6 +43,7 @@ main(): Int64 {
     var lastDays: Int64 = DefaultLastDays
     let addSplits = isTrueFlag("splits", flags, bools)
     let addAnds = isTrueFlag("ands", flags, bools)
+    let addExtended = isTrueFlag("extended-strategies", flags, bools)
 
     if (flags.contains("repository-name")) { repositoryName = flags["repository-name"] }
     if (flags.contains("repository-config")) { repositoryConfig = flags["repository-config"] }
@@ -88,6 +90,10 @@ main(): Int64 {
         for (s in indicator4cj.strategy.trend.allStrategies()) { strategies.add(s) }
         for (s in indicator4cj.strategy.volatility.allStrategies()) { strategies.add(s) }
         for (s in indicator4cj.strategy.volume.allStrategies()) { strategies.add(s) }
+        if (addExtended) {
+            for (s in indicator4cj.strategy.trend.allExtendedStrategies()) { strategies.add(s) }
+            for (s in indicator4cj.strategy.volume.allExtendedStrategies()) { strategies.add(s) }
+        }
 
         for (s in strategies) { backtester.strategies.add(s) }
 
@@ -122,69 +128,11 @@ private func printUsage(): Unit {
     out.writeln("  -last int                     number of days to do backtest (default ${DefaultLastDays})")
     out.writeln("  -splits                       add the split strategies")
     out.writeln("  -ands                         add the and strategies")
+    out.writeln("  -extended-strategies          add extended strategies not in Go default set")
     out.writeln("  -h, -help                     show this help")
 }
 
-private func parseArgs(args: Array<String>): (HashMap<String, String>, HashSet<String>, ArrayList<String>) {
-    let flags = HashMap<String, String>()
-    let bools = HashSet<String>()
-    let positional = ArrayList<String>()
-
-    var i: Int64 = 0
-    var stopFlags = false
-    while (i < args.size) {
-        let a = args[i]
-        if (!stopFlags && a == "--") {
-            stopFlags = true
-            i += 1
-            continue
-        }
-
-        if (!stopFlags && ((a.startsWith("--") && a.size > 2) || (a.startsWith("-") && a.size > 1 && !a.startsWith("--")))) {
-            let raw = if (a.startsWith("--")) { a[2..] } else { a[1..] }
-            let parts = raw.split("=")
-            if (parts.size >= 2) {
-                let key = parts[0]
-                flags.add(key, joinParts(parts, 1))
-            } else {
-                let key = raw
-                if ((i + 1) < args.size && !args[i + 1].startsWith("-")) {
-                    flags.add(key, args[i + 1])
-                    i += 1
-                } else {
-                    bools.add(key)
-                }
-            }
-        } else {
-            positional.add(a)
-        }
-        i += 1
-    }
-
-    return (flags, bools, positional)
-}
-
-private func joinParts(parts: Array<String>, start: Int64): String {
-    var s = ""
-    var i: Int64 = start
-    while (i < parts.size) {
-        if (i > start) { s = s + "=" }
-        s = s + parts[i]
-        i += 1
-    }
-    return s
-}
-
-private func isTrueFlag(name: String, flags: HashMap<String, String>, bools: HashSet<String>): Bool {
-    if (bools.contains(name)) { return true }
-    if (!flags.contains(name)) { return false }
-    let v = flags[name].toAsciiLower()
-    if (v == "true" || v == "1") { return true }
-    if (v == "false" || v == "0") { return false }
-    return true
-}
-
-private func validateKnownFlags(flags: HashMap<String, String>, bools: HashSet<String>): Bool {
+private func allowedFlagSet(): HashSet<String> {
     let allowed = HashSet<String>()
     allowed.add("repository-name")
     allowed.add("repository-config")
@@ -194,14 +142,18 @@ private func validateKnownFlags(flags: HashMap<String, String>, bools: HashSet<S
     allowed.add("last")
     allowed.add("splits")
     allowed.add("ands")
+    allowed.add("extended-strategies")
     allowed.add("help")
     allowed.add("h")
+    return allowed
+}
 
-    for (k in flags.keys()) {
-        if (!allowed.contains(k)) { return false }
-    }
-    for (k in bools) {
-        if (!allowed.contains(k)) { return false }
-    }
-    return true
+private func boolFlagSet(): HashSet<String> {
+    let bools = HashSet<String>()
+    bools.add("splits")
+    bools.add("ands")
+    bools.add("extended-strategies")
+    bools.add("help")
+    bools.add("h")
+    return bools
 }

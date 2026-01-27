@@ -6,6 +6,7 @@ import indicator4cj.helper.*
 import indicator4cj.helper as h
 import indicator4cj.asset.*
 import indicator4cj.strategy.*
+import indicator4cj.trend.*
 import indicator4cj.volatility.*
 
 /**
@@ -27,6 +28,9 @@ public class SuperTrendStrategy <: Strategy {
     }
     public init(period: Int64, multiplier: Float64) {
         this.indicator = SuperTrend(period, multiplier)
+    }
+    public init(ma: Ma, multiplier: Float64) {
+        this.indicator = SuperTrend(ma, multiplier)
     }
 
     public func name(): String {
@@ -77,6 +81,10 @@ public class SuperTrendStrategy <: Strategy {
 
 public func newSuperTrendStrategyWith(period: Int64, multiplier: Float64): SuperTrendStrategy {
     return SuperTrendStrategy(period, multiplier)
+}
+
+public func newSuperTrendStrategyWithMa(ma: Ma, multiplier: Float64): SuperTrendStrategy {
+    return SuperTrendStrategy(ma, multiplier)
 }
 
 

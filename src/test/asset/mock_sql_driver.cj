@@ -106,6 +106,7 @@ private class MockSqlStatement <: Statement {
         _ = value.size
     }
 
+    @Deprecated
     public func query(params: Array<SqlDbType>): QueryResult {
         _ = params.size
         return query()
@@ -171,6 +172,7 @@ private class MockSqlStatement <: Statement {
         return MockSqlQueryResult(ArrayList<ArrayList<Any>>())
     }
 
+    @Deprecated
     public func update(params: Array<SqlDbType>): UpdateResult {
         _ = params.size
         return update()
@@ -260,6 +262,7 @@ private class MockSqlQueryResult <: QueryResult {
         get() { Array<ColumnInfo>() }
     }
 
+    @Deprecated
     public func next(values: Array<SqlDbType>): Bool {
         _ = values.size
         return next()

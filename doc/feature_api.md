@@ -2,9 +2,9 @@
 
 > **版本**: v1.0.0 正式版
 > **仓颉版本**: 1.0.4
-> **更新日期**: 2025-01-18
+> **更新日期**: 2026-01-27
 
-本文档提供 `indicator4cj` 库的完整 API 参考手册，包括所有公开的类、接口、函数及常量定义。
+本文档提供 `indicator4cj` 库的主要 API 参考手册（以当前仓库代码为准，文档可能会随版本演进而滞后）。完整迁移对比与限制说明见 [migration_status.md](./migration_status.md)。
 
 ---
 
@@ -157,14 +157,17 @@ public init()
 
 #### 1.3.3 SQLRepository
 
-基于 SQL 数据库的仓储实现（当前版本使用内存模拟）。
+基于 SQL 数据库的仓储实现（依赖 `std.database.sql`），支持注入 Driver 或通过 DriverManager 按名称获取。
 
 **包路径**: `indicator4cj.asset.SQLRepository`
 
 **构造函数**:
 
 ```cangjie
-public init(dialect: SQLRepositoryDialect)
+public init(driver: Driver, connectionString: String, dialect: SQLRepositoryDialect)
+public init(driver: Driver, connectionString: String, dialect: SQLRepositoryDialect, opts: Array<(String, String)>)
+public init(driverName: String, connectionString: String, dialect: SQLRepositoryDialect)
+public init(driverName: String, connectionString: String, dialect: SQLRepositoryDialect, opts: Array<(String, String)>)
 ```
 
 #### 1.3.4 TiingoRepository
@@ -195,9 +198,9 @@ public init(apiKey: String)
 
 | 值 | 说明 |
 |---|------|
-| `Buy` | 买入信号 |
-| `Sell` | 卖出信号 |
-| `Hold` | 持有（无操作） |
+| `BUY` | 买入信号 |
+| `SELL` | 卖出信号 |
+| `HOLD` | 持有（无操作） |
 
 **方法**:
 

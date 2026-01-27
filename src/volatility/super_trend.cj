@@ -20,6 +20,11 @@ public class SuperTrend {
         this._multiplier = multiplier
     }
 
+    public init(ma: Ma, multiplier: Float64) {
+        this._atr = Atr(ma)
+        this._multiplier = multiplier
+    }
+
     // compute 计算超级趋势指标。
     public func compute(highs: Iterator<Float64>, lows: Iterator<Float64>, closings: Iterator<Float64>): Iterator<Float64> {
         let hs = duplicate(highs, 2)

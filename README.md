@@ -12,7 +12,7 @@
 
 ## 介绍
 
-**indicator4cj** 是一个基于仓颉（Cangjie）语言实现的**金融技术分析与回测组件库**。本项目由原 Go 语言知名金融库 [cinar/indicator](https://github.com/cinar/indicator) (v2) 完整迁移而来，旨在为仓颉生态提供高性能、类型安全且易于扩展的技术指标计算与策略开发工具。
+**indicator4cj** 是一个基于仓颉（Cangjie）语言实现的**金融技术分析与回测组件库**。本项目以 Go 语言库 [cinar/indicator](https://github.com/cinar/indicator) (v2) 为对照基准进行迁移与适配，核心语义、默认参数与关键行为保持一致，并通过持续回归测试保障稳定性（本仓库同时保留了对照用的 Go 版本源码：`indicator/`）。
 
 ### 核心特性
 
@@ -21,11 +21,11 @@
 - **🎯 完整回测框架**：支持多资产并行回测、比例佣金及止损装饰器
 - **📈 自动化报表**：可生成内存数据报告及静态 HTML 可视化报告
 - **💾 数据摄取层**：支持 CSV 反射解析、文件系统仓储及内存仓储
-- **🧪 完善测试覆盖**：171个测试文件，203个源文件，100%测试通过率
+- **🧪 可回归验证**：`cjpm test` 374/374 通过（当前仓库版本）
 
 **参考与依赖:**
 - 本项目参考了 [cinar/indicator](https://github.com/cinar/indicator) 的实现
-- 本项目遵循 1:1 数据对标原则，所有指标均通过与 Go 原版的精度验证
+- 已对关键路径做强对齐回归（策略集合口径、HTML/Report golden、MCP schema 与错误返回）；其余指标以迁移后的单测与测试数据集覆盖为主，跨语言逐点对比可作为后续增强（详见 [迁移对比与限制](./doc/migration_status.md)）
 
 ## 项目架构
 
@@ -37,7 +37,8 @@
 ├── cjpm.toml           # 项目配置
 ├── doc/                # 深入设计与 API 文档
 │   ├── design.md       # 设计哲学与架构深度解析
-│   └── feature_api.md  # 详尽的 API 接口参考
+│   ├── feature_api.md  # 主要 API 接口参考
+│   └── migration_status.md # 迁移对比、验收口径与已知限制
 └── src/                # 源码目录
     ├── asset/          # 资产管理与数据源 (CSV, 文件系统, 内存仓储)
     ├── backtest/       # 回测核心引擎与报表生成
@@ -53,7 +54,7 @@
     ├── valuation/      # 估值计算 (PV, FV, NPV)
     ├── volatility/     # 波动率指标 (ATR, Bollinger, etc.)
     ├── volume/         # 成交量指标 (OBV, VWAP, etc.)
-    └── test/           # 单元测试与 1:1 对标测试数据
+    └── test/           # 单元测试与对标测试数据
 ```
 
 ### 接口说明
@@ -137,6 +138,19 @@ public const MACD_DEFAULT_SIGNAL_PERIOD: Int64 = 9
 ```shell
 cjpm build
 ```
+
+### 运行测试
+
+```shell
+cjpm test
+```
+
+### 已知限制（简版）
+
+- 本项目当前以静态库形态组织，`cmd/` 下入口代码已迁移但未作为可执行产物交付（详见 [迁移对比与限制](./doc/migration_status.md)）。
+- MCP 目前聚焦 tools 能力；resources/prompts/sampling 等高级能力尚未实现。
+- Tiingo 数据源不支持 `append`（语义限制，与 Go 原版一致）。
+
 ### 功能示例
 
 #### 技术指标计算示例

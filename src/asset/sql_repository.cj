@@ -14,6 +14,40 @@ public class SQLRepository <: Repository {
     private var _lastDateStmt: Statement
     private var _appendStmt: Statement
 
+    public init(driver: Driver, connectionString: String, dialect: SQLRepositoryDialect) {
+        this._dialect = dialect
+        let ds = driver.open(connectionString, Array<(String, String)>())
+        let conn = ds.connect()
+
+        let createStmt = conn.prepareStatement(dialect.createTable())
+        createStmt.update()
+        createStmt.close()
+
+        this._datasource = ds
+        this._conn = conn
+        this._assetsStmt = conn.prepareStatement(dialect.assets())
+        this._getSinceStmt = conn.prepareStatement(dialect.getSince())
+        this._lastDateStmt = conn.prepareStatement(dialect.lastDate())
+        this._appendStmt = conn.prepareStatement(dialect.append())
+    }
+
+    public init(driver: Driver, connectionString: String, dialect: SQLRepositoryDialect, opts: Array<(String, String)>) {
+        this._dialect = dialect
+        let ds = driver.open(connectionString, opts)
+        let conn = ds.connect()
+
+        let createStmt = conn.prepareStatement(dialect.createTable())
+        createStmt.update()
+        createStmt.close()
+
+        this._datasource = ds
+        this._conn = conn
+        this._assetsStmt = conn.prepareStatement(dialect.assets())
+        this._getSinceStmt = conn.prepareStatement(dialect.getSince())
+        this._lastDateStmt = conn.prepareStatement(dialect.lastDate())
+        this._appendStmt = conn.prepareStatement(dialect.append())
+    }
+
     public init(driverName: String, connectionString: String, dialect: SQLRepositoryDialect) {
         this._dialect = dialect
         let drv = match (DriverManager.getDriver(driverName)) {

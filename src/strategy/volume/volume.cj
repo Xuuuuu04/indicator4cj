@@ -11,8 +11,12 @@ public func allStrategies(): ArrayList<Strategy> {
     arr.add(MoneyFlowIndexStrategy())
     arr.add(NegativeVolumeIndexStrategy())
     arr.add(WeightedAveragePriceStrategy())
-    arr.add(PercentBandMFIStrategy())
     return arr
 }
 
+public func allExtendedStrategies(): ArrayList<Strategy> {
+    let arr = ArrayList<Strategy>()
+    arr.add(PercentBandMFIStrategy())
+    return arr
+}
 

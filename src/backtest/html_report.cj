@@ -45,6 +45,7 @@ public class HtmlReport <: Report {
         Directory.create(_outputDir, recursive: true)
         _bestResults.clear()
         _assetResults.clear()
+        if (generatedOn.size == 0) { generatedOn = DateTime.now().toString() }
         _ = assetNames.size
     }
 
@@ -96,7 +97,7 @@ public class HtmlReport <: Report {
 
     public func end(): Unit {
         sortByOutcomeDesc(_bestResults)
-        generatedOn = DateTime.now().toString()
+        if (generatedOn.size == 0) { generatedOn = DateTime.now().toString() }
         writeIndex(_bestResults)
     }
 

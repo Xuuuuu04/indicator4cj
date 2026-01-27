@@ -3,6 +3,7 @@ package indicator4cj.test.strategy.momentum
 import std.core.*
 import std.collection.*
 import std.time.*
+import std.io.*
 import indicator4cj.helper.*
 import indicator4cj.helper as h
 import indicator4cj.asset.*
@@ -80,7 +81,7 @@ public func awesome_oscillator_strategy_basic() {
     }
 }
 
-// @Test
+@Test
 public func awesome_oscillator_strategy_report() {
     let snapRows = Csv<AoSnapshotRow>().readFromFile("src/test/testdata/strategy/repository/brk-b.csv")
     let snaps = ArrayList<Snapshot>()
@@ -94,8 +95,27 @@ public func awesome_oscillator_strategy_report() {
     }
 
     let strat = AwesomeOscillatorStrategy()
-    strat.report(snaps.iterator())
-    @Expect(true, true)
+    let report = strat.report(snaps.iterator())
+    let out = MemoryOutputStream()
+    report.writeToWriter(out)
+    let html = out.toStringValue()
+    if (!html.contains("<!DOCTYPE html>")) { fail("expected html output") }
+    if (!html.contains("Awesome Oscillator")) { fail("expected strategy name in html") }
 }
 
+private class MemoryOutputStream <: OutputStream {
+    private let _data = ArrayList<Byte>()
+
+    public func write(bytes: Array<Byte>): Unit {
+        for (b in bytes) { _data.add(b) }
+    }
+
+    public func flush(): Unit { }
+
+    public func toStringValue(): String {
+        let runes = ArrayList<Rune>()
+        for (b in _data) { runes.add(Rune(Int64(b))) }
+        return String(runes.toArray())
+    }
+}
 

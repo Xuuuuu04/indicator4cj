@@ -2,7 +2,6 @@ package indicator4cj.test.asset
 
 import std.core.*
 import std.unittest.*
-import std.database.sql.*
 import indicator4cj.asset.*
 
 public class MockDialect <: SQLRepositoryDialect {
@@ -17,11 +16,9 @@ public class MockDialect <: SQLRepositoryDialect {
 @Test
 public func test_sql_repository_basic() {
     try {
-        DriverManager.register(MockSqlDriverName, MockSqlDriver())
-        let repo = SQLRepository(MockSqlDriverName, "mock://basic", MockDialect())
+        let repo = SQLRepository(MockSqlDriver(), "mock://basic", MockDialect())
         repo.drop()
         repo.close()
-        DriverManager.deregister(MockSqlDriverName)
     } catch (e: Exception) {
         fail(e.toString())
     }

@@ -82,3 +82,4 @@ public func super_trend_strategy_basic() {
         case None => ()
     }
 }
+
