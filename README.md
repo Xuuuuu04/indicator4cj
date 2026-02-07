@@ -7,7 +7,7 @@
 <img alt="" src="https://img.shields.io/badge/release-v1.0.0-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/cjc-v1.0.4-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/domain-Finance/Analysis-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/license-Apache%202.0-blue" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/license-MIT-blue" style="display: inline-block;" />
 </p>
 
 ## 介绍
@@ -247,3 +247,7 @@ main() {
 
 本项目 committer：[@mumu_xsy](https://gitcode.com/mumu_xsy)
 监督人：[@zhangyin_gitcode](https://gitcode.com/zhangyin_gitcode) (HUAWEI Developer Advocate)
+
+## 开发进度（截至 2026-02-07）
+- 当前开发进度与已知风险：`doc/PROJECT_STATUS.md`
+- 本仓库以可公开协作为目标维护，功能清单与后续计划以状态文档为准并持续更新。
